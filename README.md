@@ -84,9 +84,9 @@ When using remote url ng2-markdown-to-html will use file extension to automatica
 
 ## Demo application
 
-You can found the working example inside the `src/app/demo` directory.
+A demo applicatino can be found inside the `src/app/demo` directory.
 
-The following commands will close the repository, install npm dependencies and serve the application.
+The following commands will clone the repository, install npm dependencies and serve the application.
 
 ```bash
 git clone https://github.com/jfcere/ng2-markdown-to-html.git
