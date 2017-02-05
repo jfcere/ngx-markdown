@@ -1,0 +1,327 @@
+<header>
+  <h1>ng2-markdown-to-html</h1>
+
+  <h4>
+    Demo based on <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">Markdown Cheatsheet</a>
+  </h4>
+</header>
+
+<!-- HEADER -->
+<h2 class="subtitle">Headers</h2>
+
+<pre>
+# Headers
+
+# H1
+## H2
+### H3
+#### H4
+##### H5
+###### H6
+
+Alternatively, for H1 and H2, an underline-ish style:
+
+Alt-H1
+======
+
+Alt-H2
+------
+</pre>
+
+<markdown-to-html>
+  # Headers
+
+  # H1
+  ## H2
+  ### H3
+  #### H4
+  ##### H5
+  ###### H6
+
+  Alternatively, for H1 and H2, an underline-ish style:
+
+  Alt-H1
+  ======
+
+  Alt-H2
+  ------
+</markdown-to-html>
+
+<!-- EMPHASIS -->
+<h2 class="subtitle">Emphasis</h2>
+
+<pre>
+# Emphasis
+
+Emphasis, aka italics, with *asterisks* or _underscores_.
+
+Strong emphasis, aka bold, with **asterisks** or __underscores__.
+
+Combined emphasis with **asterisks and _underscores_**.
+
+Strikethrough uses two tildes. ~~Scratch this.~~
+</pre>
+
+<markdown-to-html>
+  # Emphasis
+
+  Emphasis, aka italics, with *asterisks* or _underscores_.
+
+  Strong emphasis, aka bold, with **asterisks** or __underscores__.
+
+  Combined emphasis with **asterisks and _underscores_**.
+
+  Strikethrough uses two tildes. ~~Scratch this.~~
+</markdown-to-html>
+
+<!-- LISTS -->
+<h2 class="subtitle">Lists</h2>
+
+<p>
+  In this example, leading and trailing spaces are shown with with dots (⋅)
+</p>
+
+<pre>
+# Lists
+
+1. First ordered list item
+2. Another item
+⋅⋅* Unordered sub-list.
+1. Actual numbers don't matter, just that it's a number
+⋅⋅1. Ordered sub-list
+4. And another item.
+
+⋅⋅⋅You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).
+
+⋅⋅⋅To have a line break without a paragraph, you will need to use two trailing spaces.⋅⋅
+⋅⋅⋅Note that this line is separate, but within the same paragraph.⋅⋅
+⋅⋅⋅(This is contrary to the typical GFM line break behaviour, where trailing spaces are not required.)
+
+
+* Unordered list can use asterisks
+- Or minuses
++ Or pluses
+</pre>
+
+<markdown-to-html>
+  # Lists
+
+  1. First ordered list item
+  2. Another item
+    * Unordered sub-list.
+  1. Actual numbers don't matter, just that it's a number
+    1. Ordered sub-list
+  4. And another item.
+
+    You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).
+
+    To have a line break without a paragraph, you will need to use two trailing spaces.
+    Note that this line is separate, but within the same paragraph.
+    (This is contrary to the typical GFM line break behaviour, where trailing spaces are not required.)
+
+
+  * Unordered list can use asterisks
+  - Or minuses
+  + Or pluses
+</markdown-to-html>
+
+<!-- LINKS -->
+<h2 class="subtitle">Links</h2>
+
+<pre>
+# Links
+
+There are two ways to create links.
+
+[I'm an inline-style link](https://www.google.com)
+
+[I'm an inline-style link with title](https://www.google.com "Google's Homepage")
+
+[I'm a reference-style link][Arbitrary case-insensitive reference text]
+
+[I'm a relative reference to a repository file](../blob/master/LICENSE)
+
+[You can use numbers for reference-style link definitions][1]
+
+Or leave it empty and use the [link text itself].
+
+URLs and URLs in angle brackets will automatically get turned into links.
+http://www.example.com or <http://www.example.com> and sometimes
+example.com (but not on Github, for example).
+
+Some text to show that the reference links can follow later.
+
+[arbitrary case-insensitive reference text]: https://www.mozilla.org
+[1]: http://slashdot.org
+[link text itself]: http://www.reddit.com
+</pre>
+
+<markdown-to-html>
+  # Links
+
+  There are two ways to create links.
+
+  [I'm an inline-style link](https://www.google.com)
+
+  [I'm an inline-style link with title](https://www.google.com "Google's Homepage")
+
+  [I'm a reference-style link][Arbitrary case-insensitive reference text]
+
+  [I'm a relative reference to a repository file](../blob/master/LICENSE)
+
+  [You can use numbers for reference-style link definitions][1]
+
+  Or leave it empty and use the [link text itself].
+
+  URLs and URLs in angle brackets will automatically get turned into links.
+  http://www.example.com or <http://www.example.com> and sometimes
+  example.com (but not on Github, for example).
+
+  Some text to show that the reference links can follow later.
+
+  [arbitrary case-insensitive reference text]: https://www.mozilla.org
+  [1]: http://slashdot.org
+  [link text itself]: http://www.reddit.com
+</markdown-to-html>
+
+<!-- IMAGES -->
+<h2 class="subtitle">Images</h2>
+
+<pre>
+# Images
+
+Here's our logo (hover to see the title text):
+
+Inline-style:
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+
+Reference-style:
+![alt text][logo]
+
+[logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"
+</pre>
+
+<markdown-to-html>
+  # Images
+
+  Here's our logo (hover to see the title text):
+
+  Inline-style:
+  ![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+
+  Reference-style:
+  ![alt text][logo]
+
+  [logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"
+</markdown-to-html>
+
+<!-- CODE AND SYNTAX HIGHLIGHTING -->
+<h2 class="subtitle">Code and Syntax Highlighting</h2>
+
+<pre>
+# Code and Syntax Highlighting
+
+Inline `code` has `back-ticks around` it.
+
+```javascript
+var s = "JavaScript syntax highlighting";
+alert(s);
+```
+
+```python
+s = "Python syntax highlighting"
+print s
+```
+</pre>
+
+<markdown-to-html>
+  # Code and Syntax Highlighting
+
+  Inline `code` has `back-ticks around` it.
+
+  ```javascript
+  var s = "JavaScript syntax highlighting";
+  alert(s);
+  ```
+
+  ```python
+  s = "Python syntax highlighting"
+  print s
+  ```
+</markdown-to-html>
+
+<!-- BLOCKQUOTES -->
+<h2 class="subtitle">Blockquotes</h2>
+
+<pre>
+# Blockquotes
+
+> Blockquotes are very handy in email to emulate reply text.
+> This line is part of the same quote.
+
+Quote break.
+
+> This is a very long line that will still be quoted properly when it wraps. Oh boy let's keep writing to make sure this is long enough to actually wrap for everyone. Oh, you can *put* **Markdown** into a blockquote.
+</pre>
+
+<markdown-to-html>
+  # Blockquotes
+
+  > Blockquotes are very handy in email to emulate reply text.
+  > This line is part of the same quote.
+
+  Quote break.
+
+  > This is a very long line that will still be quoted properly when it wraps. Oh boy let's keep writing to make sure this is long enough to actually wrap for everyone. Oh, you can *put* **Markdown** into a blockquote.
+</markdown-to-html>
+
+<!-- HORIZONTAL RULE -->
+<h2 class="subtitle">Horizontal Rule</h2>
+
+<pre>
+# Horizontal Rule
+
+Three or more...
+
+---
+
+Hyphens
+
+***
+
+Asterisks
+___
+
+Underscores
+</pre>
+
+<markdown-to-html>
+  # Horizontal Rule
+
+  Three or more...
+
+  ---
+
+  Hyphens
+
+  ***
+
+  Asterisks
+  ___
+
+  Underscores
+</markdown-to-html>
+
+<!-- REMOTE URL -->
+<h2 class="subtitle">Remote url</h2>
+
+<markdown-to-html [src]="'app/demo/demo.md'"></markdown-to-html>
+
+<markdown-to-html>
+```python
+{{fileContent}}
+```
+</markdown-to-html>
+
+<div markdown-to-html [src]="'app/demo/demo.html'"></div>
+<div markdown-to-html [src]="'app/demo/demo.cpp'"></div>
