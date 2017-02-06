@@ -60,7 +60,7 @@ The same way the component works, you can use `markdown-to-html` directive to ac
 <div markdown-to-html [src]="'path/to/file.md'"></div>
 ```
 
-## Synthax hightlight
+## Synthax highlight
 
 When using static markdown you are responsible to provide the code block with related language.
 
