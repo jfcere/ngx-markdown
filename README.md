@@ -4,7 +4,7 @@ ng2-markdown-to-html is an [Angular 2](https://angular.io/) library that uses [m
 
 ## Installation
 
-Use the following command to add ng-2markdown-to-html library to your `package.json` file.
+Use the following command to add ng2-markdown-to-html library to your `package.json` file.
 
 ```bash
 npm install ng2-markdown-to-html --save
@@ -30,11 +30,11 @@ import { HomeComponent } from './home.component';
 })
 ```
 
-ng2-markdown-to-html provides one component and one directivee to parse your markdown to your web application.
+ng2-markdown-to-html provides one component and one directive to parse your markdown to your web application.
 
 ### Component
 
-You can use `markdown-to-html` component to either parse static markdown directly from your html file or to load the content from a remote url using `src` property.
+You can use `markdown-to-html` component to either parse static markdown directly from your html markup or load the content from a remote url using `src` property.
 
 ```html
 <!-- static markdown -->
@@ -62,7 +62,7 @@ The same way the component works, you can use `markdown-to-html` directive to ac
 
 ## Synthax hightlight
 
-When using static markdown you are responsible to provide the code block with related language
+When using static markdown you are responsible to provide the code block with related language.
 
 ```diff
 <markdown-to-html>
@@ -84,7 +84,7 @@ When using remote url ng2-markdown-to-html will use file extension to automatica
 
 ## Demo application
 
-A demo applicatino can be found inside the `src/app/demo` directory.
+A demo application can be found inside the `src/app/demo` directory.
 
 The following commands will clone the repository, install npm dependencies and serve the application.
 
@@ -100,7 +100,7 @@ Navigate to the demo application @ [http://localhost:4200](http://localhost:4200
 
 ## AoT workaround
 
-Temporarily if you are using AoT compilation you will need to use this workaround as the n2-markdown-to-html library is currently packaged with source file and is not transpiled to Javascript. Take not that I will work on that shortly to avoid theses modificatios.
+Temporarily if you are using AoT compilation you will need to use this workaround as the ng2-markdown-to-html library is currently packaged with source file and is not transpiled to Javascript. Take note that I will work on that shortly to avoid theses modifications.
 
 For now you will need to do the following modifications to `tsconfig.json`:
 
