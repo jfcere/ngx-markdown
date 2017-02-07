@@ -111,17 +111,12 @@ ng serve
 
 Navigate to the demo application @ [http://localhost:4200](http://localhost:4200)
 
-## AoT workaround
+## AoT compilation
 
-Temporarily if you are using AoT compilation you will need to use this workaround as the ng2-markdown-to-html library is currently packaged with source file and is not transpiled to Javascript. Take note that I will work on that shortly to avoid theses modifications.
-
-For now you will need to do the following modifications to `tsconfig.json`:
-
-- Add relative paths to node_modules for angular dependencies
-- Exclude `test.ts` file (loading TestBed pull on dependencies that are not needed when serving app)
+You will need to do exclude `test.ts` from your `tsconfig.json` file as loading TestBed pulls on dependencies that are not needed when serving app.
 
 > **Warning!**
-You should copy your `tsconfig.json` and create a new one for AoT compilation like `tsconfig-aot.json` as stated on Angular official website [here](https://angular.io/docs/ts/latest/cookbook/aot-compiler.html#!#compile) othwerwise your tests won't run after excluding `test.ts`
+You should copy your `tsconfig.json` and create a new one for AoT compilation like `tsconfig-aot.json` as stated on [Angular official website](https://angular.io/docs/ts/latest/cookbook/aot-compiler.html#!#compile) othwerwise your tests won't run after excluding `test.ts`.
 
 ```diff
 {
@@ -139,19 +134,7 @@ You should copy your `tsconfig.json` and create a new one for AoT compilation li
     "target": "es5",
     "typeRoots": [
       "../node_modules/@types"
-    ],
-    "paths": {
-+      "@angular/common": ["../node_modules/@angular/common"],
-+      "@angular/compiler": ["../node_modules/@angular/compiler"],
-+      "@angular/core": ["../node_modules/@angular/core"],
-+      "@angular/forms": ["../node_modules/@angular/forms"],
-+      "@angular/http": ["../node_modules/@angular/http"],
-+      "@angular/platform-browser": ["../node_modules/@angular/platform-browser"],
-+      "@angular/platform-browser-dynamic": ["../node_modules/@angular/platform-browser-dynamic"],
-+      "@angular/router": ["../node_modules/@angular/router"],
-+      "rxjs/Rx": ["../node_modules/rxjs/Rx"],
-+      "rxjs/add/operator/toPromise": ["../node_modules/rxjs/add/operator/toPromise"]
-    }
+    ]
   },
   "exclude": [
 +    "test.ts"
@@ -168,7 +151,7 @@ You should copy your `tsconfig.json` and create a new one for AoT compilation li
 Here is the list of tasks that will be done on this library in a near future ...
 
 - Add Circle-CI integration
-- AoT compilation ready (currently needs to use workaround)
+- Transpiled library to Javascript
 
 ## Contribution
 
