@@ -21,6 +21,8 @@
     "@angular/platform-browser": "^2.3.1",
     "@angular/platform-browser-dynamic": "^2.3.1",
     "@angular/router": "^3.3.1",
+    "@types/marked": "0.0.28",
+    "@types/prismjs": "^1.4.18",
     "core-js": "^2.4.1",
     "marked": "^0.3.6",
     "prismjs": "^1.6.0",
@@ -31,9 +33,7 @@
   "devDependencies": {
     "@angular/compiler-cli": "^2.3.1",
     "@types/jasmine": "2.5.38",
-    "@types/marked": "0.0.28",
     "@types/node": "^6.0.42",
-    "@types/prismjs": "^1.4.18",
     "angular-cli": "1.0.0-beta.26",
     "codelyzer": "~2.0.0-beta.1",
     "jasmine-core": "2.5.2",
