@@ -113,10 +113,10 @@ Navigate to the demo application @ [http://localhost:4200](http://localhost:4200
 
 ## AoT compilation
 
-You will need to do exclude `test.ts` from your `tsconfig.json` file as loading TestBed pulls on dependencies that are not needed when serving app.
+You will need to exclude `test.ts` from your `tsconfig.json` file as loading TestBed pulls on dependencies that are not needed when serving app.
 
 > **Warning!**
-You should copy your `tsconfig.json` and create a new one for AoT compilation like `tsconfig-aot.json` as stated on [Angular official website](https://angular.io/docs/ts/latest/cookbook/aot-compiler.html#!#compile) othwerwise your tests won't run after excluding `test.ts`.
+You should copy your `tsconfig.json` file and create a new one for AoT compilation like `tsconfig-aot.json` as stated on [Angular official documentation](https://angular.io/docs/ts/latest/cookbook/aot-compiler.html#!#compile) othwerwise your tests won't run after excluding `test.ts`.
 
 ```diff
 {
