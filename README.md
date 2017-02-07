@@ -10,7 +10,7 @@ Use the following command to add ng2-markdown-to-html library to your `package.j
 npm install ng2-markdown-to-html --save
 ```
 
-## Usage
+## Configuration
 
 You must import `MarkdownToHtmlModule` inside your module to be able to use `markdown-to-html` component and/or directive.
 
@@ -29,6 +29,19 @@ import { HomeComponent } from './home.component';
   declarations: [HomeComponent],
 })
 ```
+
+To activate [Prism.js](http://prismjs.com/) synthax highlight you will need to chose a theming css from `node_modules/prismjs/themes` directory and add it to your application.
+
+If you are using [Angular CLI](https://cli.angular.io/) you can add the theming css file of your choice by modifying the `angular-cli.json` file as bellow ...
+
+```diff
+"styles": [
+  "styles.css",
++  "../node_modules/prismjs/themes/prism-okaidia.css"
+],
+```
+
+## Usage
 
 ng2-markdown-to-html provides one component and one directive to parse your markdown to your web application.
 
