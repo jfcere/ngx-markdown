@@ -1,4 +1,4 @@
-# ng2-markdown-to-html
+# ng2-markdown-to-html [![CircleCI](https://circleci.com/gh/jfcere/ng2-markdown-to-html/tree/master.svg?style=shield&)](https://circleci.com/gh/jfcere/ng2-markdown-to-html/tree/master)[![version](https://img.shields.io/npm/v/ng2-markdown-to-html.svg?style=flat)](https://www.npmjs.com/package/ng2-markdown-to-html) [![npm](https://img.shields.io/npm/l/ng2-markdown-to-html.svg)](https://opensource.org/licenses/MIT)
 
 ng2-markdown-to-html is an [Angular 2](https://angular.io/) library that uses [marked](https://github.com/chjj/marked) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for synthax highlights.
 
