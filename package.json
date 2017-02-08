@@ -1,7 +1,21 @@
 {
   "name": "ng2-markdown-to-html",
-  "version": "0.0.4",
+  "description": "Angular 2 library that uses marked to parse markdown to html combined with Prism.js for synthax highlights",
+  "homepage": "https://github.com/jfcere/ng2-markdown-to-html",
+  "version": "0.0.5",
   "license": "MIT",
+  "keywords": [
+    "angular",
+    "angular2",
+    "angular-2",
+    "markdown",
+    "markdown-to-html",
+    "marked",
+    "ng2",
+    "parser",
+    "prism",
+    "prism.js"
+  ],
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
