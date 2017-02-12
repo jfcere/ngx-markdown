@@ -9,7 +9,12 @@
       "outDir": "dist",
       "assets": [
         "assets",
-        "favicon.ico"
+        "favicon.ico",
+        "app/markdown-demo/demo.cpp",
+        "app/markdown-demo/demo.html",
+        "app/markdown-demo/demo.java",
+        "app/markdown-demo/demo.md",
+        "app/markdown-demo/demo.py"
       ],
       "index": "index.html",
       "main": "main.ts",
