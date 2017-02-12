@@ -8,7 +8,16 @@
 }
 
 header {
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
   margin-bottom: 3rem;
+}
+
+.title {
+  color: #c7254e;
+}
+
+.title-based-on {
+  color: #690;
 }
 
 .subtitle {
