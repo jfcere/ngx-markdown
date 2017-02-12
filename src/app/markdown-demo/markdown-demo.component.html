@@ -1,8 +1,7 @@
 <header>
-  <h1>ng2-markdown-to-html</h1>
-
-  <h4>
-    Demo based on <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">Markdown Cheatsheet</a>
+  <h1 class="title">ng2-markdown-to-html</h1>
+  <h4 class="title-based-on">
+    demo based on <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">markdown cheatsheet</a>
   </h4>
 </header>
 
@@ -315,13 +314,36 @@ Underscores
 <!-- REMOTE URL -->
 <h2 class="subtitle">Remote url</h2>
 
-<markdown-to-html [src]="'app/demo/demo.md'"></markdown-to-html>
+<markdown-to-html>
+  Using component with `src` property to fetch remote markdown file `app/markdown-demo/demo.md`
+</markdown-to-html>
+
+<markdown-to-html [src]="'app/markdown-demo/demo.md'"></markdown-to-html>
+
+<br />
+
+<markdown-to-html>
+  Using component with static `python` code block
+</markdown-to-html>
 
 <markdown-to-html>
 ```python
-{{fileContent}}
+{{ fileContent }}
 ```
 </markdown-to-html>
 
-<div markdown-to-html [src]="'app/demo/demo.html'"></div>
-<div markdown-to-html [src]="'app/demo/demo.cpp'"></div>
+<br />
+
+<markdown-to-html>
+  Using directive with `src` property to fetch remote html file `app/markdown-demo/demo.html`
+</markdown-to-html>
+
+<div markdown-to-html [src]="'app/markdown-demo/demo.html'"></div>
+
+<br />
+
+<markdown-to-html>
+  Using directive with `src` property to fetch remote C++ file `app/markdown-demo/demo.cpp`
+</markdown-to-html>
+
+<div markdown-to-html [src]="'app/markdown-demo/demo.cpp'"></div>

@@ -1,16 +1,15 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { DemoComponent } from './demo.component';
+import { MarkdownDemoComponent } from './markdown-demo.component';
 import { MarkdownToHtmlModule } from '../markdown-to-html/markdown-to-html.module';
 
 @NgModule({
-  exports: [],
   imports: [
     BrowserModule,
     MarkdownToHtmlModule.forRoot(),
   ],
-  declarations: [DemoComponent],
-  bootstrap: [DemoComponent],
+  declarations: [MarkdownDemoComponent],
+  bootstrap: [MarkdownDemoComponent],
 })
-export class DemoModule { }
+export class MarkdownDemoModule { }

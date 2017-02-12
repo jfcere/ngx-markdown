@@ -3,9 +3,9 @@ const fileContent = require('raw-loader!./demo.py');
 
 @Component({
   selector: 'markdown-demo',
-  templateUrl: './demo.component.html',
-  styleUrls: ['./demo.component.css'],
+  templateUrl: './markdown-demo.component.html',
+  styleUrls: ['./markdown-demo.component.css'],
 })
-export class DemoComponent {
+export class MarkdownDemoComponent {
   public fileContent = fileContent;
 }

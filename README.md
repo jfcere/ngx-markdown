@@ -2,6 +2,8 @@
 
 ng2-markdown-to-html is an [Angular 2](https://angular.io/) library that uses [marked](https://github.com/chjj/marked) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for synthax highlights.
 
+Demo available @ [jfcere.github.io/ng2-markdown-to-html](https://jfcere.github.io/ng2-markdown-to-html)
+
 ## Installation
 
 Use the following command to add ng2-markdown-to-html library to your `package.json` file.
@@ -30,9 +32,9 @@ import { HomeComponent } from './home.component';
 })
 ```
 
-To activate [Prism.js](http://prismjs.com/) synthax highlight you will need to chose a theming css from `node_modules/prismjs/themes` directory and add it to your application.
+To activate [Prism.js](http://prismjs.com/) synthax highlight you will need to choose a css theme file from `node_modules/prismjs/themes` directory and add it to your application.
 
-If you are using [Angular CLI](https://cli.angular.io/) you can add the theming css file of your choice by modifying the `angular-cli.json` file as bellow ...
+If you are using [Angular CLI](https://cli.angular.io/) you can add the css file by modifying the `angular-cli.json` file as below ...
 
 ```diff
 "styles": [
@@ -40,6 +42,10 @@ If you are using [Angular CLI](https://cli.angular.io/) you can add the theming 
 +  "../node_modules/prismjs/themes/prism-okaidia.css"
 ],
 ```
+
+You can find additional themes by browsing the web such as ...
+- [Prism-Themes](https://github.com/PrismJS/prism-themes)
+- [Mokokai](https://github.com/Ahrengot/Monokai-theme-for-Prism.js)
 
 ## Usage
 
@@ -97,9 +103,9 @@ When using remote url ng2-markdown-to-html will use file extension to automatica
 
 ## Demo application
 
-A demo application can be found inside the `src/app/demo` directory.
+You can find the [demo](https://jfcere.github.io/ng2-markdown-to-html) source code inside the `src/app/markdown-demo` directory.
 
-The following commands will clone the repository, install npm dependencies and serve the application.
+The following commands will clone the repository, install npm dependencies and serve the application @ [http://localhost:4200](http://localhost:4200)
 
 ```bash
 git clone https://github.com/jfcere/ng2-markdown-to-html.git
@@ -108,8 +114,6 @@ npm install
 
 ng serve
 ```
-
-Navigate to the demo application @ [http://localhost:4200](http://localhost:4200)
 
 ## AoT compilation
 
@@ -150,7 +154,9 @@ You should copy your `tsconfig.json` file and create a new one for AoT compilati
 
 Here is the list of tasks that will be done on this library in a near future ...
 
-- ~~Add Circle-CI integration~~
+- ~~Add CircleCI integration~~
+- ~~Publish demo on github pages~~
+- Support Prism.js customizing options (line-numbers, line-height, ...)
 - Transpile library to Javascript
 
 ## Contribution
