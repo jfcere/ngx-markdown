@@ -12,17 +12,17 @@ export class MarkdownToHtmlService {
 
   constructor(private http: Http) { }
 
-  getSource(src: string): Observable<string> {
+  getSource(src: string) {
     return this.http.get(src)
       .map(this.extractData)
       .catch(this.handleError);
   }
 
-  extractData(response: Response): string {
+  extractData(response: Response) {
     return response.text() || '';
   }
 
-  handleError(error: Response | any): ErrorObservable {
+  handleError(error: Response | any) {
     let errMsg: string;
     if (error instanceof Response) {
       const body = error.json() || '';
