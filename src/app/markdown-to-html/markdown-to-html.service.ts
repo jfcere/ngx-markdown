@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
@@ -12,17 +11,17 @@ export class MarkdownToHtmlService {
 
   constructor(private http: Http) { }
 
-  getSource(src: string): Observable<string> {
+  getSource(src: string) {
     return this.http.get(src)
       .map(this.extractData)
       .catch(this.handleError);
   }
 
-  extractData(response: Response): string {
+  extractData(response: Response) {
     return response.text() || '';
   }
 
-  handleError(error: Response | any): ErrorObservable<string> {
+  handleError(error: Response | any) {
     let errMsg: string;
     if (error instanceof Response) {
       const body = error.json() || '';
