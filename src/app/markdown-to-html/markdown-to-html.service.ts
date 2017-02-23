@@ -22,7 +22,7 @@ export class MarkdownToHtmlService {
     return response.text() || '';
   }
 
-  handleError(error: Response | any): ErrorObservable<string> {
+  handleError(error: Response | any): ErrorObservable {
     let errMsg: string;
     if (error instanceof Response) {
       const body = error.json() || '';
