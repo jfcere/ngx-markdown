@@ -30,6 +30,7 @@
     "lint": "tslint \"src/**/*.ts\" --project src/tsconfig.json --type-check && tslint \"e2e/**/*.ts\" --project e2e/tsconfig.json --type-check",
     "ng": "ng",
     "pree2e": "webdriver-manager update --standalone false --gecko false",
+    "build:gh-pages": "ng build --prod --base-href \"https://jfcere.github.io/ng2-markdown-to-html/\"",
     "publish:gh-pages": "angular-cli-ghpages --message \"Publish gh-pages\"",
     "start": "ng serve",
     "test": "ng test"
