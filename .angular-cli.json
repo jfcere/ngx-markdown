@@ -10,11 +10,8 @@
       "assets": [
         "assets",
         "favicon.ico",
-        "app/markdown-demo/demo.cpp",
-        "app/markdown-demo/demo.html",
-        "app/markdown-demo/demo.java",
-        "app/markdown-demo/demo.md",
-        "app/markdown-demo/demo.py"
+        "app/markdown-demo/markdown",
+        "app/markdown-demo/remote"
       ],
       "index": "index.html",
       "main": "main.ts",

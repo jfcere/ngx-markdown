@@ -21,6 +21,7 @@ import 'prismjs/components/prism-typescript';
 @Component({
   selector: 'markdown-to-html, [markdown-to-html]',
   template: '<ng-content></ng-content>',
+  styleUrls: ['./markdown-to-html.component.css'],
 })
 export class MarkdownToHtmlComponent implements AfterViewInit, OnChanges {
   @Input() src: string;
@@ -69,16 +70,18 @@ export class MarkdownToHtmlComponent implements AfterViewInit, OnChanges {
       return '';
     }
     let indentStart: number;
-    return raw.split('\n').map((line: string) => {
-      // find position of 1st non-whitespace character
-      // to determine the markdown indentation start
-      if (line.length > 0 && isNaN(indentStart)) {
-        indentStart = line.search(/\S|$/);
-      }
-      // remove whitespaces before indentation start
-      return indentStart
-        ? line.substring(indentStart)
-        : line;
-    }).join('\n');
+    return raw
+      .replace(/\&gt;/g, '>')
+      .split('\n').map((line: string) => {
+        // find position of 1st non-whitespace character
+        // to determine the markdown indentation start
+        if (line.length > 0 && isNaN(indentStart)) {
+          indentStart = line.search(/\S|$/);
+        }
+        // remove whitespaces before indentation start
+        return indentStart
+          ? line.substring(indentStart)
+          : line;
+      }).join('\n');
   }
 }
