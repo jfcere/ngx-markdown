@@ -9,7 +9,7 @@
 /deep/ table th,
 /deep/ table td {
   padding: 6px 13px;
-  border: 1px solid rgba(0,0,0,0.11);
+  border: 1px solid #ddd;
 }
 
 /deep/ table tr:nth-child(2n) {

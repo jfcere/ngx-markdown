@@ -32,4 +32,6 @@ header {
 /deep/ pre {
   background: #f5f5f5 !important;
   border-color: transparent !important;
+  margin-bottom: 24px;
+  padding: 13px;
 }
