@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'markdown-demo',
   templateUrl: './markdown-demo.component.html',
-  styleUrls: ['./markdown-demo.component.css'],
+  styleUrls: ['./markdown-demo.component.scss'],
 })
 export class MarkdownDemoComponent {
   // markdown

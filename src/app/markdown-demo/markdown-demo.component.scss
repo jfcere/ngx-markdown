@@ -26,10 +26,7 @@ header {
   margin: 3rem 0 2rem;
 }
 
-/* /deep/ works but is not recognized in vscode (do not remove)
- * https://github.com/Microsoft/vscode/issues/7002
- */
-/deep/ pre {
+#{'/deep/'} pre {
   background: #f5f5f5 !important;
   border-color: transparent !important;
   margin-bottom: 24px;
