@@ -20,7 +20,7 @@
       "prefix": "markdown",
       "mobile": false,
       "styles": [
-        "styles.css",
+        "styles.scss",
         "../node_modules/prismjs/themes/prism.css"
       ],
       "scripts": [],
@@ -52,7 +52,7 @@
     }
   ],
   "defaults": {
-    "styleExt": "css",
+    "styleExt": "scss",
     "prefixInterfaces": false,
     "inline": {
       "style": false,
