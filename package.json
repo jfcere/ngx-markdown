@@ -27,7 +27,7 @@
   "scripts": {
     "build": "ng build",
     "e2e": "ng e2e",
-    "lint": "ng lint",
+    "lint": "tslint \"src/**/*.ts\"",
     "ng": "ng",
     "start": "ng serve",
     "test": "ng test",
