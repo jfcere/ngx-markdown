@@ -34,18 +34,28 @@ import { HomeComponent } from './home.component';
 
 To activate [Prism.js](http://prismjs.com/) synthax highlight you will need to choose a css theme file from `node_modules/prismjs/themes` directory and add it to your application.
 
-If you are using [Angular CLI](https://cli.angular.io/) you can add the css file by modifying the `angular-cli.json` file as below ...
+> Note that you can also find additional themes by browsing the web such as [Prism-Themes](https://github.com/PrismJS/prism-themes) or [Mokokai](https://github.com/Ahrengot/Monokai-theme-for-Prism.js) for example.
+
+If you are using [Angular CLI](https://cli.angular.io/) you can follow the example below...
+
+#### .angular-cli.json
 
 ```diff
 "styles": [
   "styles.css",
-+  "../node_modules/prismjs/themes/prism-okaidia.css"
++ "../node_modules/prismjs/themes/prism-okaidia.css"
 ],
 ```
 
-You can find additional themes by browsing the web such as ...
-- [Prism-Themes](https://github.com/PrismJS/prism-themes)
-- [Mokokai](https://github.com/Ahrengot/Monokai-theme-for-Prism.js)
+#### tsconfig.app.json (for Angular-CLI >= 1.0.0-rc.0)
+
+```diff
+"compilerOptions": {
+  "types": [
++   "prismjs"
+  ]
+},
+```
 
 ## Usage
 
@@ -117,38 +127,7 @@ ng serve
 
 ## AoT compilation
 
-You will need to exclude `test.ts` from your `tsconfig.json` file as loading TestBed pulls on dependencies that are not needed when serving app.
-
-> **Warning!**
-You should copy your `tsconfig.json` file and create a new one for AoT compilation like `tsconfig-aot.json` as stated on [Angular official documentation](https://angular.io/docs/ts/latest/cookbook/aot-compiler.html#!#compile) othwerwise your tests won't run after excluding `test.ts`.
-
-```diff
-{
-  "compilerOptions": {
-    "baseUrl": "",
-    "declaration": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "lib": ["es2015", "dom"],
-    "mapRoot": "./",
-    "module": "es2015",
-    "moduleResolution": "node",
-    "outDir": "../dist/out-tsc",
-    "sourceMap": true,
-    "target": "es5",
-    "typeRoots": [
-      "../node_modules/@types"
-    ]
-  },
-  "exclude": [
-+    "test.ts"
-  ],
-  "angularCompilerOptions": {
-    "genDir": "aot",
-    "skipMetadataEmit" : true
- }
-}
-```
+Building with AoT is part of the CI and is tested every time a commit occurs so you don't have to worry at all.
 
 ## Road map
 
