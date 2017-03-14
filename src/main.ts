@@ -1,7 +1,6 @@
-import './polyfills.ts';
-
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { enableProdMode } from '@angular/core';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
 import { environment } from './environments/environment';
 import { MarkdownDemoModule } from './app/markdown-demo/markdown-demo.module';
 
