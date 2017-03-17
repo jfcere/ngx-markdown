@@ -22,6 +22,6 @@ test:
   override:
     - yarn test -- --single-run
     - yarn lint -- --formatters-dir ./tslint-formatters --format junit -o $CIRCLE_TEST_REPORTS/lint/tslint.xml
-    - yarn build
+    - yarn build -- --prod
   post:
     - mv test-results.xml $CIRCLE_TEST_REPORTS/karma
