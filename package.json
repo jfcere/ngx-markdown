@@ -71,13 +71,13 @@
     "ts-node": "~2.0.0",
     "tslint": "~4.4.2",
     "typescript": "~2.0.0",
-    "zone.js": "^0.8.0"
+    "zone.js": "^0.7.6"
   },
   "peerDependencies": {
     "@angular/core": "^2.4.0",
     "@angular/http": "^2.4.0",
     "core-js": "^2.4.1",
     "rxjs": "^5.1.0",
-    "zone.js": "^0.8.0"
+    "zone.js": "^0.7.6"
   }
 }
