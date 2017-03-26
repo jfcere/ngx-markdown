@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges }
 import { MarkdownToHtmlService } from './markdown-to-html.service';
 
 import * as marked from 'marked';
+import * as Prism from 'prismjs';
 
 import 'prismjs/prism';
 import 'prismjs/components/prism-c';
