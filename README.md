@@ -113,15 +113,13 @@ When using remote url ng2-markdown-to-html will use file extension to automatica
 
 ## Demo application
 
-You can find the [demo](https://jfcere.github.io/ng2-markdown-to-html) source code inside the `src/app/markdown-demo` directory.
+A demo is available @ [https://jfcere.github.io/ng2-markdown-to-html](https://jfcere.github.io/ng2-markdown-to-html) and it source code can be found inside the `src/app/markdown-demo` directory.
 
 The following commands will clone the repository, install npm dependencies and serve the application @ [http://localhost:4200](http://localhost:4200)
 
 ```bash
 git clone https://github.com/jfcere/ng2-markdown-to-html.git
-
 npm install
-
 ng serve
 ```
 
@@ -135,6 +133,7 @@ Here is the list of tasks that will be done on this library in a near future ...
 
 - ~~Add CircleCI integration~~
 - ~~Publish demo on github pages~~
+- Make Prism highlight optional
 - Support Prism.js customizing options (line-numbers, line-height, ...)
 - Transpile library to Javascript
 
