@@ -31,7 +31,6 @@
     "ng": "ng",
     "start": "ng serve",
     "test": "ng test",
-    "test:coverage": "ng test --code-coverage --single-run",
     "coveralls": "cat \"./coverage/lcov.info\" | \"./node_modules/coveralls/bin/coveralls.js\"",
     "build:gh-pages": "ng build --prod --base-href \"https://jfcere.github.io/ng2-markdown-to-html/\"",
     "publish:gh-pages": "angular-cli-ghpages --message \"Publish gh-pages\""
