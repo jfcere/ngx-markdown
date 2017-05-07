@@ -2,6 +2,8 @@ general:
   branches:
     ignore:
       - gh-pages
+  artifacts:
+    - "coverage"
 
 machine:
   node:
@@ -20,7 +22,7 @@ test:
     - mkdir $CIRCLE_TEST_REPORTS/karma
     - mkdir $CIRCLE_TEST_REPORTS/lint
   override:
-    - yarn test -- --single-run
+    - yarn test -- --code-coverage --single-run
     - yarn lint -- --formatters-dir ./tslint-formatters --format junit -o $CIRCLE_TEST_REPORTS/lint/tslint.xml
     - yarn build -- --prod --aot
   post:
