@@ -2,8 +2,6 @@ general:
   branches:
     ignore:
       - gh-pages
-  artifacts:
-    - "coverage"
 
 machine:
   node:
@@ -27,3 +25,4 @@ test:
     - yarn build -- --prod --aot
   post:
     - mv test-results.xml $CIRCLE_TEST_REPORTS/karma
+    - mv ./coverage/lcov.info $CIRCLE_ARTIFACTS/coverage
