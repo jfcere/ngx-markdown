@@ -31,6 +31,7 @@
     "ng": "ng",
     "start": "ng serve",
     "test": "ng test",
+    "coveralls": "cat \"./coverage/lcov.info\" | \"./node_modules/coveralls/bin/coveralls.js\"",
     "build:gh-pages": "ng build --prod --base-href \"https://jfcere.github.io/ng2-markdown-to-html/\"",
     "publish:gh-pages": "angular-cli-ghpages --message \"Publish gh-pages\""
   },
@@ -57,6 +58,7 @@
     "angular-cli-ghpages": "^0.5.0",
     "codelyzer": "~2.0.0",
     "core-js": "^2.4.1",
+    "coveralls": "^2.13.1",
     "jasmine-core": "~2.5.2",
     "jasmine-spec-reporter": "~3.2.0",
     "karma": "~1.4.1",
