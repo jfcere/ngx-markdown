@@ -134,6 +134,7 @@ Here is the list of tasks that will be done on this library in a near future ...
 
 - ~~Add CircleCI integration~~
 - ~~Publish demo on github pages~~
+- Add variable binding feature
 - Make Prism highlight optional
 - Support Prism.js customizing options (line-numbers, line-height, ...)
 - Transpile library to Javascript
