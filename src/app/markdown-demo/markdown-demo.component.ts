@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 
-declare var autosize: any;
-
 @Component({
   selector: 'markdown-demo',
   templateUrl: './markdown-demo.component.html',
