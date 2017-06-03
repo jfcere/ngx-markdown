@@ -1,11 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
-import { MarkdownToHtmlComponent } from './markdown-to-html.component';
-import { MarkdownToHtmlService } from './markdown-to-html.service';
-import * as marked from 'marked';
+
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/toPromise';
+
+import * as marked from 'marked';
+import * as Prism from 'prismjs';
+
+import { MarkdownToHtmlComponent } from './markdown-to-html.component';
+import { MarkdownToHtmlService } from './markdown-to-html.service';
 
 class MockMarkdownToHtmlService extends MarkdownToHtmlService {
   getSource(src: string): Observable<string> {
@@ -39,6 +43,16 @@ describe('MarkdownToHtmlComponent', () => {
 
   describe('ngAfterViewInit', () => {
 
+    it('should call handleData method when data is provided', () => {
+
+      spyOn(component, 'handleData');
+
+      component.data = '# Markdown';
+      component.ngAfterViewInit();
+
+      expect(component.handleData).toHaveBeenCalled();
+    });
+
     it('should call handleSrc method when src is provided', () => {
 
       spyOn(component, 'handleSrc');
@@ -65,6 +79,28 @@ describe('MarkdownToHtmlComponent', () => {
 
   describe('ngOnChanges', () => {
 
+    it('should call handleData method when data is changed', () => {
+
+      spyOn(component, 'handleData');
+
+      const mockSimpleChanges = { data: null };
+
+      component.ngOnChanges(mockSimpleChanges);
+
+      expect(component.handleData).toHaveBeenCalled();
+    });
+
+    it('should not call handleData method when data is unchanged', () => {
+
+      spyOn(component, 'handleData');
+
+      const mockSimpleChanges = {};
+
+      component.ngOnChanges(mockSimpleChanges);
+
+      expect(component.handleData).not.toHaveBeenCalled();
+    });
+
     it('should call handleSrc method when src is changed', () => {
 
       spyOn(component, 'handleSrc');
@@ -85,6 +121,21 @@ describe('MarkdownToHtmlComponent', () => {
       component.ngOnChanges(mockSimpleChanges);
 
       expect(component.handleSrc).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('handleData', () => {
+
+    it('should call handleRaw method with data parameter', () => {
+
+      spyOn(component, 'handleRaw');
+
+      const mockData = '# Markdown';
+
+      component.data = mockData;
+      component.handleData();
+
+      expect(component.handleRaw).toHaveBeenCalledWith(mockData);
     });
   });
 

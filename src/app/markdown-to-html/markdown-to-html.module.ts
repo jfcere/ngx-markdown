@@ -8,10 +8,15 @@ import { MarkdownToHtmlService } from './markdown-to-html.service';
   exports: [MarkdownToHtmlComponent],
   imports: [HttpModule],
   declarations: [MarkdownToHtmlComponent],
-  providers: [MarkdownToHtmlService],
 })
 export class MarkdownToHtmlModule {
   static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: MarkdownToHtmlModule,
+      providers: [MarkdownToHtmlService],
+    };
+  }
+  static forChild(): ModuleWithProviders {
     return {
       ngModule: MarkdownToHtmlModule,
     };

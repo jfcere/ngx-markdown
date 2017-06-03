@@ -32,3 +32,24 @@ header {
   margin-bottom: 24px;
   padding: 13px;
 }
+
+.variable-binding,
+.variable-textarea {
+  width: 49%;
+
+  @media (max-width: 900px) {
+    width: 100%;
+  }
+}
+
+.variable-textarea {
+  border-radius: 4px;
+  margin-top: 8px;
+  min-height: 320px;
+  padding: 8px;
+}
+
+.variable-binding {
+  display: block;
+  float: right;
+}

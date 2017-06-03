@@ -64,7 +64,7 @@ ng2-markdown-to-html provides one component and one directive to parse your mark
 
 ### Component
 
-You can use `markdown-to-html` component to either parse static markdown directly from your html markup or load the content from a remote url using `src` property.
+You can use `markdown-to-html` component to either parse static markdown directly from your html markup, load the content from a remote url using `src` property or bind a variable to your component using `data` property.
 
 ```html
 <!-- static markdown -->
@@ -74,6 +74,9 @@ You can use `markdown-to-html` component to either parse static markdown directl
 
 <!-- loaded from remote url -->
 <markdown-to-html [src]="'path/to/file.md'"></markdown-to-html>
+
+<!-- variable binding -->
+<markdown-to-html [data]="markdown"></markdown-to-html>
 ```
 
 ### Directive
@@ -88,6 +91,9 @@ The same way the component works, you can use `markdown-to-html` directive to ac
 
 <!-- loaded from remote url -->
 <div markdown-to-html [src]="'path/to/file.md'"></div>
+
+<!-- variable binding -->
+<div markdown-to-html [data]="markdown"></div>
 ```
 
 ## Synthax highlight
@@ -112,6 +118,14 @@ When using remote url ng2-markdown-to-html will use file extension to automatica
 <markdown-to-html [src]="'path/to/file.php'"></markdown-to-html>
 ```
 
+When using variable binding you are responsible to provide the code block with related language.
+
+```typescript
+public markdown = '```typescript \n'
++ 'const myProp: string = \'value\' \n'
++ '```';
+```
+
 ## Demo application
 
 A demo is available @ [https://jfcere.github.io/ng2-markdown-to-html](https://jfcere.github.io/ng2-markdown-to-html) and it source code can be found inside the `src/app/markdown-demo` directory.
@@ -134,7 +148,7 @@ Here is the list of tasks that will be done on this library in a near future ...
 
 - ~~Add CircleCI integration~~
 - ~~Publish demo on github pages~~
-- Add variable binding feature
+- ~~Add variable binding feature~~
 - Make Prism highlight optional
 - Support Prism.js customizing options (line-numbers, line-height, ...)
 - Transpile library to Javascript

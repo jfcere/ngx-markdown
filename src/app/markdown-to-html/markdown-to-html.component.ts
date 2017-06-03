@@ -25,6 +25,7 @@ import 'prismjs/components/prism-typescript';
   styleUrls: ['./markdown-to-html.component.scss'],
 })
 export class MarkdownToHtmlComponent implements AfterViewInit, OnChanges {
+  @Input() data: string;
   @Input() src: string;
 
   constructor(
@@ -33,25 +34,38 @@ export class MarkdownToHtmlComponent implements AfterViewInit, OnChanges {
   ) { }
 
   ngAfterViewInit() {
+    if (this.data) {
+      this.handleData();
+      return;
+    }
     if (this.src) {
       this.handleSrc();
-    } else {
-      this.handleRaw(this.element.nativeElement.innerHTML);
+      return;
     }
+    this.handleRaw(this.element.nativeElement.innerHTML);
   }
 
   // SimpleChanges parameter is required for AoT compilation (do not remove)
   ngOnChanges(changes: SimpleChanges) {
+    if ('data' in changes) {
+      this.handleData();
+      return;
+    }
     if ('src' in changes) {
       this.handleSrc();
+      return;
     }
+  }
+
+  handleData() {
+    this.handleRaw(this.data);
   }
 
   handleSrc() {
     const extension = this.src
       ? this.src.split('.').splice(-1).join()
       : null;
-    return this.mthService.getSource(this.src)
+    this.mthService.getSource(this.src)
       .subscribe(data => {
         const raw = extension !== 'md'
           ? '```' + extension + '\n' + data + '\n```'
@@ -73,7 +87,8 @@ export class MarkdownToHtmlComponent implements AfterViewInit, OnChanges {
     let indentStart: number;
     return raw
       .replace(/\&gt;/g, '>')
-      .split('\n').map((line: string) => {
+      .split('\n')
+      .map((line: string) => {
         // find position of 1st non-whitespace character
         // to determine the markdown indentation start
         if (line.length > 0 && isNaN(indentStart)) {
