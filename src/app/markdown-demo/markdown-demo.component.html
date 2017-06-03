@@ -8,7 +8,6 @@
 </header>
 
 <!-- TABLE OF CONTENT -->
-
 <h2 class="subtitle">Table of contents</h2>
 
 <ul>
@@ -22,6 +21,7 @@
   <li><a href="#blockquotes">Blockquotes</a></li>
   <li><a href="#horizontal-rule">Horizontal Rule</a></li>
   <li><a href="#remote-url">Remote Url</a></li>
+  <li><a href="#variable-binding">Variable Binding</a></li>
 </ul>
 
 <!-- HEADER -->
@@ -128,7 +128,7 @@
 </markdown-to-html>
 
 <!-- REMOTE URL -->
-<h2 id="remote-url" class="subtitle">Remote url</h2>
+<h2 id="remote-url" class="subtitle">Remote Url</h2>
 
 <markdown-to-html>
   Using component with `src` property to fetch remote markdown file `app/markdown-demo/remote/demo.md`
@@ -163,3 +163,14 @@
 </markdown-to-html>
 
 <div markdown-to-html [src]="'app/markdown-demo/remote/demo.cpp'"></div>
+
+<!-- VARIABLE BINDING -->
+<h2 id="variable-binding" class="subtitle">Variable Binding</h2>
+
+<markdown-to-html>
+  Using component or directive with `data` property allow to bind a variable that will update the DOM when value changes
+</markdown-to-html>
+
+<textarea class="variable-textarea" [(ngModel)]="markdown"></textarea>
+
+<markdown-to-html class="variable-binding" [data]="markdown"></markdown-to-html>

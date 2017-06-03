@@ -7,16 +7,32 @@ import { Component } from '@angular/core';
 })
 export class MarkdownDemoComponent {
   // markdown
-  public blockquotes = require('raw-loader!./markdown/blockquotes.md');
-  public codeAndSynthaxHighlighting = require('raw-loader!./markdown/code-and-synthax-highlighting.md');
-  public emphasis = require('raw-loader!./markdown/emphasis.md');
-  public headers = require('raw-loader!./markdown/headers.md');
-  public horizontalRule = require('raw-loader!./markdown/horizontal-rule.md');
-  public images = require('raw-loader!./markdown/images.md');
-  public links = require('raw-loader!./markdown/links.md');
-  public lists = require('raw-loader!./markdown/lists.md');
-  public listsDot = require('raw-loader!./markdown/lists-dot.md');
-  public tables = require('raw-loader!./markdown/tables.md');
+  blockquotes = require('raw-loader!./markdown/blockquotes.md');
+  codeAndSynthaxHighlighting = require('raw-loader!./markdown/code-and-synthax-highlighting.md');
+  emphasis = require('raw-loader!./markdown/emphasis.md');
+  headers = require('raw-loader!./markdown/headers.md');
+  horizontalRule = require('raw-loader!./markdown/horizontal-rule.md');
+  images = require('raw-loader!./markdown/images.md');
+  links = require('raw-loader!./markdown/links.md');
+  lists = require('raw-loader!./markdown/lists.md');
+  listsDot = require('raw-loader!./markdown/lists-dot.md');
+  tables = require('raw-loader!./markdown/tables.md');
   // remote
-  public demoPython = require('raw-loader!./remote/demo.py');
+  demoPython = require('raw-loader!./remote/demo.py');
+  // variable-binding
+  markdown =
+`### Markdown example
+---
+This is an **example** where we bind a variable to the \`markdown-to-html\` component that is also bind to a textarea.
+
+#### example.component.ts
+\`\`\`typescript
+public markdown = "# Markdown";
+\`\`\`
+
+#### example.component.html
+\`\`\`html
+<textarea [(ngModel)]="markdown"></textarea>
+<markdown-to-html [data]="markdown"></markdown-to-html>
+\`\`\``;
 }
