@@ -19,6 +19,7 @@ export class MarkdownDemoComponent {
   tables = require('raw-loader!./markdown/tables.md');
   // remote
   demoPython = require('raw-loader!./remote/demo.py');
+  languagePipe = require('raw-loader!./remote/language-pipe.html');
   // variable-binding
   markdown =
 `### Markdown example
