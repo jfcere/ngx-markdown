@@ -118,12 +118,10 @@ When using remote url ng2-markdown-to-html will use file extension to automatica
 <markdown-to-html [src]="'path/to/file.php'"></markdown-to-html>
 ```
 
-When using variable binding you are responsible to provide the code block with related language.
+When using variable binding you can optionally use `language` pipe to specify the language of the variable content (default value is markdown when pipe is not used).
 
-```typescript
-public markdown = '```typescript \n'
-+ 'const myProp: string = \'value\' \n'
-+ '```';
+```html
+<markdown-to-html [data]="markdown | language : 'typescript'"></markdown-to-html>
 ```
 
 ## Demo application
