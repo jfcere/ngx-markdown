@@ -2,6 +2,7 @@
 
 # compiled output
 /dist
+/inline-template
 /tmp
 
 # dependencies
