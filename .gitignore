@@ -3,7 +3,10 @@
 # compiled output
 /dist
 /inline-template
+/package
 /tmp
+*.tgz
+*.tar
 
 # dependencies
 /node_modules
