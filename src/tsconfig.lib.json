@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "declaration": true,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": [
+      "es2016",
+      "dom"
+    ],
+    "outDir": "../dist/lib",
+    "target": "es5",
+    "module": "es2015",
+    "baseUrl": "",
+    "typeRoots": [
+      "../node_modules/@types"
+    ]
+  },
+  "include": [
+    "../inline-template/**/*"
+  ]
+}

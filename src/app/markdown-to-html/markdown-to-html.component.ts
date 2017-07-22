@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { MarkdownToHtmlService } from './markdown-to-html.service';
 
-import * as marked from 'marked';
 import * as Prism from 'prismjs';
 
 import 'prismjs/prism';
