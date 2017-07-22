@@ -5,6 +5,8 @@
 /inline-template
 /package
 /tmp
+*.ngfactory.ts
+*.ngsummary.json
 *.tgz
 *.tar
 

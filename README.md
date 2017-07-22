@@ -15,25 +15,19 @@ npm install ng2-markdown-to-html --save
 
 ## Configuration
 
-You must import `MarkdownToHtmlModule` inside your module to be able to use `markdown-to-html` component and/or directive.
+To activate markdown parsing you will need to add [marked](https://github.com/chjj/marked) to to your application.
+
+If you are using [Angular CLI](https://cli.angular.io/) you can follow the example below...
+
+#### .angular-cli.json
 
 ```diff
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-+ import { MarkdownToHtmlModule } from 'ng2-markdown-to-html';
-
-import { HomeComponent } from './home.component';
-
-@NgModule({
-  imports: [
-    CommonModule,
-+    MarkdownToHtmlModule.forRoot(),
-  ],
-  declarations: [HomeComponent],
-})
+"scripts": [
++ "../node_modules/marked/lib/marked.js"
+ ],
 ```
 
-To activate [Prism.js](http://prismjs.com/) synthax highlight you will need to choose a css theme file from `node_modules/prismjs/themes` directory and add it to your application.
+To activate [Prism.js](http://prismjs.com/) synthax highlight you will need to choose a css theme file from `node_modules/prismjs/themes` directory and add it to your application along with `@types/prismjs` types file.
 
 > Note that you can also find additional themes by browsing the web such as [Prism-Themes](https://github.com/PrismJS/prism-themes) or [Mokokai](https://github.com/Ahrengot/Monokai-theme-for-Prism.js) for example.
 
@@ -59,6 +53,24 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the examp
 ```
 
 ## Usage
+
+You must import `MarkdownToHtmlModule` inside your module to be able to use `markdown-to-html` component and/or directive.
+
+```diff
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
++ import { MarkdownToHtmlModule } from 'ng2-markdown-to-html';
+
+import { HomeComponent } from './home.component';
+
+@NgModule({
+  imports: [
+    CommonModule,
++    MarkdownToHtmlModule.forRoot(),
+  ],
+  declarations: [HomeComponent],
+})
+```
 
 ng2-markdown-to-html provides one component and one directive to parse your markdown to your web application.
 

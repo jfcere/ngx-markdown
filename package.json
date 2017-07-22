@@ -42,6 +42,7 @@
     "clean:artifact": "rimraf src/**/*.ngfactory.ts src/**/*.ngsummary.json src/**/*.ngstyle.ts",
     "clean:dist": "rimraf dist",
     "clean:inline-template": "rimraf **/inline-template",
+    "clean:package": "rimraf package *.tar *.tgz",
     "inline-template": "gulp inline-template",
     "transpile": "ngc -p src/tsconfig.lib.json",
     "package": "rollup -c",
