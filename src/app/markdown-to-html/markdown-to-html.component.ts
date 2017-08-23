@@ -1,6 +1,11 @@
 import { AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { MarkdownToHtmlService } from './markdown-to-html.service';
 
+// workaround to fix rollup namespace import
+// https://github.com/rollup/rollup/issues/670#issuecomment-284621537
+import * as _marked from 'marked';
+const marked = _marked;
+
 import * as Prism from 'prismjs';
 
 import 'prismjs/prism';

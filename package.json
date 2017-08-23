@@ -50,7 +50,7 @@
   },
   "private": false,
   "dependencies": {
-    "@types/marked": "0.0.28",
+    "@types/marked": "0.3.0",
     "@types/prismjs": "^1.6.0",
     "marked": "^0.3.6",
     "prismjs": "^1.6.0"

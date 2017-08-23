@@ -15,18 +15,6 @@ npm install ng2-markdown-to-html --save
 
 ## Configuration
 
-To activate markdown parsing you will need to add [marked](https://github.com/chjj/marked) to to your application.
-
-If you are using [Angular CLI](https://cli.angular.io/) you can follow the example below...
-
-#### .angular-cli.json
-
-```diff
-"scripts": [
-+ "../node_modules/marked/lib/marked.js"
- ],
-```
-
 To activate [Prism.js](http://prismjs.com/) synthax highlight you will need to choose a css theme file from `node_modules/prismjs/themes` directory and add it to your application along with `@types/prismjs` types file.
 
 > Note that you can also find additional themes by browsing the web such as [Prism-Themes](https://github.com/PrismJS/prism-themes) or [Mokokai](https://github.com/Ahrengot/Monokai-theme-for-Prism.js) for example.
