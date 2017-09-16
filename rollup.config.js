@@ -1,9 +1,11 @@
 export default {
-  entry: 'dist/lib/markdown-to-html.module.js',
-  dest: 'dist/bundles/ng2-markdown-to-html.umd.js',
+  input: 'dist/lib/index.js',
+  output: {
+    file: 'dist/bundles/ng2-markdown-to-html.umd.js',
+    format: 'umd',
+  },
   sourceMap: false,
-  format: 'umd',
-  moduleName: 'ng.markdowntohtml',
+  name: 'ng.markdowntohtml',
   globals: {
     '@angular/core': 'ng.core',
     '@angular/http': 'ng.http',
