@@ -1,9 +1,22 @@
 # ngx-markdown
 [![CircleCI](https://circleci.com/gh/jfcere/ngx-markdown/tree/master.svg?style=shield&)](https://circleci.com/gh/jfcere/ngx-markdown/tree/master) [![Coverage Status](https://coveralls.io/repos/github/jfcere/ngx-markdown/badge.svg?branch=master)](https://coveralls.io/github/jfcere/ngx-markdown?branch=master) [![version](https://img.shields.io/npm/v/ngx-markdown.svg?style=flat)](https://www.npmjs.com/package/ngx-markdown) [![npm](https://img.shields.io/npm/l/ngx-markdown.svg)](https://opensource.org/licenses/MIT) [![dependencies Status](https://david-dm.org/jfcere/ngx-markdown/status.svg)](https://david-dm.org/jfcere/ngx-markdown) [![peerDependencies Status](https://david-dm.org/jfcere/ngx-markdown/peer-status.svg)](https://david-dm.org/jfcere/ngx-markdown?type=peer)
 
+> **v1.4.0** Repository has been renamed from `ng2-markdown-to-html` to `ngx-markdown`. Follow [v1.4.0 release notes](https://github.com/jfcere/ngx-markdown/releases/tag/v1.4.0) for quick required changes.
+
 ngx-markdown is an [Angular 2+](https://angular.io/) library that uses [marked](https://github.com/chjj/marked) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for synthax highlights.
 
 Demo available @ [jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown)
+
+### Table of contents
+
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Synthax highlight](#synthax-highlight)
+- [Demo application](#demo-application)
+- [AoT compilation](#aot-compilation)
+- [Road map](#road-map)
+- [Contribution](#contribution)
 
 ## Installation
 
