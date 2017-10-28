@@ -24,7 +24,7 @@ export class MarkdownDemoComponent {
   markdown =
 `### Markdown example
 ---
-This is an **example** where we bind a variable to the \`markdown-to-html\` component that is also bind to a textarea.
+This is an **example** where we bind a variable to the \`markdown\` component that is also bind to a textarea.
 
 #### example.component.ts
 \`\`\`typescript
@@ -34,6 +34,6 @@ public markdown = "# Markdown";
 #### example.component.html
 \`\`\`html
 <textarea [(ngModel)]="markdown"></textarea>
-<markdown-to-html [data]="markdown"></markdown-to-html>
+<markdown [data]="markdown"></markdown>
 \`\`\``;
 }

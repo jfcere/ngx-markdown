@@ -1,2 +1,2 @@
-export * from './src/app/markdown-to-html/markdown-to-html.module';
-export * from './src/app/markdown-to-html/markdown-to-html.component';
+export * from './src/app/markdown/markdown.module';
+export * from './src/app/markdown/markdown.component';

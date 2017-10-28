@@ -8,34 +8,34 @@ import 'rxjs/add/operator/toPromise';
 import * as marked from 'marked';
 import * as Prism from 'prismjs';
 
-import { MarkdownToHtmlComponent } from './markdown-to-html.component';
-import { MarkdownToHtmlService } from './markdown-to-html.service';
+import { MarkdownComponent } from './markdown.component';
+import { MarkdownService } from './markdown.service';
 
-class MockMarkdownToHtmlService extends MarkdownToHtmlService {
+class MockMarkdownService extends MarkdownService {
   getSource(src: string): Observable<string> {
     return Observable.of('');
   }
 }
 
-describe('MarkdownToHtmlComponent', () => {
-  let fixture: ComponentFixture<MarkdownToHtmlComponent>;
-  let component: MarkdownToHtmlComponent;
+describe('MarkdownComponent', () => {
+  let fixture: ComponentFixture<MarkdownComponent>;
+  let component: MarkdownComponent;
   let nativeElement: any;
-  let mthService: MarkdownToHtmlService;
+  let markdownService: MarkdownService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [HttpModule],
-      declarations: [MarkdownToHtmlComponent],
+      declarations: [MarkdownComponent],
       providers: [
-        { provide: MarkdownToHtmlService, useClass: MockMarkdownToHtmlService },
+        { provide: MarkdownService, useClass: MockMarkdownService },
       ],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    mthService = TestBed.get(MarkdownToHtmlService);
-    fixture = TestBed.createComponent(MarkdownToHtmlComponent);
+    markdownService = TestBed.get(MarkdownService);
+    fixture = TestBed.createComponent(MarkdownComponent);
     component = fixture.componentInstance;
     nativeElement = fixture.nativeElement;
     fixture.detectChanges();
@@ -141,25 +141,25 @@ describe('MarkdownToHtmlComponent', () => {
 
   describe('handleSrc', () => {
 
-    it('should call getSource from MarkdownToHtmlService', () => {
+    it('should call getSource from MarkdownService', () => {
 
       const mockGetSource = { subscribe: () => null };
 
-      spyOn(mthService, 'getSource').and.returnValue(mockGetSource);
+      spyOn(markdownService, 'getSource').and.returnValue(mockGetSource);
 
       const mockSrc = './src-example/file.md';
 
       component.src = mockSrc;
       component.handleSrc();
 
-      expect(mthService.getSource).toHaveBeenCalledWith(mockSrc);
+      expect(markdownService.getSource).toHaveBeenCalledWith(mockSrc);
     });
 
     it('should call handleRaw according to file extension when not .md', async(() => {
 
       const mockRaw =  'raw-text';
 
-      spyOn(mthService, 'getSource').and.returnValue(Observable.of(mockRaw));
+      spyOn(markdownService, 'getSource').and.returnValue(Observable.of(mockRaw));
 
       spyOn(component, 'handleRaw');
 
@@ -173,7 +173,7 @@ describe('MarkdownToHtmlComponent', () => {
 
       const mockRaw =  'raw-text';
 
-      spyOn(mthService, 'getSource').and.returnValue(Observable.of(mockRaw));
+      spyOn(markdownService, 'getSource').and.returnValue(Observable.of(mockRaw));
 
       spyOn(component, 'handleRaw');
 
