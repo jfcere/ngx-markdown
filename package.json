@@ -1,7 +1,7 @@
 {
-  "name": "ng2-markdown-to-html",
+  "name": "ngx-markdown",
   "description": "Angular 2+ library that uses marked to parse markdown to html combined with Prism.js for synthax highlights",
-  "homepage": "https://github.com/jfcere/ng2-markdown-to-html",
+  "homepage": "https://github.com/jfcere/ngx-markdown",
   "version": "1.3.2",
   "license": "MIT",
   "author": {
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jfcere/ng2-markdown-to-html"
+    "url": "https://github.com/jfcere/ngx-markdown"
   },
   "keywords": [
     "angular",
@@ -20,6 +20,7 @@
     "markdown-to-html",
     "marked",
     "ng2",
+    "ngx",
     "parser",
     "prism",
     "prism.js"
@@ -34,7 +35,7 @@
     "start": "npm run clean:dist && ng serve",
     "test": "ng test",
     "coveralls": "cat \"./coverage/lcov.info\" | \"./node_modules/coveralls/bin/coveralls.js\"",
-    "build:gh-pages": "ng build --prod --base-href \"https://jfcere.github.io/ng2-markdown-to-html/\"",
+    "build:gh-pages": "ng build --prod --base-href \"https://jfcere.github.io/ngx-markdown/\"",
     "publish:gh-pages": "angular-cli-ghpages --message \"Publish gh-pages\"",
     "prebuild:lib": "npm run clean:dist && npm run clean:inline-template && npm run clean:artifact",
     "build:lib": "npm run inline-template && npm run transpile && npm run package && npm run minify",
@@ -46,7 +47,7 @@
     "inline-template": "gulp inline-template",
     "transpile": "ngc -p src/tsconfig.lib.json",
     "package": "rollup -c",
-    "minify": "uglifyjs dist/bundles/ng2-markdown-to-html.umd.js --screw-ie8 --compress --mangle --comments --output dist/bundles/ng2-markdown-to-html.umd.min.js"
+    "minify": "uglifyjs dist/bundles/ngx-markdown.umd.js --screw-ie8 --compress --mangle --comments --output dist/bundles/ngx-markdown.umd.min.js"
   },
   "private": false,
   "dependencies": {

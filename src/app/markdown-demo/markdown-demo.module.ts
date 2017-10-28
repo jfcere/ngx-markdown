@@ -3,13 +3,13 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { MarkdownDemoComponent } from './markdown-demo.component';
-import { MarkdownToHtmlModule } from '../markdown-to-html/markdown-to-html.module';
+import { MarkdownModule } from '../markdown/markdown.module';
 
 @NgModule({
   imports: [
     BrowserModule,
     FormsModule,
-    MarkdownToHtmlModule.forRoot(),
+    MarkdownModule.forRoot(),
   ],
   declarations: [MarkdownDemoComponent],
   bootstrap: [MarkdownDemoComponent],

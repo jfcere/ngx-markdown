@@ -1,7 +1,7 @@
 import { async, TestBed } from '@angular/core/testing';
 import { BaseRequestOptions, Http, HttpModule, Response, ResponseOptions } from '@angular/http';
 import { MockBackend, MockConnection } from '@angular/http/testing';
-import { MarkdownToHtmlService } from './markdown-to-html.service';
+import { MarkdownService } from './markdown.service';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { AnonymousSubject } from 'rxjs/Subject';
@@ -22,9 +22,9 @@ const mockHttpProvider = {
   ) => new Http(backend, defaultOptions),
 };
 
-describe('MarkdownToHtmlService', () => {
+describe('MarkdowService', () => {
   let http: Http;
-  let mthService: MarkdownToHtmlService;
+  let markdownService: MarkdownService;
   let mockBackend: MockBackend;
 
   function mockBackendResponse(responseOptions: ResponseOptions = new ResponseOptions()): Response {
@@ -51,7 +51,7 @@ describe('MarkdownToHtmlService', () => {
     TestBed.configureTestingModule({
       providers: [
         BaseRequestOptions,
-        MarkdownToHtmlService,
+        MarkdownService,
         MockBackend,
         mockHttpProvider,
       ],
@@ -60,7 +60,7 @@ describe('MarkdownToHtmlService', () => {
 
   beforeEach(() => {
     http = TestBed.get(Http);
-    mthService = TestBed.get(MarkdownToHtmlService);
+    markdownService = TestBed.get(MarkdownService);
     mockBackend = TestBed.get(MockBackend);
   });
 
@@ -72,34 +72,34 @@ describe('MarkdownToHtmlService', () => {
 
       const mockSrc = 'src-x';
 
-      mthService.getSource(mockSrc);
+      markdownService.getSource(mockSrc);
 
       expect(http.get).toHaveBeenCalledWith(mockSrc);
     });
 
     it('should map returned data', async(() => {
 
-      spyOn(mthService, 'extractData');
+      spyOn(markdownService, 'extractData');
 
       const response = mockBackendResponse(<ResponseOptions>{ body: 'response-text-x' });
 
-      const observable = mthService.getSource('src-x');
+      const observable = markdownService.getSource('src-x');
 
       observable.subscribe(responseData => {
-        expect(mthService.extractData).toHaveBeenCalledWith(response, jasmine.any(Number));
+        expect(markdownService.extractData).toHaveBeenCalledWith(response, jasmine.any(Number));
       });
     }));
 
     it('should call handleError when an error occurs', async(() => {
 
-      spyOn(mthService, 'handleError');
+      spyOn(markdownService, 'handleError');
 
       const error = mockBackendError('error-x');
 
-      const observable = mthService.getSource('src-x');
+      const observable = markdownService.getSource('src-x');
 
       observable.subscribe(null, responseError => {
-        expect(mthService.handleError).toHaveBeenCalledWith(error, jasmine.any(AnonymousSubject));
+        expect(markdownService.handleError).toHaveBeenCalledWith(error, jasmine.any(AnonymousSubject));
       });
     }));
   });
@@ -111,7 +111,7 @@ describe('MarkdownToHtmlService', () => {
       const reponseText = 'reponse-text-x';
       const responseOptions = new ResponseOptions({ body: reponseText });
 
-      const extractedData = mthService.extractData(new Response(responseOptions));
+      const extractedData = markdownService.extractData(new Response(responseOptions));
 
       expect(extractedData).toEqual(reponseText);
     });
@@ -120,7 +120,7 @@ describe('MarkdownToHtmlService', () => {
 
       const responseOptions = new ResponseOptions();
 
-      const extractedData = mthService.extractData(new Response(responseOptions));
+      const extractedData = markdownService.extractData(new Response(responseOptions));
 
       expect(extractedData).toEqual('');
     });
@@ -135,7 +135,7 @@ describe('MarkdownToHtmlService', () => {
       spyOn(console, 'error');
       spyOn(Observable, 'create');
 
-      mthService.handleError(error);
+      markdownService.handleError(error);
 
       expect(console.error).toHaveBeenCalledWith(error);
     });
@@ -147,7 +147,7 @@ describe('MarkdownToHtmlService', () => {
       spyOn(console, 'error');
       spyOn(Observable, 'create');
 
-      const observable = mthService.handleError(error);
+      const observable = markdownService.handleError(error);
 
       observable.subscribe(null, () => {
         expect(observable).toEqual(jasmine.any(ErrorObservable));

@@ -1,6 +1,6 @@
 <header>
   <h1>
-    <a class="title" href="https://github.com/jfcere/ng2-markdown-to-html">ng2-markdown-to-html</a>
+    <a class="title" href="https://github.com/jfcere/ngx-markdown">ngx-markdown</a>
   </h1>
   <h4 class="title-based-on">
     demo based on <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">markdown cheatsheet</a>
@@ -31,9 +31,9 @@
 {{ headers }}
 </pre>
 
-<markdown-to-html>
+<markdown>
 {{ headers }}
-</markdown-to-html>
+</markdown>
 
 <!-- EMPHASIS -->
 <h2 id="emphasis" class="subtitle">Emphasis</h2>
@@ -42,9 +42,9 @@
 {{ emphasis }}
 </pre>
 
-<markdown-to-html>
+<markdown>
 {{ emphasis }}
-</markdown-to-html>
+</markdown>
 
 <!-- LISTS -->
 <h2 id="lists" class="subtitle">Lists</h2>
@@ -57,9 +57,9 @@
 {{ listsDot }}
 </pre>
 
-<markdown-to-html>
+<markdown>
 {{ lists }}
-</markdown-to-html>
+</markdown>
 
 <!-- LINKS -->
 <h2 id="links" class="subtitle">Links</h2>
@@ -68,9 +68,9 @@
 {{ links }}
 </pre>
 
-<markdown-to-html>
+<markdown>
 {{ links }}
-</markdown-to-html>
+</markdown>
 
 <!-- IMAGES -->
 <h2 id="images" class="subtitle">Images</h2>
@@ -79,9 +79,9 @@
 {{ images }}
 </pre>
 
-<markdown-to-html>
+<markdown>
 {{ images }}
-</markdown-to-html>
+</markdown>
 
 <!-- CODE AND SYNTAX HIGHLIGHTING -->
 <h2 id="code-and-synthax" class="subtitle">Code and Syntax Highlighting</h2>
@@ -90,9 +90,9 @@
 {{ codeAndSynthaxHighlighting }}
 </pre>
 
-<markdown-to-html>
+<markdown>
 {{ codeAndSynthaxHighlighting }}
-</markdown-to-html>
+</markdown>
 
 <!-- TABLES -->
 <h2 id="tables" class="subtitle">Tables</h2>
@@ -101,9 +101,9 @@
 {{ tables }}
 </pre>
 
-<markdown-to-html>
+<markdown>
 {{ tables }}
-</markdown-to-html>
+</markdown>
 
 <!-- BLOCKQUOTES -->
 <h2 id="blockquotes" class="subtitle">Blockquotes</h2>
@@ -112,9 +112,9 @@
 {{ blockquotes }}
 </pre>
 
-<markdown-to-html>
+<markdown>
 {{ blockquotes }}
-</markdown-to-html>
+</markdown>
 
 <!-- HORIZONTAL RULE -->
 <h2 id="horizontal-rule" class="subtitle">Horizontal Rule</h2>
@@ -123,62 +123,62 @@
 {{ horizontalRule }}
 </pre>
 
-<markdown-to-html>
+<markdown>
 {{ horizontalRule }}
-</markdown-to-html>
+</markdown>
 
 <!-- REMOTE URL -->
 <h2 id="remote-url" class="subtitle">Remote Url</h2>
 
-<markdown-to-html>
+<markdown>
   Using component with `src` property to fetch remote markdown file `app/markdown-demo/remote/demo.md`
-</markdown-to-html>
+</markdown>
 
-<markdown-to-html [src]="'app/markdown-demo/remote/demo.md'"></markdown-to-html>
+<markdown [src]="'app/markdown-demo/remote/demo.md'"></markdown>
 
 <br />
 
-<markdown-to-html>
+<markdown>
   Using component with static `python` code block
-</markdown-to-html>
+</markdown>
 
-<markdown-to-html>
+<markdown>
 ```python
 {{ demoPython }}
 ```
-</markdown-to-html>
+</markdown>
 
 <br />
 
-<markdown-to-html>
+<markdown>
   Using directive with `src` property to fetch remote html file `app/markdown-demo/remote/demo.html`
-</markdown-to-html>
+</markdown>
 
-<div markdown-to-html [src]="'app/markdown-demo/remote/demo.html'"></div>
+<div markdown [src]="'app/markdown-demo/remote/demo.html'"></div>
 
 <br />
 
-<markdown-to-html>
+<markdown>
   Using directive with `src` property to fetch remote C++ file `app/markdown-demo/remote/demo.cpp`
-</markdown-to-html>
+</markdown>
 
-<div markdown-to-html [src]="'app/markdown-demo/remote/demo.cpp'"></div>
+<div markdown [src]="'app/markdown-demo/remote/demo.cpp'"></div>
 
 <!-- VARIABLE BINDING -->
 <h2 id="variable-binding" class="subtitle">Variable Binding</h2>
 
-<markdown-to-html>
+<markdown>
   Using component or directive with `data` property allow to bind a variable that will update the DOM when value changes
-</markdown-to-html>
+</markdown>
 
 <textarea class="variable-textarea" [(ngModel)]="markdown"></textarea>
 
-<markdown-to-html class="variable-binding" [data]="markdown"></markdown-to-html>
+<markdown class="variable-binding" [data]="markdown"></markdown>
 
 <br /><br />
 
-<markdown-to-html>
+<markdown>
   Using `language` pipe you can specify the language of the variable content for synthax highlights
-</markdown-to-html>
+</markdown>
 
-<markdown-to-html [src]="'app/markdown-demo/remote/language-pipe.html'"></markdown-to-html>
+<markdown [src]="'app/markdown-demo/remote/language-pipe.html'"></markdown>

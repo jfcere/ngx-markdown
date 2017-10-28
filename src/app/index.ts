@@ -1,1 +1,1 @@
-export * from './markdown-to-html/markdown-to-html.module';
+export * from './markdown/markdown.module';

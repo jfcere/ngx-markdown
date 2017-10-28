@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { MarkdownToHtmlService } from './markdown-to-html.service';
+import { MarkdownService } from './markdown.service';
 
 // workaround to fix rollup namespace import
 // https://github.com/rollup/rollup/issues/670#issuecomment-284621537
@@ -24,17 +24,18 @@ import 'prismjs/components/prism-scss';
 import 'prismjs/components/prism-typescript';
 
 @Component({
-  selector: 'markdown-to-html, [markdown-to-html]',
+  // tslint:disable-next-line:component-selector
+  selector: 'markdown, [markdown]',
   template: '<ng-content></ng-content>',
-  styleUrls: ['./markdown-to-html.component.scss'],
+  styleUrls: ['./markdown.component.scss'],
 })
-export class MarkdownToHtmlComponent implements AfterViewInit, OnChanges {
+export class MarkdownComponent implements AfterViewInit, OnChanges {
   @Input() data: string;
   @Input() src: string;
 
   constructor(
     public element: ElementRef,
-    public mthService: MarkdownToHtmlService,
+    public markdownService: MarkdownService,
   ) { }
 
   ngAfterViewInit() {
@@ -69,7 +70,7 @@ export class MarkdownToHtmlComponent implements AfterViewInit, OnChanges {
     const extension = this.src
       ? this.src.split('.').splice(-1).join()
       : null;
-    this.mthService.getSource(this.src)
+    this.markdownService.getSource(this.src)
       .subscribe(data => {
         const raw = extension !== 'md'
           ? '```' + extension + '\n' + data + '\n```'

@@ -2,30 +2,30 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 
 import { LanguagePipe } from './language.pipe';
-import { MarkdownToHtmlComponent } from './markdown-to-html.component';
-import { MarkdownToHtmlService } from './markdown-to-html.service';
+import { MarkdownComponent } from './markdown.component';
+import { MarkdownService } from './markdown.service';
 
 @NgModule({
   exports: [
-    MarkdownToHtmlComponent,
+    MarkdownComponent,
     LanguagePipe,
   ],
   imports: [HttpModule],
   declarations: [
-    MarkdownToHtmlComponent,
+    MarkdownComponent,
     LanguagePipe,
   ],
 })
-export class MarkdownToHtmlModule {
+export class MarkdownModule {
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: MarkdownToHtmlModule,
-      providers: [MarkdownToHtmlService],
+      ngModule: MarkdownModule,
+      providers: [MarkdownService],
     };
   }
   static forChild(): ModuleWithProviders {
     return {
-      ngModule: MarkdownToHtmlModule,
+      ngModule: MarkdownModule,
     };
   }
 }
