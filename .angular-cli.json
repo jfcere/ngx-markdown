@@ -25,7 +25,21 @@
         "../node_modules/prismjs/themes/prism.css"
       ],
       "scripts": [
-        "../node_modules/marked/lib/marked.js"
+        "../node_modules/prismjs/prism.js",
+        "../node_modules/prismjs/components/prism-c.min.js",
+        "../node_modules/prismjs/components/prism-cpp.min.js",
+        "../node_modules/prismjs/components/prism-csharp.min.js",
+        "../node_modules/prismjs/components/prism-css.min.js",
+        "../node_modules/prismjs/components/prism-diff.min.js",
+        "../node_modules/prismjs/components/prism-java.min.js",
+        "../node_modules/prismjs/components/prism-javascript.min.js",
+        "../node_modules/prismjs/components/prism-perl.min.js",
+        "../node_modules/prismjs/components/prism-php.min.js",
+        "../node_modules/prismjs/components/prism-python.min.js",
+        "../node_modules/prismjs/components/prism-sass.min.js",
+        "../node_modules/prismjs/components/prism-scss.min.js",
+        "../node_modules/prismjs/components/prism-typescript.min.js",
+        "../node_modules/markdown-it/dist/markdown-it.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

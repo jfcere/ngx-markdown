@@ -16,7 +16,7 @@
     "types": [
       "node",
       "prismjs",
-      "marked"
+      "markdown-it"
     ]
   },
   "exclude": [

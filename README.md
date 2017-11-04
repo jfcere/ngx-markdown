@@ -3,14 +3,13 @@
 
 > **v1.4.0** Repository has been renamed from `ng2-markdown-to-html` to `ngx-markdown`. Follow [v1.4.0 release notes](https://github.com/jfcere/ngx-markdown/releases/tag/v1.4.0) for quick required changes.
 
-ngx-markdown is an [Angular 2+](https://angular.io/) library that uses [marked](https://github.com/chjj/marked) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for synthax highlights.
+ngx-markdown is an [Angular 2+](https://angular.io/) library that uses [markdown-it](https://github.com/markdown-it/markdown-it) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for synthax highlights.
 
 Demo available @ [jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown)
 
 ### Table of contents
 
 - [Installation](#installation)
-- [Configuration](#configuration)
 - [Usage](#usage)
 - [Synthax highlight](#synthax-highlight)
 - [Demo application](#demo-application)
@@ -20,37 +19,55 @@ Demo available @ [jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-ma
 
 ## Installation
 
+### ngx-markdown
+
 Use the following command to add ngx-markdown library to your `package.json` file.
+
+To add ngx-markdown library to your `package.json` file use the following command
 
 ```bash
 npm install ngx-markdown --save
 ```
 
-## Configuration
+As the library is using [markdown-it]() parser you will need to add `../node_modules/markdown-it/dist/markdown-it.min.js` to your application.
 
-To activate [Prism.js](http://prismjs.com/) synthax highlight you will need to choose a css theme file from `node_modules/prismjs/themes` directory and add it to your application along with `@types/prismjs` types file.
+If you are using [Angular CLI](https://cli.angular.io/) you can follow the `.angular-cli.json` example below...
 
-> Note that you can also find additional themes by browsing the web such as [Prism-Themes](https://github.com/PrismJS/prism-themes) or [Mokokai](https://github.com/Ahrengot/Monokai-theme-for-Prism.js) for example.
+```diff
+"scripts": [
++ "../node_modules/markdown-it/dist/markdown-it.min.js"
+]
+```
 
-If you are using [Angular CLI](https://cli.angular.io/) you can follow the example below...
+### Synthax highlight
 
-#### .angular-cli.json
+To add [Prism.js](http://prismjs.com/) synthax highlight to your `package.json` use the following command
+
+> Synthax highlight is **optional**, skip this step if you are not planning to use it
+
+```bash
+npm install prismjs --save
+```
+
+To activate [Prism.js](http://prismjs.com/) synthax highlight you will need include...
+- prism.js core library - `node_modules/prismjs/prism.js` file
+- a highlight css theme - from `node_modules/prismjs/themes` directory
+- desired code language synthax files - from `node_modules/prismjs/components` directory
+
+> Additional themes can be found by browsing the web such as [Prism-Themes](https://github.com/PrismJS/prism-themes) or [Mokokai](https://github.com/Ahrengot/Monokai-theme-for-Prism.js) for example.
+
+If you are using [Angular CLI](https://cli.angular.io/) you can follow the `.angular-cli.json` example below...
 
 ```diff
 "styles": [
   "styles.css",
 + "../node_modules/prismjs/themes/prism-okaidia.css"
 ],
-```
-
-#### tsconfig.app.json (for Angular-CLI >= 1.0.0-rc.0)
-
-```diff
-"compilerOptions": {
-  "types": [
-+   "prismjs"
-  ]
-},
+"scripts": [
++ "../node_modules/prismjs/prism.js",
++ "../node_modules/prismjs/components/prism-csharp.min.js", # c-sharp language synthax
++ "../node_modules/prismjs/components/prism-css.min.js" # css language synthax
+]
 ```
 
 ## Usage
@@ -59,21 +76,46 @@ You must import `MarkdownModule` inside your module to be able to use `markdown`
 
 ```diff
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 + import { MarkdownModule } from 'ngx-markdown';
 
 import { HomeComponent } from './home.component';
 
 @NgModule({
   imports: [
-    CommonModule,
-+    MarkdownModule.forRoot(),
++   MarkdownModule.forRoot(),
   ],
   declarations: [HomeComponent],
 })
 ```
 
-ngx-markdown provides one component and one directive to parse your markdown to your web application.
+Optionaly, markdown parsing can be customized by passing [markdown-it](https://markdown-it.github.io/markdown-it/#MarkdownIt.new) preset and/or options to the `forRoot` method of `MarkdownModule`.
+
+```typescript
+// using default options
+MarkdownModule.forRoot(),
+
+// using preset
+MarkdownModule.forRoot({ preset: 'commonmark' }),
+
+// using options
+MarkdownModule.forRoot({
+  options: {
+    html: true,
+    linkify: true,
+    typographer: true,
+  }
+}),
+
+// combining preset and options
+MarkdownModule.forRoot({
+  preset: 'zero',
+  options: {
+    html: true,
+    linkify: true,
+    typographer: true,
+  }
+}),
+```
 
 ### Component
 
@@ -161,7 +203,8 @@ Here is the list of tasks that will be done on this library in a near future ...
 - ~~Publish demo on github pages~~
 - ~~Add variable binding feature~~
 - ~~Transpile library to Javascript~~
-- Make Prism highlight optional
+- ~~Replace marked parser~~
+- ~~Make Prism highlight optional~~
 - Support Prism.js customizing options (line-numbers, line-height, ...)
 
 ## Contribution

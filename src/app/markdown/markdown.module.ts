@@ -4,6 +4,7 @@ import { HttpModule } from '@angular/http';
 import { LanguagePipe } from './language.pipe';
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownService } from './markdown.service';
+import { MarkdownOptions } from './models';
 
 @NgModule({
   exports: [
@@ -17,10 +18,13 @@ import { MarkdownService } from './markdown.service';
   ],
 })
 export class MarkdownModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(markdownOptions?: MarkdownOptions): ModuleWithProviders {
     return {
       ngModule: MarkdownModule,
-      providers: [MarkdownService],
+      providers: [
+        MarkdownService,
+        { provide: MarkdownOptions, useValue: markdownOptions },
+      ],
     };
   }
   static forChild(): ModuleWithProviders {
