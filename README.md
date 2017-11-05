@@ -1,7 +1,7 @@
 # ngx-markdown
 [![CircleCI](https://circleci.com/gh/jfcere/ngx-markdown/tree/master.svg?style=shield&)](https://circleci.com/gh/jfcere/ngx-markdown/tree/master) [![Coverage Status](https://coveralls.io/repos/github/jfcere/ngx-markdown/badge.svg?branch=master)](https://coveralls.io/github/jfcere/ngx-markdown?branch=master) [![version](https://img.shields.io/npm/v/ngx-markdown.svg?style=flat)](https://www.npmjs.com/package/ngx-markdown) [![npm](https://img.shields.io/npm/l/ngx-markdown.svg)](https://opensource.org/licenses/MIT) [![dependencies Status](https://david-dm.org/jfcere/ngx-markdown/status.svg)](https://david-dm.org/jfcere/ngx-markdown) [![peerDependencies Status](https://david-dm.org/jfcere/ngx-markdown/peer-status.svg)](https://david-dm.org/jfcere/ngx-markdown?type=peer)
 
-> **v1.4.0** Repository has been renamed from `ng2-markdown-to-html` to `ngx-markdown`. Follow [v1.4.0 release notes](https://github.com/jfcere/ngx-markdown/releases/tag/v1.4.0) for quick required changes.
+> **v2.0.0** For security purpose `marked` parser has been replaced with `markdown-it`. Follow [v2.0.0 release notes](https://github.com/jfcere/ngx-markdown/releases/tag/v2.0.0) for quick required changes.
 
 ngx-markdown is an [Angular 2+](https://angular.io/) library that uses [markdown-it](https://github.com/markdown-it/markdown-it) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for synthax highlights.
 
@@ -21,9 +21,7 @@ Demo available @ [jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-ma
 
 ### ngx-markdown
 
-Use the following command to add ngx-markdown library to your `package.json` file.
-
-To add ngx-markdown library to your `package.json` file use the following command
+To add ngx-markdown library to your `package.json` use the following command.
 
 ```bash
 npm install ngx-markdown --save
@@ -41,7 +39,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `.ang
 
 ### Synthax highlight
 
-To add [Prism.js](http://prismjs.com/) synthax highlight to your `package.json` use the following command
+To add [Prism.js](http://prismjs.com/) synthax highlight to your `package.json` use the following command.
 
 > Synthax highlight is **optional**, skip this step if you are not planning to use it
 
