@@ -60,9 +60,9 @@ describe('MarkdownComponent', () => {
       expect(component.handleSrc).toHaveBeenCalled();
     });
 
-    it('should call handleRaw method when src is not provided', () => {
+    it('should call render method when src is not provided', () => {
 
-      spyOn(component, 'handleRaw');
+      spyOn(component, 'render');
 
       const mockElement = { nativeElement: { innerHTML: 'inner-html' } };
 
@@ -70,7 +70,7 @@ describe('MarkdownComponent', () => {
       component.src = undefined;
       component.ngAfterViewInit();
 
-      expect(component.handleRaw).toHaveBeenCalledWith(mockElement.nativeElement.innerHTML);
+      expect(component.render).toHaveBeenCalledWith(mockElement.nativeElement.innerHTML);
     });
   });
 
@@ -123,16 +123,16 @@ describe('MarkdownComponent', () => {
 
   describe('handleData', () => {
 
-    it('should call handleRaw method with data parameter', () => {
+    it('should call render method with data parameter', () => {
 
-      spyOn(component, 'handleRaw');
+      spyOn(component, 'render');
 
       const mockData = '# Markdown';
 
       component.data = mockData;
       component.handleData();
 
-      expect(component.handleRaw).toHaveBeenCalledWith(mockData);
+      expect(component.render).toHaveBeenCalledWith(mockData);
     });
   });
 
@@ -152,20 +152,20 @@ describe('MarkdownComponent', () => {
       expect(markdownService.getSource).toHaveBeenCalledWith(mockSrc);
     });
 
-    it('should call handleRaw with getSource return value', async(() => {
+    it('should call render with getSource return value', async(() => {
 
       const mockRaw =  'raw-text';
 
       spyOn(markdownService, 'getSource').and.returnValue(Observable.of(mockRaw));
-      spyOn(component, 'handleRaw');
+      spyOn(component, 'render');
 
       component.handleSrc();
 
-      expect(component.handleRaw).toHaveBeenCalledWith(mockRaw);
+      expect(component.render).toHaveBeenCalledWith(mockRaw);
     }));
   });
 
-  describe('handleRaw', () => {
+  describe('render', () => {
 
     it('should set innerHTML with compiled markdown', () => {
 
@@ -174,7 +174,7 @@ describe('MarkdownComponent', () => {
 
       spyOn(markdownService, 'compile').and.returnValue(compiled);
 
-      component.handleRaw(raw);
+      component.render(raw);
 
       expect(markdownService.compile).toHaveBeenCalledWith(raw);
       expect(component.element.nativeElement.innerHTML).toBe(compiled);
@@ -184,7 +184,7 @@ describe('MarkdownComponent', () => {
 
       spyOn(markdownService, 'highlight');
 
-      component.handleRaw('### Raw');
+      component.render('### Raw');
 
       expect(markdownService.highlight).toHaveBeenCalled();
     });

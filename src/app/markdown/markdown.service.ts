@@ -70,19 +70,19 @@ export class MarkdownService {
 
   private httpGet(src: string) {
     return this.http.get(src)
-      .map(this.extractData)
-      .catch(this.handleError);
+      .catch(this.handleError)
+      .map(this.extractData);
   }
 
-  private precompile(raw: string) {
-    if (!raw) {
+  private precompile(markdown: string) {
+    if (!markdown) {
       return '';
     }
     let indentStart: number;
-    return raw
+    return markdown
       .replace(/\&gt;/g, '>')
       .split('\n')
-      .map((line: string) => {
+      .map(line => {
         // find position of 1st non-whitespace character
         // to determine the markdown indentation start
         if (line.length > 0 && isNaN(indentStart)) {
