@@ -28,7 +28,7 @@ export class MarkdownService {
       ? src.split('.').splice(-1).join()
       : null;
     return this.httpGet(src)
-      .map(data => {
+      .map<string, string>(data => {
         return extension !== 'md'
           ? '```' + extension + '\n' + data + '\n```'
           : data;
@@ -41,7 +41,7 @@ export class MarkdownService {
     }
   }
 
-  private createMarkdownitInstance(markdownOptions: MarkdownOptions) {
+  private createMarkdownitInstance(markdownOptions?: MarkdownOptions) {
     if (!markdownOptions) {
       return markdownit();
     }

@@ -5,9 +5,6 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/toPromise';
 
-import * as marked from 'marked';
-import * as Prism from 'prismjs';
-
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownService } from './markdown.service';
 
@@ -155,29 +152,13 @@ describe('MarkdownComponent', () => {
       expect(markdownService.getSource).toHaveBeenCalledWith(mockSrc);
     });
 
-    it('should call handleRaw according to file extension when not .md', async(() => {
+    it('should call handleRaw with getSource return value', async(() => {
 
       const mockRaw =  'raw-text';
 
       spyOn(markdownService, 'getSource').and.returnValue(Observable.of(mockRaw));
-
       spyOn(component, 'handleRaw');
 
-      component.src = './src-example/file.cpp';
-      component.handleSrc();
-
-      expect(component.handleRaw).toHaveBeenCalledWith('```cpp\n' + mockRaw + '\n```');
-    }));
-
-    it('should call handleRaw without file extension when .md', async(() => {
-
-      const mockRaw =  'raw-text';
-
-      spyOn(markdownService, 'getSource').and.returnValue(Observable.of(mockRaw));
-
-      spyOn(component, 'handleRaw');
-
-      component.src = './src-example/file.md';
       component.handleSrc();
 
       expect(component.handleRaw).toHaveBeenCalledWith(mockRaw);
@@ -189,69 +170,23 @@ describe('MarkdownComponent', () => {
     it('should set innerHTML with compiled markdown', () => {
 
       const raw = '### Raw';
-      const markdown = '### Markdown';
+      const compiled = '<h3>Compiled</h3>';
 
-      spyOn(component, 'prepare').and.returnValue(markdown);
+      spyOn(markdownService, 'compile').and.returnValue(compiled);
 
       component.handleRaw(raw);
 
-      expect(component.prepare).toHaveBeenCalledWith(raw);
-      expect(component.element.nativeElement.innerHTML).toBe(marked(markdown));
+      expect(markdownService.compile).toHaveBeenCalledWith(raw);
+      expect(component.element.nativeElement.innerHTML).toBe(compiled);
     });
 
-    it('should apply Prism highlight', () => {
+    it('should apply highlight', () => {
 
-      spyOn(Prism, 'highlightAll');
+      spyOn(markdownService, 'highlight');
 
       component.handleRaw('### Raw');
 
-      expect(Prism.highlightAll).toHaveBeenCalledWith(false);
-    });
-  });
-
-  describe('prepare', () => {
-
-    it('should return empty string when raw is null/undefined/empty', () => {
-
-      expect(component.prepare(null)).toBe('');
-      expect(component.prepare(undefined)).toBe('');
-      expect(component.prepare('')).toBe('');
-    });
-
-    it('should remove leading whitespaces offset while keeping indent', () => {
-
-      const mockRaw =  [
-        '',               // wait for line with non-whitespaces
-        '  * list',       // find first line with non-whitespaces to set offset
-        '    * sub-list', // keep indent while removing from previous row offset
-      ];
-
-      const expected = [
-        '',
-        '* list',
-        '  * sub-list',
-      ];
-
-      expect(component.prepare(mockRaw.join('\n'))).toBe(expected.join('\n'));
-    });
-
-    it('should return line with indent correctly', () => {
-
-      const mockRaw =  [
-        '* list',       // find first line with non-whitespaces to set offset
-        '  * sub-list', // keep indent while removing from previous row offset
-        '',             // keep blank line
-        'Lorem Ipsum',  // keep everthing else
-      ];
-
-      const expected = [
-        '* list',
-        '  * sub-list',
-        '',
-        'Lorem Ipsum',
-      ];
-
-      expect(component.prepare(mockRaw.join('\n'))).toBe(expected.join('\n'));
+      expect(markdownService.highlight).toHaveBeenCalled();
     });
   });
 });
