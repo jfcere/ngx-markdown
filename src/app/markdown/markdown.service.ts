@@ -24,15 +24,11 @@ export class MarkdownService {
   }
 
   getSource(src: string) {
-    const extension = src
-      ? src.split('.').splice(-1).join()
-      : null;
-    return this.httpGet(src)
-      .map<string, string>(data => {
-        return extension !== 'md'
-          ? '```' + extension + '\n' + data + '\n```'
-          : data;
-      });
+    return this.http
+      .get(src)
+      .catch(error => this.handleError(error))
+      .map(data => this.extractData(data))
+      .map(markdown => this.handleExtension(src, markdown));
   }
 
   highlight() {
@@ -45,8 +41,11 @@ export class MarkdownService {
     if (!markdownOptions) {
       return markdownit();
     }
-    if (markdownOptions.preset) {
+    if (markdownOptions.preset && markdownOptions.options) {
       return markdownit(markdownOptions.preset, markdownOptions.options);
+    }
+    if (markdownOptions.preset) {
+      return markdownit(markdownOptions.preset);
     }
     return markdownit(markdownOptions.options);
   }
@@ -68,10 +67,13 @@ export class MarkdownService {
     return Observable.throw(errMsg);
   }
 
-  private httpGet(src: string) {
-    return this.http.get(src)
-      .catch(this.handleError)
-      .map(this.extractData);
+  private handleExtension(src: string, markdown: string) {
+    const extension = src
+      ? src.split('.').splice(-1).join()
+      : null;
+    return extension !== 'md'
+      ? '```' + extension + '\n' + markdown + '\n```'
+      : markdown;
   }
 
   private precompile(markdown: string) {
