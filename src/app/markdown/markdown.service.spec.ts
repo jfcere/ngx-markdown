@@ -102,11 +102,52 @@ describe('MarkdowService', () => {
 
   describe('getSource', () => {
 
+    it('should call http service to get src content', async(() => {
+
+      const mockSrc = 'src-x';
+
+      spyOn(http, 'get').and.returnValue(Observable.of());
+      spyOn(markdownService, 'extractData').and.returnValue(mockSrc);
+
+      markdownService
+        .getSource(mockSrc)
+        .subscribe(result => {
+          expect(http.get).toHaveBeenCalledWith(mockSrc);
+        });
+    }));
+
+    it('should map returned data', async(() => {
+
+      spyOn(markdownService, 'extractData');
+
+      const response = mockBackendResponse(<ResponseOptions>{ body: 'response-text-x' });
+
+      markdownService
+        .getSource('src-x')
+        .subscribe(responseData => {
+          expect(markdownService['extractData']).toHaveBeenCalledWith(response);
+        });
+    }));
+
+    it('should call handleError when an error occurs', async(() => {
+
+      spyOn(markdownService, 'handleError');
+
+      const error = mockBackendError('error-x');
+
+      markdownService
+        .getSource('src-x')
+        .subscribe(null, responseError => {
+          expect(markdownService['handleError']).toHaveBeenCalledWith(error);
+        });
+    }));
+
     it('should add tick for language when src file extension is not .md', async(() => {
 
       const mockRaw =  'raw-text';
 
-      spyOn(markdownService, 'httpGet').and.returnValue(Observable.of(mockRaw));
+      spyOn(http, 'get').and.returnValue(Observable.of());
+      spyOn(markdownService, 'extractData').and.returnValue(mockRaw);
 
       markdownService
         .getSource('./src-example/file.cpp')
@@ -119,7 +160,8 @@ describe('MarkdowService', () => {
 
       const mockRaw = 'raw-text';
 
-      spyOn(markdownService, 'httpGet').and.returnValue(Observable.of(mockRaw));
+      spyOn(http, 'get').and.returnValue(Observable.of());
+      spyOn(markdownService, 'extractData').and.returnValue(mockRaw);
 
       markdownService
         .getSource('./src-example/file.md')
@@ -244,46 +286,6 @@ describe('MarkdowService', () => {
       observable.subscribe(null, () => {
         expect(observable).toEqual(jasmine.any(ErrorObservable));
         expect(observable.error).toBe(error);
-      });
-    }));
-  });
-
-  describe('httpGet', () => {
-
-    it('should call http service to get src content', () => {
-
-      spyOn(http, 'get').and.returnValue(Observable.of());
-
-      const mockSrc = 'src-x';
-
-      markdownService['httpGet'](mockSrc);
-
-      expect(http.get).toHaveBeenCalledWith(mockSrc);
-    });
-
-    it('should map returned data', async(() => {
-
-      spyOn(markdownService, 'extractData');
-
-      const response = mockBackendResponse(<ResponseOptions>{ body: 'response-text-x' });
-
-      const observable = markdownService['httpGet']('src-x');
-
-      observable.subscribe(responseData => {
-        expect(markdownService['extractData']).toHaveBeenCalledWith(response, jasmine.any(Number));
-      });
-    }));
-
-    it('should call handleError when an error occurs', async(() => {
-
-      spyOn(markdownService, 'handleError');
-
-      const error = mockBackendError('error-x');
-
-      const observable = markdownService['httpGet']('src-x');
-
-      observable.subscribe(null, responseError => {
-        expect(markdownService['handleError']).toHaveBeenCalledWith(error, jasmine.any(AnonymousSubject));
       });
     }));
   });
