@@ -69,7 +69,7 @@ describe('MarkdownComponent', () => {
       const mockContent = 'source-content';
 
       spyOn(component, 'render');
-      spyOn(markdownService, 'getSource').and.returnValue(Observable.of(mockContent))
+      spyOn(markdownService, 'getSource').and.returnValue(Observable.of(mockContent));
 
       component.src = mockSrc;
 
