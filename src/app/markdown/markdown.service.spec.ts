@@ -175,6 +175,8 @@ describe('MarkdowService', () => {
 
     it('should not call Prism when not available', () => {
 
+      window['Prism'] = undefined;
+
       markdownService.highlight();
     });
 
@@ -261,6 +263,25 @@ describe('MarkdowService', () => {
   });
 
   describe('handleError', () => {
+
+    it('should format error message correctly when Response', () => {
+
+      const responseOptions = new ResponseOptions({
+        body: {
+          error: 'error-x',
+        },
+        status: 200,
+        statusText: 'ok',
+      });
+      const error = new Response(responseOptions);
+
+      spyOn(console, 'error');
+      spyOn(Observable, 'create');
+
+      markdownService['handleError'](error);
+
+      expect(console.error).toHaveBeenCalledWith(`${error.status} - ${error.statusText || ''} ${(responseOptions.body as any).error}`);
+    });
 
     it('should write error message in console', () => {
 
