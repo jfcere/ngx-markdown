@@ -38,131 +38,99 @@ describe('MarkdownComponent', () => {
     fixture.detectChanges();
   });
 
-  describe('ngAfterViewInit', () => {
+  describe('data', () => {
 
-    it('should call handleData method when data is provided', () => {
+    it('should call render with provided data when set', () => {
 
-      spyOn(component, 'handleData');
-
-      component.data = '# Markdown';
-      component.ngAfterViewInit();
-
-      expect(component.handleData).toHaveBeenCalled();
-    });
-
-    it('should call handleSrc method when src is provided', () => {
-
-      spyOn(component, 'handleSrc');
-
-      component.src = './src-example/file.md';
-      component.ngAfterViewInit();
-
-      expect(component.handleSrc).toHaveBeenCalled();
-    });
-
-    it('should call render method when src is not provided', () => {
+      const mockData = '# Markdown';
 
       spyOn(component, 'render');
 
-      const mockElement = { nativeElement: { innerHTML: 'inner-html' } };
+      component.data = mockData;
 
-      component.element = mockElement;
-      component.src = undefined;
-      component.ngAfterViewInit();
-
-      expect(component.render).toHaveBeenCalledWith(mockElement.nativeElement.innerHTML);
-    });
-  });
-
-  describe('ngOnChanges', () => {
-
-    it('should call handleData method when data is changed', () => {
-
-      spyOn(component, 'handleData');
-
-      const mockSimpleChanges = { data: null };
-
-      component.ngOnChanges(mockSimpleChanges);
-
-      expect(component.handleData).toHaveBeenCalled();
+      expect(component.render).toHaveBeenCalledWith(mockData);
     });
 
-    it('should not call handleData method when data is unchanged', () => {
-
-      spyOn(component, 'handleData');
-
-      const mockSimpleChanges = {};
-
-      component.ngOnChanges(mockSimpleChanges);
-
-      expect(component.handleData).not.toHaveBeenCalled();
-    });
-
-    it('should call handleSrc method when src is changed', () => {
-
-      spyOn(component, 'handleSrc');
-
-      const mockSimpleChanges = { src: null };
-
-      component.ngOnChanges(mockSimpleChanges);
-
-      expect(component.handleSrc).toHaveBeenCalled();
-    });
-
-    it('should not call handleSrc method when src is unchanged', () => {
-
-      spyOn(component, 'handleSrc');
-
-      const mockSimpleChanges = {};
-
-      component.ngOnChanges(mockSimpleChanges);
-
-      expect(component.handleSrc).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('handleData', () => {
-
-    it('should call render method with data parameter', () => {
-
-      spyOn(component, 'render');
+    it('should return value correctly when get', () => {
 
       const mockData = '# Markdown';
 
       component.data = mockData;
-      component.handleData();
 
-      expect(component.render).toHaveBeenCalledWith(mockData);
+      expect(component.data).toBe(mockData);
     });
   });
 
-  describe('handleSrc', () => {
+  describe('src', () => {
 
-    it('should call getSource from MarkdownService', () => {
+    it('should call render with retreived content when set', async(() => {
 
-      const mockGetSource = { subscribe: () => null };
+      const mockSrc = './src-example/file.md';
+      const mockContent = 'source-content';
 
-      spyOn(markdownService, 'getSource').and.returnValue(mockGetSource);
+      spyOn(component, 'render');
+      spyOn(markdownService, 'getSource').and.returnValue(Observable.of(mockContent))
+
+      component.src = mockSrc;
+
+      expect(markdownService.getSource).toHaveBeenCalledWith(mockSrc);
+      expect(component.render).toHaveBeenCalledWith(mockContent);
+    }));
+
+    it('should return value correctly when get', () => {
 
       const mockSrc = './src-example/file.md';
 
       component.src = mockSrc;
-      component.handleSrc();
 
-      expect(markdownService.getSource).toHaveBeenCalledWith(mockSrc);
+      expect(component.src).toBe(mockSrc);
     });
+  });
 
-    it('should call render with getSource return value', async(() => {
+  describe('ngAfterViewInit', () => {
 
-      const mockRaw =  'raw-text';
+    it('should call render method when neither data or src input property is provided', () => {
 
-      spyOn(markdownService, 'getSource').and.returnValue(Observable.of(mockRaw));
+      const mockElement = { nativeElement: { innerHTML: 'inner-html' } };
+
+      component.element = mockElement;
+      component.data = undefined;
+      component.src = undefined;
+
       spyOn(component, 'render');
 
-      component.handleSrc();
+      component.ngAfterViewInit();
 
-      expect(component.render).toHaveBeenCalledWith(mockRaw);
-    }));
+      expect(component.render).toHaveBeenCalledWith(mockElement.nativeElement.innerHTML);
+    });
+
+    it('should not call render method when src is provided', () => {
+
+      const mockElement = { nativeElement: { innerHTML: 'inner-html' } };
+
+      component.element = mockElement;
+      component.src = './src-example/file.md';
+
+      spyOn(component, 'render');
+
+      component.ngAfterViewInit();
+
+      expect(component.render).not.toHaveBeenCalled();
+    });
+
+    it('should not call render method when data is provided', () => {
+
+      const mockElement = { nativeElement: { innerHTML: 'inner-html' } };
+
+      component.element = mockElement;
+      component.data = '# Markdown';
+
+      spyOn(component, 'render');
+
+      component.ngAfterViewInit();
+
+      expect(component.render).not.toHaveBeenCalled();
+    });
   });
 
   describe('render', () => {
@@ -190,4 +158,3 @@ describe('MarkdownComponent', () => {
     });
   });
 });
-
