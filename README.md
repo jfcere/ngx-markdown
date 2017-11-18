@@ -203,6 +203,7 @@ Here is the list of tasks that will be done on this library in a near future ...
 - ~~Transpile library to Javascript~~
 - ~~Replace marked parser~~
 - ~~Make Prism highlight optional~~
+- Support [markdown-it-plugins](https://www.npmjs.com/browse/keyword/markdown-it-plugin) integration (checkbox, emoji, ...)
 - Support Prism.js customizing options (line-numbers, line-height, ...)
 
 ## Contribution
