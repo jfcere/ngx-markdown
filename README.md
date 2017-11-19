@@ -3,7 +3,7 @@
 
 > **v2.0.0** For security purpose `marked` parser has been replaced with `markdown-it`. Follow [v2.0.0 release notes](https://github.com/jfcere/ngx-markdown/releases/tag/v2.0.0) for quick required changes.
 
-ngx-markdown is an [Angular 2+](https://angular.io/) library that uses [markdown-it](https://github.com/markdown-it/markdown-it) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for synthax highlights.
+ngx-markdown is an [Angular 2+](https://angular.io/) library that uses [markdown-it](https://github.com/markdown-it/markdown-it) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for syntax highlight.
 
 Demo available @ [jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown)
 
@@ -11,7 +11,7 @@ Demo available @ [jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-ma
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Synthax highlight](#synthax-highlight)
+- [Syntax highlight](#syntax-highlight)
 - [Demo application](#demo-application)
 - [AoT compilation](#aot-compilation)
 - [Road map](#road-map)
@@ -37,20 +37,20 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `.ang
 ]
 ```
 
-### Synthax highlight
+### Syntax highlight
 
-To add [Prism.js](http://prismjs.com/) synthax highlight to your `package.json` use the following command.
+To add [Prism.js](http://prismjs.com/) syntax highlight to your `package.json` use the following command.
 
-> Synthax highlight is **optional**, skip this step if you are not planning to use it
+> Syntax highlight is **optional**, skip this step if you are not planning to use it
 
 ```bash
 npm install prismjs --save
 ```
 
-To activate [Prism.js](http://prismjs.com/) synthax highlight you will need include...
+To activate [Prism.js](http://prismjs.com/) syntax highlight you will need include...
 - prism.js core library - `node_modules/prismjs/prism.js` file
 - a highlight css theme - from `node_modules/prismjs/themes` directory
-- desired code language synthax files - from `node_modules/prismjs/components` directory
+- desired code language syntax files - from `node_modules/prismjs/components` directory
 
 > Additional themes can be found by browsing the web such as [Prism-Themes](https://github.com/PrismJS/prism-themes) or [Mokokai](https://github.com/Ahrengot/Monokai-theme-for-Prism.js) for example.
 
@@ -63,8 +63,8 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `.ang
 ],
 "scripts": [
 + "../node_modules/prismjs/prism.js",
-+ "../node_modules/prismjs/components/prism-csharp.min.js", # c-sharp language synthax
-+ "../node_modules/prismjs/components/prism-css.min.js" # css language synthax
++ "../node_modules/prismjs/components/prism-csharp.min.js", # c-sharp language syntax
++ "../node_modules/prismjs/components/prism-css.min.js" # css language syntax
 ]
 ```
 
@@ -149,7 +149,7 @@ The same way the component works, you can use `markdown` directive to accomplish
 <div markdown [data]="markdown"></div>
 ```
 
-## Synthax highlight
+## Syntax highlight
 
 When using static markdown you are responsible to provide the code block with related language.
 
