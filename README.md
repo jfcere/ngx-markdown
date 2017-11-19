@@ -3,7 +3,7 @@
 
 > **v1.4.0** Repository has been renamed from `ng2-markdown-to-html` to `ngx-markdown`. Follow [v1.4.0 release notes](https://github.com/jfcere/ngx-markdown/releases/tag/v1.4.0) for quick required changes.
 
-ngx-markdown is an [Angular 2+](https://angular.io/) library that uses [marked](https://github.com/chjj/marked) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for synthax highlights.
+ngx-markdown is an [Angular 2+](https://angular.io/) library that uses [marked](https://github.com/chjj/marked) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for syntax highlight.
 
 Demo available @ [jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown)
 
@@ -12,7 +12,7 @@ Demo available @ [jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-ma
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Usage](#usage)
-- [Synthax highlight](#synthax-highlight)
+- [Syntax highlight](#syntax-highlight)
 - [Demo application](#demo-application)
 - [AoT compilation](#aot-compilation)
 - [Road map](#road-map)
@@ -28,7 +28,7 @@ npm install ngx-markdown --save
 
 ## Configuration
 
-To activate [Prism.js](http://prismjs.com/) synthax highlight you will need to choose a css theme file from `node_modules/prismjs/themes` directory and add it to your application along with `@types/prismjs` types file.
+To activate [Prism.js](http://prismjs.com/) syntax highlight you will need to choose a css theme file from `node_modules/prismjs/themes` directory and add it to your application along with `@types/prismjs` types file.
 
 > Note that you can also find additional themes by browsing the web such as [Prism-Themes](https://github.com/PrismJS/prism-themes) or [Mokokai](https://github.com/Ahrengot/Monokai-theme-for-Prism.js) for example.
 
@@ -43,7 +43,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the examp
 ],
 ```
 
-#### tsconfig.app.json (for Angular-CLI >= 1.0.0-rc.0)
+#### tsconfig.app.json
 
 ```diff
 "compilerOptions": {
@@ -109,7 +109,7 @@ The same way the component works, you can use `markdown` directive to accomplish
 <div markdown [data]="markdown"></div>
 ```
 
-## Synthax highlight
+## Syntax highlight
 
 When using static markdown you are responsible to provide the code block with related language.
 
