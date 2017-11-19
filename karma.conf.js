@@ -17,7 +17,6 @@ module.exports = function (config) {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
     files: [
-      './node_modules/markdown-it/dist/markdown-it.min.js',
       { pattern: './src/test.ts', watched: false }
     ],
     preprocessors: {

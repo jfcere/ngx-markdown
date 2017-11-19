@@ -1,17 +1,15 @@
-import { MarkdownOptions } from './models/markdown-options';
 import { async, TestBed } from '@angular/core/testing';
 import { BaseRequestOptions, Http, HttpModule, Response, ResponseOptions } from '@angular/http';
 import { MockBackend, MockConnection } from '@angular/http/testing';
-import { MarkdownService } from './markdown.service';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { AnonymousSubject } from 'rxjs/Subject';
 
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
-
-import * as markdownit from 'markdown-it';
+import { MarkdownService } from './markdown.service';
+import { MarkdownOptions } from './models';
 
 // window mock
 declare var window: any;
