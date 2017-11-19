@@ -6,8 +6,9 @@ import { Observable } from 'rxjs/Observable';
 
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownService } from './markdown.service';
+import { MarkdownOptions } from './models';
 
-class MockMarkdownService extends MarkdownService {
+class MockMarkdownService {
   getSource(src: string): Observable<string> {
     return Observable.of('');
   }
@@ -24,7 +25,8 @@ describe('MarkdownComponent', () => {
       imports: [HttpModule],
       declarations: [MarkdownComponent],
       providers: [
-        { provide: MarkdownService, useClass: MockMarkdownService },
+        MarkdownService,
+        { provide: MarkdownOptions, useValue: {} },
       ],
     }).compileComponents();
   }));
@@ -80,6 +82,8 @@ describe('MarkdownComponent', () => {
 
       const mockSrc = './src-example/file.md';
 
+      spyOn(markdownService, 'getSource').and.returnValue(Observable.of());
+
       component.src = mockSrc;
 
       expect(component.src).toBe(mockSrc);
@@ -91,6 +95,8 @@ describe('MarkdownComponent', () => {
     it('should call render method when neither data or src input property is provided', () => {
 
       const mockElement = { nativeElement: { innerHTML: 'inner-html' } };
+
+      spyOn(markdownService, 'getSource').and.returnValue(Observable.of());
 
       component.element = mockElement;
       component.data = undefined;
@@ -106,6 +112,8 @@ describe('MarkdownComponent', () => {
     it('should not call render method when src is provided', () => {
 
       const mockElement = { nativeElement: { innerHTML: 'inner-html' } };
+
+      spyOn(markdownService, 'getSource').and.returnValue(Observable.of());
 
       component.element = mockElement;
       component.src = './src-example/file.md';
