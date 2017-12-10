@@ -1,6 +1,6 @@
-import markdownit from 'markdown-it';
+import * as MarkdownIt from 'markdown-it';
 
 export class MarkdownOptions {
   preset?: 'commonmark' | 'zero' | 'default';
-  options?: markdownit.Options;
+  options?: MarkdownIt.Options;
 }

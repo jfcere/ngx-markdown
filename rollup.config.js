@@ -1,4 +1,4 @@
-import nodeResolve from 'rollup-plugin-node-resolve';
+import resolve from 'rollup-plugin-node-resolve';
 
 export default {
   input: 'dist/lib/index.js',
@@ -9,7 +9,7 @@ export default {
   sourceMap: false,
   name: 'ngx.markdown',
   plugins: [
-    nodeResolve({
+    resolve({
       jsnext: true,
       main: true,
     }),

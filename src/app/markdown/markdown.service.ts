@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import markdownit from 'markdown-it';
+import * as MarkdownIt from 'markdown-it';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
@@ -9,7 +9,7 @@ import { MarkdownOptions } from './models';
 
 @Injectable()
 export class MarkdownService {
-  markdownIt: markdownit.MarkdownIt;
+  markdownIt: MarkdownIt.MarkdownIt;
 
   constructor(
     private http: Http,
@@ -39,15 +39,15 @@ export class MarkdownService {
 
   private createMarkdownitInstance(markdownOptions?: MarkdownOptions) {
     if (!markdownOptions) {
-      return markdownit();
+      return new MarkdownIt();
     }
     if (markdownOptions.preset && markdownOptions.options) {
-      return markdownit(markdownOptions.preset, markdownOptions.options);
+      return new MarkdownIt(markdownOptions.preset, markdownOptions.options);
     }
     if (markdownOptions.preset) {
-      return markdownit(markdownOptions.preset);
+      return new MarkdownIt(markdownOptions.preset);
     }
-    return markdownit(markdownOptions.options);
+    return new MarkdownIt(markdownOptions.options);
   }
 
   private extractData(response: Response) {
