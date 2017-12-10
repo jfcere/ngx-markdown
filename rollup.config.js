@@ -11,7 +11,8 @@ export default {
     '@angular/http': 'ng.http',
     'marked': 'marked',
     'prismjs': 'prismjs',
-    'rxjs/Observable': 'Rx',
+    'rxjs/Observable': 'rx.observable',
+    'rxjs/observable/ErrorObservable': 'rx.errorObservable',
   },
   external: [
     '@angular/core',
@@ -33,6 +34,7 @@ export default {
     'prismjs/components/prism-scss',
     'prismjs/components/prism-typescript',
     'rxjs/Observable',
+    'rxjs/observable/ErrorObservable',
     'rxjs/add/operator/catch',
     'rxjs/add/operator/map',
   ],
