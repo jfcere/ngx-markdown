@@ -1,3 +1,5 @@
+import resolve from 'rollup-plugin-node-resolve';
+
 export default {
   input: 'dist/lib/index.js',
   output: {
@@ -6,34 +8,28 @@ export default {
   },
   sourceMap: false,
   name: 'ngx.markdown',
+  plugins: [
+    resolve({
+      jsnext: true,
+      main: true,
+    }),
+  ],
   globals: {
     '@angular/core': 'ng.core',
     '@angular/http': 'ng.http',
-    'marked': 'marked',
-    'prismjs': 'prismjs',
-    'rxjs/Observable': 'Rx',
+    'markdown-it': 'markdown-it',
+    'rxjs/Observable': 'rxjs.observable',
+    'rxjs/add/operator/catch': 'rxjs.catch',
+    'rxjs/add/operator/map': 'rxjs.map',
+    'rxjs/observable/ErrorObservable': 'rxjs.errorobservable',
   },
   external: [
     '@angular/core',
     '@angular/http',
-    'marked',
-    'prismjs',
-    'prismjs/prism',
-    'prismjs/components/prism-c',
-    'prismjs/components/prism-cpp',
-    'prismjs/components/prism-csharp',
-    'prismjs/components/prism-css',
-    'prismjs/components/prism-diff',
-    'prismjs/components/prism-java',
-    'prismjs/components/prism-javascript',
-    'prismjs/components/prism-perl',
-    'prismjs/components/prism-php',
-    'prismjs/components/prism-python',
-    'prismjs/components/prism-sass',
-    'prismjs/components/prism-scss',
-    'prismjs/components/prism-typescript',
+    'markdown-it',
     'rxjs/Observable',
     'rxjs/add/operator/catch',
     'rxjs/add/operator/map',
+    'rxjs/observable/ErrorObservable',
   ],
 }

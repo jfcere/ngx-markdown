@@ -3,6 +3,7 @@
     "sourceMap": true,
     "declaration": true,
     "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": [

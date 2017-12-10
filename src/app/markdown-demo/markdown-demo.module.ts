@@ -9,7 +9,13 @@ import { MarkdownModule } from '../markdown/markdown.module';
   imports: [
     BrowserModule,
     FormsModule,
-    MarkdownModule.forRoot(),
+    MarkdownModule.forRoot({
+      options: {
+        html: true,
+        linkify: true,
+        typographer: true,
+      },
+    }),
   ],
   declarations: [MarkdownDemoComponent],
   bootstrap: [MarkdownDemoComponent],

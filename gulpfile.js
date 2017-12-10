@@ -28,7 +28,7 @@ function minifyTemplate(path, ext, file, callback) {
 }
 
 gulp.task('inline-template', function () {
-  return gulp.src(['./src/app/markdown/*.ts', '!./src/app/markdown/*.spec.ts'])
+  return gulp.src(['./src/app/markdown/**/*.ts', '!./src/app/markdown/*.spec.ts'])
     .pipe(inlineNg2Template({
       base: '/src/app/markdown',
       removeLineBreaks: true,

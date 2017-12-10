@@ -3,6 +3,7 @@
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": [
@@ -16,7 +17,7 @@
     "types": [
       "node",
       "prismjs",
-      "marked"
+      "markdown-it"
     ]
   },
   "exclude": [
