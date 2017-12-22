@@ -6,22 +6,49 @@ import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
+// workaround to fix rollup namespace import
+// https://github.com/rollup/rollup/issues/670#issuecomment-284621537
+import * as _marked from 'marked';
+const marked = _marked;
+
+import { MarkdownOptions } from './markdown-options';
+
 @Injectable()
 export class MarkdownService {
+  renderer: marked.Renderer;
 
-  constructor(private http: Http) { }
-
-  getSource(src: string) {
-    return this.http.get(src)
-      .map(this.extractData)
-      .catch(this.handleError);
+  constructor(
+    private http: Http,
+    private markedOptions: MarkdownOptions,
+  ) {
+    this.renderer = new marked.Renderer();
   }
 
-  extractData(response: Response) {
+  compile(markdown: string, markedOptions = this.markedOptions) {
+    const precompiled = this.precompile(markdown);
+    const options = Object.assign({}, { renderer: this.renderer }, markedOptions);
+    return marked(precompiled, options);
+  }
+
+  getSource(src: string) {
+    return this.http
+      .get(src)
+      .catch(error => this.handleError(error))
+      .map(data => this.extractData(data))
+      .map(markdown => this.handleExtension(src, markdown));
+  }
+
+  highlight() {
+    if (window['Prism']) {
+      window['Prism'].highlightAll(false);
+    }
+  }
+
+  private extractData(response: Response) {
     return response.text() || '';
   }
 
-  handleError(error: Response | any) {
+  private handleError(error: Response | any) {
     let errMsg: string;
     if (error instanceof Response) {
       const body = error.json() || '';
@@ -32,5 +59,35 @@ export class MarkdownService {
     }
     console.error(errMsg);
     return Observable.throw(errMsg);
+  }
+
+  private handleExtension(src: string, markdown: string) {
+    const extension = src
+      ? src.split('.').splice(-1).join()
+      : null;
+    return extension !== 'md'
+      ? '```' + extension + '\n' + markdown + '\n```'
+      : markdown;
+  }
+
+  private precompile(markdown: string) {
+    if (!markdown) {
+      return '';
+    }
+    let indentStart: number;
+    return markdown
+      .replace(/\&gt;/g, '>')
+      .split('\n')
+      .map(line => {
+        // find position of 1st non-whitespace character
+        // to determine the markdown indentation start
+        if (line.length > 0 && isNaN(indentStart)) {
+          indentStart = line.search(/\S|$/);
+        }
+        // remove whitespaces before indentation start
+        return indentStart
+          ? line.substring(indentStart)
+          : line;
+      }).join('\n');
   }
 }
