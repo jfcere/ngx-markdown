@@ -9,7 +9,9 @@ import { MarkdownModule } from '../markdown/markdown.module';
   imports: [
     BrowserModule,
     FormsModule,
-    MarkdownModule.forRoot(),
+    MarkdownModule.forRoot({
+      options: { gfm: true },
+    }),
   ],
   declarations: [MarkdownDemoComponent],
   bootstrap: [MarkdownDemoComponent],

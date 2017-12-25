@@ -3,6 +3,7 @@
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": [
@@ -10,7 +11,7 @@
     ],
     "outDir": "../out-tsc/spec",
     "module": "commonjs",
-    "target": "es6",
+    "target": "es5",
     "baseUrl": "",
     "types": [
       "jasmine",

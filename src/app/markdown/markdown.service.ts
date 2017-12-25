@@ -1,15 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
-
+import * as marked from 'marked';
+import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
-
-// workaround to fix rollup namespace import
-// https://github.com/rollup/rollup/issues/670#issuecomment-284621537
-import * as _marked from 'marked';
-const marked = _marked;
+import { Observable } from 'rxjs/Observable';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 import { MarkdownOptions } from './markdown-options';
 
@@ -24,9 +20,12 @@ export class MarkdownService {
     this.renderer = new marked.Renderer();
   }
 
-  compile(markdown: string, markedOptions = this.markedOptions) {
+  compile(markdown: string, markedOptions: MarkdownOptions = this.markedOptions) {
     const precompiled = this.precompile(markdown);
-    const options = Object.assign({}, { renderer: this.renderer }, markedOptions);
+    const options = Object.assign(
+      { renderer: this.renderer },
+      markedOptions && markedOptions.options ? markedOptions.options : {},
+    );
     return marked(precompiled, options);
   }
 
