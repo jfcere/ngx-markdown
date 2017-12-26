@@ -1,3 +1,4 @@
+import commonjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
 
 export default {
@@ -12,6 +13,13 @@ export default {
     resolve({
       jsnext: true,
       main: true,
+    }),
+    commonjs({
+      include: 'dist/lib/**',
+      extensions: ['.js'],
+      ignoreGlobal: false,
+      sourceMap: false,
+      namedExports: { 'node_modules/marked/lib/marked.js': ['marked'] },
     }),
   ],
   globals: {
