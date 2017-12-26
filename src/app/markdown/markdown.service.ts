@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable, Optional } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import * as marked from 'marked';
 import 'rxjs/add/observable/throw';
@@ -7,7 +7,7 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
-import { MARKED_OPTIONS } from './markdown.module';
+import { MarkedOptionsToken } from './marked-options.token';
 
 @Injectable()
 export class MarkdownService {
@@ -15,7 +15,7 @@ export class MarkdownService {
 
   constructor(
     private http: Http,
-    @Inject(forwardRef(() => MARKED_OPTIONS)) private markedOptions: marked.MarkedOptions,
+    @Inject(MarkedOptionsToken) public markedOptions: marked.MarkedOptions,
   ) {
     this.renderer = new marked.Renderer();
   }
@@ -35,9 +35,10 @@ export class MarkdownService {
   }
 
   highlight() {
-    if (window['Prism']) {
-      window['Prism'].highlightAll(false);
+    if (!window['Prism']) {
+      return;
     }
+    window['Prism'].highlightAll(false);
   }
 
   private extractData(response: Response) {

@@ -1,12 +1,11 @@
-import { ModuleWithProviders, NgModule, OpaqueToken } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { Http, HttpModule } from '@angular/http';
 import * as marked from 'marked';
 
 import { LanguagePipe } from './language.pipe';
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownService } from './markdown.service';
-
-export const MARKED_OPTIONS = new OpaqueToken('marked.options');
+import { MarkedOptionsToken } from './marked-options.token';
 
 @NgModule({
   imports: [HttpModule],
@@ -24,7 +23,7 @@ export class MarkdownModule {
     return {
       ngModule: MarkdownModule,
       providers: [
-        { provide: MARKED_OPTIONS, useValue: markedOptions },
+        { provide: MarkedOptionsToken, useValue: markedOptions },
         MarkdownService,
       ],
     };

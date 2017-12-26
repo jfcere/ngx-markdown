@@ -8,8 +8,8 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
-import { MARKED_OPTIONS } from './markdown.module';
 import { MarkdownService } from './markdown.service';
+import { MarkedOptionsToken } from './marked-options.token';
 
 // window mock
 declare var window: any;
@@ -54,7 +54,7 @@ describe('MarkdowService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        { provide: MARKED_OPTIONS, useValue: {} },
+        { provide: MarkedOptionsToken, useValue: {} },
         BaseRequestOptions,
         MarkdownService,
         MockBackend,
