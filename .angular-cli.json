@@ -47,7 +47,7 @@
     },
     {
       "project": "src/tsconfig.spec.json"
-    },
+    }
   ],
   "test": {
     "karma": {
