@@ -10,7 +10,6 @@ Demo available @ [jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-ma
 ### Table of contents
 
 - [Installation](#installation)
-- [Configuration](#configuration)
 - [Usage](#usage)
 - [Syntax highlight](#syntax-highlight)
 - [Demo application](#demo-application)
@@ -20,60 +19,91 @@ Demo available @ [jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-ma
 
 ## Installation
 
-Use the following command to add ngx-markdown library to your `package.json` file.
+### ngx-markdown
+
+To add ngx-markdown library to your `package.json` use the following command.
 
 ```bash
 npm install ngx-markdown --save
 ```
 
-## Configuration
+As the library is using [marked](https://github.com/chjj/marked) parser you will need to add `../node_modules/marked/lib/marked.js` to your application.
 
-To activate [Prism.js](http://prismjs.com/) syntax highlight you will need to choose a css theme file from `node_modules/prismjs/themes` directory and add it to your application along with `@types/prismjs` types file.
+If you are using [Angular CLI](https://cli.angular.io/) you can follow the `.angular-cli.json` example below...
 
-> Note that you can also find additional themes by browsing the web such as [Prism-Themes](https://github.com/PrismJS/prism-themes) or [Mokokai](https://github.com/Ahrengot/Monokai-theme-for-Prism.js) for example.
+```diff
+"scripts": [
++ "../node_modules/marked/lib/marked.js"
+]
+```
 
-If you are using [Angular CLI](https://cli.angular.io/) you can follow the example below...
+### Syntax highlight
 
-#### .angular-cli.json
+> Syntax highlight is **optional**, skip this step if you are not planning to use it
+
+To add [Prism.js](http://prismjs.com/) syntax highlight to your `package.json` use the following command.
+
+```bash
+npm install prismjs --save
+```
+
+To activate [Prism.js](http://prismjs.com/) syntax highlight you will need include...
+- prism.js core library - `node_modules/prismjs/prism.js` file
+- a highlight css theme - from `node_modules/prismjs/themes` directory
+- desired code language syntax files - from `node_modules/prismjs/components` directory
+
+> Additional themes can be found by browsing the web such as [Prism-Themes](https://github.com/PrismJS/prism-themes) or [Mokokai](https://github.com/Ahrengot/Monokai-theme-for-Prism.js) for example.
+
+If you are using [Angular CLI](https://cli.angular.io/) you can follow the `.angular-cli.json` example below...
 
 ```diff
 "styles": [
   "styles.css",
 + "../node_modules/prismjs/themes/prism-okaidia.css"
 ],
-```
-
-#### tsconfig.app.json
-
-```diff
-"compilerOptions": {
-  "types": [
-+   "prismjs"
-  ]
-},
+"scripts": [
++ "../node_modules/prismjs/prism.js",
++ "../node_modules/prismjs/components/prism-csharp.min.js", # c-sharp language syntax
++ "../node_modules/prismjs/components/prism-css.min.js" # css language syntax
+]
 ```
 
 ## Usage
 
-You must import `MarkdownModule` inside your module to be able to use `markdown` component and/or directive.
+You must import `MarkdownModule` inside your main application module with `forRoot` to be able to use `markdown` component and/or directive.
 
 ```diff
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 + import { MarkdownModule } from 'ngx-markdown';
 
-import { HomeComponent } from './home.component';
+import { AppComponent } from './app.component';
 
 @NgModule({
   imports: [
-    CommonModule,
-+    MarkdownModule.forRoot(),
++   MarkdownModule.forRoot(),
   ],
-  declarations: [HomeComponent],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 ```
 
-ngx-markdown provides one component and one directive to parse your markdown to your web application.
+Optionaly, markdown parsing can be customized by passing [marked options](https://github.com/chjj/marked#options-1) to the `forRoot` method of `MarkdownModule`.
+
+```typescript
+// using default options
+MarkdownModule.forRoot(),
+
+// using specific options
+MarkdownModule.forRoot({
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: false,
+  smartLists: true,
+  smartypants: false,
+}),
+```
 
 ### Component
 
@@ -161,7 +191,8 @@ Here is the list of tasks that will be done on this library in a near future ...
 - ~~Publish demo on github pages~~
 - ~~Add variable binding feature~~
 - ~~Transpile library to Javascript~~
-- Make Prism highlight optional
+- ~~Make Prism highlight optional~~
+- Support [markdown-it-plugins](https://www.npmjs.com/browse/keyword/markdown-it-plugin) integration (checkbox, emoji, ...)
 - Support Prism.js customizing options (line-numbers, line-height, ...)
 
 ## Contribution
