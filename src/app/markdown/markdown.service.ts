@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { forwardRef, Inject, Injectable, Optional } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import * as marked from 'marked';
 import 'rxjs/add/observable/throw';
@@ -7,23 +7,22 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
+import { MARKED_OPTIONS } from './markdown.module';
+
 @Injectable()
 export class MarkdownService {
   renderer: marked.Renderer;
 
   constructor(
     private http: Http,
-    private markedOptions: marked.MarkedOptions,
+    @Inject(forwardRef(() => MARKED_OPTIONS)) private markedOptions: marked.MarkedOptions,
   ) {
     this.renderer = new marked.Renderer();
   }
 
   compile(markdown: string, markedOptions = this.markedOptions) {
     const precompiled = this.precompile(markdown);
-    const options = Object.assign(
-      { renderer: this.renderer },
-      markedOptions,
-    );
+    const options = Object.assign({ renderer: this.renderer }, markedOptions);
     return marked(precompiled, options);
   }
 

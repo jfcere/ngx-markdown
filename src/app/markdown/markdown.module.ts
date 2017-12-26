@@ -8,10 +8,6 @@ import { MarkdownService } from './markdown.service';
 
 export const MARKED_OPTIONS = new OpaqueToken('marked.options');
 
-export function markdownServiceFactory(http, markedOptions): MarkdownService {
-  return new MarkdownService(http, markedOptions);
-}
-
 @NgModule({
   imports: [HttpModule],
   exports: [
@@ -29,11 +25,7 @@ export class MarkdownModule {
       ngModule: MarkdownModule,
       providers: [
         { provide: MARKED_OPTIONS, useValue: markedOptions },
-        {
-          provide: MarkdownService,
-          useFactory: markdownServiceFactory,
-          deps: [Http, MARKED_OPTIONS],
-        },
+        MarkdownService,
       ],
     };
   }
