@@ -8,7 +8,8 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
-import { MarkdownService, markdownServiceFactory } from './markdown.service';
+import { markdownServiceFactory, MARKED_OPTIONS } from './markdown.module';
+import { MarkdownService } from './markdown.service';
 
 // window mock
 declare var window: any;
@@ -53,12 +54,13 @@ describe('MarkdowService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        BaseRequestOptions,
+        { provide: MARKED_OPTIONS, useValue: {} },
         {
           provide: MarkdownService,
-          useFactory: (_http) => markdownServiceFactory(_http, {}),
-          deps: [Http],
+          useFactory: markdownServiceFactory,
+          deps: [Http, MARKED_OPTIONS],
         },
+        BaseRequestOptions,
         MockBackend,
         mockHttpProvider,
       ],

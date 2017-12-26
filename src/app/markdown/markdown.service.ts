@@ -7,10 +7,6 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
-export function markdownServiceFactory(http, markedOptions): MarkdownService {
-  return new MarkdownService(http, markedOptions);
-}
-
 @Injectable()
 export class MarkdownService {
   renderer: marked.Renderer;

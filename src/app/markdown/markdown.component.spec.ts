@@ -5,7 +5,8 @@ import 'rxjs/add/operator/toPromise';
 import { Observable } from 'rxjs/Observable';
 
 import { MarkdownComponent } from './markdown.component';
-import { MarkdownService, markdownServiceFactory } from './markdown.service';
+import { markdownServiceFactory, MARKED_OPTIONS } from './markdown.module';
+import { MarkdownService } from './markdown.service';
 
 class MockMarkdownService {
   getSource(src: string): Observable<string> {
@@ -24,10 +25,11 @@ describe('MarkdownComponent', () => {
       imports: [HttpModule],
       declarations: [MarkdownComponent],
       providers: [
+        { provide: MARKED_OPTIONS, useValue: {} },
         {
           provide: MarkdownService,
-          useFactory: (_http) => markdownServiceFactory(_http, {}),
-          deps: [Http],
+          useFactory: markdownServiceFactory,
+          deps: [Http, MARKED_OPTIONS],
         },
       ],
     }).compileComponents();
