@@ -4,6 +4,7 @@ import * as marked from 'marked';
 
 import { LanguagePipe } from './language.pipe';
 import { MarkdownComponent } from './markdown.component';
+import { MarkdownPipe } from './markdown.pipe';
 import { MarkdownService } from './markdown.service';
 import { MarkedOptionsToken } from './marked-options.token';
 
@@ -12,10 +13,12 @@ import { MarkedOptionsToken } from './marked-options.token';
   exports: [
     LanguagePipe,
     MarkdownComponent,
+    MarkdownPipe,
   ],
   declarations: [
     LanguagePipe,
     MarkdownComponent,
+    MarkdownPipe,
   ],
 })
 export class MarkdownModule {

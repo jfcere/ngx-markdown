@@ -1,3 +1,4 @@
+// tslint:disable:max-line-length
 import { Component } from '@angular/core';
 
 @Component({
@@ -17,9 +18,11 @@ export class MarkdownDemoComponent {
   lists = require('raw-loader!./markdown/lists.md');
   listsDot = require('raw-loader!./markdown/lists-dot.md');
   tables = require('raw-loader!./markdown/tables.md');
+
   // remote
   demoPython = require('raw-loader!./remote/demo.py');
   languagePipe = require('raw-loader!./remote/language-pipe.html');
+
   // variable-binding
   markdown =
 `### Markdown example
@@ -36,4 +39,32 @@ public markdown = "# Markdown";
 <textarea [(ngModel)]="markdown"></textarea>
 <markdown [data]="markdown"></markdown>
 \`\`\``;
+
+  // pipe
+  pipeMarkdown =
+`### Markdown example
+---
+This is an **example** where we use a variable with the \`markdownToHtml\` pipe that is also bind to a textarea. Using the pipe allows to chain pipe transformation.
+
+#### example.component.ts
+\`\`\`typescript
+public pipeMarkdown = "# Markdown";
+\`\`\`
+
+#### example.component.html
+\`\`\`html
+<textarea [(ngModel)]="pipeMarkdown"></textarea>
+<div [innerHTML]="pipeMarkdown | markdownToHtml"></div>
+\`\`\``;
+  typescriptMarkdown =
+`import { Component } from '@angular/core';
+
+@Component({
+  selector: 'markdown-demo',
+  templateUrl: './markdown-demo.component.html',
+  styleUrls: ['./markdown-demo.component.scss'],
+})
+export class MarkdownDemoComponent {
+  public pipeMarkdown = '# Markdown';
+}`;
 }

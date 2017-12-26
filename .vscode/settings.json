@@ -2,8 +2,8 @@
   "files.trimTrailingWhitespace": true,
 
   "[markdown]": {
-      "files.trimTrailingWhitespace": false
+    "files.trimTrailingWhitespace": false
   },
 
-  "vsicons.presets.angular": false
+  "vsicons.presets.angular": true
 }
