@@ -1,29 +1,32 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import { Http, HttpModule } from '@angular/http';
+import * as marked from 'marked';
 
 import { LanguagePipe } from './language.pipe';
-import { MarkdownOptions } from './markdown-options';
 import { MarkdownComponent } from './markdown.component';
-import { MarkdownService } from './markdown.service';
+import { MarkdownService, markdownServiceFactory } from './markdown.service';
 
 @NgModule({
-  exports: [
-    MarkdownComponent,
-    LanguagePipe,
-  ],
   imports: [HttpModule],
-  declarations: [
-    MarkdownComponent,
+  exports: [
     LanguagePipe,
+    MarkdownComponent,
+  ],
+  declarations: [
+    LanguagePipe,
+    MarkdownComponent,
   ],
 })
 export class MarkdownModule {
-  static forRoot(markdownOptions?: MarkdownOptions): ModuleWithProviders {
+  static forRoot(markedOptions?: marked.MarkedOptions): ModuleWithProviders {
     return {
       ngModule: MarkdownModule,
       providers: [
-        MarkdownService,
-        { provide: MarkdownOptions, useValue: markdownOptions },
+        {
+          provide: MarkdownService,
+          useFactory: (http) => markdownServiceFactory(http, markedOptions),
+          deps: [Http],
+        },
       ],
     };
   }

@@ -1,20 +1,14 @@
 import { async, TestBed } from '@angular/core/testing';
 import { BaseRequestOptions, Http, HttpModule, Response, ResponseOptions } from '@angular/http';
 import { MockBackend, MockConnection } from '@angular/http/testing';
+import * as marked from 'marked';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
-import { AnonymousSubject } from 'rxjs/Subject';
 
-// workaround to fix rollup namespace import
-// https://github.com/rollup/rollup/issues/670#issuecomment-284621537
-import * as _marked from 'marked';
-const marked = _marked;
-
-import { MarkdownOptions } from './markdown-options';
-import { MarkdownService } from './markdown.service';
+import { MarkdownService, markdownServiceFactory } from './markdown.service';
 
 // window mock
 declare var window: any;
@@ -60,10 +54,13 @@ describe('MarkdowService', () => {
     TestBed.configureTestingModule({
       providers: [
         BaseRequestOptions,
-        MarkdownService,
+        {
+          provide: MarkdownService,
+          useFactory: (_http) => markdownServiceFactory(_http, {}),
+          deps: [Http],
+        },
         MockBackend,
         mockHttpProvider,
-        { provide: MarkdownOptions, useValue: null },
       ],
     });
   });
@@ -91,7 +88,7 @@ describe('MarkdowService', () => {
 
       spyOn(markdownService, 'precompile').and.returnValue(mockPrecompiled);
 
-      const result = markdownService.compile(mockMarkdown, <MarkdownOptions>{ renderer: markdownService.renderer });
+      const result = markdownService.compile(mockMarkdown, { renderer: markdownService.renderer });
 
       expect(markdownService['precompile']).toHaveBeenCalledWith(mockMarkdown);
       expect(result).toBe(marked(mockPrecompiled));

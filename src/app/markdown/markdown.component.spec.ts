@@ -1,12 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpModule } from '@angular/http';
+import { Http, HttpModule } from '@angular/http';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/toPromise';
 import { Observable } from 'rxjs/Observable';
 
-import { MarkdownOptions } from './markdown-options';
 import { MarkdownComponent } from './markdown.component';
-import { MarkdownService } from './markdown.service';
+import { MarkdownService, markdownServiceFactory } from './markdown.service';
 
 class MockMarkdownService {
   getSource(src: string): Observable<string> {
@@ -25,8 +24,11 @@ describe('MarkdownComponent', () => {
       imports: [HttpModule],
       declarations: [MarkdownComponent],
       providers: [
-        MarkdownService,
-        { provide: MarkdownOptions, useValue: {} },
+        {
+          provide: MarkdownService,
+          useFactory: (_http) => markdownServiceFactory(_http, {}),
+          deps: [Http],
+        },
       ],
     }).compileComponents();
   }));

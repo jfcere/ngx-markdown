@@ -7,7 +7,9 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
-import { MarkdownOptions } from './markdown-options';
+export function markdownServiceFactory(http, markedOptions): MarkdownService {
+  return new MarkdownService(http, markedOptions);
+}
 
 @Injectable()
 export class MarkdownService {
@@ -15,16 +17,16 @@ export class MarkdownService {
 
   constructor(
     private http: Http,
-    private markedOptions: MarkdownOptions,
+    private markedOptions: marked.MarkedOptions,
   ) {
     this.renderer = new marked.Renderer();
   }
 
-  compile(markdown: string, markedOptions: MarkdownOptions = this.markedOptions) {
+  compile(markdown: string, markedOptions = this.markedOptions) {
     const precompiled = this.precompile(markdown);
     const options = Object.assign(
       { renderer: this.renderer },
-      markedOptions && markedOptions.options ? markedOptions.options : {},
+      markedOptions,
     );
     return marked(precompiled, options);
   }
