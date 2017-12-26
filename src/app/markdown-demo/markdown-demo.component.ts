@@ -44,7 +44,7 @@ public markdown = "# Markdown";
   pipeMarkdown =
 `### Markdown example
 ---
-This is an **example** where we use a variable with the \`markdownToHtml\` pipe that is also bind to a textarea. Using the pipe allows to chain pipe transformation.
+This is an **example** where we use a variable with the \`markdown\` pipe that is also bind to a textarea. Using the pipe allows to chain pipe transformation.
 
 #### example.component.ts
 \`\`\`typescript
@@ -54,7 +54,7 @@ public pipeMarkdown = "# Markdown";
 #### example.component.html
 \`\`\`html
 <textarea [(ngModel)]="pipeMarkdown"></textarea>
-<div [innerHTML]="pipeMarkdown | markdownToHtml"></div>
+<div [innerHTML]="pipeMarkdown | markdown"></div>
 \`\`\``;
   typescriptMarkdown =
 `import { Component } from '@angular/core';

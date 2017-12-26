@@ -163,6 +163,77 @@ The same way the component works, you can use `markdown` directive to accomplish
 <div markdown [data]="markdown"></div>
 ```
 
+### Pipe
+
+Using `markdown` pipe to transform markdown to HTML allow you to chain pipe transformations and will update the DOM when value changes.
+
+```html
+<!-- chain `language` pipe with `markdown` pipe to convert typescriptMarkdown variable content -->
+<div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown"></div>
+```
+
+### Service
+
+You can use `MarkdownService` to have access to markdown parser and syntax highlight methods.
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { MarkdownService } from 'ngx-markdown';
+
+@Component({ ... })
+export class ExampleComponent implements OnInit() {
+  constructor(private markdownService: MarkdownService) { }
+
+  ngOnInit() {
+    // outputs: <p>I am using <strong>markdown</strong>.</p>
+    console.log(this.markdownService.compile('I am using __markdown__.'));
+  }
+}
+```
+
+#### Renderer
+
+`MarkdownService` exposes the `renderer` property which allows you to render tokens in a custom manner.
+
+Here is an example of overriding the default heading token rendering by adding an embedded anchor tag like on GitHub:
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { MarkdownService } from 'ngx-markdown';
+
+@Component({
+  selector: 'app-example',
+  template: '<markdown># Heading</markdown>',
+})
+export class ExampleComponent implements OnInit() {
+  constructor(private markdownService: MarkdownService) { }
+
+  ngOnInit() {
+    this.markdownService.renderer.heading = (text: string, level: number) => {
+      const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
+      return '<h' + level + '>' +
+               '<a name="' + escapedText + '" class="anchor" href="#' + escapedText + '">' +
+                 '<span class="header-link"></span>' +
+               '</a>' + text +
+             '</h' + level + '>';
+    };
+  }
+}
+```
+
+This code will output the following HTML:
+
+```html
+<h1>
+  <a name="heading" class="anchor" href="#heading">
+    <span class="header-link"></span>
+  </a>
+  Heading
+</h1>
+```
+
+> Follow official [marked.renderer](https://github.com/chjj/marked#renderer) documentation for the list of tokens that can be overriden.
+
 ## Syntax highlight
 
 When using static markdown you are responsible to provide the code block with related language.
