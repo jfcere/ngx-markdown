@@ -48,7 +48,7 @@ To add [Prism.js](http://prismjs.com/) syntax highlight to your `package.json` u
 npm install prismjs --save
 ```
 
-To activate [Prism.js](http://prismjs.com/) syntax highlight you will need include...
+To activate [Prism.js](http://prismjs.com/) syntax highlight you will need to include...
 - prism.js core library - `node_modules/prismjs/prism.js` file
 - a highlight css theme - from `node_modules/prismjs/themes` directory
 - desired code language syntax files - from `node_modules/prismjs/components` directory
