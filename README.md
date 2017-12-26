@@ -10,6 +10,7 @@ Demo available @ [jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-ma
 ### Table of contents
 
 - [Installation](#installation)
+- [Configuration](#configuration)
 - [Usage](#usage)
 - [Syntax highlight](#syntax-highlight)
 - [Demo application](#demo-application)
@@ -68,9 +69,11 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `.ang
 ]
 ```
 
-## Usage
+## Configuration
 
-You must import `MarkdownModule` inside your main application module with `forRoot` to be able to use `markdown` component and/or directive.
+### Main application module
+
+You must import `MarkdownModule` inside your main application module (usually named AppModule) with `forRoot` to be able to use `markdown` component and/or directive.
 
 ```diff
 import { NgModule } from '@angular/core';
@@ -85,9 +88,10 @@ import { AppComponent } from './app.component';
   declarations: [AppComponent],
   bootstrap: [AppComponent],
 })
+export class AppModule { }
 ```
 
-Optionaly, markdown parsing can be customized by passing [marked options](https://github.com/chjj/marked#options-1) to the `forRoot` method of `MarkdownModule`.
+Optionaly, markdown parsing can be configured by passing [marked options](https://github.com/chjj/marked#options-1) to the `forRoot` method of `MarkdownModule`.
 
 ```typescript
 // using default options
@@ -104,6 +108,26 @@ MarkdownModule.forRoot({
   smartypants: false,
 }),
 ```
+### Other application modules
+
+Use `forChild` when importing `MarkdownModule` into other application modules to allow you to use the same parser configuration accross your application.
+
+```diff
+import { NgModule } from '@angular/core';
++ import { MarkdownModule } from 'ngx-markdown';
+
+import { HomeComponent } from './home.component';
+
+@NgModule({
+  imports: [
++   MarkdownModule.forChild(),
+  ],
+  declarations: [HomeComponent],
+})
+export class HomeModule { }
+```
+
+## Usage
 
 ### Component
 
