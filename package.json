@@ -29,7 +29,6 @@
   "typings": "./dist/lib/index.d.ts",
   "scripts": {
     "build": "ng build",
-    "e2e": "ng e2e",
     "lint": "tslint \"src/**/*.ts\"",
     "ng": "ng",
     "start": "npm run clean:dist && ng serve",
@@ -87,7 +86,6 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "karma-junit-reporter": "^1.2.0",
     "node-sass": "^4.5.1",
-    "protractor": "~5.1.0",
     "rimraf": "^2.6.1",
     "rollup": "^0.52.1",
     "rollup-plugin-node-resolve": "^3.0.0",
