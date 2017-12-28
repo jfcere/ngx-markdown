@@ -1,12 +1,14 @@
-// tslint:disable:max-line-length
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
+import { MarkdownService } from '../markdown/markdown.service';
+
+// tslint:disable:max-line-length
 @Component({
   selector: 'markdown-demo',
   templateUrl: './markdown-demo.component.html',
   styleUrls: ['./markdown-demo.component.scss'],
 })
-export class MarkdownDemoComponent {
+export class MarkdownDemoComponent implements OnInit {
   // markdown
   blockquotes = require('raw-loader!./markdown/blockquotes.md');
   codeAndSynthaxHighlighting = require('raw-loader!./markdown/code-and-synthax-highlighting.md');
@@ -67,4 +69,17 @@ public pipeMarkdown = "# Markdown";
 export class MarkdownDemoComponent {
   public pipeMarkdown = '# Markdown';
 }`;
+
+  constructor(private markdownService: MarkdownService) { }
+
+  ngOnInit() {
+    this.markdownService.renderer.heading = (text: string, level: number) => {
+      const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
+      return '<h' + level + '>' +
+               '<a name="' + escapedText + '" class="anchor" href="#' + escapedText + '">' +
+                 '<span class="header-link"></span>' +
+               '</a>' + text +
+             '</h' + level + '>';
+    };
+  }
 }

@@ -12,6 +12,7 @@ Demo available @ [jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-ma
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Usage](#usage)
+- [Renderer](#renderer)
 - [Syntax highlight](#syntax-highlight)
 - [Demo application](#demo-application)
 - [AoT compilation](#aot-compilation)
@@ -91,23 +92,67 @@ import { AppComponent } from './app.component';
 export class AppModule { }
 ```
 
-Optionaly, markdown parsing can be configured by passing [marked options](https://github.com/chjj/marked#options-1) to the `forRoot` method of `MarkdownModule`.
+#### MarkedOptions
+
+Optionaly, markdown parsing can be configured by passing [MarkedOptions](https://github.com/chjj/marked#options-1) to the `forRoot` method of `MarkdownModule`.
 
 ```typescript
+import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
+
 // using default options
 MarkdownModule.forRoot(),
 
-// using specific options
+// using specific options with ValueProvider
 MarkdownModule.forRoot({
-  gfm: true,
-  tables: true,
-  breaks: false,
-  pedantic: false,
-  sanitize: false,
-  smartLists: true,
-  smartypants: false,
+  provide: MarkedOptions,
+  useValue: {
+    gfm: true,
+    tables: true,
+    breaks: false,
+    pedantic: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false,
+  },
 }),
 ```
+
+#### MarkedOptions.renderer
+
+`MarkedOptions` also exposes the `renderer` property which allows you to override token rendering for your whole application.
+
+The example below overrides the default blockquote token rendering by adding a CSS class for custom styling when using Bootstrap CSS:
+
+```typescript
+import { MarkedOptions, MarkedRenderer } from 'ngx-markdown';
+
+// function that returns `MarkedOptions` with renderer override
+export function markedOptionsFactory(): MarkedOptions {
+  const renderer = new MarkedRenderer();
+
+  renderer.blockquote = (text: string) => {
+    return '<blockquote class="blockquote"><p>' + text + '</p></blockquote>';
+  };
+
+  return {
+    renderer: renderer,
+    gfm: true,
+    tables: true,
+    breaks: false,
+    pedantic: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false,
+  };
+}
+
+// using specific option with FactoryProvider
+MarkdownModule.forRoot({
+  provide: MarkedOptions,
+  useFactory: markedOptionsFactory,
+}),
+```
+
 ### Other application modules
 
 Use `forChild` when importing `MarkdownModule` into other application modules to allow you to use the same parser configuration accross your application.
@@ -191,11 +236,13 @@ export class ExampleComponent implements OnInit() {
 }
 ```
 
-#### Renderer
+## Renderer
 
-`MarkdownService` exposes the `renderer` property which allows you to render tokens in a custom manner.
+Tokens can be render in a custom manner by either...
+- providing the `renderer` property with the `MarkedOptions` when importing `MarkdownModule.forRoot()` into your main application module (see [Configuration](#markedoptionsrenderer) section)
+- using `MarkdownService` exposed `renderer`
 
-Here is an example of overriding the default heading token rendering by adding an embedded anchor tag like on GitHub:
+Here is an example of overriding the default heading token rendering through `MarkdownService` by adding an embedded anchor tag like on GitHub:
 
 ```typescript
 import { Component, OnInit } from '@angular/core';
@@ -232,7 +279,7 @@ This code will output the following HTML:
 </h1>
 ```
 
-> Follow official [marked.renderer](https://github.com/chjj/marked#renderer) documentation for the list of tokens that can be overriden.
+> Follow official [marked.renderer](https://github.com/chjj/marked#block-level-renderer-methods) documentation for the list of tokens that can be overriden.
 
 ## Syntax highlight
 

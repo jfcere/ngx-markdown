@@ -7,23 +7,30 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
-import { MarkedOptionsToken } from './marked-options.token';
+import { MarkedOptions } from './marked-options';
+import { MarkedRenderer } from './marked-renderer';
 
 @Injectable()
 export class MarkdownService {
-  renderer: marked.Renderer;
+  get renderer(): marked.Renderer {
+    return this.options.renderer;
+  }
+  set renderer(value: marked.Renderer) {
+    this.options.renderer = value;
+  }
 
   constructor(
     private http: Http,
-    @Inject(MarkedOptionsToken) public markedOptions: marked.MarkedOptions,
+    public options: MarkedOptions,
   ) {
-    this.renderer = new marked.Renderer();
+    if (!this.renderer) {
+      this.renderer = new marked.Renderer();
+    }
   }
 
-  compile(markdown: string, markedOptions = this.markedOptions) {
+  compile(markdown: string, markedOptions = this.options) {
     const precompiled = this.precompile(markdown);
-    const options = Object.assign({ renderer: this.renderer }, markedOptions);
-    return marked(precompiled, options);
+    return marked(precompiled, markedOptions);
   }
 
   getSource(src: string) {

@@ -1,12 +1,25 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
-import { Http, HttpModule } from '@angular/http';
+import { ModuleWithProviders, NgModule, Provider } from '@angular/core';
+import { HttpModule } from '@angular/http';
 import * as marked from 'marked';
 
 import { LanguagePipe } from './language.pipe';
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownPipe } from './markdown.pipe';
 import { MarkdownService } from './markdown.service';
-import { MarkedOptionsToken } from './marked-options.token';
+import { MarkedOptions } from './marked-options';
+
+export const initialMarkedOptions: Provider = {
+  provide: MarkedOptions,
+  useValue: {
+    gfm: true,
+    tables: true,
+    breaks: false,
+    pedantic: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false,
+  },
+};
 
 @NgModule({
   imports: [HttpModule],
@@ -22,15 +35,16 @@ import { MarkedOptionsToken } from './marked-options.token';
   ],
 })
 export class MarkdownModule {
-  static forRoot(markedOptions?: marked.MarkedOptions): ModuleWithProviders {
+  static forRoot(markedOptions?: Provider): ModuleWithProviders {
     return {
       ngModule: MarkdownModule,
       providers: [
-        { provide: MarkedOptionsToken, useValue: markedOptions },
         MarkdownService,
+        markedOptions || initialMarkedOptions,
       ],
     };
   }
+
   static forChild(): ModuleWithProviders {
     return {
       ngModule: MarkdownModule,

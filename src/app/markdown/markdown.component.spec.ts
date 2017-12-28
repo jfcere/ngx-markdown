@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownService } from './markdown.service';
-import { MarkedOptionsToken } from './marked-options.token';
+import { MarkedOptions } from './marked-options';
 
 class MockMarkdownService {
   getSource(src: string): Observable<string> {
@@ -25,7 +25,7 @@ describe('MarkdownComponent', () => {
       imports: [HttpModule],
       declarations: [MarkdownComponent],
       providers: [
-        { provide: MarkedOptionsToken, useValue: {} },
+        { provide: MarkedOptions, useValue: {} },
         MarkdownService,
       ],
     }).compileComponents();
