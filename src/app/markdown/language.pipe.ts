@@ -6,6 +6,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class LanguagePipe implements PipeTransform {
 
   transform(value: string, language: string): string {
+    if (typeof value !== 'string') {
+      console.error(`LanguagePipe has been invoked with an invalid value type [${value}]`);
+      return value;
+    }
     if (typeof language !== 'string') {
       console.error(`LanguagePipe has been invoked with an invalid parameter [${language}]`);
       return value;
