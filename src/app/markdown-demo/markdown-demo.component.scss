@@ -31,12 +31,6 @@
   }
 }
 
-.flex {
-  @media (min-width: 992px) {
-    display: flex;
-  }
-}
-
 .title {
   margin-bottom: 0;
 
@@ -72,14 +66,16 @@
   }
 }
 
+section:first-of-type {
+  @media (min-width: 993px) {
+    margin-top: 118px;
+  }
+}
+
 .subtitle {
   border-bottom: 1px solid rgba(0,0,0,0.14);
   padding-bottom: 1rem;
   margin: 3rem 0 2rem;
-}
-
-section:first-of-type {
-  margin-top: 118px;
 }
 
 #{'/deep/'} pre {
@@ -95,7 +91,7 @@ section:first-of-type {
 .variable-textarea {
   width: 49%;
 
-  @media (max-width: 900px) {
+  @media (max-width: 992px) {
     width: 100%;
   }
 }

@@ -9,7 +9,7 @@ import { MarkdownService } from '../markdown/markdown.service';
   styleUrls: ['./markdown-demo.component.scss'],
 })
 export class MarkdownDemoComponent implements OnInit {
-  // markdown
+  //#region markdown
   blockquotes = require('raw-loader!./markdown/blockquotes.md');
   codeAndSynthaxHighlighting = require('raw-loader!./markdown/code-and-synthax-highlighting.md');
   emphasis = require('raw-loader!./markdown/emphasis.md');
@@ -20,12 +20,14 @@ export class MarkdownDemoComponent implements OnInit {
   lists = require('raw-loader!./markdown/lists.md');
   listsDot = require('raw-loader!./markdown/lists-dot.md');
   tables = require('raw-loader!./markdown/tables.md');
+  //#endregion
 
-  // remote
+  //#region remote
   demoPython = require('raw-loader!./remote/demo.py');
   languagePipe = require('raw-loader!./remote/language-pipe.html');
+  //#endregion
 
-  // variable-binding
+  //#region variable-binding
   markdown =
 `### Markdown example
 ---
@@ -41,8 +43,9 @@ public markdown = "# Markdown";
 <textarea [(ngModel)]="markdown"></textarea>
 <markdown [data]="markdown"></markdown>
 \`\`\``;
+  //#endregion
 
-  // pipe
+  //#region pipe
   pipeMarkdown =
 `### Markdown example
 ---
@@ -69,21 +72,19 @@ public pipeMarkdown = "# Markdown";
 export class MarkdownDemoComponent {
   public pipeMarkdown = '# Markdown';
 }`;
+  //#endregion
 
   protected _titleIsAnimating = false;
+  protected _pushpinIsOn = false;
+
+  @HostListener('window:resize')
+  onWindowResize() {
+    this.initPushpin();
+  }
 
   @HostListener('window:scroll')
   onWindowScroll() {
-    const title = $('.title a');
-    const titleOffset = title[0].offsetTop;
-    const windowOffset = window.pageYOffset;
-    const currentFontSize = title[0].style.fontSize;
-    const targetFontSize = windowOffset > titleOffset ? '2.28rem' : '2.92rem';
-
-    if (currentFontSize !== targetFontSize && !this._titleIsAnimating) {
-      this._titleIsAnimating = true;
-      title.animate({ fontSize: targetFontSize }, 200, 'swing', () => this._titleIsAnimating = false);
-    }
+    this.animateTitle();
   }
 
   constructor(
@@ -92,7 +93,8 @@ export class MarkdownDemoComponent {
 
   ngOnInit() {
     this.initRenderer();
-    this.initTableOfContents();
+    this.initPushpin();
+    this.initScrollSpy();
   }
 
   initRenderer() {
@@ -107,12 +109,39 @@ export class MarkdownDemoComponent {
   }
 
   initTableOfContents() {
-    // initialize pushpin
-    const tableOfContent = $('.table-of-contents');
-    const pushpinTop = tableOfContent.parent().offset().top;
-    tableOfContent.pushpin({ top: pushpinTop });
+    this.initPushpin();
+    this.initScrollSpy();
+  }
 
-    // initialize scrollSpy
+  private animateTitle() {
+    const title = $('.title a');
+    const titleOffset = title[0].offsetTop;
+    const windowOffset = window.pageYOffset;
+    const currentFontSize = title[0].style.fontSize;
+    const targetFontSize = windowOffset > titleOffset ? '2.28rem' : '2.92rem';
+
+    if (currentFontSize !== targetFontSize && !this._titleIsAnimating) {
+      this._titleIsAnimating = true;
+      title.animate({ fontSize: targetFontSize }, 200, 'swing', () => this._titleIsAnimating = false);
+    }
+  }
+
+  private initPushpin() {
+    const tableOfContent = $('.table-of-contents');
+    // add pushpin
+    if (!this._pushpinIsOn && window.innerWidth > 992) {
+      const pushpinTop = tableOfContent.parent().offset().top;
+      tableOfContent.pushpin({ top: pushpinTop });
+      this._pushpinIsOn = true;
+    }
+    // remove pushpin
+    if (this._pushpinIsOn && window.innerWidth <= 992) {
+      tableOfContent.pushpin('remove' as any);
+      this._pushpinIsOn = false;
+    }
+  }
+
+  private initScrollSpy() {
     $('section').scrollSpy();
   }
 }
