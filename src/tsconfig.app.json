@@ -15,9 +15,11 @@
     "module": "es2015",
     "baseUrl": "",
     "types": [
+      "jquery",
+      "marked",
+      "materialize-css",
       "node",
-      "prismjs",
-      "marked"
+      "prismjs"
     ]
   },
   "exclude": [

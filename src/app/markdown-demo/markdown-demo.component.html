@@ -1,203 +1,190 @@
-<header>
-  <h1>
-    <a class="title" href="https://github.com/jfcere/ngx-markdown">ngx-markdown</a>
-  </h1>
-  <h4 class="title-based-on">
-    demo based on <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">markdown cheatsheet</a>
-  </h4>
-</header>
+<div class="row">
+  <!-- TABLE OF CONTENT -->
+  <div class="col s12 col m3">
+    <div class="table-of-contents">
+      <h1 class="title">
+        <a href="https://github.com/jfcere/ngx-markdown">ngx-markdown</a>
+      </h1>
+      <div class="title-based-on">
+        demo based on <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">markdown cheatsheet</a>
+      </div>
+      <ul>
+        <li><a href="#headers">Headers</a></li>
+        <li><a href="#emphasis">Emphasis</a></li>
+        <li><a href="#lists">Lists</a></li>
+        <li><a href="#links">Links</a></li>
+        <li><a href="#images">Images</a></li>
+        <li><a href="#code-and-synthax">Code and Syntax Highlighting</a></li>
+        <li><a href="#tables">Tables</a></li>
+        <li><a href="#blockquotes">Blockquotes</a></li>
+        <li><a href="#horizontal-rule">Horizontal Rule</a></li>
+        <li><a href="#remote-url">Remote Url</a></li>
+        <li><a href="#variable-binding">Variable Binding</a></li>
+        <li><a href="#pipe">Pipe Usage</a></li>
+      </ul>
+    </div>
+  </div>
 
-<!-- TABLE OF CONTENT -->
-<h2 class="subtitle">Table of contents</h2>
+  <div class="col s12 m9">
+    <!-- HEADER -->
+    <section id="headers">
+      <h2 class="subtitle">Headers</h2>
 
-<ul>
-  <li><a href="#headers">Headers</a></li>
-  <li><a href="#emphasis">Emphasis</a></li>
-  <li><a href="#lists">Lists</a></li>
-  <li><a href="#links">Links</a></li>
-  <li><a href="#images">Images</a></li>
-  <li><a href="#code-and-synthax">Code and Syntax Highlighting</a></li>
-  <li><a href="#tables">Tables</a></li>
-  <li><a href="#blockquotes">Blockquotes</a></li>
-  <li><a href="#horizontal-rule">Horizontal Rule</a></li>
-  <li><a href="#remote-url">Remote Url</a></li>
-  <li><a href="#variable-binding">Variable Binding</a></li>
-  <li><a href="#pipe">Pipe Usage</a></li>
-</ul>
+      <pre>{{ headers }}</pre>
 
-<!-- HEADER -->
-<h2 id="headers" class="subtitle">Headers</h2>
+      <markdown>{{ headers }}</markdown>
+    </section>
 
-<pre>
-{{ headers }}
-</pre>
+    <!-- EMPHASIS -->
+    <section id="emphasis">
+      <h2 class="subtitle">Emphasis</h2>
 
-<markdown>
-{{ headers }}
-</markdown>
+      <pre>{{ emphasis }}</pre>
 
-<!-- EMPHASIS -->
-<h2 id="emphasis" class="subtitle">Emphasis</h2>
+      <markdown>{{ emphasis }}</markdown>
+    </section>
 
-<pre>
-{{ emphasis }}
-</pre>
+    <!-- LISTS -->
+    <section id="lists">
+      <h2 class="subtitle">Lists</h2>
 
-<markdown>
-{{ emphasis }}
-</markdown>
+      <p>
+        In this example, leading and trailing spaces are shown with with dots (⋅)
+      </p>
 
-<!-- LISTS -->
-<h2 id="lists" class="subtitle">Lists</h2>
+      <pre>{{ listsDot }}</pre>
 
-<p>
-  In this example, leading and trailing spaces are shown with with dots (⋅)
-</p>
+      <markdown>{{ lists }}</markdown>
+    </section>
 
-<pre>
-{{ listsDot }}
-</pre>
+    <!-- LINKS -->
+    <section id="links">
+      <h2 class="subtitle">Links</h2>
 
-<markdown>
-{{ lists }}
-</markdown>
+      <pre>{{ links }}</pre>
 
-<!-- LINKS -->
-<h2 id="links" class="subtitle">Links</h2>
+      <markdown>{{ links }}</markdown>
+    </section>
 
-<pre>
-{{ links }}
-</pre>
+    <!-- IMAGES -->
+    <section id="images">
+      <h2 class="subtitle">Images</h2>
 
-<markdown>
-{{ links }}
-</markdown>
+      <pre>{{ images }}</pre>
 
-<!-- IMAGES -->
-<h2 id="images" class="subtitle">Images</h2>
+      <markdown>{{ images }}</markdown>
+    </section>
 
-<pre>
-{{ images }}
-</pre>
+    <!-- CODE AND SYNTAX HIGHLIGHTING -->
+    <section id="code-and-synthax">
+      <h2 class="subtitle">Code and Syntax Highlighting</h2>
 
-<markdown>
-{{ images }}
-</markdown>
+      <pre>{{ codeAndSynthaxHighlighting }}</pre>
 
-<!-- CODE AND SYNTAX HIGHLIGHTING -->
-<h2 id="code-and-synthax" class="subtitle">Code and Syntax Highlighting</h2>
+      <markdown>{{ codeAndSynthaxHighlighting }}</markdown>
+    </section>
 
-<pre>
-{{ codeAndSynthaxHighlighting }}
-</pre>
+    <!-- TABLES -->
+    <section id="tables">
+      <h2 class="subtitle">Tables</h2>
 
-<markdown>
-{{ codeAndSynthaxHighlighting }}
-</markdown>
+      <pre>{{ tables }}</pre>
 
-<!-- TABLES -->
-<h2 id="tables" class="subtitle">Tables</h2>
+      <markdown>{{ tables }}</markdown>
+    </section>
 
-<pre>
-{{ tables }}
-</pre>
+    <!-- BLOCKQUOTES -->
+    <section id="blockquotes">
+      <h2 class="subtitle">Blockquotes</h2>
 
-<markdown>
-{{ tables }}
-</markdown>
+      <pre>{{ blockquotes }}</pre>
 
-<!-- BLOCKQUOTES -->
-<h2 id="blockquotes" class="subtitle">Blockquotes</h2>
+      <markdown>{{ blockquotes }}</markdown>
+    </section>
 
-<pre>
-{{ blockquotes }}
-</pre>
+    <!-- HORIZONTAL RULE -->
+    <section id="horizontal-rule">
+      <h2 class="subtitle">Horizontal Rule</h2>
 
-<markdown>
-{{ blockquotes }}
-</markdown>
+      <pre>{{ horizontalRule }}</pre>
 
-<!-- HORIZONTAL RULE -->
-<h2 id="horizontal-rule" class="subtitle">Horizontal Rule</h2>
+      <markdown>{{ horizontalRule }}</markdown>
+    </section>
 
-<pre>
-{{ horizontalRule }}
-</pre>
+    <!-- REMOTE URL -->
+    <section id="remote-url">
+      <h2 class="subtitle">Remote Url</h2>
 
-<markdown>
-{{ horizontalRule }}
-</markdown>
+      <markdown>
+        Using component with `src` property to fetch remote markdown file `app/markdown-demo/remote/demo.md`
+      </markdown>
 
-<!-- REMOTE URL -->
-<h2 id="remote-url" class="subtitle">Remote Url</h2>
+      <markdown [src]="'app/markdown-demo/remote/demo.md'"></markdown>
 
-<markdown>
-  Using component with `src` property to fetch remote markdown file `app/markdown-demo/remote/demo.md`
-</markdown>
+      <br />
 
-<markdown [src]="'app/markdown-demo/remote/demo.md'"></markdown>
+      <markdown>
+        Using component with static `python` code block
+      </markdown>
 
-<br />
+      <markdown>{{ demoPython | language: 'python' }}</markdown>
 
-<markdown>
-  Using component with static `python` code block
-</markdown>
+      <br />
 
-<markdown>
-```python
-{{ demoPython }}
-```
-</markdown>
+      <markdown>
+        Using directive with `src` property to fetch remote html file `app/markdown-demo/remote/demo.html`
+      </markdown>
 
-<br />
+      <div markdown [src]="'app/markdown-demo/remote/demo.html'"></div>
 
-<markdown>
-  Using directive with `src` property to fetch remote html file `app/markdown-demo/remote/demo.html`
-</markdown>
+      <br />
 
-<div markdown [src]="'app/markdown-demo/remote/demo.html'"></div>
+      <markdown>
+        Using directive with `src` property to fetch remote C++ file `app/markdown-demo/remote/demo.cpp`
+      </markdown>
 
-<br />
+      <div markdown [src]="'app/markdown-demo/remote/demo.cpp'"></div>
+    </section>
 
-<markdown>
-  Using directive with `src` property to fetch remote C++ file `app/markdown-demo/remote/demo.cpp`
-</markdown>
+    <!-- VARIABLE BINDING -->
+    <section id="variable-binding">
+      <h2 class="subtitle">Variable Binding</h2>
 
-<div markdown [src]="'app/markdown-demo/remote/demo.cpp'"></div>
+      <markdown>
+        Using component or directive with `data` property allow to bind a variable that will update the DOM when value changes
+      </markdown>
 
-<!-- VARIABLE BINDING -->
-<h2 id="variable-binding" class="subtitle">Variable Binding</h2>
+      <textarea class="variable-textarea" [(ngModel)]="markdown"></textarea>
 
-<markdown>
-  Using component or directive with `data` property allow to bind a variable that will update the DOM when value changes
-</markdown>
+      <markdown class="variable-binding" [data]="markdown"></markdown>
 
-<textarea class="variable-textarea" [(ngModel)]="markdown"></textarea>
+      <br /><br />
 
-<markdown class="variable-binding" [data]="markdown"></markdown>
+      <markdown>
+        Using `language` pipe you can specify the language of the variable content for synthax highlights
+      </markdown>
 
-<br /><br />
+      <markdown [src]="'app/markdown-demo/remote/language-pipe.html'"></markdown>
+    </section>
 
-<markdown>
-  Using `language` pipe you can specify the language of the variable content for synthax highlights
-</markdown>
+    <!-- PIPE USAGE -->
+    <section id="pipe">
+      <h2 class="subtitle">Pipe Usage</h2>
 
-<markdown [src]="'app/markdown-demo/remote/language-pipe.html'"></markdown>
+      <markdown>
+        Using `markdown` pipe to transform markdown to HTML allow you to chain pipe transformations and will update the DOM when value changes
+      </markdown>
 
-<!-- PIPE USAGE -->
-<h2 id="pipe" class="subtitle">Pipe Usage</h2>
+      <markdown [src]="'app/markdown-demo/remote/markdown-pipe.html'"></markdown>
 
-<markdown>
-  Using `markdown` pipe to transform markdown to HTML allow you to chain pipe transformations and will update the DOM when value changes
-</markdown>
+      <br />
 
-<markdown [src]="'app/markdown-demo/remote/markdown-pipe.html'"></markdown>
+      <markdown>
+        In the example below, `pipeMarkdown` property does not contains any `back-ticks` to set the content language but will be chain with `language` pipe instead to specify synthax highlights language along with `markdown` pipe for conversion
+      </markdown>
 
-<br />
-
-<markdown>
-  In the example below, `pipeMarkdown` property does not contains any `back-ticks` to set the content language but will be chain with `language` pipe instead to specify synthax highlights language along with `markdown` pipe for conversion
-</markdown>
-
-<textarea class="pipe-textarea" [(ngModel)]="typescriptMarkdown"></textarea>
-<div class="pipe-usage" [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown"></div>
+      <textarea class="pipe-textarea" [(ngModel)]="typescriptMarkdown"></textarea>
+      <div class="pipe-usage" [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown"></div>
+    </section>
+  </div>
+</div>

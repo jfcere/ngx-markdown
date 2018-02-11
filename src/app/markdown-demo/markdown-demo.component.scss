@@ -1,29 +1,85 @@
-@import url(https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css);
-
 :host {
   display: block;
-  padding: 3rem;
+  font-size: 13px;
+  margin: 0 auto 3rem;
   max-width: 1170px;
-  margin: 0 auto;
 }
 
-header {
-  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-  margin-bottom: 3rem;
+#{'/deep/'} {
+  h1 {
+    font-size: 2.92rem;
+  }
+
+  h2 {
+    font-size: 2.28rem
+  }
+
+  h3 {
+    font-size: 1.64rem;
+  }
+
+  h4 {
+    font-size: 1.21rem;
+  }
+
+  h5 {
+    font-size: 1.1rem;
+  }
+
+  h6 {
+    font-size: 1rem;
+  }
+}
+
+.flex {
+  @media (min-width: 992px) {
+    display: flex;
+  }
 }
 
 .title {
-  color: #c7254e;
+  margin-bottom: 0;
+
+  a {
+    color: #c7254e;
+    height: 1.8rem;
+    transition: padding 300ms ease-out;
+
+    &:not(:hover) {
+      padding: 0;
+    }
+
+    &:hover {
+      color: #ff3e6f;
+      border-left-width: 2px;
+    }
+  }
 }
 
 .title-based-on {
   color: #690;
+  font-weight: 300;
+  margin-top: 4px;
+
+  a {
+    border: 0;
+    color: #0089ec;
+    padding: 0;
+
+    &:hover {
+      opacity: 0.87;
+    }
+  }
 }
 
 .subtitle {
   border-bottom: 1px solid rgba(0,0,0,0.14);
   padding-bottom: 1rem;
   margin: 3rem 0 2rem;
+}
+
+section:first-of-type {
+  margin-top: 118px;
 }
 
 #{'/deep/'} pre {

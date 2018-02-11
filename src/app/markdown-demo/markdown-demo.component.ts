@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 
 import { MarkdownService } from '../markdown/markdown.service';
 
@@ -70,9 +70,32 @@ export class MarkdownDemoComponent {
   public pipeMarkdown = '# Markdown';
 }`;
 
-  constructor(private markdownService: MarkdownService) { }
+  protected _titleIsAnimating = false;
+
+  @HostListener('window:scroll')
+  onWindowScroll() {
+    const title = $('.title a');
+    const titleOffset = title[0].offsetTop;
+    const windowOffset = window.pageYOffset;
+    const currentFontSize = title[0].style.fontSize;
+    const targetFontSize = windowOffset > titleOffset ? '2.28rem' : '2.92rem';
+
+    if (currentFontSize !== targetFontSize && !this._titleIsAnimating) {
+      this._titleIsAnimating = true;
+      title.animate({ fontSize: targetFontSize }, 200, 'swing', () => this._titleIsAnimating = false);
+    }
+  }
+
+  constructor(
+    private markdownService: MarkdownService,
+  ) { }
 
   ngOnInit() {
+    this.initRenderer();
+    this.initTableOfContents();
+  }
+
+  initRenderer() {
     this.markdownService.renderer.heading = (text: string, level: number) => {
       const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
       return '<h' + level + '>' +
@@ -81,5 +104,15 @@ export class MarkdownDemoComponent {
                '</a>' + text +
              '</h' + level + '>';
     };
+  }
+
+  initTableOfContents() {
+    // initialize pushpin
+    const tableOfContent = $('.table-of-contents');
+    const pushpinTop = tableOfContent.parent().offset().top;
+    tableOfContent.pushpin({ top: pushpinTop });
+
+    // initialize scrollSpy
+    $('section').scrollSpy();
   }
 }
