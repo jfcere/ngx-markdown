@@ -22,7 +22,8 @@
       "prefix": "markdown",
       "styles": [
         "styles.scss",
-        "../node_modules/prismjs/themes/prism.css"
+        "../node_modules/prismjs/themes/prism.css",
+        "../node_modules/materialize-css/dist/css/materialize.min.css"
       ],
       "scripts": [
         "../node_modules/marked/lib/marked.js",
@@ -32,7 +33,9 @@
         "../node_modules/prismjs/components/prism-javascript.min.js",
         "../node_modules/prismjs/components/prism-markdown.min.js",
         "../node_modules/prismjs/components/prism-python.min.js",
-        "../node_modules/prismjs/components/prism-typescript.min.js"
+        "../node_modules/prismjs/components/prism-typescript.min.js",
+        "../node_modules/jquery/dist/jquery.min.js",
+        "../node_modules/materialize-css/dist/js/materialize.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
