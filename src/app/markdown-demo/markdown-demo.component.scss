@@ -5,6 +5,18 @@
   max-width: 1170px;
 }
 
+.fixed-action-btn {
+  @media (max-width: 992px) {
+    bottom: 16px;
+    right: 16px;
+  }
+}
+
+svg.center {
+  display: flex;
+  margin: 0 auto;
+}
+
 #{'/deep/'} {
   h1 {
     font-size: 2.92rem;

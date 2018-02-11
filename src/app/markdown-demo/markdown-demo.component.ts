@@ -1,4 +1,9 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/delay';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/first';
 
 import { MarkdownService } from '../markdown/markdown.service';
 
@@ -85,6 +90,7 @@ export class MarkdownDemoComponent {
   @HostListener('window:scroll')
   onWindowScroll() {
     this.animateTitle();
+    this.animateScrollTop();
   }
 
   constructor(
@@ -92,25 +98,38 @@ export class MarkdownDemoComponent {
   ) { }
 
   ngOnInit() {
-    this.initRenderer();
+    this.initMarkdown();
     this.initPushpin();
     this.initScrollSpy();
   }
 
-  initRenderer() {
-    this.markdownService.renderer.heading = (text: string, level: number) => {
-      const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
-      return '<h' + level + '>' +
-               '<a name="' + escapedText + '" class="anchor" href="#' + escapedText + '">' +
-                 '<span class="header-link"></span>' +
-               '</a>' + text +
-             '</h' + level + '>';
-    };
+  onPageUp() {
+    $('html, body').animate({ scrollTop: 0 }, {
+      duration: 400,
+      queue: false,
+      easing: 'easeOutCubic',
+    });
   }
 
-  initTableOfContents() {
-    this.initPushpin();
-    this.initScrollSpy();
+  private animateScrollTop() {
+    const scrollTop = $('.fixed-action-btn button');
+    const windowOffset = window.pageYOffset;
+    const hasScaleInClass = scrollTop.hasClass('scale-in');
+    const targetScaleInClass = windowOffset > 100 ? true : false;
+    // scale-in
+    if (!hasScaleInClass && targetScaleInClass) {
+      scrollTop.addClass('scale-in');
+      Observable.of(null)
+        .do(() => scrollTop.addClass('pulse'))
+        .delay(1000)
+        .do(() => scrollTop.removeClass('pulse'))
+        .first()
+        .subscribe();
+    }
+    // scale-out
+    if (hasScaleInClass && !targetScaleInClass) {
+      scrollTop.removeClass('scale-in');
+    }
   }
 
   private animateTitle() {
@@ -121,9 +140,25 @@ export class MarkdownDemoComponent {
     const targetFontSize = windowOffset > titleOffset ? '2.28rem' : '2.92rem';
 
     if (currentFontSize !== targetFontSize && !this._titleIsAnimating) {
-      this._titleIsAnimating = true;
-      title.animate({ fontSize: targetFontSize }, 200, 'swing', () => this._titleIsAnimating = false);
+      title.animate({ fontSize: targetFontSize}, {
+        duration: 200,
+        queue: false,
+        easing: 'easeOutCubic',
+        start: () => this._titleIsAnimating = true,
+        complete: () => this._titleIsAnimating = false,
+      });
     }
+  }
+
+  private initMarkdown() {
+    this.markdownService.renderer.heading = (text: string, level: number) => {
+      const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
+      return '<h' + level + '>' +
+               '<a name="' + escapedText + '" class="anchor" href="#' + escapedText + '">' +
+                 '<span class="header-link"></span>' +
+               '</a>' + text +
+             '</h' + level + '>';
+    };
   }
 
   private initPushpin() {
