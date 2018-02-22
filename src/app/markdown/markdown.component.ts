@@ -1,6 +1,7 @@
-import { AfterViewInit, Component, ElementRef, Input } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, Output } from '@angular/core';
 
 import { MarkdownService } from './markdown.service';
+import { EventEmitter } from '@angular/forms/src/facade/async';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -25,8 +26,13 @@ export class MarkdownComponent implements AfterViewInit {
     this._src = value;
     this.markdownService
       .getSource(value)
-      .subscribe(markdown => this.render(markdown));
+      .subscribe(
+        markdown => this.render(markdown),
+        error => this.error.emit(error),
+      );
   }
+
+  @Output() error = new EventEmitter<string>();
 
   get isTranscluded(): boolean {
     return !this.data && !this.src;

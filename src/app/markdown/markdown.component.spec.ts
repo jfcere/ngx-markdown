@@ -88,6 +88,19 @@ describe('MarkdownComponent', () => {
 
       expect(component.src).toBe(mockSrc);
     });
+
+    it('should emit error when and error occurs', () => {
+
+      const mockSrc = './src-example/file.md';
+      const mockError = 'error-x';
+
+      spyOn(markdownService, 'getSource').and.returnValue(Observable.throw(mockError));
+      spyOn(component.error, 'emit');
+
+      component.src = mockSrc;
+
+      expect(component.error.emit).toHaveBeenCalledWith(mockError);
+    });
   });
 
   describe('ngAfterViewInit', () => {

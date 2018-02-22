@@ -177,7 +177,7 @@ export class HomeModule { }
 
 ### Component
 
-You can use `markdown` component to either parse static markdown directly from your html markup, load the content from a remote url using `src` property or bind a variable to your component using `data` property.
+You can use `markdown` component to either parse static markdown directly from your html markup, load the content from a remote url using `src` property or bind a variable to your component using `data` property. You can get a hook on loading error using `error` output event property.
 
 ```html
 <!-- static markdown -->
@@ -186,7 +186,7 @@ You can use `markdown` component to either parse static markdown directly from y
 </markdown>
 
 <!-- loaded from remote url -->
-<markdown [src]="'path/to/file.md'"></markdown>
+<markdown [src]="'path/to/file.md'" (error)="onError($event)"></markdown>
 
 <!-- variable binding -->
 <markdown [data]="markdown"></markdown>
@@ -203,7 +203,7 @@ The same way the component works, you can use `markdown` directive to accomplish
 </div>
 
 <!-- loaded from remote url -->
-<div markdown [src]="'path/to/file.md'"></div>
+<div markdown [src]="'path/to/file.md'" (error)="onError($event)"></div>
 
 <!-- variable binding -->
 <div markdown [data]="markdown"></div>
