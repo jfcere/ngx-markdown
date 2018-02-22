@@ -1,7 +1,6 @@
-import { AfterViewInit, Component, ElementRef, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 
 import { MarkdownService } from './markdown.service';
-import { EventEmitter } from '@angular/forms/src/facade/async';
 
 @Component({
   // tslint:disable-next-line:component-selector
