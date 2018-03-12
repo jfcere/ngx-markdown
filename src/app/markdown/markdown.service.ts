@@ -10,6 +10,10 @@ import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
 
+declare var Prism: {
+  highlightAll: (async: boolean) => void
+};
+
 @Injectable()
 export class MarkdownService {
   get renderer(): marked.Renderer {
@@ -42,10 +46,10 @@ export class MarkdownService {
   }
 
   highlight() {
-    if (!window['Prism']) {
+    if (!Prism) {
       return;
     }
-    window['Prism'].highlightAll(false);
+    Prism.highlightAll(false);
   }
 
   private extractData(response: Response) {

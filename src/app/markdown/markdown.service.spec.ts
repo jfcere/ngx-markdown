@@ -11,8 +11,8 @@ import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { MarkdownService } from './markdown.service';
 import { MarkedOptions } from './marked-options';
 
-// window mock
-declare var window: any;
+// Prism mock
+declare var Prism: any;
 
 const mockHttpProvider = {
   provide: Http,
@@ -168,20 +168,20 @@ describe('MarkdowService', () => {
 
     it('should not call Prism when not available', () => {
 
-      window['Prism'] = undefined;
+      Prism = undefined;
 
       markdownService.highlight();
     });
 
     it('should call Prism when available', () => {
 
-      window['Prism'] = { highlightAll: () => {} };
+      Prism = { highlightAll: () => {} };
 
-      spyOn(window['Prism'], 'highlightAll');
+      spyOn(Prism, 'highlightAll');
 
       markdownService.highlight();
 
-      expect(window['Prism'].highlightAll).toHaveBeenCalledWith(false);
+      expect(Prism.highlightAll).toHaveBeenCalledWith(false);
     });
   });
 
