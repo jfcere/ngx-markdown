@@ -42,10 +42,12 @@ export class MarkdownService {
   }
 
   highlight() {
-    if (!window['Prism']) {
-      return;
+    if (window) {
+      if (!window['Prism']) {
+        return;
+      }
+      window['Prism'].highlightAll(false);
     }
-    window['Prism'].highlightAll(false);
   }
 
   private extractData(response: Response) {
