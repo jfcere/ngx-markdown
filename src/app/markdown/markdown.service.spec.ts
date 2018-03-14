@@ -168,14 +168,14 @@ describe('MarkdowService', () => {
 
     it('should not call Prism when not available', () => {
 
-      Prism = undefined;
+      global['Prism'] = undefined;
 
       markdownService.highlight();
     });
 
     it('should call Prism when available', () => {
 
-      Prism = { highlightAll: () => {} };
+      global['Prism'] = { highlightAll: () => {} };
 
       spyOn(Prism, 'highlightAll');
 

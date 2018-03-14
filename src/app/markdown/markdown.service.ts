@@ -46,10 +46,9 @@ export class MarkdownService {
   }
 
   highlight() {
-    if (!Prism) {
-      return;
+    if (typeof Prism !== 'undefined') {
+      Prism.highlightAll(false);
     }
-    Prism.highlightAll(false);
   }
 
   private extractData(response: Response) {
