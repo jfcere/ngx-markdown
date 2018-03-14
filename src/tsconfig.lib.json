@@ -14,8 +14,9 @@
     "target": "es5",
     "module": "commonjs",
     "baseUrl": "",
-    "typeRoots": [
-      "../node_modules/@types"
+    "types" : [
+      "marked",
+      "node"
     ]
   },
   "include": [
