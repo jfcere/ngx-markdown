@@ -2,7 +2,7 @@
   "name": "ngx-markdown",
   "description": "Angular 2+ library that uses marked to parse markdown to html combined with Prism.js for synthax highlights",
   "homepage": "https://github.com/jfcere/ngx-markdown",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "license": "MIT",
   "author": {
     "name": "Jean-Francois Cere",
