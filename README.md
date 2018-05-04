@@ -180,8 +180,11 @@ export class HomeModule { }
 You can use `markdown` component to either parse static markdown directly from your html markup, load the content from a remote url using `src` property or bind a variable to your component using `data` property. You can get a hook on loading error using `error` output event property.
 
 ```html
-<!-- static markdown -->
-<markdown>
+<!-- static markdown in templates -->
+<!-- Note: as of Angular v6, the template compiler strips whitespace by default.
+     Use the ngPreserveWhitespaces directive to preserve whitespace such as newlines
+     in order for the Markdown-formatted content to render as intended. -->
+<markdown ngPreserveWhitespaces>
   # Markdown
 </markdown>
 
