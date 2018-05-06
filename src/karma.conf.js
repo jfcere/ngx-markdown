@@ -21,9 +21,11 @@ module.exports = function (config) {
       reports: ['html', 'lcovonly'],
       fixWebpackSourcePaths: true
     },
-    reporters: ['progress', 'kjhtml', 'junit'],
+    reporters: config.angularCli && config.angularCli.codeCoverage
+              ? ['progress', 'junit', 'kjhtml', 'coverage-istanbul']
+              : ['progress', 'junit', 'kjhtml'],
     junitReporter: {
-      outputFile: 'test-results.xml',
+      outputFile: '../test-results.xml',
       useBrowserName: false
     },
     port: 9876,
