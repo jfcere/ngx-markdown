@@ -2,8 +2,12 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../dist/lib",
+    "declaration": true,
     "module": "commonjs",
     "types": []
+  },
+  "angularCompilerOptions": {
+    "skipTemplateCodegen": true
   },
   "include": [
     "../inline-template/**/*"
