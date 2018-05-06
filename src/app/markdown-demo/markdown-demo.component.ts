@@ -1,9 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/delay';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/first';
+import { Observable, of } from 'rxjs';
+import { delay, first, tap } from 'rxjs/operators';
 
 import { MarkdownService } from '../markdown/markdown.service';
 
@@ -119,12 +116,12 @@ export class MarkdownDemoComponent {
     // scale-in
     if (!hasScaleInClass && targetScaleInClass) {
       scrollTop.addClass('scale-in');
-      Observable.of(null)
-        .do(() => scrollTop.addClass('pulse'))
-        .delay(1000)
-        .do(() => scrollTop.removeClass('pulse'))
-        .first()
-        .subscribe();
+      of(null).pipe(
+        tap(() => scrollTop.addClass('pulse')),
+        delay(1000),
+        tap(() => scrollTop.removeClass('pulse')),
+        first()
+      ).subscribe();
     }
     // scale-out
     if (hasScaleInClass && !targetScaleInClass) {
