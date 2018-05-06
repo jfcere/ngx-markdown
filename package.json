@@ -33,6 +33,7 @@
     "ng": "ng",
     "start": "npm run clean:dist && ng serve",
     "test": "ng test",
+    "test:watch": "ng test --watch=true",
     "coveralls": "cat \"./coverage/lcov.info\" | \"./node_modules/coveralls/bin/coveralls.js\"",
     "build:gh-pages": "ng build --prod --base-href \"https://jfcere.github.io/ngx-markdown/\"",
     "publish:gh-pages": "angular-cli-ghpages --message \"Publish gh-pages\"",

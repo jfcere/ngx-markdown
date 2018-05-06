@@ -1,5 +1,5 @@
 import { ModuleWithProviders, NgModule, Provider } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import * as marked from 'marked';
 
 import { LanguagePipe } from './language.pipe';
@@ -22,7 +22,7 @@ export const initialMarkedOptions: Provider = {
 };
 
 @NgModule({
-  imports: [HttpModule],
+  imports: [HttpClientModule],
   exports: [
     LanguagePipe,
     MarkdownComponent,

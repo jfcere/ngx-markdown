@@ -1,5 +1,5 @@
+import { HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Http, HttpModule } from '@angular/http';
 import { Observable, of, throwError } from 'rxjs';
 
 import { MarkdownComponent } from './markdown.component';
@@ -20,7 +20,7 @@ describe('MarkdownComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [HttpModule],
+      imports: [HttpClientModule],
       declarations: [MarkdownComponent],
       providers: [
         { provide: MarkedOptions, useValue: {} },

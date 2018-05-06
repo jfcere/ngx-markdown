@@ -1,5 +1,5 @@
+import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
 import * as marked from 'marked';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -13,15 +13,11 @@ declare var Prism: {
 
 @Injectable()
 export class MarkdownService {
-  get renderer(): marked.Renderer {
-    return this.options.renderer;
-  }
-  set renderer(value: marked.Renderer) {
-    this.options.renderer = value;
-  }
+  get renderer(): marked.Renderer { return this.options.renderer; }
+  set renderer(value: marked.Renderer) { this.options.renderer = value; }
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     public options: MarkedOptions,
   ) {
     if (!this.renderer) {
@@ -35,34 +31,15 @@ export class MarkdownService {
   }
 
   getSource(src: string) {
-    return this.http.get(src).pipe(
-      catchError(error => this.handleError(error)),
-      map(data => this.extractData(data)),
-      map(markdown => this.handleExtension(src, markdown)),
-    );
+    return this.http
+      .get(src, { responseType: 'text' })
+      .pipe(map(markdown => this.handleExtension(src, markdown)));
   }
 
   highlight() {
     if (typeof Prism !== 'undefined') {
       Prism.highlightAll(false);
     }
-  }
-
-  private extractData(response: Response) {
-    return response.text() || '';
-  }
-
-  private handleError(error: Response | any) {
-    let errMsg: string;
-    if (error instanceof Response) {
-      const body = error.json() || '';
-      const err = body.error || JSON.stringify(body);
-      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-    } else {
-      errMsg = error.message ? error.message : error.toString();
-    }
-    console.error(errMsg);
-    return throwError(errMsg);
   }
 
   private handleExtension(src: string, markdown: string) {

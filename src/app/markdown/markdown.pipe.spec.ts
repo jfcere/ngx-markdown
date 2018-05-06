@@ -1,6 +1,6 @@
+import { HttpClientModule } from '@angular/common/http';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { NgZone } from '@angular/core';
-import { HttpModule } from '@angular/http';
 
 import { MarkdownPipe } from './markdown.pipe';
 import { MarkdownService } from './markdown.service';
@@ -13,7 +13,7 @@ describe('MarkdownPipe', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpModule],
+      imports: [HttpClientModule],
       providers: [
         MarkdownService,
         { provide: MarkedOptions, useValue: {} },
