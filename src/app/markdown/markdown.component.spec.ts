@@ -1,8 +1,6 @@
+import { HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Http, HttpModule } from '@angular/http';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/toPromise';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of, throwError } from 'rxjs';
 
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownService } from './markdown.service';
@@ -10,7 +8,7 @@ import { MarkedOptions } from './marked-options';
 
 class MockMarkdownService {
   getSource(src: string): Observable<string> {
-    return Observable.of('');
+    return of('');
   }
 }
 
@@ -22,7 +20,7 @@ describe('MarkdownComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [HttpModule],
+      imports: [HttpClientModule],
       declarations: [MarkdownComponent],
       providers: [
         { provide: MarkedOptions, useValue: {} },
@@ -70,7 +68,7 @@ describe('MarkdownComponent', () => {
       const mockContent = 'source-content';
 
       spyOn(component, 'render');
-      spyOn(markdownService, 'getSource').and.returnValue(Observable.of(mockContent));
+      spyOn(markdownService, 'getSource').and.returnValue(of(mockContent));
 
       component.src = mockSrc;
 
@@ -82,7 +80,7 @@ describe('MarkdownComponent', () => {
 
       const mockSrc = './src-example/file.md';
 
-      spyOn(markdownService, 'getSource').and.returnValue(Observable.of());
+      spyOn(markdownService, 'getSource').and.returnValue(of());
 
       component.src = mockSrc;
 
@@ -94,7 +92,7 @@ describe('MarkdownComponent', () => {
       const mockSrc = './src-example/file.md';
       const mockError = 'error-x';
 
-      spyOn(markdownService, 'getSource').and.returnValue(Observable.throw(mockError));
+      spyOn(markdownService, 'getSource').and.returnValue(throwError(mockError));
       spyOn(component.error, 'emit');
 
       component.src = mockSrc;
@@ -109,7 +107,7 @@ describe('MarkdownComponent', () => {
 
       const mockElement = { nativeElement: { innerHTML: 'inner-html' } };
 
-      spyOn(markdownService, 'getSource').and.returnValue(Observable.of());
+      spyOn(markdownService, 'getSource').and.returnValue(of());
 
       component.element = mockElement;
       component.data = undefined;
@@ -126,7 +124,7 @@ describe('MarkdownComponent', () => {
 
       const mockElement = { nativeElement: { innerHTML: 'inner-html' } };
 
-      spyOn(markdownService, 'getSource').and.returnValue(Observable.of());
+      spyOn(markdownService, 'getSource').and.returnValue(of());
 
       component.element = mockElement;
       component.src = './src-example/file.md';

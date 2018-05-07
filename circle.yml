@@ -5,7 +5,7 @@ general:
 
 machine:
   node:
-    version: 6
+    version: 8
   environment:
     PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin"
 
@@ -20,7 +20,7 @@ test:
     - mkdir $CIRCLE_TEST_REPORTS/karma
     - mkdir $CIRCLE_TEST_REPORTS/lint
   override:
-    - yarn test --code-coverage --single-run --no-progress
+    - yarn test --code-coverage --no-progress
     - yarn lint --formatters-dir ./tslint-formatters --format junit -o $CIRCLE_TEST_REPORTS/lint/tslint.xml
     - yarn build --prod --aot --no-progress
   post:

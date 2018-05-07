@@ -1,11 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
 import * as marked from 'marked';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
-import { Observable } from 'rxjs/Observable';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
@@ -16,15 +13,11 @@ declare var Prism: {
 
 @Injectable()
 export class MarkdownService {
-  get renderer(): marked.Renderer {
-    return this.options.renderer;
-  }
-  set renderer(value: marked.Renderer) {
-    this.options.renderer = value;
-  }
+  get renderer(): marked.Renderer { return this.options.renderer; }
+  set renderer(value: marked.Renderer) { this.options.renderer = value; }
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     public options: MarkedOptions,
   ) {
     if (!this.renderer) {
@@ -39,33 +32,14 @@ export class MarkdownService {
 
   getSource(src: string) {
     return this.http
-      .get(src)
-      .catch(error => this.handleError(error))
-      .map(data => this.extractData(data))
-      .map(markdown => this.handleExtension(src, markdown));
+      .get(src, { responseType: 'text' })
+      .pipe(map(markdown => this.handleExtension(src, markdown)));
   }
 
   highlight() {
     if (typeof Prism !== 'undefined') {
       Prism.highlightAll(false);
     }
-  }
-
-  private extractData(response: Response) {
-    return response.text() || '';
-  }
-
-  private handleError(error: Response | any) {
-    let errMsg: string;
-    if (error instanceof Response) {
-      const body = error.json() || '';
-      const err = body.error || JSON.stringify(body);
-      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-    } else {
-      errMsg = error.message ? error.message : error.toString();
-    }
-    console.error(errMsg);
-    return Observable.throw(errMsg);
   }
 
   private handleExtension(src: string, markdown: string) {

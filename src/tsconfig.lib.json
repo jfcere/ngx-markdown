@@ -1,23 +1,13 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "sourceMap": true,
-    "declaration": true,
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "lib": [
-      "es2016",
-      "dom"
-    ],
     "outDir": "../dist/lib",
-    "target": "es5",
+    "declaration": true,
     "module": "commonjs",
-    "baseUrl": "",
-    "types" : [
-      "marked",
-      "node"
-    ]
+    "types": []
+  },
+  "angularCompilerOptions": {
+    "skipTemplateCodegen": true
   },
   "include": [
     "../inline-template/**/*"

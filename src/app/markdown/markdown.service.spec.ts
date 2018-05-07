@@ -1,12 +1,6 @@
-import { async, TestBed } from '@angular/core/testing';
-import { BaseRequestOptions, Http, HttpModule, Response, ResponseOptions } from '@angular/http';
-import { MockBackend, MockConnection } from '@angular/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 import * as marked from 'marked';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
-import { Observable } from 'rxjs/Observable';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 import { MarkdownService } from './markdown.service';
 import { MarkedOptions } from './marked-options';
@@ -14,59 +8,23 @@ import { MarkedOptions } from './marked-options';
 // Prism mock
 declare var Prism: any;
 
-const mockHttpProvider = {
-  provide: Http,
-  deps: [
-    MockBackend,
-    BaseRequestOptions,
-  ],
-  useFactory: (
-    backend: MockBackend,
-    defaultOptions: BaseRequestOptions
-  ) => new Http(backend, defaultOptions),
-};
-
 describe('MarkdowService', () => {
-  let http: Http;
+  let http: HttpTestingController;
   let markdownService: MarkdownService;
-  let mockBackend: MockBackend;
-
-  function mockBackendResponse(responseOptions: ResponseOptions = new ResponseOptions()): Response {
-    const response = new Response(responseOptions);
-
-    mockBackend.connections.subscribe((connection: MockConnection) => {
-      connection.mockRespond(response);
-    });
-
-    return response;
-  }
-
-  function mockBackendError(errorMessage: string): Error {
-    const error = new Error(errorMessage);
-
-    mockBackend.connections.subscribe((connection: MockConnection) => {
-      connection.mockError(error);
-    });
-
-    return error;
-  }
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       providers: [
         { provide: MarkedOptions, useValue: {} },
-        BaseRequestOptions,
         MarkdownService,
-        MockBackend,
-        mockHttpProvider,
       ],
     });
   });
 
   beforeEach(() => {
-    http = TestBed.get(Http);
+    http = TestBed.get(HttpTestingController);
     markdownService = TestBed.get(MarkdownService);
-    mockBackend = TestBed.get(MockBackend);
   });
 
   describe('constructor', () => {
@@ -81,87 +39,104 @@ describe('MarkdowService', () => {
 
     it('should return parsed markdown correctly', () => {
 
-      const mockMarkdown = '### Markdown-x';
-      const mockPrecompiled = '### Precompiled-x';
+      const mockRaw = '### Markdown-x';
 
-      spyOn(markdownService, 'precompile').and.returnValue(mockPrecompiled);
+      expect(markdownService.compile(mockRaw)).toBe(marked(mockRaw));
+    });
 
-      const result = markdownService.compile(mockMarkdown, { renderer: markdownService.renderer });
+    it('should return empty string when raw is null/undefined/empty', () => {
 
-      expect(markdownService['precompile']).toHaveBeenCalledWith(mockMarkdown);
-      expect(result).toBe(marked(mockPrecompiled));
+      expect(markdownService.compile(null)).toBe('');
+      expect(markdownService.compile(undefined)).toBe('');
+      expect(markdownService.compile('')).toBe('');
+    });
+
+    it('should remove leading whitespaces offset while keeping indent', () => {
+
+      const mockRaw =  [
+        '',               // wait for line with non-whitespaces
+        '  * list',       // find first line with non-whitespaces to set offset
+        '    * sub-list', // keep indent while removing from previous row offset
+      ].join('\n');
+
+      const expected = [
+        '',
+        '* list',
+        '  * sub-list',
+      ].join('\n');
+
+      expect(markdownService.compile(mockRaw)).toBe(marked(expected));
+    });
+
+    it('should return line with indent correctly', () => {
+
+      const mockRaw =  [
+        '* list',       // find first line with non-whitespaces to set offset
+        '  * sub-list', // keep indent while removing from previous row offset
+        '',             // keep blank line
+        'Lorem Ipsum',  // keep everthing else
+      ].join('\n');
+
+      const expected = [
+        '* list',
+        '  * sub-list',
+        '',
+        'Lorem Ipsum',
+      ].join('\n');
+
+      expect(markdownService.compile(mockRaw)).toBe(marked(expected));
     });
   });
 
   describe('getSource', () => {
 
-    it('should call http service to get src content', async(() => {
+    it('should call http service to get src content', () => {
 
-      const mockSrc = 'src-x';
+      const mockSrc = 'file-x.md';
+      const mockResponse = 'response-x';
 
-      spyOn(http, 'get').and.returnValue(Observable.of());
-      spyOn(markdownService, 'extractData').and.returnValue(mockSrc);
+      let result: string;
 
       markdownService
         .getSource(mockSrc)
-        .subscribe(result => {
-          expect(http.get).toHaveBeenCalledWith(mockSrc);
-        });
-    }));
+        .subscribe(data => result = data);
 
-    it('should map returned data', async(() => {
+      http.expectOne(mockSrc).flush(mockResponse);
 
-      spyOn(markdownService, 'extractData');
+      expect(result).toEqual(mockResponse);
+    });
 
-      const response = mockBackendResponse(<ResponseOptions>{ body: 'response-text-x' });
+    it('should return src content with language tick when file extension is not .md', () => {
 
-      markdownService
-        .getSource('src-x')
-        .subscribe(responseData => {
-          expect(markdownService['extractData']).toHaveBeenCalledWith(response);
-        });
-    }));
+      const mockSrc = './src-example/file.cpp';
+      const mockResponse = 'response-x';
 
-    it('should call handleError when an error occurs', async(() => {
-
-      spyOn(markdownService, 'handleError');
-
-      const error = mockBackendError('error-x');
+      let result: string;
 
       markdownService
-        .getSource('src-x')
-        .subscribe(null, responseError => {
-          expect(markdownService['handleError']).toHaveBeenCalledWith(error);
-        });
-    }));
+        .getSource(mockSrc)
+        .subscribe(data => result = data);
 
-    it('should add tick for language when src file extension is not .md', async(() => {
+      http.expectOne(mockSrc).flush(mockResponse);
 
-      const mockRaw =  'raw-text';
+      expect(result).toEqual('```cpp\n' + mockResponse + '\n```');
+    });
 
-      spyOn(http, 'get').and.returnValue(Observable.of());
-      spyOn(markdownService, 'extractData').and.returnValue(mockRaw);
+    it('should return src content without language tick when file extension is .md', () => {
 
-      markdownService
-        .getSource('./src-example/file.cpp')
-        .subscribe(result => {
-          expect(result).toBe('```cpp\n' + mockRaw + '\n```');
-        });
-    }));
+      const mockSrc = './src-example/file.md';
+      const mockResponse = 'response-x';
 
-    it('should not add tick for langauge when src file extension is .md', async(() => {
-
-      const mockRaw = 'raw-text';
-
-      spyOn(http, 'get').and.returnValue(Observable.of());
-      spyOn(markdownService, 'extractData').and.returnValue(mockRaw);
+      let result: string;
 
       markdownService
-        .getSource('./src-example/file.md')
-        .subscribe(result => {
-          expect(result).toBe(mockRaw);
-        });
-    }));
+        .getSource(mockSrc)
+        .subscribe(data => result = data);
+
+      http.expectOne(mockSrc).flush(mockResponse);
+
+      expect(result).toEqual(mockResponse);
+    });
   });
 
   describe('highlight', () => {
@@ -182,123 +157,6 @@ describe('MarkdowService', () => {
       markdownService.highlight();
 
       expect(Prism.highlightAll).toHaveBeenCalledWith(false);
-    });
-  });
-
-  describe('extractData', () => {
-
-    it('should return value correctly', () => {
-
-      const reponseText = 'reponse-text-x';
-      const responseOptions = new ResponseOptions({ body: reponseText });
-
-      const extractedData = markdownService['extractData'](new Response(responseOptions));
-
-      expect(extractedData).toEqual(reponseText);
-    });
-
-    it('should return empty string when no value returned', () => {
-
-      const responseOptions = new ResponseOptions();
-
-      const extractedData = markdownService['extractData'](new Response(responseOptions));
-
-      expect(extractedData).toEqual('');
-    });
-  });
-
-  describe('handleError', () => {
-
-    it('should format error message correctly when Response', () => {
-
-      const responseOptions = new ResponseOptions({
-        body: {
-          error: 'error-x',
-        },
-        status: 200,
-        statusText: 'ok',
-      });
-      const error = new Response(responseOptions);
-
-      spyOn(console, 'error');
-      spyOn(Observable, 'create');
-
-      markdownService['handleError'](error);
-
-      expect(console.error).toHaveBeenCalledWith(`${error.status} - ${error.statusText || ''} ${(responseOptions.body as any).error}`);
-    });
-
-    it('should write error message in console', () => {
-
-      const error = 'error-x';
-
-      spyOn(console, 'error');
-      spyOn(Observable, 'create');
-
-      markdownService['handleError'](error);
-
-      expect(console.error).toHaveBeenCalledWith(error);
-    });
-
-    it('should throw observable error', async(() => {
-
-      const error = 'error-x';
-
-      spyOn(console, 'error');
-      spyOn(Observable, 'create');
-
-      const observable = markdownService['handleError'](error);
-
-      observable.subscribe(null, () => {
-        expect(observable).toEqual(jasmine.any(ErrorObservable));
-        expect(observable.error).toBe(error);
-      });
-    }));
-  });
-
-  describe('precompile', () => {
-
-    it('should return empty string when raw is null/undefined/empty', () => {
-
-      expect(markdownService['precompile'](null)).toBe('');
-      expect(markdownService['precompile'](undefined)).toBe('');
-      expect(markdownService['precompile']('')).toBe('');
-    });
-
-    it('should remove leading whitespaces offset while keeping indent', () => {
-
-      const mockRaw =  [
-        '',               // wait for line with non-whitespaces
-        '  * list',       // find first line with non-whitespaces to set offset
-        '    * sub-list', // keep indent while removing from previous row offset
-      ];
-
-      const expected = [
-        '',
-        '* list',
-        '  * sub-list',
-      ];
-
-      expect(markdownService['precompile'](mockRaw.join('\n'))).toBe(expected.join('\n'));
-    });
-
-    it('should return line with indent correctly', () => {
-
-      const mockRaw =  [
-        '* list',       // find first line with non-whitespaces to set offset
-        '  * sub-list', // keep indent while removing from previous row offset
-        '',             // keep blank line
-        'Lorem Ipsum',  // keep everthing else
-      ];
-
-      const expected = [
-        '* list',
-        '  * sub-list',
-        '',
-        'Lorem Ipsum',
-      ];
-
-      expect(markdownService['precompile'](mockRaw.join('\n'))).toBe(expected.join('\n'));
     });
   });
 });

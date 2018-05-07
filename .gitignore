@@ -5,6 +5,7 @@
 /inline-template
 /package
 /tmp
+/out-tsc
 *.ngfactory.ts
 *.ngsummary.json
 *.tgz
@@ -14,13 +15,13 @@
 /node_modules
 
 # IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
 *.launch
-.settings/
 *.sublime-workspace
+.c9/
+.classpath
+.project
+.settings/
+/.idea
 
 # IDE - VSCode
 .vscode/*
@@ -32,13 +33,14 @@
 # misc
 /.sass-cache
 /connect.lock
-/coverage/*
-test-results.xml
+/coverage
 /libpeerconnection.log
-npm-debug.log
-testem.log
 /typings
+npm-debug.log
+test-results.xml
+testem.log
+yarn-error.log
 
-#System Files
+# System Files
 .DS_Store
 Thumbs.db
