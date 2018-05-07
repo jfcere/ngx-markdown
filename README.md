@@ -1,7 +1,8 @@
 # ngx-markdown
 [![CircleCI](https://circleci.com/gh/jfcere/ngx-markdown/tree/master.svg?style=shield&)](https://circleci.com/gh/jfcere/ngx-markdown/tree/master) [![Coverage Status](https://coveralls.io/repos/github/jfcere/ngx-markdown/badge.svg?branch=master)](https://coveralls.io/github/jfcere/ngx-markdown?branch=master) [![version](https://img.shields.io/npm/v/ngx-markdown.svg?style=flat)](https://www.npmjs.com/package/ngx-markdown) [![npm](https://img.shields.io/npm/l/ngx-markdown.svg)](https://opensource.org/licenses/MIT) [![dependencies Status](https://david-dm.org/jfcere/ngx-markdown/status.svg)](https://david-dm.org/jfcere/ngx-markdown) [![peerDependencies Status](https://david-dm.org/jfcere/ngx-markdown/peer-status.svg)](https://david-dm.org/jfcere/ngx-markdown?type=peer) [![monthly Downloads](https://img.shields.io/npm/dm/ngx-markdown.svg)](https://www.npmjs.com/package/ngx-markdown)
 
-> **v1.4.0** Repository has been renamed from `ng2-markdown-to-html` to `ngx-markdown`. Follow [v1.4.0 release notes](https://github.com/jfcere/ngx-markdown/releases/tag/v1.4.0) for quick required changes.
+> **v1.6.0** Repository has been updated to **Angular 6**  and now uses `HttpClient` instead of `Http` service.  
+*Please use a previous version of the package if you are using an older version of Angular.*
 
 ngx-markdown is an [Angular 2+](https://angular.io/) library that uses [marked](https://github.com/chjj/marked) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for syntax highlight.
 
@@ -30,13 +31,13 @@ To add ngx-markdown library to your `package.json` use the following command.
 npm install ngx-markdown --save
 ```
 
-As the library is using [marked](https://github.com/chjj/marked) parser you will need to add `../node_modules/marked/lib/marked.js` to your application.
+As the library is using [marked](https://github.com/chjj/marked) parser you will need to add `node_modules/marked/lib/marked.js` to your application.
 
-If you are using [Angular CLI](https://cli.angular.io/) you can follow the `.angular-cli.json` example below...
+If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
 
 ```diff
 "scripts": [
-+ "../node_modules/marked/lib/marked.js"
++ "node_modules/marked/lib/marked.js"
 ]
 ```
 
@@ -57,17 +58,17 @@ To activate [Prism.js](http://prismjs.com/) syntax highlight you will need to in
 
 > Additional themes can be found by browsing the web such as [Prism-Themes](https://github.com/PrismJS/prism-themes) or [Mokokai](https://github.com/Ahrengot/Monokai-theme-for-Prism.js) for example.
 
-If you are using [Angular CLI](https://cli.angular.io/) you can follow the `.angular-cli.json` example below...
+If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
 
 ```diff
 "styles": [
   "styles.css",
-+ "../node_modules/prismjs/themes/prism-okaidia.css"
++ "node_modules/prismjs/themes/prism-okaidia.css"
 ],
 "scripts": [
-+ "../node_modules/prismjs/prism.js",
-+ "../node_modules/prismjs/components/prism-csharp.min.js", # c-sharp language syntax
-+ "../node_modules/prismjs/components/prism-css.min.js" # css language syntax
++ "node_modules/prismjs/prism.js",
++ "node_modules/prismjs/components/prism-csharp.min.js", # c-sharp language syntax
++ "node_modules/prismjs/components/prism-css.min.js" # css language syntax
 ]
 ```
 
@@ -175,13 +176,18 @@ export class HomeModule { }
 
 ## Usage
 
+`ngx-markdown` provides different approaches to help you parse markdown to your application depending of your needs.
+
+> As of Angular 6, the template compiler strips whitespace by default. Use `ngPreserveWhitespaces` directive to preserve whitespaces such as newlines in order for the markdown-formatted content to render as intended.  
+https://angular.io/api/core/Component#preserveWhitespaces
+
 ### Component
 
 You can use `markdown` component to either parse static markdown directly from your html markup, load the content from a remote url using `src` property or bind a variable to your component using `data` property. You can get a hook on loading error using `error` output event property.
 
 ```html
 <!-- static markdown -->
-<markdown>
+<markdown ngPreserveWhitespaces>
   # Markdown
 </markdown>
 
@@ -198,7 +204,7 @@ The same way the component works, you can use `markdown` directive to accomplish
 
 ```html
 <!-- static markdown -->
-<div markdown>
+<div markdown ngPreserveWhitespaces>
   # Markdown
 </div>
 
