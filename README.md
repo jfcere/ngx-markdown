@@ -96,7 +96,7 @@ export class AppModule { }
 
 #### MarkedOptions
 
-Optionaly, markdown parsing can be configured by passing [MarkedOptions](https://github.com/markedjs/marked/blob/master/USING_ADVANCED.md#options) to the `forRoot` method of `MarkdownModule`.
+Optionaly, markdown parsing can be configured by passing [MarkedOptions](https://marked.js.org/#/USING_ADVANCED.md#options) to the `forRoot` method of `MarkdownModule`.
 
 ```typescript
 import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
