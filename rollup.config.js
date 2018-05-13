@@ -25,6 +25,7 @@ export default {
   globals: {
     '@angular/common/http': 'ng.common.http',
     '@angular/core': 'ng.core',
+    '@angular/platform-browser': 'ng.platform-browser',
     'marked': 'marked',
     'rxjs': 'rxjs',
     'rxjs/operators': 'rxjs.operators',
@@ -32,6 +33,7 @@ export default {
   external: [
     '@angular/common/http',
     '@angular/core',
+    '@angular/platform-browser',
     'marked',
     'rxjs',
     'rxjs/operators',

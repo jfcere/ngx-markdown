@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, SecurityContext } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import * as marked from 'marked';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -17,6 +18,7 @@ export class MarkdownService {
   set renderer(value: marked.Renderer) { this.options.renderer = value; }
 
   constructor(
+    private domSanitizer: DomSanitizer,
     private http: HttpClient,
     public options: MarkedOptions,
   ) {
@@ -27,7 +29,8 @@ export class MarkdownService {
 
   compile(markdown: string, markedOptions = this.options) {
     const precompiled = this.precompile(markdown);
-    return marked(precompiled, markedOptions);
+    const compiled = marked(precompiled, markedOptions);
+    return this.domSanitizer.sanitize(SecurityContext.HTML, compiled);
   }
 
   getSource(src: string) {

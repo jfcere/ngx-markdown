@@ -1,5 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { SecurityContext } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import * as marked from 'marked';
 
 import { MarkdownService } from './markdown.service';
@@ -9,12 +11,16 @@ import { MarkedOptions } from './marked-options';
 declare var Prism: any;
 
 describe('MarkdowService', () => {
+  let domSanitizer: DomSanitizer;
   let http: HttpTestingController;
   let markdownService: MarkdownService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [
+        BrowserModule,
+        HttpClientTestingModule,
+      ],
       providers: [
         { provide: MarkedOptions, useValue: {} },
         MarkdownService,
@@ -23,6 +29,7 @@ describe('MarkdowService', () => {
   });
 
   beforeEach(() => {
+    domSanitizer = TestBed.get(DomSanitizer);
     http = TestBed.get(HttpTestingController);
     markdownService = TestBed.get(MarkdownService);
   });
@@ -40,8 +47,9 @@ describe('MarkdowService', () => {
     it('should return parsed markdown correctly', () => {
 
       const mockRaw = '### Markdown-x';
+      const expected = domSanitizer.sanitize(SecurityContext.HTML, marked(mockRaw));
 
-      expect(markdownService.compile(mockRaw)).toBe(marked(mockRaw));
+      expect(markdownService.compile(mockRaw)).toBe(expected);
     });
 
     it('should return empty string when raw is null/undefined/empty', () => {
@@ -59,13 +67,13 @@ describe('MarkdowService', () => {
         '    * sub-list', // keep indent while removing from previous row offset
       ].join('\n');
 
-      const expected = [
+      const expected = domSanitizer.sanitize(SecurityContext.HTML, marked([
         '',
         '* list',
         '  * sub-list',
-      ].join('\n');
+      ].join('\n')));
 
-      expect(markdownService.compile(mockRaw)).toBe(marked(expected));
+      expect(markdownService.compile(mockRaw)).toBe(expected);
     });
 
     it('should return line with indent correctly', () => {
@@ -77,14 +85,14 @@ describe('MarkdowService', () => {
         'Lorem Ipsum',  // keep everthing else
       ].join('\n');
 
-      const expected = [
+      const expected = domSanitizer.sanitize(SecurityContext.HTML, marked([
         '* list',
         '  * sub-list',
         '',
         'Lorem Ipsum',
-      ].join('\n');
+      ].join('\n')));
 
-      expect(markdownService.compile(mockRaw)).toBe(marked(expected));
+      expect(markdownService.compile(mockRaw)).toBe(expected);
     });
   });
 
