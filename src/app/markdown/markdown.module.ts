@@ -21,8 +21,16 @@ export const initialMarkedOptions: Provider = {
   },
 };
 
+// having a dependency on `HttpClientModule` within a library
+// breaks all the interceptors from the app consuming the library
+// here, we explicitely ask the user to pass a provider with their own
+// instance of `HttpClientModule`
+export interface MarkdownModuleConfig {
+  loader: Provider;
+  markedOptions?: Provider;
+}
+
 @NgModule({
-  imports: [HttpClientModule],
   exports: [
     LanguagePipe,
     MarkdownComponent,
@@ -35,12 +43,13 @@ export const initialMarkedOptions: Provider = {
   ],
 })
 export class MarkdownModule {
-  static forRoot(markedOptions?: Provider): ModuleWithProviders {
+  static forRoot(markdownModuleConfig: MarkdownModuleConfig): ModuleWithProviders {
     return {
       ngModule: MarkdownModule,
       providers: [
         MarkdownService,
-        markedOptions || initialMarkedOptions,
+        markdownModuleConfig.loader,
+        markdownModuleConfig.markedOptions || initialMarkedOptions,
       ],
     };
   }

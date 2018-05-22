@@ -78,6 +78,8 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 
 You must import `MarkdownModule` inside your main application module (usually named AppModule) with `forRoot` to be able to use `markdown` component and/or directive.
 
+In order to keep only one instance of HttpClient and avoid issues with interceptors, you also have to pass `HttpClient`:
+
 ```diff
 import { NgModule } from '@angular/core';
 + import { MarkdownModule } from 'ngx-markdown';
@@ -86,7 +88,7 @@ import { AppComponent } from './app.component';
 
 @NgModule({
   imports: [
-+   MarkdownModule.forRoot(),
++   MarkdownModule.forRoot({ loader: HttpClient })
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
@@ -106,15 +108,18 @@ MarkdownModule.forRoot(),
 
 // using specific options with ValueProvider
 MarkdownModule.forRoot({
-  provide: MarkedOptions,
-  useValue: {
-    gfm: true,
-    tables: true,
-    breaks: false,
-    pedantic: false,
-    sanitize: false,
-    smartLists: true,
-    smartypants: false,
+  loader: HttpClient,
+  markedOptions: {
+    provide: MarkedOptions,
+    useValue: {
+      gfm: true,
+      tables: true,
+      breaks: false,
+      pedantic: false,
+      sanitize: false,
+      smartLists: true,
+      smartypants: false,
+    },
   },
 }),
 ```
@@ -150,8 +155,11 @@ export function markedOptionsFactory(): MarkedOptions {
 
 // using specific option with FactoryProvider
 MarkdownModule.forRoot({
-  provide: MarkedOptions,
-  useFactory: markedOptionsFactory,
+  loader: HttpClient,
+  markedOptions: {
+    provide: MarkedOptions,
+    useFactory: markedOptionsFactory,
+  },
 }),
 ```
 
