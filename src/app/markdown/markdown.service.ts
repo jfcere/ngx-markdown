@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import * as marked from 'marked';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -8,17 +8,24 @@ import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
 
 declare var Prism: {
-  highlightAll: (async: boolean) => void
+  highlightAll: (async: boolean) => void;
 };
+
+export const errorSrcWithoutHttpClient: string =
+  '[ngx-markdown] When using the [src] attribute you *have to* pass the `HttpClient` as a parameter of the `forRoot` method. See README for more information';
 
 @Injectable()
 export class MarkdownService {
-  get renderer(): marked.Renderer { return this.options.renderer; }
-  set renderer(value: marked.Renderer) { this.options.renderer = value; }
+  get renderer(): marked.Renderer {
+    return this.options.renderer;
+  }
+  set renderer(value: marked.Renderer) {
+    this.options.renderer = value;
+  }
 
   constructor(
-    private http: HttpClient,
-    public options: MarkedOptions,
+    @Optional() private http: HttpClient,
+    public options: MarkedOptions
   ) {
     if (!this.renderer) {
       this.renderer = new marked.Renderer();
@@ -31,6 +38,10 @@ export class MarkdownService {
   }
 
   getSource(src: string) {
+    if (!this.http) {
+      throw new Error(errorSrcWithoutHttpClient);
+    }
+
     return this.http
       .get(src, { responseType: 'text' })
       .pipe(map(markdown => this.handleExtension(src, markdown)));

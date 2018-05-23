@@ -78,8 +78,6 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 
 You must import `MarkdownModule` inside your main application module (usually named AppModule) with `forRoot` to be able to use `markdown` component and/or directive.
 
-In order to keep only one instance of HttpClient and avoid issues with interceptors, you also have to pass `HttpClient`:
-
 ```diff
 import { NgModule } from '@angular/core';
 + import { MarkdownModule } from 'ngx-markdown';
@@ -88,7 +86,7 @@ import { AppComponent } from './app.component';
 
 @NgModule({
   imports: [
-+   MarkdownModule.forRoot({ loader: HttpClient })
++   MarkdownModule.forRoot()
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
@@ -96,19 +94,35 @@ import { AppComponent } from './app.component';
 export class AppModule { }
 ```
 
+If you want to use the `[src]` attribute to directly load a `.md` file, in order to keep only one instance of `HttpClient` and avoid issues with interceptors, you also have to provide `HttpClient`:
+
+```diff
+imports: [
++  HttpClientModule,
++  MarkdownModule.forRoot({ loader: HttpClient })
+],
+```
+
 #### MarkedOptions
 
 Optionaly, markdown parsing can be configured by passing [MarkedOptions](https://marked.js.org/#/USING_ADVANCED.md#options) to the `forRoot` method of `MarkdownModule`.
 
+Imports:
 ```typescript
 import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
+```
 
+Default options
+```typescript
 // using default options
 MarkdownModule.forRoot(),
+```
 
-// using specific options with ValueProvider
+Custom options and passing HttpClient to use `[src]` attribute
+```typescript
+// using specific options with ValueProvider and passing HttpClient
 MarkdownModule.forRoot({
-  loader: HttpClient,
+  loader: HttpClient, // optional, only if you use [src] attribute
   markedOptions: {
     provide: MarkedOptions,
     useValue: {

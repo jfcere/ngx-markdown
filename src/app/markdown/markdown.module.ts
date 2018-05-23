@@ -26,30 +26,36 @@ export const initialMarkedOptions: Provider = {
 // here, we explicitely ask the user to pass a provider with their own
 // instance of `HttpClientModule`
 export interface MarkdownModuleConfig {
-  loader: Provider;
+  loader?: Provider;
   markedOptions?: Provider;
 }
 
+const sharedDeclarations = [
+  LanguagePipe,
+  MarkdownComponent,
+  MarkdownPipe,
+];
+
 @NgModule({
   exports: [
-    LanguagePipe,
-    MarkdownComponent,
-    MarkdownPipe,
+    ...sharedDeclarations
   ],
   declarations: [
-    LanguagePipe,
-    MarkdownComponent,
-    MarkdownPipe,
+    ...sharedDeclarations
   ],
 })
 export class MarkdownModule {
-  static forRoot(markdownModuleConfig: MarkdownModuleConfig): ModuleWithProviders {
+  static forRoot(markdownModuleConfig?: MarkdownModuleConfig): ModuleWithProviders {
     return {
       ngModule: MarkdownModule,
       providers: [
         MarkdownService,
-        markdownModuleConfig.loader,
-        markdownModuleConfig.markedOptions || initialMarkedOptions,
+        ...(markdownModuleConfig
+          ? [
+              markdownModuleConfig.loader || [],
+              markdownModuleConfig.markedOptions || initialMarkedOptions,
+            ]
+          : [initialMarkedOptions]),
       ],
     };
   }
