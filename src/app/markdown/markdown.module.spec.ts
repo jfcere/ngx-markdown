@@ -3,14 +3,14 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { CommonModule } from '@angular/common';
 import { Component, DebugElement } from '@angular/core';
+import { By } from '@angular/platform-browser';
 import * as marked from 'marked';
 
-import { MarkdownService, errorSrcWithoutHttpClient } from './markdown.service';
+import { errorSrcWithoutHttpClient, MarkdownService } from './markdown.service';
 import { MarkedOptions } from './marked-options';
 import { MarkdownModule } from './markdown.module';
-import { By } from '@angular/platform-browser';
-import { CommonModule } from '@angular/common';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -27,8 +27,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./markdown.component.scss'],
 })
 class HostComponent {
-  markdown: string = '# Super title';
-
+  markdown = '# Super title';
   src: string;
 }
 

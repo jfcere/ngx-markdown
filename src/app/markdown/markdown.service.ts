@@ -11,8 +11,8 @@ declare var Prism: {
   highlightAll: (async: boolean) => void;
 };
 
-export const errorSrcWithoutHttpClient: string =
-  '[ngx-markdown] When using the [src] attribute you *have to* pass the `HttpClient` as a parameter of the `forRoot` method. See README for more information';
+// tslint:disable-next-line:max-line-length
+export const errorSrcWithoutHttpClient = '[ngx-markdown] When using the [src] attribute you *have to* pass the `HttpClient` as a parameter of the `forRoot` method. See README for more information';
 
 @Injectable()
 export class MarkdownService {
