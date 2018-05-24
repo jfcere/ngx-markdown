@@ -1,7 +1,7 @@
 # ngx-markdown
 [![CircleCI](https://circleci.com/gh/jfcere/ngx-markdown/tree/master.svg?style=shield&)](https://circleci.com/gh/jfcere/ngx-markdown/tree/master) [![Coverage Status](https://coveralls.io/repos/github/jfcere/ngx-markdown/badge.svg?branch=master)](https://coveralls.io/github/jfcere/ngx-markdown?branch=master) [![version](https://img.shields.io/npm/v/ngx-markdown.svg?style=flat)](https://www.npmjs.com/package/ngx-markdown) [![npm](https://img.shields.io/npm/l/ngx-markdown.svg)](https://opensource.org/licenses/MIT) [![dependencies Status](https://david-dm.org/jfcere/ngx-markdown/status.svg)](https://david-dm.org/jfcere/ngx-markdown) [![peerDependencies Status](https://david-dm.org/jfcere/ngx-markdown/peer-status.svg)](https://david-dm.org/jfcere/ngx-markdown?type=peer) [![monthly Downloads](https://img.shields.io/npm/dm/ngx-markdown.svg)](https://www.npmjs.com/package/ngx-markdown)
 
-> **v1.6.0** Repository has been updated to **Angular 6**  and now uses `HttpClient` instead of `Http` service.  
+> **v1.6.0 and up** are using **Angular 6**  and now uses `HttpClient` instead of `Http` service.  
 *Please use a previous version of the package if you are using an older version of Angular.*
 
 ngx-markdown is an [Angular 2+](https://angular.io/) library that uses [marked](https://github.com/chjj/marked) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for syntax highlight.
@@ -86,7 +86,7 @@ import { AppComponent } from './app.component';
 
 @NgModule({
   imports: [
-+   MarkdownModule.forRoot(),
++   MarkdownModule.forRoot()
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
@@ -94,27 +94,46 @@ import { AppComponent } from './app.component';
 export class AppModule { }
 ```
 
+If you want to use the `[src]` attribute to directly load a `.md` file, in order to keep only one instance of `HttpClient` and avoid issues with interceptors, you also have to provide `HttpClient`:
+
+```diff
+imports: [
++  HttpClientModule,
++  MarkdownModule.forRoot({ loader: HttpClient })
+],
+```
+
 #### MarkedOptions
 
 Optionaly, markdown parsing can be configured by passing [MarkedOptions](https://marked.js.org/#/USING_ADVANCED.md#options) to the `forRoot` method of `MarkdownModule`.
 
+Imports:
 ```typescript
 import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
+```
 
+Default options
+```typescript
 // using default options
 MarkdownModule.forRoot(),
+```
 
-// using specific options with ValueProvider
+Custom options and passing HttpClient to use `[src]` attribute
+```typescript
+// using specific options with ValueProvider and passing HttpClient
 MarkdownModule.forRoot({
-  provide: MarkedOptions,
-  useValue: {
-    gfm: true,
-    tables: true,
-    breaks: false,
-    pedantic: false,
-    sanitize: false,
-    smartLists: true,
-    smartypants: false,
+  loader: HttpClient, // optional, only if you use [src] attribute
+  markedOptions: {
+    provide: MarkedOptions,
+    useValue: {
+      gfm: true,
+      tables: true,
+      breaks: false,
+      pedantic: false,
+      sanitize: false,
+      smartLists: true,
+      smartypants: false,
+    },
   },
 }),
 ```
@@ -150,8 +169,11 @@ export function markedOptionsFactory(): MarkedOptions {
 
 // using specific option with FactoryProvider
 MarkdownModule.forRoot({
-  provide: MarkedOptions,
-  useFactory: markedOptionsFactory,
+  loader: HttpClient,
+  markedOptions: {
+    provide: MarkedOptions,
+    useFactory: markedOptionsFactory,
+  },
 }),
 ```
 

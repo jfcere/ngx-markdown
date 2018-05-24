@@ -1,3 +1,4 @@
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -31,12 +32,16 @@ export function markedOptions(): MarkedOptions {
   imports: [
     BrowserModule,
     FormsModule,
+    HttpClientModule,
     MarkdownModule.forRoot({
-      provide: MarkedOptions,
-      useFactory: markedOptions,
+      loader: HttpClient,
+      markedOptions: {
+        provide: MarkedOptions,
+        useFactory: markedOptions,
+      },
     }),
   ],
   declarations: [MarkdownDemoComponent],
   bootstrap: [MarkdownDemoComponent],
 })
-export class MarkdownDemoModule { }
+export class MarkdownDemoModule {}
