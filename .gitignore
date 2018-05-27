@@ -2,26 +2,21 @@
 
 # compiled output
 /dist
-/inline-template
-/package
+/documentation
 /tmp
 /out-tsc
-*.ngfactory.ts
-*.ngsummary.json
-*.tgz
-*.tar
 
 # dependencies
-/node_modules
+**/node_modules
 
 # IDEs and editors
-*.launch
-*.sublime-workspace
-.c9/
-.classpath
-.project
-.settings/
 /.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
 # IDE - VSCode
 .vscode/*
@@ -35,11 +30,14 @@
 /connect.lock
 /coverage
 /libpeerconnection.log
+/package
 /typings
-npm-debug.log
+package-lock.json
 test-results.xml
-testem.log
-yarn-error.log
+tslint.xml
+*.log
+*.tar
+*.tgz
 
 # System Files
 .DS_Store

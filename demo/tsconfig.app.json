@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/app",
+    "module": "es2015",
+    "types": [
+      "jquery",
+      "marked",
+      "materialize-css",
+      "node"
+    ]
+  }
+}

@@ -4,7 +4,7 @@
 > **v1.6.0 and up** are using **Angular 6**  and now uses `HttpClient` instead of `Http` service.  
 *Please use a previous version of the package if you are using an older version of Angular.*
 
-ngx-markdown is an [Angular 2+](https://angular.io/) library that uses [marked](https://github.com/chjj/marked) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for syntax highlight.
+ngx-markdown is an [Angular](https://angular.io/) library that uses [marked](https://github.com/chjj/marked) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for syntax highlight.
 
 - Demo available @ [https://jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown)
 - Plunker available @ [https://plnkr.co/edit/y5LPj7?p=preview](https://plnkr.co/edit/y5LPj7?p=preview)
@@ -340,7 +340,7 @@ When using variable binding you can optionally use `language` pipe to specify th
 
 ## Demo application
 
-A demo is available @ [https://jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown) and it source code can be found inside the `src/app/markdown-demo` directory.
+A demo is available @ [https://jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown) and it source code can be found inside the `demo` directory.
 
 The following commands will clone the repository, install npm dependencies and serve the application @ [http://localhost:4200](http://localhost:4200)
 

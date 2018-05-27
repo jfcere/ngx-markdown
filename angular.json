@@ -1,11 +1,11 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
-  "newProjectRoot": "projects",
+  "newProjectRoot": "",
   "projects": {
-    "ngx-markdown": {
-      "root": "",
-      "sourceRoot": "src",
+    "demo": {
+      "root": "demo/",
+      "sourceRoot": "demo/src",
       "projectType": "application",
       "prefix": "app",
       "schematics": {
@@ -17,19 +17,19 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ngx-markdown",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.app.json",
+            "outputPath": "dist/demo",
+            "index": "demo/src/index.html",
+            "main": "demo/src/main.ts",
+            "polyfills": "demo/src/polyfills.ts",
+            "tsConfig": "demo/tsconfig.app.json",
             "assets": [
-              "src/favicon.ico",
-              "src/assets",
-              "src/app/markdown-demo/markdown",
-              "src/app/markdown-demo/remote"
+              "demo/src/favicon.ico",
+              "demo/src/assets",
+              "demo/src/app/markdown",
+              "demo/src/app/remote"
             ],
             "styles": [
-              "src/styles.scss",
+              "demo/src/styles.scss",
               "node_modules/prismjs/themes/prism.css",
               "node_modules/materialize-css/dist/css/materialize.min.css"
             ],
@@ -50,8 +50,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "replace": "demo/src/environments/environment.ts",
+                  "with": "demo/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -69,43 +69,59 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ngx-markdown:build"
+            "browserTarget": "demo:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ngx-markdown:build:production"
+              "browserTarget": "demo:build:production"
             }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "ngx-markdown:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.spec.json",
-            "karmaConfig": "src/karma.conf.js",
-            "styles": [
-              "styles.scss"
-            ],
-            "scripts": [],
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ]
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
+              "demo/tsconfig.app.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "lib": {
+      "root": "lib",
+      "sourceRoot": "lib/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "lib/tsconfig.lib.json",
+            "project": "lib/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "lib/ng-package.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "lib/test.ts",
+            "tsConfig": "lib/tsconfig.spec.json",
+            "karmaConfig": "lib/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "lib/tsconfig.lib.json",
+              "lib/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -115,5 +131,5 @@
       }
     }
   },
-  "defaultProject": "ngx-markdown"
+  "defaultProject": "demo"
 }
