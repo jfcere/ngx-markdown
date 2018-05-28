@@ -4,16 +4,28 @@
       border-spacing: 0;
       border-collapse: collapse;
       margin-bottom: 16px;
-    }
 
-    table th,
-    table td {
-      padding: 6px 13px;
-      border: 1px solid #ddd;
-    }
+      th,
+      td {
+        padding: 6px 13px;
+        border: 1px solid #ddd;
 
-    table tr:nth-child(2n) {
-      background-color: rgba(0,0,0,0.03);
+        &[align="left"] {
+          text-align: left;
+        }
+
+        &[align="center"] {
+          text-align: center;
+        }
+
+        &[align="right"] {
+          text-align: right;
+        }
+      }
+
+      tr:nth-child(2n) {
+        background-color: rgba(0,0,0,0.03);
+      }
     }
 
     blockquote {
