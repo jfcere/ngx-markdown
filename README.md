@@ -50,7 +50,7 @@ To activate [Prism.js](http://prismjs.com/) syntax highlight you will need to in
 - a highlight css theme - from `node_modules/prismjs/themes` directory
 - desired code language syntax files - from `node_modules/prismjs/components` directory
 
-> Additional themes can be found by browsing the web such as [Prism-Themes](https://github.com/PrismJS/prism-themes) or [Mokokai](https://github.com/Ahrengot/Monokai-theme-for-Prism.js) for example.
+_Additional themes can be found by browsing the web such as [Prism-Themes](https://github.com/PrismJS/prism-themes) or [Mokokai](https://github.com/Ahrengot/Monokai-theme-for-Prism.js) for example._
 
 If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
 
