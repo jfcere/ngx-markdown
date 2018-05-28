@@ -45,12 +45,6 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 
 > Syntax highlight is **optional**, skip this step if you are not planning to use it
 
-To add [Prism.js](http://prismjs.com/) syntax highlight to your `package.json` use the following command.
-
-```bash
-npm install prismjs --save
-```
-
 To activate [Prism.js](http://prismjs.com/) syntax highlight you will need to include...
 - prism.js core library - `node_modules/prismjs/prism.js` file
 - a highlight css theme - from `node_modules/prismjs/themes` directory

@@ -1,6 +1,6 @@
 {
   "name": "ngx-markdown",
-  "version": "6.0.0",
+  "version": "6.0.0-beta.1",
   "description": "Angular library that uses marked to parse markdown to html combined with Prism.js for synthax highlights",
   "homepage": "https://github.com/jfcere/ngx-markdown",
   "license": "MIT",
@@ -36,7 +36,7 @@
     "coveralls": "cat \"./coverage/lcov.info\" | \"./node_modules/coveralls/bin/coveralls.js\"",
     "gh-pages:build": "yarn build:demo --prod --aot --base-href /ngx-markdown/",
     "gh-pages:deploy": "angular-cli-ghpages --name=\"CircleCI\" --email=\"circleci@email.com\" --no-silent",
-    "publish:lib": "cd dist/lib && npm pack"
+    "publish:lib": "npm publish ./dist/lib"
   },
   "dependencies": {
     "@angular/animations": "^6.0.0",
@@ -51,7 +51,6 @@
     "core-js": "^2.5.4",
     "materialize-css": "~0.100.2",
     "ngx-markdown": "file:./lib",
-    "prismjs": "^1.14.0",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"
   },

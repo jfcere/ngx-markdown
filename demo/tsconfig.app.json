@@ -5,7 +5,6 @@
     "module": "es2015",
     "types": [
       "jquery",
-      "marked",
       "materialize-css",
       "node"
     ]
