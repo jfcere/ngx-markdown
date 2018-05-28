@@ -6,7 +6,6 @@ import {
 import { Component, DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import * as marked from 'marked';
 
 import { MarkdownModule } from './markdown.module';
 import { errorSrcWithoutHttpClient, MarkdownService } from './markdown.service';

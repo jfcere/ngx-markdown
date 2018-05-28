@@ -1,4 +1,4 @@
-import * as marked from 'marked';
+import { Renderer } from 'marked';
 
 export class MarkedOptions implements marked.MarkedOptions {
   /**
@@ -6,7 +6,7 @@ export class MarkedOptions implements marked.MarkedOptions {
    *
    * An object containing functions to render tokens to HTML.
    */
-  renderer?: marked.Renderer;
+  renderer?: Renderer;
 
   /**
    * Enable GitHub flavored markdown.

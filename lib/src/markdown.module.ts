@@ -1,6 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule, Provider } from '@angular/core';
-import * as marked from 'marked';
 
 import { LanguagePipe } from './language.pipe';
 import { MarkdownComponent } from './markdown.component';

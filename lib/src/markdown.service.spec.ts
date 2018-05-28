@@ -1,6 +1,6 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import * as marked from 'marked';
+import { parse } from 'marked';
 
 import { MarkdownService } from './markdown.service';
 import { MarkedOptions } from './marked-options';
@@ -41,7 +41,7 @@ describe('MarkdowService', () => {
 
       const mockRaw = '### Markdown-x';
 
-      expect(markdownService.compile(mockRaw)).toBe(marked(mockRaw));
+      expect(markdownService.compile(mockRaw)).toBe(parse(mockRaw));
     });
 
     it('should return empty string when raw is null/undefined/empty', () => {
@@ -65,7 +65,7 @@ describe('MarkdowService', () => {
         '  * sub-list',
       ].join('\n');
 
-      expect(markdownService.compile(mockRaw)).toBe(marked(expected));
+      expect(markdownService.compile(mockRaw)).toBe(parse(expected));
     });
 
     it('should return line with indent correctly', () => {
@@ -84,7 +84,7 @@ describe('MarkdowService', () => {
         'Lorem Ipsum',
       ].join('\n');
 
-      expect(markdownService.compile(mockRaw)).toBe(marked(expected));
+      expect(markdownService.compile(mockRaw)).toBe(parse(expected));
     });
   });
 

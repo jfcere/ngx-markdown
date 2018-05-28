@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, Optional } from '@angular/core';
-import * as marked from 'marked';
+import { parse, Renderer } from 'marked';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
@@ -16,7 +16,7 @@ export const errorSrcWithoutHttpClient = '[ngx-markdown] When using the [src] at
 
 @Injectable()
 export class MarkdownService {
-  get renderer(): marked.Renderer {
+  get renderer(): Renderer {
     return this.options.renderer;
   }
   set renderer(value: marked.Renderer) {
@@ -28,13 +28,13 @@ export class MarkdownService {
     public options: MarkedOptions,
   ) {
     if (!this.renderer) {
-      this.renderer = new marked.Renderer();
+      this.renderer = new Renderer();
     }
   }
 
   compile(markdown: string, markedOptions = this.options) {
     const precompiled = this.precompile(markdown);
-    return marked(precompiled, markedOptions);
+    return parse(precompiled, markedOptions);
   }
 
   getSource(src: string) {

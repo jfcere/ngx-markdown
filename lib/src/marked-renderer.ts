@@ -1,3 +1,3 @@
-import * as marked from 'marked';
+import { Renderer } from 'marked';
 
-export class MarkedRenderer extends marked.Renderer { }
+export class MarkedRenderer extends Renderer { }
