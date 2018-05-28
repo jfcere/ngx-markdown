@@ -1,6 +1,8 @@
 {
   "rulesDirectory": [
-    "node_modules/codelyzer"
+    "node_modules/codelyzer",
+    "node_modules/tslint-eslint-rules/dist/rules",
+    "node_modules/tslint-microsoft-contrib"
   ],
   "rules": {
     "arrow-return-shorthand": true,
@@ -125,6 +127,35 @@
     "use-life-cycle-interface": true,
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,
-    "directive-class-suffix": true
+    "directive-class-suffix": true,
+
+    /**
+      * added rules
+      */
+      "ordered-imports": [
+      true,
+      {
+        "import-sources-order": "case-insensitive",
+        "named-imports-order": "case-insensitive"
+      }
+    ],
+    "trailing-comma": [
+      true,
+      {
+        "multiline": "always",
+        "singleline": "never"
+      }
+    ],
+
+    /**
+     * tslint-eslint-rules
+     */
+    "block-spacing": true,
+    "object-curly-spacing": true,
+
+    /**
+     * tslint-microsoft-contrib
+     */
+    "no-unnecessary-local-variable": true
   }
 }

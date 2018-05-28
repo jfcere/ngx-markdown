@@ -1,0 +1,198 @@
+<div class="fixed-action-btn">
+  <button class="blue btn-floating btn-large waves-effect waves-light scale-transition scale-out" (click)="onPageUp()">
+    <svg class="center" style="width:32px;height:32px" viewBox="0 0 24 24">
+      <path fill="#ffffff" d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" />
+    </svg>
+  </button>
+</div>
+
+<div class="row">
+  <!-- TABLE OF CONTENT -->
+  <div class="col s12 l3">
+    <div class="table-of-contents">
+      <h1 class="title">
+        <a href="https://github.com/jfcere/ngx-markdown">ngx-markdown</a>
+      </h1>
+      <div class="title-based-on">
+        demo based on <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">markdown cheatsheet</a>
+      </div>
+      <ul>
+        <li><a href="#headers">Headers</a></li>
+        <li><a href="#emphasis">Emphasis</a></li>
+        <li><a href="#lists">Lists</a></li>
+        <li><a href="#links">Links</a></li>
+        <li><a href="#images">Images</a></li>
+        <li><a href="#code-and-synthax">Code and Syntax Highlighting</a></li>
+        <li><a href="#tables">Tables</a></li>
+        <li><a href="#blockquotes">Blockquotes</a></li>
+        <li><a href="#horizontal-rule">Horizontal Rule</a></li>
+        <li><a href="#remote-url">Remote Url</a></li>
+        <li><a href="#variable-binding">Variable Binding</a></li>
+        <li><a href="#pipe">Pipe Usage</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col s12 l9">
+    <!-- HEADER -->
+    <section id="headers">
+      <h2 class="subtitle">Headers</h2>
+
+      <pre>{{ headers }}</pre>
+
+      <markdown>{{ headers }}</markdown>
+    </section>
+
+    <!-- EMPHASIS -->
+    <section id="emphasis">
+      <h2 class="subtitle">Emphasis</h2>
+
+      <pre>{{ emphasis }}</pre>
+
+      <markdown>{{ emphasis }}</markdown>
+    </section>
+
+    <!-- LISTS -->
+    <section id="lists">
+      <h2 class="subtitle">Lists</h2>
+
+      <p>
+        In this example, leading and trailing spaces are shown with with dots (⋅)
+      </p>
+
+      <pre>{{ listsDot }}</pre>
+
+      <markdown>{{ lists }}</markdown>
+    </section>
+
+    <!-- LINKS -->
+    <section id="links">
+      <h2 class="subtitle">Links</h2>
+
+      <pre>{{ links }}</pre>
+
+      <markdown>{{ links }}</markdown>
+    </section>
+
+    <!-- IMAGES -->
+    <section id="images">
+      <h2 class="subtitle">Images</h2>
+
+      <pre>{{ images }}</pre>
+
+      <markdown>{{ images }}</markdown>
+    </section>
+
+    <!-- CODE AND SYNTAX HIGHLIGHTING -->
+    <section id="code-and-synthax">
+      <h2 class="subtitle">Code and Syntax Highlighting</h2>
+
+      <pre>{{ codeAndSynthaxHighlighting }}</pre>
+
+      <markdown>{{ codeAndSynthaxHighlighting }}</markdown>
+    </section>
+
+    <!-- TABLES -->
+    <section id="tables">
+      <h2 class="subtitle">Tables</h2>
+
+      <pre>{{ tables }}</pre>
+
+      <markdown>{{ tables }}</markdown>
+    </section>
+
+    <!-- BLOCKQUOTES -->
+    <section id="blockquotes">
+      <h2 class="subtitle">Blockquotes</h2>
+
+      <pre>{{ blockquotes }}</pre>
+
+      <markdown>{{ blockquotes }}</markdown>
+    </section>
+
+    <!-- HORIZONTAL RULE -->
+    <section id="horizontal-rule">
+      <h2 class="subtitle">Horizontal Rule</h2>
+
+      <pre>{{ horizontalRule }}</pre>
+
+      <markdown>{{ horizontalRule }}</markdown>
+    </section>
+
+    <!-- REMOTE URL -->
+    <section id="remote-url">
+      <h2 class="subtitle">Remote Url</h2>
+
+      <markdown>
+        Using component with `src` property to fetch remote markdown file `app/remote/demo.md`
+      </markdown>
+
+      <markdown [src]="'app/remote/demo.md'"></markdown>
+
+      <br />
+
+      <markdown>
+        Using component with static `python` code block
+      </markdown>
+
+      <markdown>{{ demoPython | language: 'python' }}</markdown>
+
+      <br />
+
+      <markdown>
+        Using directive with `src` property to fetch remote html file `app/remote/demo.html`
+      </markdown>
+
+      <div markdown [src]="'app/remote/demo.html'"></div>
+
+      <br />
+
+      <markdown>
+        Using directive with `src` property to fetch remote C++ file `app/remote/demo.cpp`
+      </markdown>
+
+      <div markdown [src]="'app/remote/demo.cpp'"></div>
+    </section>
+
+    <!-- VARIABLE BINDING -->
+    <section id="variable-binding">
+      <h2 class="subtitle">Variable Binding</h2>
+
+      <markdown>
+        Using component or directive with `data` property allow to bind a variable that will update the DOM when value changes
+      </markdown>
+
+      <textarea class="variable-textarea" [(ngModel)]="markdown"></textarea>
+
+      <markdown class="variable-binding" [data]="markdown"></markdown>
+
+      <br /><br />
+
+      <markdown>
+        Using `language` pipe you can specify the language of the variable content for synthax highlights
+      </markdown>
+
+      <markdown [src]="'app/remote/language-pipe.html'"></markdown>
+    </section>
+
+    <!-- PIPE USAGE -->
+    <section id="pipe">
+      <h2 class="subtitle">Pipe Usage</h2>
+
+      <markdown>
+        Using `markdown` pipe to transform markdown to HTML allow you to chain pipe transformations and will update the DOM when value changes
+      </markdown>
+
+      <markdown [src]="'app/remote/markdown-pipe.html'"></markdown>
+
+      <br />
+
+      <markdown>
+        In the example below, `pipeMarkdown` property does not contains any `back-ticks` to set the content language but will be chain with `language` pipe instead to specify synthax highlights language along with `markdown` pipe for conversion
+      </markdown>
+
+      <textarea class="pipe-textarea" [(ngModel)]="typescriptMarkdown"></textarea>
+      <div class="pipe-usage" [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown"></div>
+    </section>
+  </div>
+</div>

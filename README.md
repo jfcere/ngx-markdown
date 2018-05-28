@@ -4,7 +4,7 @@
 > **v1.6.0 and up** are using **Angular 6**  and now uses `HttpClient` instead of `Http` service.  
 *Please use a previous version of the package if you are using an older version of Angular.*
 
-ngx-markdown is an [Angular 2+](https://angular.io/) library that uses [marked](https://github.com/chjj/marked) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for syntax highlight.
+ngx-markdown is an [Angular](https://angular.io/) library that uses [marked](https://github.com/chjj/marked) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for syntax highlight.
 
 - Demo available @ [https://jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown)
 - Plunker available @ [https://plnkr.co/edit/y5LPj7?p=preview](https://plnkr.co/edit/y5LPj7?p=preview)
@@ -44,12 +44,6 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 ### Syntax highlight
 
 > Syntax highlight is **optional**, skip this step if you are not planning to use it
-
-To add [Prism.js](http://prismjs.com/) syntax highlight to your `package.json` use the following command.
-
-```bash
-npm install prismjs --save
-```
 
 To activate [Prism.js](http://prismjs.com/) syntax highlight you will need to include...
 - prism.js core library - `node_modules/prismjs/prism.js` file
@@ -340,7 +334,7 @@ When using variable binding you can optionally use `language` pipe to specify th
 
 ## Demo application
 
-A demo is available @ [https://jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown) and it source code can be found inside the `src/app/markdown-demo` directory.
+A demo is available @ [https://jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown) and it source code can be found inside the `demo` directory.
 
 The following commands will clone the repository, install npm dependencies and serve the application @ [http://localhost:4200](http://localhost:4200)
 
