@@ -32,6 +32,7 @@ export class MarkdownComponent implements AfterViewInit {
   }
 
   @Output() error = new EventEmitter<string>();
+  @Output() load = new EventEmitter<ElementRef>();
 
   get isTranscluded(): boolean {
     return !this.data && !this.src;
@@ -51,5 +52,6 @@ export class MarkdownComponent implements AfterViewInit {
   render(markdown: string) {
     this.element.nativeElement.innerHTML = this.markdownService.compile(markdown);
     this.markdownService.highlight();
+    this.load.emit(this.element.nativeElement);
   }
 }
