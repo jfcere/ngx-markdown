@@ -41,19 +41,17 @@ describe('MarkdownPipe', () => {
     });
   });
 
-  it('should apply synthax highlight', fakeAsync(() => {
+  it('should apply synthax highlight when zone is stable', fakeAsync(() => {
 
     const markdown = '# Markdown';
 
     spyOn(markdownService, 'highlight');
-    spyOn(zone, 'runOutsideAngular').and.callFake(func => func());
 
-    const result = pipe.transform(markdown);
+    pipe.transform(markdown);
 
-    expect(zone.runOutsideAngular).toHaveBeenCalled();
     expect(markdownService.highlight).not.toHaveBeenCalled();
 
-    tick();
+    zone.onStable.emit(null);
 
     expect(markdownService.highlight).toHaveBeenCalled();
   }));
@@ -64,7 +62,6 @@ describe('MarkdownPipe', () => {
     const mockCompiled = 'compiled-x';
 
     spyOn(markdownService, 'compile').and.returnValue(mockCompiled);
-    spyOn(zone, 'runOutsideAngular');
 
     const result = pipe.transform(markdown);
 

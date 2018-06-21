@@ -1,15 +1,9 @@
 import { CommonModule } from '@angular/common';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
-import { Component, DebugElement } from '@angular/core';
+import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 
 import { MarkdownModule } from './markdown.module';
-import { errorSrcWithoutHttpClient, MarkdownService } from './markdown.service';
-import { MarkedOptions } from './marked-options';
+import { errorSrcWithoutHttpClient } from './markdown.service';
 
 @Component({
   // tslint:disable-next-line:component-selector

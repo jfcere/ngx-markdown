@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { MarkdownService } from 'ngx-markdown';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { delay, first, tap } from 'rxjs/operators';
 
 

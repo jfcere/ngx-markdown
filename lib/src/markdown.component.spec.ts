@@ -15,7 +15,6 @@ class MockMarkdownService {
 describe('MarkdownComponent', () => {
   let fixture: ComponentFixture<MarkdownComponent>;
   let component: MarkdownComponent;
-  let nativeElement: any;
   let markdownService: MarkdownService;
 
   beforeEach(async(() => {
@@ -33,7 +32,6 @@ describe('MarkdownComponent', () => {
     markdownService = TestBed.get(MarkdownService);
     fixture = TestBed.createComponent(MarkdownComponent);
     component = fixture.componentInstance;
-    nativeElement = fixture.nativeElement;
     fixture.detectChanges();
   });
 

@@ -1,4 +1,5 @@
 import { NgZone, Pipe, PipeTransform } from '@angular/core';
+import { first } from 'rxjs/operators';
 
 import { MarkdownService } from './markdown.service';
 
@@ -20,10 +21,9 @@ export class MarkdownPipe implements PipeTransform {
 
     const markdown = this.markdownService.compile(value);
 
-    this.zone.runOutsideAngular(() => {
-      // glitch in the UI... need a better way to handle this!
-      setTimeout(() => this.markdownService.highlight());
-    });
+    this.zone.onStable
+      .pipe(first())
+      .subscribe(() => this.markdownService.highlight());
 
     return markdown;
   }

@@ -1,11 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable, Optional } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { parse, Renderer } from 'marked';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { MarkedOptions } from './marked-options';
-import { MarkedRenderer } from './marked-renderer';
 
 declare var Prism: {
   highlightAll: (async: boolean) => void;

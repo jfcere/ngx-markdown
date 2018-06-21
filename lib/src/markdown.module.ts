@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule, Provider } from '@angular/core';
 
 import { LanguagePipe } from './language.pipe';
