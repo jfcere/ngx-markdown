@@ -233,9 +233,9 @@
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.3.2.tgz#8700226bdde24b6f98e3a60126dbaab3b2a3ab41"
 
-"@types/marked@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@types/marked/-/marked-0.3.0.tgz#583c223dd33385a1dda01aaf77b0cd0411c4b524"
+"@types/marked@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@types/marked/-/marked-0.4.0.tgz#057a6165703e7419217f8ffc6887747f980b6315"
 
 "@types/materialize-css@~0.100.4":
   version "0.100.4"
@@ -4304,10 +4304,11 @@ ng-packagr@^3.0.0-rc.2:
     update-notifier "^2.3.0"
 
 "ngx-markdown@file:./lib":
-  version "6.0.0"
+  version "6.0.1"
   dependencies:
-    "@types/marked" "^0.3.0"
+    "@types/marked" "^0.4.0"
     marked "^0.4.0"
+    prismjs "^1.14.0"
 
 no-case@^2.2.0:
   version "2.3.2"

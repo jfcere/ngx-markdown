@@ -23,7 +23,7 @@
     "prism.js"
   ],
   "dependencies": {
-    "@types/marked": "^0.3.0",
+    "@types/marked": "^0.4.0",
     "marked": "^0.4.0",
     "prismjs": "^1.14.0"
   },
