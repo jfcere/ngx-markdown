@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Optional } from '@angular/core';
 import { parse, Renderer } from 'marked';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { MarkedOptions } from './marked-options';
@@ -30,12 +31,12 @@ export class MarkdownService {
     }
   }
 
-  compile(markdown: string, markedOptions = this.options) {
+  compile(markdown: string, markedOptions = this.options): string {
     const precompiled = this.precompile(markdown);
     return parse(precompiled, markedOptions);
   }
 
-  getSource(src: string) {
+  getSource(src: string): Observable<string> {
     if (!this.http) {
       throw new Error(errorSrcWithoutHttpClient);
     }
@@ -51,7 +52,7 @@ export class MarkdownService {
     }
   }
 
-  private handleExtension(src: string, markdown: string) {
+  private handleExtension(src: string, markdown: string): string {
     const extension = src
       ? src.split('.').splice(-1).join()
       : null;
@@ -60,7 +61,7 @@ export class MarkdownService {
       : markdown;
   }
 
-  private precompile(markdown: string) {
+  private precompile(markdown: string): string {
     if (!markdown) {
       return '';
     }
