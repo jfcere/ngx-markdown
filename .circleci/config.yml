@@ -1,0 +1,94 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8-browsers
+    steps:
+      # Checkout the code from the branch into the working_directory
+      - checkout
+      # Restore dependencies from cache
+      - restore_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+      # Install dependencies
+      - run:
+          name: Install dependencies
+          command: yarn install --frozen-lockfile --no-progress
+      # Cache dependencies if they don't exist
+      - save_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+            - ./node_modules
+      # Test the source code
+      - run:
+          name: Test
+          command: yarn test --watch=false --code-coverage --no-progress
+      - store_artifacts:
+          path: test-results.xml
+          prefix: tests
+      - store_artifacts:
+          path: coverage
+          prefix: coverage
+      # Upload coverage artifacts to Coveralls
+      - run:
+          name: Push coverage artifacts
+          command: yarn coveralls
+      # Lint the source code
+      - run:
+          name: Lint
+          command: yarn lint:ci
+      - store_artifacts:
+          path: tslint.xml
+          prefix: lint
+      # Build the source code
+      - run:
+          name: Build
+          command: yarn build:lib --prod
+  deploy:
+    docker:
+      - image: circleci/node:8-browsers
+    steps:
+      # Checkout the code from the branch into the working_directory
+      - checkout
+      # Restore dependencies from cache
+      - restore_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+      # Install dependencies
+      - run:
+          name: Install dependencies
+          command: yarn install --frozen-lockfile --no-progress
+      # Cache local dependencies if they don't exist
+      - save_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+            - ./node_modules
+      # Build demo
+      - run:
+          name: Build
+          command: yarn gh-pages:build
+      # Deploy demo to Github Pages
+      - run:
+          name: Deploy to gh-pages
+          command: yarn gh-pages:deploy
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      # Build for all branches other than gh-pages and for all tags
+      - build:
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: gh-pages
+      # Deploy for tags marked by a version number only on master branch
+      - deploy:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
+            branches:
+              only: master
