@@ -35,7 +35,7 @@
     "test": "ng test",
     "coveralls": "cat \"./coverage/lcov.info\" | \"./node_modules/coveralls/bin/coveralls.js\"",
     "gh-pages:build": "yarn build:demo --prod --aot --base-href /ngx-markdown/",
-    "gh-pages:deploy": "angular-cli-ghpages --name=\"CircleCI\" --email=\"circleci@email.com\" --no-silent",
+    "gh-pages:deploy": "angular-cli-ghpages --dir=\"dist/demo\" --name=\"CircleCI\" --email=\"circleci@email.com\" --no-silent",
     "publish:lib": "npm publish ./dist/lib"
   },
   "dependencies": {
