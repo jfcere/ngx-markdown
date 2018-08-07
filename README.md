@@ -309,7 +309,7 @@ This code will output the following HTML:
 When using static markdown you are responsible to provide the code block with related language.
 
 ```diff
-<markdown>
+<markdown ngPreserveWhitespaces>
 +  ```typescript
     const myProp: string = 'value';
 +  ```
