@@ -24,8 +24,8 @@
   ],
   "dependencies": {
     "@types/marked": "^0.4.0",
-    "marked": "^0.4.0",
-    "prismjs": "^1.14.0"
+    "marked": "^0.5.0",
+    "prismjs": "^1.15.0"
   },
   "peerDependencies": {
     "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
