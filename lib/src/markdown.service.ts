@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Optional, SecurityContext } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Injectable, Optional } from '@angular/core';
 import { parse, Renderer } from 'marked';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -25,7 +24,6 @@ export class MarkdownService {
 
   constructor(
     @Optional() private http: HttpClient,
-    private domSanitizer: DomSanitizer,
     public options: MarkedOptions,
   ) {
     if (!this.renderer) {
@@ -35,8 +33,7 @@ export class MarkdownService {
 
   compile(markdown: string, markedOptions = this.options): string {
     const precompiled = this.precompile(markdown);
-    const compiled = parse(precompiled, markedOptions);
-    return this.domSanitizer.sanitize(SecurityContext.HTML, compiled);
+    return parse(precompiled, markedOptions);
   }
 
   getSource(src: string): Observable<string> {

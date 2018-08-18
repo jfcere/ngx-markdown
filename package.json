@@ -29,7 +29,6 @@
     "build:lib": "ng build lib",
     "postbuild:lib": "cpx ./README.md ./dist/lib",
     "link:lib": "rimraf node_modules/ngx-markdown && linklocal",
-    "lint": "yarn lint:lib && yarn lint:demo",
     "lint:demo": "ng lint demo",
     "lint:lib": "ng lint lib",
     "lint:ci": "ng lint lib --format checkstyle > tslint.xml",
