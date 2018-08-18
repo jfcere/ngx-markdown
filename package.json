@@ -68,6 +68,7 @@
     "angular-cli-ghpages": "^0.5.2",
     "codelyzer": "~4.2.1",
     "coveralls": "^2.13.3",
+    "cpx": "^1.5.0",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~1.7.1",
