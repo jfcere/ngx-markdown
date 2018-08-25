@@ -86,6 +86,25 @@ describe('MarkdowService', () => {
 
       expect(markdownService.compile(mockRaw)).toBe(parse(expected));
     });
+
+    it('should decode HTML correctly when decodeHtml is true ', () => {
+
+      const mockRaw = '&lt;html&gt;';
+      const expected = '<html>';
+
+      expect(markdownService.compile(mockRaw, true)).toBe(expected);
+    });
+
+    it('should not decode HTML when decodeHtml is omitted/false/null/undefined', () => {
+
+      const mockRaw = '&lt;html&gt;';
+      const expected = '<p>&lt;html&gt;</p>\n';
+
+      expect(markdownService.compile(mockRaw)).toBe(expected);
+      expect(markdownService.compile(mockRaw, false)).toBe(expected);
+      expect(markdownService.compile(mockRaw, null)).toBe(expected);
+      expect(markdownService.compile(mockRaw, undefined)).toBe(expected);
+    });
   });
 
   describe('getSource', () => {

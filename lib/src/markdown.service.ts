@@ -31,9 +31,11 @@ export class MarkdownService {
     }
   }
 
-  compile(markdown: string, markedOptions = this.options): string {
+  compile(markdown: string, decodeHtml = false, markedOptions = this.options): string {
     const precompiled = this.precompile(markdown);
-    return parse(precompiled, markedOptions);
+    return parse(
+      decodeHtml ? this.decodeHtml(precompiled) : precompiled,
+      markedOptions);
   }
 
   getSource(src: string): Observable<string> {
@@ -52,6 +54,12 @@ export class MarkdownService {
     }
   }
 
+  private decodeHtml(html: string) {
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = html;
+    return textarea.value;
+}
+
   private handleExtension(src: string, markdown: string): string {
     const extension = src
       ? src.split('.').splice(-1).join()
@@ -67,7 +75,6 @@ export class MarkdownService {
     }
     let indentStart: number;
     return markdown
-      .replace(/\&gt;/g, '>')
       .split('\n')
       .map(line => {
         // find position of 1st non-whitespace character
