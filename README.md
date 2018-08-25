@@ -1,7 +1,6 @@
 <p align="center">
   <img src="https://github.com/jfcere/ngx-markdown/raw/master/demo/src/assets/ngx-markdown.png">
 </p>
-<h1 align="center">ngx-markdown</h1>
 <p align="center">
   <a href="https://circleci.com/gh/jfcere/ngx-markdown">
     <img alt="CircleCI Status" src="https://circleci.com/gh/jfcere/ngx-markdown/tree/master.svg?style=shield">
@@ -26,17 +25,14 @@
     <img alt="PeerDependencies Status" src="https://david-dm.org/jfcere/ngx-markdown/peer-status.svg?path=lib">
   </a>
 </p>
-<p align="center">
-  ngx-markdown is an <a href="https://angular.io/">Angular</a> library that uses <a href="https://github.com/markedjs/marked">marked.js</a> to parse markdown to html combined with <a href="http://prismjs.com">Prism.js</a> for syntax highlight.
-</p>
-<p align="center">
-  Demo available @ <a href="https://jfcere.github.io/ngx-markdown">https://jfcere.github.io/ngx-markdown</a><br>
-  Plunker available @ <a href="https://plnkr.co/edit/y5LPj7?p=preview">https://plnkr.co/edit/y5LPj7?p=preview</a><br>
-  StackBlitz available @ <a href="https://stackblitz.com/edit/ngx-markdown">https://stackblitz.com/edit/ngx-markdown</a>
-</p>
 
-> **v1.6.0 and up** are using **Angular 6**  and now uses `HttpClient` instead of `Http` service.  
-*Please use a previous version of the package if you are using an older version of Angular.*
+# ngx-markdown
+
+ngx-markdown is an [Angular](https://angular.io/) library that uses [marked](https://github.com/chjj/marked) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for syntax highlight.
+
+- Demo available @ [https://jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown)
+- Plunker available @ [https://plnkr.co/edit/y5LPj7?p=preview](https://plnkr.co/edit/y5LPj7?p=preview)
+- StackBlitz available @ [https://stackblitz.com/edit/ngx-markdown](https://stackblitz.com/edit/ngx-markdown)
 
 ### Table of contents
 
