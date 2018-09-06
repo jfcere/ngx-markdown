@@ -17,6 +17,7 @@
         demo based on <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">markdown cheatsheet</a>
       </div>
       <ul>
+        <li class="menu-subtitle"><span>Markdown</span></li>
         <li><a href="#headers">Headers</a></li>
         <li><a href="#emphasis">Emphasis</a></li>
         <li><a href="#lists">Lists</a></li>
@@ -26,9 +27,13 @@
         <li><a href="#tables">Tables</a></li>
         <li><a href="#blockquotes">Blockquotes</a></li>
         <li><a href="#horizontal-rule">Horizontal Rule</a></li>
+        <li class="menu-subtitle"><span>Bindings</span></li>
         <li><a href="#remote-url">Remote Url</a></li>
         <li><a href="#variable-binding">Variable Binding</a></li>
         <li><a href="#pipe">Pipe Usage</a></li>
+        <li class="menu-subtitle"><span>Plugins</span></li>
+        <li><a href="#line-numbers">Line Numbers</a></li>
+        <li><a href="#line-highlight">Line Highlight</a></li>
       </ul>
     </div>
   </div>
@@ -193,6 +198,119 @@
 
       <textarea class="pipe-textarea" [(ngModel)]="typescriptMarkdown"></textarea>
       <div class="pipe-usage" [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown"></div>
+    </section>
+
+    <!-- PLUGINS - LineNumbers -->
+    <section id="line-numbers">
+      <h2 class="subtitle">Line Numbers plugin</h2>
+
+      <markdown ngPreserveWhitespaces>
+        #### Prism files to include
+        ```javascript
+        node_modules/prismjs/plugins/line-highlight/prism-line-numbers.css
+        node_modules/prismjs/plugins/line-highlight/prism-line-numbers.js
+        ```
+        #### Directive
+        `lineNumbers` - activate line numbers plugin
+        #### Attributes
+        `start` - offset number for the first display line
+        ### Example
+      </markdown>
+
+      <markdown>
+        Using `lineNumbers` input property on `markdown` component or directive (this is not available when using pipe or service) allows you to add line number at the beginning of each lines of code block.
+      </markdown>
+
+      <markdown [src]="'app/remote/line-numbers.html'"></markdown>
+
+      <markdown>
+        The example below uses `lineNumbers` directive which uses default line offset of 1.
+      </markdown>
+
+      <markdown lineNumbers ngPreserveWhitespaces>
+        ```javascript
+        var result = square(2);
+
+        function square(number) &#123;
+          return number * number;
+        }
+        ```
+      </markdown>
+
+      <markdown>
+        Optionally you can use `start` to specify the offset number for the first display line.
+      </markdown>
+
+      <markdown>
+        In the example below line offset is set to 5 using `start` input property.
+      </markdown>
+
+      <markdown lineNumbers [start]="5" ngPreserveWhitespaces>
+        ```javascript
+        var result = root(2);
+
+        function root(x, n) &#123;
+          try &#123;
+            var negate = n % 2 == 1 && x < 0;
+            if(negate)
+              x = -x;
+            var possible = Math.pow(x, 1 / n);
+            n = Math.pow(possible, n);
+            if(Math.abs(x - n) < 1 && (x > 0 == n > 0))
+              return negate ? -possible : possible;
+          } catch(e)&#123; }
+        }
+        ```
+      </markdown>
+    </section>
+
+    <!-- PLUGIN - LineHighlight -->
+    <section id="line-highlight">
+      <h2 class="subtitle">Line Highlight plugin</h2>
+
+      <markdown ngPreserveWhitespaces>
+        #### Prism files to include
+        ```javascript
+        node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css
+        node_modules/prismjs/plugins/line-highlight/prism-line-highlight.js
+        ```
+        #### Directive
+        `lineHighlight` - activate line highlight plugin
+        #### Attributes
+        `line` - lines to highlight (i.e.: 6, 11-15)<br>
+        `lineOffset` - starting offset for line numbers
+        ### Example
+      </markdown>
+
+      <markdown ngPreserveWhitespaces>
+        You can highlight different lines by adding `lineHighlight` directive on the `markdown` component/directive.
+
+        Use `line` input property to specify the line(s) to highlight and optionally there is a `lineOffset` property to specify the starting line of code your snippet represents.
+      </markdown>
+
+      <markdown [src]="'app/remote/line-highlight.html'"></markdown>
+
+      <markdown>
+        In the example below `line` 6 and 10 to 16 are highlight using a `lineOffset` of 5.
+      </markdown>
+
+      <markdown lineHighlight [line]="'6, 10-16'" [lineOffset]="5" ngPreserveWhitespaces>
+        ```javascript
+        var result = root(2);
+
+        function root(x, n) &#123;
+          try &#123;
+            var negate = n % 2 == 1 && x < 0;
+            if(negate)
+              x = -x;
+            var possible = Math.pow(x, 1 / n);
+            n = Math.pow(possible, n);
+            if(Math.abs(x - n) < 1 && (x > 0 == n > 0))
+              return negate ? -possible : possible;
+          } catch(e)&#123; }
+        }
+        ```
+      </markdown>
     </section>
   </div>
 </div>

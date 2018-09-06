@@ -1,4 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
+import { ElementRef } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Observable, of, throwError } from 'rxjs';
 
@@ -103,11 +104,12 @@ describe('MarkdownComponent', () => {
 
     it('should call render method and decodeHtml when neither data or src input property is provided', () => {
 
-      const mockElement = { nativeElement: { innerHTML: 'inner-html' } };
+      const mockHtmlElement = document.createElement('div');
+      mockHtmlElement.innerHTML = 'inner-html';
 
       spyOn(markdownService, 'getSource').and.returnValue(of());
 
-      component.element = mockElement;
+      component.element = new ElementRef(mockHtmlElement);
       component.data = undefined;
       component.src = undefined;
 
@@ -115,16 +117,17 @@ describe('MarkdownComponent', () => {
 
       component.ngAfterViewInit();
 
-      expect(component.render).toHaveBeenCalledWith(mockElement.nativeElement.innerHTML, true);
+      expect(component.render).toHaveBeenCalledWith(mockHtmlElement.innerHTML, true);
     });
 
     it('should not call render method when src is provided', () => {
 
-      const mockElement = { nativeElement: { innerHTML: 'inner-html' } };
+      const mockHtmlElement = document.createElement('div');
+      mockHtmlElement.innerHTML = 'inner-html';
 
       spyOn(markdownService, 'getSource').and.returnValue(of());
 
-      component.element = mockElement;
+      component.element = new ElementRef(mockHtmlElement);
       component.src = './src-example/file.md';
 
       spyOn(component, 'render');
@@ -136,9 +139,10 @@ describe('MarkdownComponent', () => {
 
     it('should not call render method when data is provided', () => {
 
-      const mockElement = { nativeElement: { innerHTML: 'inner-html' } };
+      const mockHtmlElement = document.createElement('div');
+      mockHtmlElement.innerHTML = 'inner-html';
 
-      component.element = mockElement;
+      component.element = new ElementRef(mockHtmlElement);
       component.data = '# Markdown';
 
       spyOn(component, 'render');
@@ -215,7 +219,43 @@ describe('MarkdownComponent', () => {
 
       component.render('### Raw');
 
-      expect(markdownService.highlight).toHaveBeenCalled();
+      expect(markdownService.highlight).toHaveBeenCalledWith(component.element.nativeElement);
+    });
+
+    it('should handle lineNumbers plugin correctly', () => {
+
+      const markdown = '```javascript\nconst random = \'Math.random();\n```';
+      const getHTMLPreElement = () => (fixture.nativeElement as HTMLElement).querySelector('pre');
+
+      component.lineNumbers = true;
+      component.render(markdown);
+
+      expect(getHTMLPreElement().classList).toContain('line-numbers');
+      expect(getHTMLPreElement().attributes.getNamedItem('data-start')).toBeNull();
+
+      component.start = 5;
+      component.render(markdown);
+
+      expect(getHTMLPreElement().attributes.getNamedItem('data-start').value).toBe('5');
+    });
+
+    it('should handle lineHighlight plugin correctly', () => {
+
+      const markdown = '```javascript\nconst random = \'Math.random();\n```';
+      const getHTMLPreElement = () => (fixture.nativeElement as HTMLElement).querySelector('pre');
+
+      component.lineHighlight = true;
+      component.line = '6, 10-16';
+      component.render(markdown);
+
+      expect(getHTMLPreElement().classList).toContain('line-highlight');
+      expect(getHTMLPreElement().attributes.getNamedItem('data-line').value).toBe('6, 10-16');
+      expect(getHTMLPreElement().attributes.getNamedItem('data-line-offset')).toBeNull();
+
+      component.lineOffset = 5;
+      component.render(markdown);
+
+      expect(getHTMLPreElement().attributes.getNamedItem('data-line-offset').value).toBe('5');
     });
   });
 });

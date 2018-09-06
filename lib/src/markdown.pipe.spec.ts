@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { NgZone } from '@angular/core';
+import { ElementRef, NgZone } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { MarkdownPipe } from './markdown.pipe';
@@ -7,6 +7,7 @@ import { MarkdownService } from './markdown.service';
 import { MarkedOptions } from './marked-options';
 
 describe('MarkdownPipe', () => {
+  const elementRef = new ElementRef(document.createElement('div'));
   let markdownService: MarkdownService;
   let pipe: MarkdownPipe;
   let zone: NgZone;
@@ -24,7 +25,7 @@ describe('MarkdownPipe', () => {
   beforeEach(() => {
     markdownService = TestBed.get(MarkdownService);
     zone = TestBed.get(NgZone);
-    pipe = new MarkdownPipe(markdownService, zone);
+    pipe = new MarkdownPipe(elementRef, markdownService, zone);
   });
 
   it('should log error and return value when parameter is not a string', () => {
@@ -53,7 +54,7 @@ describe('MarkdownPipe', () => {
 
     zone.onStable.emit(null);
 
-    expect(markdownService.highlight).toHaveBeenCalled();
+    expect(markdownService.highlight).toHaveBeenCalledWith(elementRef.nativeElement);
   }));
 
   it('should return compiled markdown', () => {

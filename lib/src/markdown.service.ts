@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Optional } from '@angular/core';
-import { parse, Renderer } from 'marked';
+import { parse } from 'marked';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { MarkedOptions } from './marked-options';
+import { MarkedRenderer } from './marked-renderer';
 
 declare var Prism: {
-  highlightAll: (async: boolean) => void;
+  highlightAllUnder: (element: Element) => void;
 };
 
 // tslint:disable-next-line:max-line-length
@@ -15,20 +16,31 @@ export const errorSrcWithoutHttpClient = '[ngx-markdown] When using the [src] at
 
 @Injectable()
 export class MarkdownService {
-  get renderer(): Renderer {
+
+  get options(): MarkedOptions {
+    return this._options;
+  }
+  set options(value: MarkedOptions) {
+    this._options = Object.assign({},
+      { renderer: new MarkedRenderer() },
+      this._options,
+      value,
+    );
+  }
+
+  get renderer(): MarkedRenderer {
     return this.options.renderer;
   }
-  set renderer(value: marked.Renderer) {
+  set renderer(value: MarkedRenderer) {
     this.options.renderer = value;
   }
 
   constructor(
-    @Optional() private http: HttpClient,
-    public options: MarkedOptions,
+    @Optional() private _http: HttpClient,
+    private _options: MarkedOptions,
   ) {
-    if (!this.renderer) {
-      this.renderer = new Renderer();
-    }
+    this._http = _http;
+    this.options = _options;
   }
 
   compile(markdown: string, decodeHtml = false, markedOptions = this.options): string {
@@ -39,18 +51,17 @@ export class MarkdownService {
   }
 
   getSource(src: string): Observable<string> {
-    if (!this.http) {
+    if (!this._http) {
       throw new Error(errorSrcWithoutHttpClient);
     }
-
-    return this.http
+    return this._http
       .get(src, { responseType: 'text' })
       .pipe(map(markdown => this.handleExtension(src, markdown)));
   }
 
-  highlight() {
+  highlight(element: Element) {
     if (typeof Prism !== 'undefined') {
-      Prism.highlightAll(false);
+      Prism.highlightAllUnder(element);
     }
   }
 

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/jfcere/ngx-markdown/raw/master/demo/src/assets/ngx-markdown.png">
+  <img alt="Ngx-Markdown Logo" src="https://github.com/jfcere/ngx-markdown/raw/master/demo/src/assets/ngx-markdown.png">
 </p>
 <p align="center">
   <a href="https://circleci.com/gh/jfcere/ngx-markdown">
@@ -89,6 +89,68 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 + "node_modules/prismjs/components/prism-csharp.min.js", # c-sharp language syntax
 + "node_modules/prismjs/components/prism-css.min.js" # css language syntax
 ]
+```
+
+#### Line Numbers plugin
+
+To use the [line numbers plugin](http://prismjs.com/plugins/line-numbers/) that shows line numbers in code blocks, in addition to Prism.js configuration files, you will need to include the following files from `prismjs/plugins/line-numbers` directory to your application:
+
+- css styling for line numbers - `prism-line-numbers.css`
+- line numbers plugin script - `prism-line-numbers.js`
+
+If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
+
+```diff
+"styles": [
+  "src/styles.css",
+  "node_modules/prismjs/themes/prism-okaidia.css",
++ "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css"
+],
+"scripts": [
+  "node_modules/prismjs/prism.js",
+  "node_modules/prismjs/components/prism-csharp.min.js",
+  "node_modules/prismjs/components/prism-css.min.js",
++ "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.js"
+]
+```
+
+Using `markdown` component and/or directive, you will be able to use the `lineNumbers` property to activate the plugin. The property can be use in combinaison with either `data` for variable binding, `src` for remote content or using transclusion for static markdown.
+
+Additionaly, you can use `start` input property to specify the offset number for the first display line.
+
+```html
+<markdown [src]="path/to/file.js" lineNumbers [start]="5"></markdown>
+```
+
+#### Line Highlight plugin
+
+To use the [line highlight plugin](http://prismjs.com/plugins/line-highlight/) that highlights specific lines and/or line ranges in code blocks, in addition to Prism.js configuration files, you will need to include the following files from `prismjs/plugins/line-highlight` directory to your application:
+
+- css styling for line highlight - `prism-line-highlight.css`
+- line highlight plugin script - `prism-line-highlight.js`
+
+If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
+
+```diff
+"styles": [
+  "src/styles.css",
+  "node_modules/prismjs/themes/prism-okaidia.css",
++ "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css"
+],
+"scripts": [
+  "node_modules/prismjs/prism.js",
+  "node_modules/prismjs/components/prism-csharp.min.js",
+  "node_modules/prismjs/components/prism-css.min.js",
++ "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.js"
+]
+```
+
+Using `markdown` component and/or directive, you will be able to use the `lineHighlight` property to activate the plugin. The property can be use in combinaison with either `data` for variable binding, `src` for remote content or using transclusion for static markdown.
+
+Use `line` input property to specify the line(s) to highlight and optionally there is a `lineOffset` property to specify the starting line of code your snippet represents.
+
+```html
+<markdown [src]="path/to/file.js" lineHighlight [line]="'6, 10-16'" [lineOffset]="5"></markdown>
 ```
 
 ## Configuration
