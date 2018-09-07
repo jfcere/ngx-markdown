@@ -68,7 +68,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 
 ### Syntax highlight
 
-> Syntax highlight is **optional**, skip this step if you are not planning to use it
+> :bell: Syntax highlight is **optional**, skip this step if you are not planning to use it
 
 To activate [Prism.js](http://prismjs.com/) syntax highlight you will need to include...
 - prism.js core library - `node_modules/prismjs/prism.js` file
@@ -219,7 +219,7 @@ export class HomeModule { }
 
 `ngx-markdown` provides different approaches to help you parse markdown to your application depending of your needs.
 
-> As of Angular 6, the template compiler strips whitespace by default. Use `ngPreserveWhitespaces` directive to preserve whitespaces such as newlines in order for the markdown-formatted content to render as intended.  
+> :bulb: As of Angular 6, the template compiler strips whitespace by default. Use `ngPreserveWhitespaces` directive to preserve whitespaces such as newlines in order for the markdown-formatted content to render as intended.  
 https://angular.io/api/core/Component#preserveWhitespaces
 
 ### Component
@@ -327,7 +327,7 @@ This code will output the following HTML:
 </h1>
 ```
 
-> Follow official [marked.renderer](https://github.com/chjj/marked#block-level-renderer-methods) documentation for the list of tokens that can be overriden.
+> :blue_book: Follow official [marked.renderer](https://github.com/chjj/marked#block-level-renderer-methods) documentation for the list of tokens that can be overriden.
 
 ## Syntax highlight
 
