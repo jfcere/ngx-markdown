@@ -75,7 +75,7 @@ describe('MarkdowService', () => {
         '  * list',         // find first line with non-whitespaces to set offset
         '    * sub-list',   // keep indent while removing from previous row offset
         '  ',               // keep blank line
-        ' Negative indent', // keep line with negative offset according first non-whitespaces line indent
+        ' Negative indent', // keep line with negative offset according to first non-whitespaces line indent
         '  Lorem Ipsum',    // keep indent like equals to first non-whitespaces line ident
       ].join('\n');
 
