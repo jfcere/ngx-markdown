@@ -313,9 +313,9 @@
   version "3.3.6"
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.3.6.tgz#5932ead926307ca21e5b36808257f7c926b06565"
 
-"@types/marked@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@types/marked/-/marked-0.4.0.tgz#057a6165703e7419217f8ffc6887747f980b6315"
+"@types/marked@^0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@types/marked/-/marked-0.4.2.tgz#64a89e53ea37f61cc0f3ee1732c555c2dbf6452f"
 
 "@types/materialize-css@~0.100.4":
   version "0.100.4"
@@ -4157,9 +4157,9 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
-marked@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-0.5.0.tgz#9e590bad31584a48ff405b33ab1c0dd25172288e"
+marked@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-0.5.1.tgz#062f43b88b02ee80901e8e8d8e6a620ddb3aa752"
 
 materialize-css@~0.100.2:
   version "0.100.2"
@@ -4479,10 +4479,10 @@ ng-packagr@^3.0.0-rc.2:
     update-notifier "^2.3.0"
 
 "ngx-markdown@file:./lib":
-  version "6.1.0"
+  version "6.2.1"
   dependencies:
-    "@types/marked" "^0.4.0"
-    marked "^0.5.0"
+    "@types/marked" "^0.4.2"
+    marked "^0.5.1"
     prismjs "^1.15.0"
 
 no-case@^2.2.0:
