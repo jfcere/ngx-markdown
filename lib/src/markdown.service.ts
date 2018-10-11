@@ -16,9 +16,7 @@ export const errorSrcWithoutHttpClient = '[ngx-markdown] When using the [src] at
 
 @Injectable()
 export class MarkdownService {
-  get renderer(): Renderer {
-    return this.options.renderer;
-  }
+  get renderer(): Renderer { return this.options.renderer; }
   set renderer(value: marked.Renderer) {
     this.options.renderer = value;
   }
@@ -38,14 +36,15 @@ export class MarkdownService {
     const compiled = parse(
       decodeHtml ? this.decodeHtml(precompiled) : precompiled,
       markedOptions);
-    return this.domSanitizer.sanitize(SecurityContext.HTML, compiled);
+    return markedOptions.sanitize && !markedOptions.sanitizer
+      ? this.domSanitizer.sanitize(SecurityContext.HTML, compiled)
+      : compiled;
   }
 
   getSource(src: string): Observable<string> {
     if (!this.http) {
       throw new Error(errorSrcWithoutHttpClient);
     }
-
     return this.http
       .get(src, { responseType: 'text' })
       .pipe(map(markdown => this.handleExtension(src, markdown)));

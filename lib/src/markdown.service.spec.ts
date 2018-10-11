@@ -1,9 +1,9 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { SecurityContext } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { parse } from 'marked';
 
+import { SecurityContext } from '@angular/core';
 import { MarkdownService } from './markdown.service';
 import { MarkedOptions } from './marked-options';
 
@@ -47,9 +47,8 @@ describe('MarkdowService', () => {
     it('should return parsed markdown correctly', () => {
 
       const mockRaw = '### Markdown-x';
-      const expected = domSanitizer.sanitize(SecurityContext.HTML, parse(mockRaw));
 
-      expect(markdownService.compile(mockRaw)).toBe(expected);
+      expect(markdownService.compile(mockRaw)).toBe(parse(mockRaw));
     });
 
     it('should return empty string when raw is null/undefined/empty', () => {
@@ -67,13 +66,13 @@ describe('MarkdowService', () => {
         '    * sub-list', // keep indent while removing from previous row offset
       ].join('\n');
 
-      const expected = domSanitizer.sanitize(SecurityContext.HTML, parse([
+      const expected = [
         '',
         '* list',
         '  * sub-list',
-      ].join('\n')));
+      ].join('\n');
 
-      expect(markdownService.compile(mockRaw)).toBe(expected);
+      expect(markdownService.compile(mockRaw)).toBe(parse(expected));
     });
 
     it('should return line with indent correctly', () => {
@@ -87,15 +86,15 @@ describe('MarkdowService', () => {
         '  Lorem Ipsum',    // keep indent like equals to first non-whitespaces line ident
       ].join('\n');
 
-      const expected = domSanitizer.sanitize(SecurityContext.HTML, parse([
+      const expected = [
         '* list',
         '  * sub-list',
         '',
         'Negative indent',
         'Lorem Ipsum',
-      ].join('\n')));
+      ].join('\n');
 
-      expect(markdownService.compile(mockRaw)).toBe(expected);
+      expect(markdownService.compile(mockRaw)).toBe(parse(expected));
     });
 
     it('should decode HTML correctly when decodeHtml is true ', () => {
@@ -115,6 +114,33 @@ describe('MarkdowService', () => {
       expect(markdownService.compile(mockRaw, false)).toBe(expected);
       expect(markdownService.compile(mockRaw, null)).toBe(expected);
       expect(markdownService.compile(mockRaw, undefined)).toBe(expected);
+    });
+
+    it('should sanitize when markedOptions.sanitize is true and no sanitizer function is provided', () => {
+
+      const markedOptions: MarkedOptions = { sanitize: true };
+      const mockRaw = '### Markdown-x';
+      const expected = domSanitizer.sanitize(SecurityContext.HTML, parse(mockRaw));
+
+      expect(markdownService.compile(mockRaw, false, markedOptions)).toBe(expected);
+    });
+
+    it('should not sanitize when markedOptions.sanitize is true but a sanitizer function is provided', () => {
+
+      const markedOptions: MarkedOptions = { sanitize: true, sanitizer: () => null };
+      const mockRaw = '### Markdown-x';
+      const expected = parse(mockRaw);
+
+      expect(markdownService.compile(mockRaw, false, markedOptions)).toBe(expected);
+    });
+
+    it('should not sanitize when markedOptions.sanitize is false regardless of whether a sanitizer function is provided or not', () => {
+
+      const mockRaw = '### Markdown-x';
+      const expected = parse(mockRaw);
+
+      expect(markdownService.compile(mockRaw, false, { sanitize: false })).toBe(expected);
+      expect(markdownService.compile(mockRaw, false, { sanitize: false, sanitizer: () => null })).toBe(expected);
     });
   });
 
