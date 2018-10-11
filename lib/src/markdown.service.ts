@@ -33,9 +33,11 @@ export class MarkdownService {
     }
   }
 
-  compile(markdown: string, markedOptions = this.options): string {
+  compile(markdown: string, decodeHtml = false, markedOptions = this.options): string {
     const precompiled = this.precompile(markdown);
-    const compiled = parse(precompiled, markedOptions);
+    const compiled = parse(
+      decodeHtml ? this.decodeHtml(precompiled) : precompiled,
+      markedOptions);
     return this.domSanitizer.sanitize(SecurityContext.HTML, compiled);
   }
 
@@ -55,6 +57,12 @@ export class MarkdownService {
     }
   }
 
+  private decodeHtml(html: string) {
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = html;
+    return textarea.value;
+}
+
   private handleExtension(src: string, markdown: string): string {
     const extension = src
       ? src.split('.').splice(-1).join()
@@ -70,17 +78,25 @@ export class MarkdownService {
     }
     let indentStart: number;
     return markdown
-      .replace(/\&gt;/g, '>')
       .split('\n')
       .map(line => {
+        // set current line ident start to base reference indentation
+        let lineIdentStart = indentStart;
         // find position of 1st non-whitespace character
-        // to determine the markdown indentation start
-        if (line.length > 0 && isNaN(indentStart)) {
-          indentStart = line.search(/\S|$/);
+        // to determine the current line indentation start
+        if (line.length > 0) {
+          lineIdentStart = isNaN(lineIdentStart)
+            ? line.search(/\S|$/)
+            : Math.min(line.search(/\S|$/), lineIdentStart);
         }
-        // remove whitespaces before indentation start
-        return indentStart
-          ? line.substring(indentStart)
+        // keep 1st non-whitespace line indentation
+        // as base reference for other lines
+        if (isNaN(indentStart)) {
+          indentStart = lineIdentStart;
+        }
+        // remove whitespaces before current line indentation
+        return !!lineIdentStart
+          ? line.substring(lineIdentStart)
           : line;
       }).join('\n');
   }

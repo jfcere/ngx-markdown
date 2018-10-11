@@ -48,12 +48,12 @@ export class MarkdownComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     if (this.isTranscluded) {
-      this.render(this.element.nativeElement.innerHTML);
+      this.render(this.element.nativeElement.innerHTML, true);
     }
   }
 
-  render(markdown: string) {
-    this.element.nativeElement.innerHTML = this.markdownService.compile(markdown);
+  render(markdown: string, decodeHtml = false) {
+    this.element.nativeElement.innerHTML = this.markdownService.compile(markdown, decodeHtml);
     this.markdownService.highlight();
   }
 }

@@ -101,7 +101,7 @@ describe('MarkdownComponent', () => {
 
   describe('ngAfterViewInit', () => {
 
-    it('should call render method when neither data or src input property is provided', () => {
+    it('should call render method and decodeHtml when neither data or src input property is provided', () => {
 
       const mockElement = { nativeElement: { innerHTML: 'inner-html' } };
 
@@ -115,7 +115,7 @@ describe('MarkdownComponent', () => {
 
       component.ngAfterViewInit();
 
-      expect(component.render).toHaveBeenCalledWith(mockElement.nativeElement.innerHTML);
+      expect(component.render).toHaveBeenCalledWith(mockElement.nativeElement.innerHTML, true);
     });
 
     it('should not call render method when src is provided', () => {
@@ -151,7 +151,52 @@ describe('MarkdownComponent', () => {
 
   describe('render', () => {
 
-    it('should set innerHTML with compiled markdown', () => {
+    it('should set innerHTML with compiled/decoded html markdown when decodeHtml is true', () => {
+
+      const raw = '### Raw';
+      const decoded = '<h3>Compiled</h3>';
+
+      spyOn(markdownService, 'compile').and.callFake((markdown: string, decodeHtml: boolean) => {
+        return decodeHtml ? decoded : null;
+      });
+
+      component.render(raw, true);
+
+      expect(markdownService.compile).toHaveBeenCalledWith(raw, true);
+      expect(component.element.nativeElement.innerHTML).toBe(decoded);
+    });
+
+    it('should set innerHTML with compiled/undecoded html markdown when decodeHtml is omitted/false/null/undefined', () => {
+
+      const raw = '### Raw';
+      const undecoded = '<h3>Compiled-Undecoded</h3>';
+
+      spyOn(markdownService, 'compile').and.callFake((markdown: string, decodeHtml: boolean) => {
+        return decodeHtml ? null : undecoded;
+      });
+
+      component.render(raw);
+
+      expect(markdownService.compile).toHaveBeenCalledWith(raw, false);
+      expect(component.element.nativeElement.innerHTML).toBe(undecoded);
+
+      component.render(raw, false);
+
+      expect(markdownService.compile).toHaveBeenCalledWith(raw, false);
+      expect(component.element.nativeElement.innerHTML).toBe(undecoded);
+
+      component.render(raw, null);
+
+      expect(markdownService.compile).toHaveBeenCalledWith(raw, false);
+      expect(component.element.nativeElement.innerHTML).toBe(undecoded);
+
+      component.render(raw, undefined);
+
+      expect(markdownService.compile).toHaveBeenCalledWith(raw, false);
+      expect(component.element.nativeElement.innerHTML).toBe(undecoded);
+    });
+
+    it('should set innerHTML with compiled/decoded html markdown', () => {
 
       const raw = '### Raw';
       const compiled = '<h3>Compiled</h3>';
@@ -160,7 +205,7 @@ describe('MarkdownComponent', () => {
 
       component.render(raw);
 
-      expect(markdownService.compile).toHaveBeenCalledWith(raw);
+      expect(markdownService.compile).toHaveBeenCalledWith(raw, false);
       expect(component.element.nativeElement.innerHTML).toBe(compiled);
     });
 

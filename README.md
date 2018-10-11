@@ -1,13 +1,38 @@
-# ngx-markdown
-[![CircleCI](https://circleci.com/gh/jfcere/ngx-markdown/tree/master.svg?style=shield&)](https://circleci.com/gh/jfcere/ngx-markdown/tree/master) [![Coverage Status](https://coveralls.io/repos/github/jfcere/ngx-markdown/badge.svg?branch=master)](https://coveralls.io/github/jfcere/ngx-markdown?branch=master) [![version](https://img.shields.io/npm/v/ngx-markdown.svg?style=flat)](https://www.npmjs.com/package/ngx-markdown) [![npm](https://img.shields.io/npm/l/ngx-markdown.svg)](https://opensource.org/licenses/MIT) [![dependencies Status](https://david-dm.org/jfcere/ngx-markdown/status.svg?path=lib)](https://david-dm.org/jfcere/ngx-markdown?path=lib) [![peerDependencies Status](https://david-dm.org/jfcere/ngx-markdown/peer-status.svg?path=lib)](https://david-dm.org/jfcere/ngx-markdown?path=lib&type=peer) [![monthly Downloads](https://img.shields.io/npm/dm/ngx-markdown.svg)](https://www.npmjs.com/package/ngx-markdown)
+<p align="center">
+  <img src="https://github.com/jfcere/ngx-markdown/raw/master/demo/src/assets/ngx-markdown.png">
+</p>
+<p align="center">
+  <a href="https://circleci.com/gh/jfcere/ngx-markdown">
+    <img alt="CircleCI Status" src="https://circleci.com/gh/jfcere/ngx-markdown/tree/master.svg?style=shield">
+  </a>
+  <a href="https://coveralls.io/github/jfcere/ngx-markdown?branch=master">
+    <img alt="Coverage Status" src="https://coveralls.io/repos/github/jfcere/ngx-markdown/badge.svg?branch=master">
+  </a>
+  <a href="https://www.npmjs.com/package/ngx-markdown">
+    <img alt="NPM Version" src="https://img.shields.io/npm/v/ngx-markdown.svg?style=flat">
+  </a>
+  <a href="https://opensource.org/licenses/MIT">
+    <img alt="License" src="https://img.shields.io/npm/l/ngx-markdown.svg">
+  </a>
+    <a href="https://www.npmjs.com/package/ngx-markdown">
+    <img alt="Monthly Downloads" src="https://img.shields.io/npm/dm/ngx-markdown.svg">
+  </a>
+  <br>
+  <a href="https://david-dm.org/jfcere/ngx-markdown?path=lib">
+    <img alt="Dependencies Status" src="https://david-dm.org/jfcere/ngx-markdown/status.svg?path=lib">
+  </a>
+  <a href="https://david-dm.org/jfcere/ngx-markdown?path=lib&type=peer">
+    <img alt="PeerDependencies Status" src="https://david-dm.org/jfcere/ngx-markdown/peer-status.svg?path=lib">
+  </a>
+</p>
 
-> **v1.6.0 and up** are using **Angular 6**  and now uses `HttpClient` instead of `Http` service.  
-*Please use a previous version of the package if you are using an older version of Angular.*
+# ngx-markdown
 
 ngx-markdown is an [Angular](https://angular.io/) library that uses [marked](https://github.com/chjj/marked) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for syntax highlight.
 
 - Demo available @ [https://jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown)
 - Plunker available @ [https://plnkr.co/edit/y5LPj7?p=preview](https://plnkr.co/edit/y5LPj7?p=preview)
+- StackBlitz available @ [https://stackblitz.com/edit/ngx-markdown](https://stackblitz.com/edit/ngx-markdown)
 
 ### Table of contents
 
@@ -43,7 +68,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 
 ### Syntax highlight
 
-> Syntax highlight is **optional**, skip this step if you are not planning to use it
+> :bell: Syntax highlight is **optional**, skip this step if you are not planning to use it
 
 To activate [Prism.js](http://prismjs.com/) syntax highlight you will need to include...
 - prism.js core library - `node_modules/prismjs/prism.js` file
@@ -194,7 +219,7 @@ export class HomeModule { }
 
 `ngx-markdown` provides different approaches to help you parse markdown to your application depending of your needs.
 
-> As of Angular 6, the template compiler strips whitespace by default. Use `ngPreserveWhitespaces` directive to preserve whitespaces such as newlines in order for the markdown-formatted content to render as intended.  
+> :bulb: As of Angular 6, the template compiler strips whitespace by default. Use `ngPreserveWhitespaces` directive to preserve whitespaces such as newlines in order for the markdown-formatted content to render as intended.  
 https://angular.io/api/core/Component#preserveWhitespaces
 
 ### Component
@@ -302,7 +327,7 @@ This code will output the following HTML:
 </h1>
 ```
 
-> Follow official [marked.renderer](https://github.com/chjj/marked#block-level-renderer-methods) documentation for the list of tokens that can be overriden.
+> :blue_book: Follow official [marked.renderer](https://github.com/chjj/marked#block-level-renderer-methods) documentation for the list of tokens that can be overriden.
 
 ## Syntax highlight
 
