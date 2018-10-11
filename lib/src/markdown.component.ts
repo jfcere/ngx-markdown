@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 
 import { MarkdownService } from './markdown.service';
 
@@ -6,11 +6,14 @@ import { MarkdownService } from './markdown.service';
   // tslint:disable-next-line:component-selector
   selector: 'markdown, [markdown]',
   template: '<ng-content></ng-content>',
-  styleUrls: ['./markdown.component.scss'],
 })
 export class MarkdownComponent implements AfterViewInit {
   private _data: string;
   private _src: string;
+
+  private get _isTranscluded() {
+    return !this._data && !this._src;
+  }
 
   @Input()
   get data(): string { return this._data; }
@@ -37,17 +40,13 @@ export class MarkdownComponent implements AfterViewInit {
   @Output() error = new EventEmitter<string>();
   @Output() load = new EventEmitter<string>();
 
-  get isTranscluded(): boolean {
-    return !this.data && !this.src;
-  }
-
   constructor(
     public element: ElementRef,
     public markdownService: MarkdownService,
   ) { }
 
   ngAfterViewInit() {
-    if (this.isTranscluded) {
+    if (this._isTranscluded) {
       this.render(this.element.nativeElement.innerHTML, true);
     }
   }
