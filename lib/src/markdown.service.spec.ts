@@ -120,9 +120,11 @@ describe('MarkdowService', () => {
 
       const markedOptions: MarkedOptions = { sanitize: true };
       const mockRaw = '### Markdown-x';
-      const expected = domSanitizer.sanitize(SecurityContext.HTML, parse(mockRaw));
+      const sanitized = domSanitizer.sanitize(SecurityContext.HTML, parse(mockRaw));
+      const unsanitized = parse(mockRaw);
 
-      expect(markdownService.compile(mockRaw, false, markedOptions)).toBe(expected);
+      expect(markdownService.compile(mockRaw, false, markedOptions)).toBe(sanitized);
+      expect(markdownService.compile(mockRaw, false, markedOptions)).not.toBe(unsanitized);
     });
 
     it('should not sanitize when markedOptions.sanitize is true but a sanitizer function is provided', () => {

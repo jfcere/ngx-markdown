@@ -36,9 +36,11 @@ export class MarkdownService {
     const compiled = parse(
       decodeHtml ? this.decodeHtml(precompiled) : precompiled,
       markedOptions);
-    return markedOptions.sanitize && !markedOptions.sanitizer
-      ? this.domSanitizer.sanitize(SecurityContext.HTML, compiled)
-      : compiled;
+debugger;
+    if (markedOptions.sanitize && !markedOptions.sanitizer) {
+      return this.domSanitizer.sanitize(SecurityContext.HTML, compiled);
+    }
+    return compiled;
   }
 
   getSource(src: string): Observable<string> {
