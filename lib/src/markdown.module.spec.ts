@@ -17,7 +17,6 @@ import { errorSrcWithoutHttpClient } from './markdown.service';
       <markdown [data]="markdown"></markdown>
     </ng-template>
   `,
-  styleUrls: ['./markdown.component.scss'],
 })
 class HostComponent {
   markdown = '# Super title';
