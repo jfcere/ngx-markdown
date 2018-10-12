@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Optional } from '@angular/core';
+import { Injectable, Optional, SecurityContext } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { parse, Renderer } from 'marked';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -15,15 +16,14 @@ export const errorSrcWithoutHttpClient = '[ngx-markdown] When using the [src] at
 
 @Injectable()
 export class MarkdownService {
-  get renderer(): Renderer {
-    return this.options.renderer;
-  }
+  get renderer(): Renderer { return this.options.renderer; }
   set renderer(value: marked.Renderer) {
     this.options.renderer = value;
   }
 
   constructor(
     @Optional() private http: HttpClient,
+    private domSanitizer: DomSanitizer,
     public options: MarkedOptions,
   ) {
     if (!this.renderer) {
@@ -33,16 +33,18 @@ export class MarkdownService {
 
   compile(markdown: string, decodeHtml = false, markedOptions = this.options): string {
     const precompiled = this.precompile(markdown);
-    return parse(
+    const compiled = parse(
       decodeHtml ? this.decodeHtml(precompiled) : precompiled,
       markedOptions);
+    return markedOptions.sanitize && !markedOptions.sanitizer
+      ? this.domSanitizer.sanitize(SecurityContext.HTML, compiled)
+      : compiled;
   }
 
   getSource(src: string): Observable<string> {
     if (!this.http) {
       throw new Error(errorSrcWithoutHttpClient);
     }
-
     return this.http
       .get(src, { responseType: 'text' })
       .pipe(map(markdown => this.handleExtension(src, markdown)));
