@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Optional } from '@angular/core';
-import { parse } from 'marked';
+import { Injectable, Optional, SecurityContext } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { parse, Renderer } from 'marked';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -16,10 +17,7 @@ export const errorSrcWithoutHttpClient = '[ngx-markdown] When using the [src] at
 
 @Injectable()
 export class MarkdownService {
-
-  get options(): MarkedOptions {
-    return this._options;
-  }
+  get options(): MarkedOptions { return this._options; }
   set options(value: MarkedOptions) {
     this._options = Object.assign({},
       { renderer: new MarkedRenderer() },
@@ -28,26 +26,25 @@ export class MarkdownService {
     );
   }
 
-  get renderer(): MarkedRenderer {
-    return this.options.renderer;
-  }
+  get renderer(): MarkedRenderer { return this._options.renderer; }
   set renderer(value: MarkedRenderer) {
-    this.options.renderer = value;
+    this._options.renderer = value;
   }
 
   constructor(
     @Optional() private _http: HttpClient,
+    private _domSanitizer: DomSanitizer,
     private _options: MarkedOptions,
-  ) {
-    this._http = _http;
-    this.options = _options;
-  }
+  ) { }
 
   compile(markdown: string, decodeHtml = false, markedOptions = this.options): string {
     const precompiled = this.precompile(markdown);
-    return parse(
+    const compiled = parse(
       decodeHtml ? this.decodeHtml(precompiled) : precompiled,
       markedOptions);
+    return markedOptions.sanitize && !markedOptions.sanitizer
+      ? this._domSanitizer.sanitize(SecurityContext.HTML, compiled)
+      : compiled;
   }
 
   getSource(src: string): Observable<string> {
@@ -88,14 +85,23 @@ export class MarkdownService {
     return markdown
       .split('\n')
       .map(line => {
+        // set current line ident start to base reference indentation
+        let lineIdentStart = indentStart;
         // find position of 1st non-whitespace character
-        // to determine the markdown indentation start
-        if (line.length > 0 && isNaN(indentStart)) {
-          indentStart = line.search(/\S|$/);
+        // to determine the current line indentation start
+        if (line.length > 0) {
+          lineIdentStart = isNaN(lineIdentStart)
+            ? line.search(/\S|$/)
+            : Math.min(line.search(/\S|$/), lineIdentStart);
         }
-        // remove whitespaces before indentation start
-        return indentStart
-          ? line.substring(indentStart)
+        // keep 1st non-whitespace line indentation
+        // as base reference for other lines
+        if (isNaN(indentStart)) {
+          indentStart = lineIdentStart;
+        }
+        // remove whitespaces before current line indentation
+        return !!lineIdentStart
+          ? line.substring(lineIdentStart)
           : line;
       }).join('\n');
   }
