@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.10.0",
-    "@angular-devkit/build-ng-packagr": "~0.6.5",
+    "@angular-devkit/build-ng-packagr": "~0.10.0",
     "@angular/cli": "~7.0.0",
     "@angular/compiler-cli": "^7.0.0",
     "@angular/language-service": "^7.0.0",
