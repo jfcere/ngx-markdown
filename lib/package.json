@@ -28,9 +28,9 @@
     "prismjs": "^1.15.0"
   },
   "peerDependencies": {
-    "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
-    "@angular/core": "^6.0.0-rc.0 || ^6.0.0",
-    "@angular/platform-browser": "^6.0.0-rc.0 || ^6.0.0",
+    "@angular/common": "^6.0.0 || ^7.0.0",
+    "@angular/core": "^6.0.0 || ^7.0.0",
+    "@angular/platform-browser": "^6.0.0 || ^7.0.0",
     "core-js": "^2.5.4",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"
