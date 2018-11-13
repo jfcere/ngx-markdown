@@ -53,7 +53,7 @@ export class MarkdownService {
   }
 
   highlight() {
-    if (typeof Prism !== 'undefined') {
+    if (isPlatformBrowser(this.platform) && typeof Prism !== 'undefined') {
       Prism.highlightAll(false);
     }
   }
@@ -64,6 +64,7 @@ export class MarkdownService {
       textarea.innerHTML = html;
       return textarea.value;
     }
+    return html;
   }
 
   private handleExtension(src: string, markdown: string): string {
