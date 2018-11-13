@@ -1,5 +1,6 @@
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Optional, SecurityContext } from '@angular/core';
+import { Inject, Injectable, Optional, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { parse, Renderer } from 'marked';
 import { Observable } from 'rxjs';
@@ -22,6 +23,7 @@ export class MarkdownService {
   }
 
   constructor(
+    @Inject(PLATFORM_ID) private platform: Object,
     @Optional() private http: HttpClient,
     private domSanitizer: DomSanitizer,
     public options: MarkedOptions,
@@ -57,10 +59,12 @@ export class MarkdownService {
   }
 
   private decodeHtml(html: string) {
-    const textarea = document.createElement('textarea');
-    textarea.innerHTML = html;
-    return textarea.value;
-}
+    if (isPlatformBrowser(this.platform)) {
+      const textarea = document.createElement('textarea');
+      textarea.innerHTML = html;
+      return textarea.value;
+    }
+  }
 
   private handleExtension(src: string, markdown: string): string {
     const extension = src
