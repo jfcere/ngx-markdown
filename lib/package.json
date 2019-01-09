@@ -23,8 +23,8 @@
     "prism.js"
   ],
   "dependencies": {
-    "@types/marked": "^0.5.0",
-    "marked": "^0.5.2",
+    "@types/marked": "^0.6.0",
+    "marked": "^0.6.0",
     "prismjs": "^1.15.0"
   },
   "peerDependencies": {
