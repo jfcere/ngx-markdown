@@ -7,12 +7,6 @@ import { MarkdownComponent } from './markdown.component';
 import { MarkdownService } from './markdown.service';
 import { MarkedOptions } from './marked-options';
 
-class MockMarkdownService {
-  getSource(src: string): Observable<string> {
-    return of('');
-  }
-}
-
 describe('MarkdownComponent', () => {
   let fixture: ComponentFixture<MarkdownComponent>;
   let component: MarkdownComponent;

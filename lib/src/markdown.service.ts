@@ -1,7 +1,8 @@
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Optional, SecurityContext } from '@angular/core';
+import { Inject, Injectable, Optional, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { parse, Renderer } from 'marked';
+import { parse } from 'marked';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -17,6 +18,8 @@ export const errorSrcWithoutHttpClient = '[ngx-markdown] When using the [src] at
 
 @Injectable()
 export class MarkdownService {
+  private _options: MarkedOptions;
+
   get options(): MarkedOptions { return this._options; }
   set options(value: MarkedOptions) {
     this._options = Object.assign({},
@@ -26,16 +29,19 @@ export class MarkdownService {
     );
   }
 
-  get renderer(): MarkedRenderer { return this._options.renderer; }
+  get renderer(): MarkedRenderer { return this.options.renderer; }
   set renderer(value: MarkedRenderer) {
-    this._options.renderer = value;
+    this.options.renderer = value;
   }
 
   constructor(
-    @Optional() private _http: HttpClient,
-    private _domSanitizer: DomSanitizer,
-    private _options: MarkedOptions,
-  ) { }
+    @Inject(PLATFORM_ID) private platform: Object,
+    @Optional() private http: HttpClient,
+    private domSanitizer: DomSanitizer,
+    options: MarkedOptions,
+  ) {
+    this.options = options;
+  }
 
   compile(markdown: string, decodeHtml = false, markedOptions = this.options): string {
     const precompiled = this.precompile(markdown);
@@ -43,30 +49,33 @@ export class MarkdownService {
       decodeHtml ? this.decodeHtml(precompiled) : precompiled,
       markedOptions);
     return markedOptions.sanitize && !markedOptions.sanitizer
-      ? this._domSanitizer.sanitize(SecurityContext.HTML, compiled)
+      ? this.domSanitizer.sanitize(SecurityContext.HTML, compiled)
       : compiled;
   }
 
   getSource(src: string): Observable<string> {
-    if (!this._http) {
+    if (!this.http) {
       throw new Error(errorSrcWithoutHttpClient);
     }
-    return this._http
+    return this.http
       .get(src, { responseType: 'text' })
       .pipe(map(markdown => this.handleExtension(src, markdown)));
   }
 
   highlight(element: Element) {
-    if (typeof Prism !== 'undefined') {
+    if (isPlatformBrowser(this.platform) && typeof Prism !== 'undefined') {
       Prism.highlightAllUnder(element);
     }
   }
 
   private decodeHtml(html: string) {
-    const textarea = document.createElement('textarea');
-    textarea.innerHTML = html;
-    return textarea.value;
-}
+    if (isPlatformBrowser(this.platform)) {
+      const textarea = document.createElement('textarea');
+      textarea.innerHTML = html;
+      return textarea.value;
+    }
+    return html;
+  }
 
   private handleExtension(src: string, markdown: string): string {
     const extension = src
