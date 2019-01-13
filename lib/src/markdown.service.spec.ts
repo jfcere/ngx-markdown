@@ -201,20 +201,24 @@ describe('MarkdowService', () => {
 
     it('should not call Prism when not available', () => {
 
+      const mockHtmlElement = document.createElement('div');
+
       global['Prism'] = undefined;
 
-      markdownService.highlight();
+      markdownService.highlight(mockHtmlElement);
     });
 
     it('should call Prism when available', () => {
 
-      global['Prism'] = { highlightAll: () => {} };
+      const mockHtmlElement = document.createElement('div');
 
-      spyOn(Prism, 'highlightAll');
+      global['Prism'] = { highlightAllUnder: () => {} };
 
-      markdownService.highlight();
+      spyOn(Prism, 'highlightAllUnder');
 
-      expect(Prism.highlightAll).toHaveBeenCalledWith(false);
+      markdownService.highlight(mockHtmlElement);
+
+      expect(Prism.highlightAllUnder).toHaveBeenCalledWith(mockHtmlElement);
     });
   });
 });

@@ -1,4 +1,4 @@
-import { NgZone, Pipe, PipeTransform } from '@angular/core';
+import { ElementRef, NgZone, Pipe, PipeTransform } from '@angular/core';
 import { first } from 'rxjs/operators';
 
 import { MarkdownService } from './markdown.service';
@@ -9,6 +9,7 @@ import { MarkdownService } from './markdown.service';
 export class MarkdownPipe implements PipeTransform {
 
   constructor(
+    private elementRef: ElementRef<HTMLElement>,
     private markdownService: MarkdownService,
     private zone: NgZone,
   ) { }
@@ -23,7 +24,7 @@ export class MarkdownPipe implements PipeTransform {
 
     this.zone.onStable
       .pipe(first())
-      .subscribe(() => this.markdownService.highlight());
+      .subscribe(() => this.markdownService.highlight(this.elementRef.nativeElement));
 
     return markdown;
   }

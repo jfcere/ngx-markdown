@@ -85,6 +85,32 @@ svg.center {
   }
 }
 
+.menu-subtitle {
+  margin: 4px 0;
+  position: relative;
+
+  span {
+    background: #ffffff;
+    padding-right: 8px;
+    text-transform: uppercase;
+  }
+
+  &:before {
+    background: rgba(0,0,0,0.14);
+    content: "";
+    display: block;
+    height: 1px;
+    width: 100%;
+    z-index: -1;
+    position: absolute;
+    top: 11px;
+
+    @media (min-width: 993px) {
+      width: 225px;
+    }
+  }
+}
+
 section:first-of-type {
   @media (min-width: 993px) {
     margin-top: 118px;

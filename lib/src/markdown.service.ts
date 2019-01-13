@@ -2,14 +2,15 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, Optional, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { parse, Renderer } from 'marked';
+import { parse } from 'marked';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { MarkedOptions } from './marked-options';
+import { MarkedRenderer } from './marked-renderer';
 
 declare var Prism: {
-  highlightAll: (async: boolean) => void;
+  highlightAllUnder: (element: Element) => void;
 };
 
 // tslint:disable-next-line:max-line-length
@@ -17,8 +18,19 @@ export const errorSrcWithoutHttpClient = '[ngx-markdown] When using the [src] at
 
 @Injectable()
 export class MarkdownService {
-  get renderer(): Renderer { return this.options.renderer; }
-  set renderer(value: marked.Renderer) {
+  private _options: MarkedOptions;
+
+  get options(): MarkedOptions { return this._options; }
+  set options(value: MarkedOptions) {
+    this._options = Object.assign({},
+      { renderer: new MarkedRenderer() },
+      this._options,
+      value,
+    );
+  }
+
+  get renderer(): MarkedRenderer { return this.options.renderer; }
+  set renderer(value: MarkedRenderer) {
     this.options.renderer = value;
   }
 
@@ -26,11 +38,9 @@ export class MarkdownService {
     @Inject(PLATFORM_ID) private platform: Object,
     @Optional() private http: HttpClient,
     private domSanitizer: DomSanitizer,
-    public options: MarkedOptions,
+    options: MarkedOptions,
   ) {
-    if (!this.renderer) {
-      this.renderer = new Renderer();
-    }
+    this.options = options;
   }
 
   compile(markdown: string, decodeHtml = false, markedOptions = this.options): string {
@@ -52,9 +62,9 @@ export class MarkdownService {
       .pipe(map(markdown => this.handleExtension(src, markdown)));
   }
 
-  highlight() {
+  highlight(element: Element) {
     if (isPlatformBrowser(this.platform) && typeof Prism !== 'undefined') {
-      Prism.highlightAll(false);
+      Prism.highlightAllUnder(element);
     }
   }
 
