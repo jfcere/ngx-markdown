@@ -10,6 +10,7 @@ import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
 
 declare var Prism: {
+  highlightAll: (async: boolean) => void;
   highlightAllUnder: (element: Element) => void;
 };
 
@@ -62,9 +63,13 @@ export class MarkdownService {
       .pipe(map(markdown => this.handleExtension(src, markdown)));
   }
 
-  highlight(element: Element) {
+  highlight(element?: Element) {
     if (isPlatformBrowser(this.platform) && typeof Prism !== 'undefined') {
-      Prism.highlightAllUnder(element);
+      if (element) {
+        Prism.highlightAllUnder(element);
+      } else {
+        Prism.highlightAll(false);
+      }
     }
   }
 

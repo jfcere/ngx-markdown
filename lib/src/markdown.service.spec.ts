@@ -205,10 +205,10 @@ describe('MarkdowService', () => {
 
       global['Prism'] = undefined;
 
-      markdownService.highlight(mockHtmlElement);
+      expect(() => markdownService.highlight(mockHtmlElement)).not.toThrow();
     });
 
-    it('should call Prism when available', () => {
+    it('should call Prism when available and element parameter is present', () => {
 
       const mockHtmlElement = document.createElement('div');
 
@@ -219,6 +219,25 @@ describe('MarkdowService', () => {
       markdownService.highlight(mockHtmlElement);
 
       expect(Prism.highlightAllUnder).toHaveBeenCalledWith(mockHtmlElement);
+    });
+
+    it('should call Prism.highlightAll when available and element parameter is ommited/null/undefined', () => {
+
+      global['Prism'] = { highlightAll: () => {} };
+
+      spyOn(Prism, 'highlightAll');
+
+      const useCases = [
+        () => markdownService.highlight(),
+        () => markdownService.highlight(null),
+        () => markdownService.highlight(undefined),
+      ];
+
+      useCases.forEach(func => {
+        func();
+        expect(Prism.highlightAll).toHaveBeenCalledWith(false);
+        Prism.highlightAll.calls.reset();
+      });
     });
   });
 });
