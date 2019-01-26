@@ -28,9 +28,19 @@ describe('MarkdownPipe', () => {
     pipe = new MarkdownPipe(elementRef, markdownService, zone);
   });
 
+  it('should return empty string when value is null/undefined', () => {
+
+    const markdowns: any[] = [undefined, null];
+
+    markdowns.forEach(markdown => {
+      const result = pipe.transform(markdown);
+      expect(result).toBe('');
+    });
+  });
+
   it('should log error and return value when parameter is not a string', () => {
 
-    const markdowns: any[] = [undefined, null, 0, {}, [], /regex/];
+    const markdowns: any[] = [0, {}, [], /regex/];
 
     spyOn(console, 'error');
 
