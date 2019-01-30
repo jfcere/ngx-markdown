@@ -195,6 +195,22 @@ describe('MarkdowService', () => {
 
       expect(result).toEqual(mockResponse);
     });
+
+    it('should ignore query parameters when resolving file extension', () => {
+
+      const mockSrc = './src-example/file.js?param=123&another=abc';
+      const mockResponse = 'response-x';
+
+      let result: string;
+
+      markdownService
+        .getSource(mockSrc)
+        .subscribe(data => result = data);
+
+      http.expectOne(mockSrc).flush(mockResponse);
+
+      expect(result).toEqual('```js\n' + mockResponse + '\n```');
+    });
   });
 
   describe('highlight', () => {
