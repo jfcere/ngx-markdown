@@ -84,7 +84,7 @@ export class MarkdownService {
 
   private handleExtension(src: string, markdown: string): string {
     const extension = src
-      ? src.split('.').splice(-1).join()
+      ? src.split('?')[0].split('.').splice(-1).join()
       : null;
     return extension !== 'md'
       ? '```' + extension + '\n' + markdown + '\n```'
