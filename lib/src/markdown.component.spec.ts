@@ -1,7 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ElementRef } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Observable, of, throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownService } from './markdown.service';
@@ -40,6 +40,8 @@ describe('MarkdownComponent', () => {
 
       component.data = mockData;
 
+      component.ngOnChanges();
+
       expect(component.render).toHaveBeenCalledWith(mockData);
     });
 
@@ -65,6 +67,8 @@ describe('MarkdownComponent', () => {
 
       component.src = mockSrc;
 
+      component.ngOnChanges();
+
       expect(markdownService.getSource).toHaveBeenCalledWith(mockSrc);
       expect(component.render).toHaveBeenCalledWith(mockContent);
     }));
@@ -80,6 +84,21 @@ describe('MarkdownComponent', () => {
       expect(component.src).toBe(mockSrc);
     });
 
+    it('should emit load when get', () => {
+
+      const mockSrc = './src-example/file.md';
+      const mockSrcReturn = 'src-return-value';
+
+      spyOn(markdownService, 'getSource').and.returnValue(of(mockSrcReturn));
+      spyOn(component.load, 'emit');
+
+      component.src = mockSrc;
+
+      component.ngOnChanges();
+
+      expect(component.load.emit).toHaveBeenCalledWith(mockSrcReturn);
+    });
+
     it('should emit error when and error occurs', () => {
 
       const mockSrc = './src-example/file.md';
@@ -89,6 +108,8 @@ describe('MarkdownComponent', () => {
       spyOn(component.error, 'emit');
 
       component.src = mockSrc;
+
+      component.ngOnChanges();
 
       expect(component.error.emit).toHaveBeenCalledWith(mockError);
     });

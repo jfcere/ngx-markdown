@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
 import { MarkdownService } from './markdown.service';
 import { PrismPlugin } from './prism-plugin';
@@ -8,37 +8,9 @@ import { PrismPlugin } from './prism-plugin';
   selector: 'markdown, [markdown]',
   template: '<ng-content></ng-content>',
 })
-export class MarkdownComponent implements AfterViewInit {
-  private _data: string;
-  private _lineHighlight = false;
-  private _lineNumbers = false;
-  private _src: string;
-
-  private get _isTranscluded() {
-    return !this._data && !this._src;
-  }
-
-  @Input()
-  get data(): string { return this._data; }
-  set data(value: string) {
-    this._data = value;
-    this.render(value);
-  }
-
-  @Input()
-  get src(): string { return this._src; }
-  set src(value: string) {
-    this._src = value;
-    this.markdownService
-      .getSource(value)
-      .subscribe(
-        markdown => {
-          this.render(markdown);
-          this.load.emit(markdown);
-        },
-        error => this.error.emit(error),
-      );
-  }
+export class MarkdownComponent implements OnChanges, AfterViewInit {
+  @Input() data: string;
+  @Input() src: string;
 
   // Plugin - lineNumbers
   @Input()
@@ -56,14 +28,28 @@ export class MarkdownComponent implements AfterViewInit {
   @Output() error = new EventEmitter<string>();
   @Output() load = new EventEmitter<string>();
 
+  private _lineHighlight = false;
+  private _lineNumbers = false;
+
   constructor(
     public element: ElementRef<HTMLElement>,
     public markdownService: MarkdownService,
   ) { }
 
+  ngOnChanges() {
+    if (this.data) {
+      this.handleData();
+      return;
+    }
+    if (this.src) {
+      this.handleSrc();
+      return;
+    }
+  }
+
   ngAfterViewInit() {
-    if (this._isTranscluded) {
-      this.render(this.element.nativeElement.innerHTML, true);
+    if (!this.data && !this.src) {
+      this.handleTransclusion();
     }
   }
 
@@ -75,6 +61,26 @@ export class MarkdownComponent implements AfterViewInit {
 
   private coerceBooleanProperty(value: boolean): boolean {
     return value != null && `${value}` !== 'false';
+  }
+
+  private handleData() {
+    this.render(this.data);
+  }
+
+  private handleSrc() {
+    this.markdownService
+      .getSource(this.src)
+      .subscribe(
+        markdown => {
+          this.render(markdown);
+          this.load.emit(markdown);
+        },
+        error => this.error.emit(error),
+      );
+  }
+
+  private handleTransclusion() {
+    this.render(this.element.nativeElement.innerHTML, true);
   }
 
   private handlePlugins() {
