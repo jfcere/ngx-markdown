@@ -95,7 +95,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 
 To use the [line numbers plugin](http://prismjs.com/plugins/line-numbers/) that shows line numbers in code blocks, in addition to Prism.js configuration files, you will need to include the following files from `prismjs/plugins/line-numbers` directory to your application:
 
-- css styling for line numbers - `prism-line-numbers.css`
+- CSS styling for line numbers - `prism-line-numbers.css`
 - line numbers plugin script - `prism-line-numbers.js`
 
 If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
@@ -114,9 +114,9 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 ]
 ```
 
-Using `markdown` component and/or directive, you will be able to use the `lineNumbers` property to activate the plugin. The property can be use in combinaison with either `data` for variable binding, `src` for remote content or using transclusion for static markdown.
+Using `markdown` component and/or directive, you will be able to use the `lineNumbers` property to activate the plugin. The property can be used in combination with either `data` for variable binding, `src` for remote content or using transclusion for static markdown.
 
-Additionaly, you can use `start` input property to specify the offset number for the first display line.
+Additionally, you can use `start` input property to specify the offset number for the first display line.
 
 ```html
 <markdown [src]="path/to/file.js" lineNumbers [start]="5"></markdown>
@@ -126,7 +126,7 @@ Additionaly, you can use `start` input property to specify the offset number for
 
 To use the [line highlight plugin](http://prismjs.com/plugins/line-highlight/) that highlights specific lines and/or line ranges in code blocks, in addition to Prism.js configuration files, you will need to include the following files from `prismjs/plugins/line-highlight` directory to your application:
 
-- css styling for line highlight - `prism-line-highlight.css`
+- CSS styling for line highlight - `prism-line-highlight.css`
 - line highlight plugin script - `prism-line-highlight.js`
 
 If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
@@ -145,7 +145,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 ]
 ```
 
-Using `markdown` component and/or directive, you will be able to use the `lineHighlight` property to activate the plugin. The property can be use in combinaison with either `data` for variable binding, `src` for remote content or using transclusion for static markdown.
+Using `markdown` component and/or directive, you will be able to use the `lineHighlight` property to activate the plugin. The property can be used in combination with either `data` for variable binding, `src` for remote content or using transclusion for static markdown.
 
 Use `line` input property to specify the line(s) to highlight and optionally there is a `lineOffset` property to specify the starting line of code your snippet represents.
 
@@ -186,7 +186,7 @@ imports: [
 
 #### MarkedOptions
 
-Optionaly, markdown parsing can be configured by passing [MarkedOptions](https://marked.js.org/#/USING_ADVANCED.md#options) to the `forRoot` method of `MarkdownModule`.
+Optionally, markdown parsing can be configured by passing [MarkedOptions](https://marked.js.org/#/USING_ADVANCED.md#options) to the `forRoot` method of `MarkdownModule`.
 
 Imports:
 ```typescript
@@ -260,7 +260,7 @@ MarkdownModule.forRoot({
 
 ### Other application modules
 
-Use `forChild` when importing `MarkdownModule` into other application modules to allow you to use the same parser configuration accross your application.
+Use `forChild` when importing `MarkdownModule` into other application modules to allow you to use the same parser configuration across your application.
 
 ```diff
 import { NgModule } from '@angular/core';
@@ -279,14 +279,14 @@ export class HomeModule { }
 
 ## Usage
 
-`ngx-markdown` provides different approaches to help you parse markdown to your application depending of your needs.
+`ngx-markdown` provides different approaches to help you parse markdown to your application depending on your needs.
 
 > :bulb: As of Angular 6, the template compiler strips whitespace by default. Use `ngPreserveWhitespaces` directive to preserve whitespaces such as newlines in order for the markdown-formatted content to render as intended.  
 https://angular.io/api/core/Component#preserveWhitespaces
 
 ### Component
 
-You can use `markdown` component to either parse static markdown directly from your html markup, load the content from a remote url using `src` property or bind a variable to your component using `data` property. You can get a hook on load complete using `load` output event property or on loading error using `error` output event property.
+You can use `markdown` component to either parse static markdown directly from your HTML markup, load the content from a remote URL using `src` property or bind a variable to your component using `data` property. You can get a hook on load complete using `load` output event property or on loading error using `error` output event property.
 
 ```html
 <!-- static markdown -->
@@ -348,7 +348,7 @@ export class ExampleComponent implements OnInit() {
 
 ## Renderer
 
-Tokens can be render in a custom manner by either...
+Tokens can be rendered in a custom manner by either...
 - providing the `renderer` property with the `MarkedOptions` when importing `MarkdownModule.forRoot()` into your main application module (see [Configuration](#markedoptionsrenderer) section)
 - using `MarkdownService` exposed `renderer`
 
@@ -403,7 +403,7 @@ When using static markdown you are responsible to provide the code block with re
 </markdown>
 ```
 
-When using remote url ngx-markdown will use file extension to automatically resolve the code language.
+When using remote URL ngx-markdown will use the file extension to automatically resolve the code language.
 
 ```html
 <!-- will use html highlights -->
@@ -421,7 +421,7 @@ When using variable binding you can optionally use `language` pipe to specify th
 
 ## Demo application
 
-A demo is available @ [https://jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown) and it source code can be found inside the `demo` directory.
+A demo is available @ [https://jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown) and its source code can be found inside the `demo` directory.
 
 The following commands will clone the repository, install npm dependencies and serve the application @ [http://localhost:4200](http://localhost:4200)
 
@@ -437,10 +437,10 @@ Building with AoT is part of the CI and is tested every time a commit occurs so 
 
 ## Road map
 
-Here is the list of tasks that will be done on this library in a near future ...
+Here is the list of tasks that will be done on this library in the near future ...
 
 - ~~Add CircleCI integration~~
-- ~~Publish demo on github pages~~
+- ~~Publish demo on GitHub pages~~
 - ~~Add variable binding feature~~
 - ~~Transpile library to Javascript~~
 - ~~Make Prism highlight optional~~
