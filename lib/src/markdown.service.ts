@@ -10,8 +10,7 @@ import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
 
 declare var Prism: {
-  highlightAll: (async: boolean) => void;
-  highlightAllUnder: (element: Element) => void;
+  highlightAllUnder: (element: Element | Document) => void;
 };
 
 // tslint:disable-next-line:max-line-length
@@ -63,13 +62,15 @@ export class MarkdownService {
       .pipe(map(markdown => this.handleExtension(src, markdown)));
   }
 
-  highlight(element?: Element) {
+  highlight(element?: Element | Document) {
     if (isPlatformBrowser(this.platform) && typeof Prism !== 'undefined') {
-      if (element) {
-        Prism.highlightAllUnder(element);
-      } else {
-        Prism.highlightAll(false);
+      if (!element) {
+        element = document;
       }
+      element
+        .querySelectorAll('pre code:not([class*="language-"])')
+        .forEach(x => x.classList.add('language-none'));
+      Prism.highlightAllUnder(element);
     }
   }
 

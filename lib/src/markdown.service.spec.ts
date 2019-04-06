@@ -224,6 +224,49 @@ describe('MarkdowService', () => {
       expect(() => markdownService.highlight(mockHtmlElement)).not.toThrow();
     });
 
+    it('should add `language-none` class on code blocks with no language class', () => {
+
+      const preElement = document.createElement('pre');
+      const codeElement = document.createElement('code');
+      preElement.appendChild(codeElement);
+
+      global['Prism'] = { highlightAllUnder: () => {} };
+
+      markdownService.highlight(preElement);
+
+      expect(codeElement.classList).toContain('language-none');
+    });
+
+    it('should not add `language-none` class on code blocks with language class', () => {
+
+      const preElement = document.createElement('pre');
+      const codeElement = document.createElement('code');
+      codeElement.classList.add('language-mock');
+      preElement.appendChild(codeElement);
+
+      global['Prism'] = { highlightAllUnder: () => {} };
+
+      markdownService.highlight(preElement);
+
+      expect(codeElement.classList).not.toContain('language-none');
+      expect(codeElement.classList).toContain('language-mock');
+    });
+
+    it('should not add `language-none` class on element other than code blocks without language class', () => {
+
+      const divElement = document.createElement('div');
+      const codeElement = document.createElement('code');
+      codeElement.classList.add('language-mock');
+      divElement.appendChild(codeElement);
+
+      global['Prism'] = { highlightAllUnder: () => {} };
+
+      markdownService.highlight(divElement);
+
+      expect(codeElement.classList).not.toContain('language-none');
+      expect(codeElement.classList).toContain('language-mock');
+    });
+
     it('should call Prism when available and element parameter is present', () => {
 
       const mockHtmlElement = document.createElement('div');
@@ -237,11 +280,11 @@ describe('MarkdowService', () => {
       expect(Prism.highlightAllUnder).toHaveBeenCalledWith(mockHtmlElement);
     });
 
-    it('should call Prism.highlightAll when available and element parameter is ommited/null/undefined', () => {
+    it('should call Prism when available and element parameter is ommited/null/undefined', () => {
 
-      global['Prism'] = { highlightAll: () => {} };
+      global['Prism'] = { highlightAllUnder: () => {} };
 
-      spyOn(Prism, 'highlightAll');
+      spyOn(Prism, 'highlightAllUnder');
 
       const useCases = [
         () => markdownService.highlight(),
@@ -251,8 +294,8 @@ describe('MarkdowService', () => {
 
       useCases.forEach(func => {
         func();
-        expect(Prism.highlightAll).toHaveBeenCalledWith(false);
-        Prism.highlightAll.calls.reset();
+        expect(Prism.highlightAllUnder).toHaveBeenCalledWith(document);
+        Prism.highlightAllUnder.calls.reset();
       });
     });
   });
