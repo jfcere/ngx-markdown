@@ -4489,11 +4489,11 @@ ng-packagr@^3.0.0-rc.2:
     update-notifier "^2.3.0"
 
 "ngx-markdown@file:./lib":
-  version "7.0.4"
+  version "7.1.4"
   dependencies:
     "@types/marked" "^0.6.0"
     marked "^0.6.0"
-    prismjs "^1.15.0"
+    prismjs "^1.16.0"
 
 nice-try@^1.0.4:
   version "1.0.5"
@@ -5149,9 +5149,9 @@ preserve@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
 
-prismjs@^1.15.0:
-  version "1.15.0"
-  resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.15.0.tgz#8801d332e472091ba8def94976c8877ad60398d9"
+prismjs@^1.16.0:
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.16.0.tgz#406eb2c8aacb0f5f0f1167930cb83835d10a4308"
   optionalDependencies:
     clipboard "^2.0.0"
 
