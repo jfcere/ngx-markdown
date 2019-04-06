@@ -252,7 +252,7 @@ describe('MarkdowService', () => {
       expect(codeElement.classList).toContain('language-mock');
     });
 
-    it('should not add `language-none` class on element other than blocks without language class', () => {
+    it('should not add `language-none` class on element other than code blocks without language class', () => {
 
       const divElement = document.createElement('div');
       const codeElement = document.createElement('code');
