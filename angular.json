@@ -115,7 +115,7 @@
           },
           "configurations": {
             "production": {
-              "project": "lib/ng-package.prod.json"
+              "project": "lib/ng-package.json"
             }
           }
         },
