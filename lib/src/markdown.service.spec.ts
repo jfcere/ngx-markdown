@@ -1,9 +1,9 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { SecurityContext, Type } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { parse } from 'marked';
 
-import { SecurityContext } from '@angular/core';
 import { MarkdownService } from './markdown.service';
 import { MarkedOptions } from './marked-options';
 
@@ -29,8 +29,8 @@ describe('MarkdowService', () => {
   });
 
   beforeEach(() => {
-    domSanitizer = TestBed.get(DomSanitizer);
-    http = TestBed.get(HttpTestingController);
+    domSanitizer = TestBed.get(DomSanitizer as Type<DomSanitizer>);
+    http = TestBed.get(HttpTestingController as Type<HttpTestingController>);
     markdownService = TestBed.get(MarkdownService);
   });
 

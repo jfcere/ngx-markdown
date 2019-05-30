@@ -1,8 +1,11 @@
-# This file is currently used by autoprefixer to adjust CSS to support the below specified browsers
+# This file is used by the build system to adjust CSS and JS output to support the specified browsers below.
 # For additional information regarding the format and rule options, please see:
 # https://github.com/browserslist/browserslist#queries
-# For IE 9-11 support, please remove 'not' from the last line of the file and adjust as needed
-> 0.5%
+
+# You can see what browsers were selected by your queries by running:
+#   npx browserslist
+
+ > 0.5%
 last 2 versions
 Firefox ESR
 not dead
