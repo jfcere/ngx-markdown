@@ -35,25 +35,21 @@ const sharedDeclarations = [
 ];
 
 @NgModule({
-  exports: [
-    ...sharedDeclarations,
-  ],
-  declarations: [
-    ...sharedDeclarations,
-  ],
+  exports: sharedDeclarations,
+  declarations: sharedDeclarations,
 })
 export class MarkdownModule {
   static forRoot(markdownModuleConfig?: MarkdownModuleConfig): ModuleWithProviders {
+
+    const loaderProvider = markdownModuleConfig && markdownModuleConfig.loader || [];
+    const markedOptionsProvider = markdownModuleConfig && markdownModuleConfig.markedOptions || initialMarkedOptions;
+
     return {
       ngModule: MarkdownModule,
       providers: [
         MarkdownService,
-        ...(markdownModuleConfig
-          ? [
-              markdownModuleConfig.loader || [],
-              markdownModuleConfig.markedOptions || initialMarkedOptions,
-            ]
-          : [initialMarkedOptions]),
+        loaderProvider,
+        markedOptionsProvider,
       ],
     };
   }
