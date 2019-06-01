@@ -21,7 +21,7 @@ import { MarkedOptions } from './marked-options';
   `,
 })
 class HostComponent {
-  markdown = '# Super title';
+  markdown = '# Markdown Title';
   src: string;
 }
 
@@ -53,7 +53,7 @@ describe('MarkdownModule', () => {
 
       const httpClient = TestBed.get(HttpClient, null);
 
-      expect(httpClient).toEqual(null);
+      expect(httpClient).toBeNull();
     });
 
     it('should not provide HttpClientModule when MarkdownModuleConfig.markedOptions is provided', () => {
@@ -63,7 +63,7 @@ describe('MarkdownModule', () => {
           MarkdownModule.forRoot({
             markedOptions: {
               provide: MarkedOptions,
-              useValue: { gfm: false },
+              useValue: 'mockMarkedOptions',
             },
           }),
         ],
@@ -71,19 +71,19 @@ describe('MarkdownModule', () => {
 
       const httpClient = TestBed.get(HttpClient, null);
 
-      expect(httpClient).toEqual(null);
+      expect(httpClient).toBeNull();
     });
 
     it('should provide marked options when provided', () => {
 
-      expect(initialMarkedOptions['useValue'].gfm).toBeTruthy();
+      const mockMarkedOptions = 'mockMarkedOptions';
 
       TestBed.configureTestingModule({
         imports: [
           MarkdownModule.forRoot({
             markedOptions: {
               provide: MarkedOptions,
-              useValue: { gfm: false },
+              useValue: 'mockMarkedOptions',
             },
           }),
         ],
@@ -91,7 +91,7 @@ describe('MarkdownModule', () => {
 
       const markedOptions = TestBed.get(MarkedOptions);
 
-      expect(markedOptions.gmf).toBeFalsy();
+      expect(markedOptions).toBe(mockMarkedOptions);
     });
 
     it('should provide default marked options when not provided', () => {
@@ -121,6 +121,38 @@ describe('MarkdownModule', () => {
     });
   });
 
+  describe('forChild', () => {
+
+    it('should not provide any providers', () => {
+
+      const forChildModule = MarkdownModule.forChild();
+
+      expect(forChildModule.providers).toBeUndefined();
+    });
+
+    it('should inherit from forRoot providers', () => {
+
+      const mockMarkedOptions =  'mockMarkedOptions';
+
+      TestBed.configureTestingModule({
+        imports: [
+          HttpClientModule,
+          MarkdownModule.forRoot({
+            loader: HttpClient,
+            markedOptions: { provide: MarkedOptions, useValue: mockMarkedOptions },
+          }),
+          MarkdownModule.forChild(),
+        ],
+      });
+
+      const httpClient = TestBed.get(HttpClient);
+      const markedOptions = TestBed.get(MarkedOptions);
+
+      expect(httpClient instanceof HttpClient).toBeTruthy();
+      expect(markedOptions).toEqual(mockMarkedOptions);
+    });
+  });
+
   describe('without HttpClient', () => {
 
     beforeEach(async(() => {
@@ -141,7 +173,7 @@ describe('MarkdownModule', () => {
 
       const title = (fixture.nativeElement as HTMLElement).textContent.trim();
 
-      expect(title).toEqual('Super title');
+      expect(title).toEqual('Markdown Title');
     });
 
     it('should throw an error when using src attribute', () => {
