@@ -40,16 +40,12 @@ const sharedDeclarations = [
 })
 export class MarkdownModule {
   static forRoot(markdownModuleConfig?: MarkdownModuleConfig): ModuleWithProviders {
-
-    const loaderProvider = markdownModuleConfig && markdownModuleConfig.loader || [];
-    const markedOptionsProvider = markdownModuleConfig && markdownModuleConfig.markedOptions || initialMarkedOptions;
-
     return {
       ngModule: MarkdownModule,
       providers: [
         MarkdownService,
-        loaderProvider,
-        markedOptionsProvider,
+        markdownModuleConfig && markdownModuleConfig.loader || [],
+        markdownModuleConfig && markdownModuleConfig.markedOptions || initialMarkedOptions,
       ],
     };
   }
