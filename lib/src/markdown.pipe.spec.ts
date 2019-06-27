@@ -1,6 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ElementRef, NgZone } from '@angular/core';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed } from '@angular/core/testing';
 
 import { MarkdownPipe } from './markdown.pipe';
 import { MarkdownService } from './markdown.service';
