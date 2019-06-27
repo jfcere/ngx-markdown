@@ -35,7 +35,7 @@ export class MarkdownService {
   }
 
   constructor(
-    @Inject(PLATFORM_ID) private platform: object,
+    @Inject(PLATFORM_ID) private platform: Object,
     @Optional() private http: HttpClient,
     private domSanitizer: DomSanitizer,
     options: MarkedOptions,
