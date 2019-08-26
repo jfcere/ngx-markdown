@@ -18,13 +18,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "odq",
+      "app",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "odq",
+      "app",
       "kebab-case"
     ],
     "import-blacklist": [
