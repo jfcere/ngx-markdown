@@ -67,9 +67,8 @@ export class MarkdownService {
       if (!element) {
         element = document;
       }
-      element
-        .querySelectorAll('pre code:not([class*="language-"])')
-        .forEach(x => x.classList.add('language-none'));
+      const noLanguageCode = element.querySelectorAll('pre code:not([class*="language-"])');
+      Array.prototype.forEach.call(noLanguageCode, x => x.classList.add('language-none'));
       Prism.highlightAllUnder(element);
     }
   }
