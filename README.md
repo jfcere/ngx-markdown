@@ -31,7 +31,6 @@
 ngx-markdown is an [Angular](https://angular.io/) library that uses [marked](https://github.com/chjj/marked) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for syntax highlight.
 
 - Demo available @ [https://jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown)
-- Plunker available @ [https://plnkr.co/edit/y5LPj7?p=preview](https://plnkr.co/edit/y5LPj7?p=preview)
 - StackBlitz available @ [https://stackblitz.com/edit/ngx-markdown](https://stackblitz.com/edit/ngx-markdown)
 
 ### Table of contents
@@ -154,6 +153,9 @@ Use `line` input property to specify the line(s) to highlight and optionally the
 ```
 
 ## Configuration
+
+> :warning: Sanitization of parsed markdown is not enabled by default which can expose your application to XSS vulnerabilities. It is recommended that you enable it by setting `sanitize: true` through [markedOptions](#markedoptions) when importing `MarkdownModule`.  
+:soon: _Take note that sanitization will be enabled by default on next major update._
 
 ### Main application module
 
