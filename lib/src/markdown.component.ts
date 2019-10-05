@@ -37,11 +37,11 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   ) { }
 
   ngOnChanges() {
-    if (this.data) {
+    if (this.data != null) {
       this.handleData();
       return;
     }
-    if (this.src) {
+    if (this.src != null) {
       this.handleSrc();
       return;
     }
