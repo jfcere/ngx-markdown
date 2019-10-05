@@ -34,15 +34,20 @@ describe('MarkdownComponent', () => {
 
     it('should call render with provided data when set', () => {
 
-      const mockData = '# Markdown';
+      const spyRender = spyOn(component, 'render');
 
-      spyOn(component, 'render');
+      const useCases = [
+        '',
+        '# Markdown',
+        '<p>Html</p>',
+      ];
 
-      component.data = mockData;
-
-      component.ngOnChanges();
-
-      expect(component.render).toHaveBeenCalledWith(mockData);
+      useCases.forEach(data => {
+        component.data = data;
+        component.ngOnChanges();
+        expect(component.render).toHaveBeenCalledWith(data);
+        spyRender.calls.reset();
+      });
     });
 
     it('should return value correctly when get', () => {
