@@ -430,7 +430,7 @@ The following commands will clone the repository, install npm dependencies and s
 ```bash
 git clone https://github.com/jfcere/ngx-markdown.git
 npm install
-ng serve
+npm start
 ```
 
 ## AoT compilation
