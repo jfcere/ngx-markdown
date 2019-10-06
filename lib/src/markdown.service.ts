@@ -5,6 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { parse } from 'marked';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import * as katex from 'katex';
 
 import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
@@ -43,11 +44,16 @@ export class MarkdownService {
     this.options = options;
   }
 
-  compile(markdown: string, decodeHtml = false, markedOptions = this.options): string {
-    const precompiled = this.precompile(markdown);
+  compile(markdown: string, decodeHtml = false, useKatex = false, markedOptions = this.options): string {
+    let precompiled = this.precompile(markdown);
+    precompiled = useKatex ?
+      precompiled.replace(/^\$([^\$]*)\$/gm, (_, latex_expression) => {
+        return katex.renderToString(latex_expression, {throwOnError: false});
+      }) : precompiled;
     const compiled = parse(
       decodeHtml ? this.decodeHtml(precompiled) : precompiled,
       markedOptions);
+
     return markedOptions.sanitize && !markedOptions.sanitizer
       ? this.domSanitizer.sanitize(SecurityContext.HTML, compiled)
       : compiled;

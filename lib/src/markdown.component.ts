@@ -25,11 +25,17 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   @Input() line: string | string[];
   @Input() lineOffset: number;
 
+  // Plugin - katex
+  @Input()
+  get useKatex(): boolean { return this._useKatex; }
+  set useKatex(value: boolean) { this._useKatex = this.coerceBooleanProperty(value); }
+
   @Output() error = new EventEmitter<string>();
   @Output() load = new EventEmitter<string>();
 
   private _lineHighlight = false;
   private _lineNumbers = false;
+  private _useKatex = false;
 
   constructor(
     public element: ElementRef<HTMLElement>,
@@ -54,7 +60,8 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   }
 
   render(markdown: string, decodeHtml = false) {
-    this.element.nativeElement.innerHTML = this.markdownService.compile(markdown, decodeHtml);
+    this.element.nativeElement.innerHTML = this.markdownService.compile(
+      markdown, decodeHtml, this.useKatex);
     this.handlePlugins();
     this.markdownService.highlight(this.element.nativeElement);
   }
