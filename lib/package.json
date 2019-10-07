@@ -23,7 +23,9 @@
     "prism.js"
   ],
   "dependencies": {
+    "@types/katex": "^0.10.2",
     "@types/marked": "^0.6.5",
+    "katex": "^0.11.1",
     "marked": "^0.7.0",
     "prismjs": "^1.16.0"
   },
