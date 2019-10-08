@@ -1,6 +1,6 @@
 {
   "name": "ngx-markdown",
-  "version": "8.1.2",
+  "version": "8.2.0",
   "description": "Angular library that uses marked to parse markdown to html combined with Prism.js for synthax highlights",
   "homepage": "https://github.com/jfcere/ngx-markdown",
   "license": "MIT",
@@ -20,14 +20,15 @@
     "marked",
     "marked.js",
     "prism",
-    "prism.js"
+    "prism.js",
+    "katex"
   ],
   "scripts": {
     "ng": "ng",
     "start": "yarn link:lib && ng serve",
     "build:demo": "ng build demo",
     "build:lib": "ng build lib",
-    "postbuild:lib": "cpx ./README.md ./dist/lib",
+    "postbuild:lib": "cpx ./README.md ./dist/lib && cpx ./LICENSE ./dist/lib",
     "link:lib": "rimraf node_modules/ngx-markdown && linklocal",
     "lint": "yarn lint:lib && yarn lint:demo",
     "lint:demo": "ng lint demo",
