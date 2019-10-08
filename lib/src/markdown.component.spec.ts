@@ -3,6 +3,7 @@ import { ElementRef } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 
+import { KatexOptions } from './katex-options';
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownService } from './markdown.service';
 import { MarkedOptions } from './marked-options';
@@ -276,6 +277,22 @@ describe('MarkdownComponent', () => {
       component.render(markdown);
 
       expect(getHTMLPreElement().attributes.getNamedItem('data-line-offset').value).toBe('5');
+    });
+
+    it('should apply katex plugin correctly', () => {
+
+      const markdown = '$E=mc^2$';
+      const katexOptions: KatexOptions = { errorColor: '#ff00dd', throwOnError: true };
+      const compiled = '<p>$E=mc^2$</p>';
+
+      spyOn(markdownService, 'compile').and.returnValue(compiled);
+      spyOn(markdownService, 'renderKatex');
+
+      component.katex = true;
+      component.katexOptions = katexOptions;
+      component.render(markdown);
+
+      expect(markdownService.renderKatex).toHaveBeenCalledWith(compiled, katexOptions);
     });
   });
 });

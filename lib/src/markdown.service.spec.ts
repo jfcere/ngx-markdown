@@ -4,11 +4,12 @@ import { TestBed } from '@angular/core/testing';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { parse } from 'marked';
 
-import { MarkdownService } from './markdown.service';
+import { KatexOptions } from './katex-options';
+import { errorKatexNotLoaded, MarkdownService } from './markdown.service';
 import { MarkedOptions } from './marked-options';
 
-// Prism mock
 declare var Prism: any;
+declare var katex: any;
 
 describe('MarkdowService', () => {
   let domSanitizer: DomSanitizer;
@@ -296,6 +297,38 @@ describe('MarkdowService', () => {
         func();
         expect(Prism.highlightAllUnder).toHaveBeenCalledWith(document);
         Prism.highlightAllUnder.calls.reset();
+      });
+    });
+  });
+
+  describe('renderKatex', () => {
+
+    it('should throw when katex is called but not loaded', () => {
+
+      global['katex'] = undefined;
+
+      expect(() => markdownService.renderKatex('$example$')).toThrowError(errorKatexNotLoaded);
+
+      global['katex'] = { renderToString: undefined };
+
+      expect(() => markdownService.renderKatex('$example$')).toThrowError(errorKatexNotLoaded);
+    });
+
+    it('should call katex with math expressions', () => {
+
+      global['katex'] = { renderToString: (tex: string, options?: KatexOptions) => '' };
+
+      spyOn(katex, 'renderToString');
+
+      const useCases = [
+        { tex: '$E=mc^2$' },
+        { tex: '$x^2 + y^2 = z^2$', options: { displayMode: true } },
+      ];
+
+      useCases.forEach(useCase => {
+        markdownService.renderKatex(useCase.tex, useCase.options);
+        expect(katex.renderToString).toHaveBeenCalledWith(useCase.tex.replace(/\$/gm, ''), useCase.options);
+        katex.renderToString.calls.reset();
       });
     });
   });
