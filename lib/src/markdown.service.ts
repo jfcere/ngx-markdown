@@ -2,12 +2,17 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, Optional, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { parse } from 'marked';
+import * as marked from 'marked';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { KatexOptions } from './katex-options';
 import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
+
+declare var katex: {
+  renderToString(tex: string, options?: KatexOptions): string;
+};
 
 declare var Prism: {
   highlightAllUnder: (element: Element | Document) => void;
@@ -15,6 +20,8 @@ declare var Prism: {
 
 // tslint:disable-next-line:max-line-length
 export const errorSrcWithoutHttpClient = '[ngx-markdown] When using the [src] attribute you *have to* pass the `HttpClient` as a parameter of the `forRoot` method. See README for more information';
+// tslint:disable-next-line:max-line-length
+export const errorKatexNotLoaded = '[ngx-markdown] When using the [katex] attribute you *have to* include KaTeX files to `angular.json` or use imports. See README for more information';
 
 @Injectable()
 export class MarkdownService {
@@ -44,10 +51,9 @@ export class MarkdownService {
   }
 
   compile(markdown: string, decodeHtml = false, markedOptions = this.options): string {
-    const precompiled = this.precompile(markdown);
-    const compiled = parse(
-      decodeHtml ? this.decodeHtml(precompiled) : precompiled,
-      markedOptions);
+    let precompiled = this.trimIndentation(markdown);
+    precompiled = decodeHtml ? this.decodeHtml(precompiled) : precompiled;
+    const compiled = marked.parse(precompiled, markedOptions);
     return markedOptions.sanitize && !markedOptions.sanitizer
       ? this.domSanitizer.sanitize(SecurityContext.HTML, compiled)
       : compiled;
@@ -73,7 +79,14 @@ export class MarkdownService {
     }
   }
 
-  private decodeHtml(html: string) {
+  renderKatex(markdown: string, options?: KatexOptions): string {
+    if (typeof katex === 'undefined' || typeof katex.renderToString === 'undefined') {
+      throw new Error(errorKatexNotLoaded);
+    }
+    return markdown.replace(/(?:^|[^\\])\$([^\s][^$]*?[^\s])\$/gm, (_, tex) => katex.renderToString(tex, options));
+  }
+
+  private decodeHtml(html: string): string {
     if (isPlatformBrowser(this.platform)) {
       const textarea = document.createElement('textarea');
       textarea.innerHTML = html;
@@ -91,7 +104,7 @@ export class MarkdownService {
       : markdown;
   }
 
-  private precompile(markdown: string): string {
+  private trimIndentation(markdown: string): string {
     if (!markdown) {
       return '';
     }
@@ -99,21 +112,15 @@ export class MarkdownService {
     return markdown
       .split('\n')
       .map(line => {
-        // set current line ident start to base reference indentation
         let lineIdentStart = indentStart;
-        // find position of 1st non-whitespace character
-        // to determine the current line indentation start
         if (line.length > 0) {
           lineIdentStart = isNaN(lineIdentStart)
             ? line.search(/\S|$/)
             : Math.min(line.search(/\S|$/), lineIdentStart);
         }
-        // keep 1st non-whitespace line indentation
-        // as base reference for other lines
         if (isNaN(indentStart)) {
           indentStart = lineIdentStart;
         }
-        // remove whitespaces before current line indentation
         return !!lineIdentStart
           ? line.substring(lineIdentStart)
           : line;

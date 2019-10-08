@@ -1,4 +1,8 @@
 {
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+
   "files.trimTrailingWhitespace": true,
 
   "[markdown]": {

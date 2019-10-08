@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
+import { KatexOptions } from './katex-options';
 import { MarkdownService } from './markdown.service';
 import { PrismPlugin } from './prism-plugin';
 
@@ -11,6 +12,12 @@ import { PrismPlugin } from './prism-plugin';
 export class MarkdownComponent implements OnChanges, AfterViewInit {
   @Input() data: string;
   @Input() src: string;
+
+  // Plugin - katex
+  @Input()
+  get katex(): boolean { return this._katex; }
+  set katex(value: boolean) { this._katex = this.coerceBooleanProperty(value); }
+  @Input() katexOptions: KatexOptions;
 
   // Plugin - lineNumbers
   @Input()
@@ -28,6 +35,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   @Output() error = new EventEmitter<string>();
   @Output() load = new EventEmitter<string>();
 
+  private _katex = false;
   private _lineHighlight = false;
   private _lineNumbers = false;
 
@@ -54,7 +62,9 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   }
 
   render(markdown: string, decodeHtml = false) {
-    this.element.nativeElement.innerHTML = this.markdownService.compile(markdown, decodeHtml);
+    let compiled = this.markdownService.compile(markdown, decodeHtml);
+    compiled = this.katex ? this.markdownService.renderKatex(compiled, this.katexOptions) : compiled;
+    this.element.nativeElement.innerHTML = compiled;
     this.handlePlugins();
     this.markdownService.highlight(this.element.nativeElement);
   }

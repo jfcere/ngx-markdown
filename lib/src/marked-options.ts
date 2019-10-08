@@ -1,6 +1,6 @@
-import { Renderer } from 'marked';
+import { MarkedRenderer } from './marked-renderer';
 
-export class MarkedOptions implements marked.MarkedOptions {
+export class MarkedOptions {
   /**
    * A prefix URL for any relative link.
    */
@@ -46,7 +46,7 @@ export class MarkedOptions implements marked.MarkedOptions {
    *
    * An object containing functions to render tokens to HTML.
    */
-  renderer?: Renderer;
+  renderer?: MarkedRenderer;
 
   /**
    * Sanitize the output. Ignore any HTML that has been input.

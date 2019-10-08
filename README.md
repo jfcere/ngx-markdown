@@ -152,6 +152,54 @@ Use `line` input property to specify the line(s) to highlight and optionally the
 <markdown [src]="path/to/file.js" lineHighlight [line]="'6, 10-16'" [lineOffset]="5"></markdown>
 ```
 
+### Math rendering
+
+> :bell: Math rendering is **optional**, skip this step if you are not planning to use it
+
+To activate [KaTeX](https://katex.org/) math rendering you will need to include...
+- KaTex JavaScript library - `node_modules/katex/dist/katex.min.js` file
+- KaTex CSS customization - `node_modules/katex/dist/katex.min.css` file
+
+If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
+
+```diff
+"styles": [
+  "styles.css",
++ "node_modules/katex/dist/katex.min.css"
+],
+"scripts": [
+  "node_modules/marked/lib/marked.js",
++ "node_modules/katex/dist/katex.min.js",
+]
+```
+
+#### KaTeX plugin
+
+Using `markdown` component and/or directive, you will be able to use the `katex` property to activate [KaTeX](https://katex.org/) plugin that render mathematical expression to HTML.
+
+```html
+<markdown [src]="path/to/file.md" katex></markdown>
+```
+
+Optionally, you can use `katexOptions` property to specify [KaTeX options](https://katex.org/docs/options.html).
+
+```typescript
+import { KatexOptions } from 'ngx-markdown';
+
+public options: KatexOptions = {
+  displayMode: true,
+  throwOnError: false,
+  errorColor: '#cc0000',
+  ...
+};
+```
+
+```html
+<markdown [src]="path/to/file.md" katex [katexOptions]="options"></markdown>
+```
+
+> :blue_book: Follow official [KaTeX options](https://katex.org/docs/options.html) documentation for more details on the available options.
+
 ## Configuration
 
 > :warning: Sanitization of parsed markdown is not enabled by default which can expose your application to XSS vulnerabilities. It is recommended that you enable it by setting `sanitize: true` through [markedOptions](#markedoptions) when importing `MarkdownModule`.  
