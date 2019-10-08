@@ -439,7 +439,7 @@ This code will output the following HTML:
 </h1>
 ```
 
-> :blue_book: Follow official [marked.renderer](https://github.com/chjj/marked#block-level-renderer-methods) documentation for the list of tokens that can be overriden.
+> :blue_book: Follow official [marked.renderer](https://marked.js.org/#/USING_PRO.md#renderer) documentation for the list of tokens that can be overriden.
 
 ## Syntax highlight
 
