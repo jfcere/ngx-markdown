@@ -331,19 +331,18 @@
         ### Example
       </markdown>
 
-      <markdown ngPreserveWhitespaces>
+      <markdown>
         You can render KaTex expression by adding `katex` directive on the `markdown` component/directive.
       </markdown>
 
       <markdown [src]="'app/remote/katex.html'"></markdown>
 
-      <markdown ngPreserveWhitespaces>
+      <markdown>
         The example below illustrate `katex` directive in action.
       </markdown>
 
-      <markdown katex>
-        $f(x) = \int_&#123;-\infty}^\infty \hat f(\xi) e^&#123;2 \pi i \xi x} d\xi$
-      </markdown>
+      <textarea class="katex-textarea" [(ngModel)]="katexMarkdown"></textarea>
+      <markdown class="katex-usage" [data]="katexMarkdown" katex></markdown>
 
       <markdown ngPreserveWhitespaces>
         Optionally, you can specify math rendering [options](https://katex.org/docs/options.html) using `katexOptions` property.

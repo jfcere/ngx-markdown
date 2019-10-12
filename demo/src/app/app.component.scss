@@ -130,6 +130,8 @@ section:first-of-type {
   padding: 13px;
 }
 
+.katex-usage,
+.katex-textarea,
 .pipe-usage,
 .pipe-textarea,
 .variable-binding,
@@ -141,14 +143,24 @@ section:first-of-type {
   }
 }
 
+.katex-textarea {
+  min-height: 220px;
+}
+
+.pipe-textarea,
+.variable-textarea {
+  min-height: 320px;
+}
+
+.katex-textarea,
 .pipe-textarea,
 .variable-textarea {
   border-radius: 4px;
   margin-top: 8px;
-  min-height: 320px;
   padding: 8px;
 }
 
+.katex-usage,
 .pipe-usage,
 .variable-binding {
   display: block;
