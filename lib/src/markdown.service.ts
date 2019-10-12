@@ -18,15 +18,15 @@ declare var Prism: {
   highlightAllUnder: (element: Element | Document) => void;
 };
 
-// tslint:disable-next-line:max-line-length
+// tslint:disable:max-line-length
+export const errorKatexNotLoaded = '[ngx-markdown When using the [katex] attribute you *have to* include KaTeX files to `angular.json` or use imports. See README for more information';
 export const errorSrcWithoutHttpClient = '[ngx-markdown] When using the [src] attribute you *have to* pass the `HttpClient` as a parameter of the `forRoot` method. See README for more information';
-// tslint:disable-next-line:max-line-length
-export const errorKatexNotLoaded = '[ngx-markdown] When using the [katex] attribute you *have to* include KaTeX files to `angular.json` or use imports. See README for more information';
+// tslint:enable:max-line-length
 
 @Injectable()
 export class MarkdownService {
-  private _options: MarkedOptions;
 
+  private _options: MarkedOptions;
   get options(): MarkedOptions { return this._options; }
   set options(value: MarkedOptions) {
     this._options = Object.assign({},
@@ -79,11 +79,11 @@ export class MarkdownService {
     }
   }
 
-  renderKatex(markdown: string, options?: KatexOptions): string {
+  renderKatex(html: string, options?: KatexOptions): string {
     if (typeof katex === 'undefined' || typeof katex.renderToString === 'undefined') {
       throw new Error(errorKatexNotLoaded);
     }
-    return markdown.replace(/(?:^|[^\\])\$([^\s][^$]*?[^\s])\$/gm, (_, tex) => katex.renderToString(tex, options));
+    return html.replace(/\$([^\s][^$]*?[^\s])\$/gm, (_, tex) => katex.renderToString(tex, options));
   }
 
   private decodeHtml(html: string): string {

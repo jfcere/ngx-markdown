@@ -61,6 +61,19 @@ export class MarkdownDemoComponent {
 }`;
   //#endregion
 
+  //#region katex
+  katexMarkdown =
+`#### \`katex\` directive example
+
+\`\`\`latex
+f(x) = \\int_{-\\infty}^\\infty \\hat f(\\xi) e^{2 \\pi i \\xi x} d\\xi
+\`\`\`
+
+$f(x) = \\int_{-\\infty}^\\infty \\hat f(\\xi) e^{2 \\pi i \\xi x} d\\xi$
+
+> If you can understand this, you're a genius!`;
+  //#endregion
+
   protected _titleIsAnimating = false;
   protected _pushpinIsOn = false;
 
