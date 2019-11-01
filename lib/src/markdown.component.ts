@@ -35,6 +35,8 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   @Output() error = new EventEmitter<string>();
   @Output() load = new EventEmitter<string>();
 
+  @Output() buttonClick = new EventEmitter<Element>();
+
   private _katex = false;
   private _lineHighlight = false;
   private _lineNumbers = false;
@@ -62,11 +64,12 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   }
 
   render(markdown: string, decodeHtml = false) {
-    let compiled = this.markdownService.compile(markdown, decodeHtml);
+    let compiled = this.markdownService.compile(markdown, decodeHtml, this.markdownService.getMarkdownOptions(this.buttonClick));
     compiled = this.katex ? this.markdownService.renderKatex(compiled, this.katexOptions) : compiled;
     this.element.nativeElement.innerHTML = compiled;
     this.handlePlugins();
     this.markdownService.highlight(this.element.nativeElement);
+    this.markdownService.handleClipboard(this.element.nativeElement, this.buttonClick);
   }
 
   private coerceBooleanProperty(value: boolean): boolean {
