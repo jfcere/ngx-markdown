@@ -30,7 +30,7 @@
     "start": "yarn link:lib && ng serve",
     "build:demo": "ng build demo",
     "build:lib": "ng build lib",
-    "postbuild:lib": "cpx ./README.md ./dist/lib && cpx ./README.md ./dist/lib && cpx ./LICENSE ./dist/lib",
+    "postbuild:lib": "cpx ./lib/src/styles/** ./dist/lib/src/styles && cpx ./README.md ./dist/lib && cpx ./LICENSE ./dist/lib",
     "link:lib": "rimraf node_modules/ngx-markdown && linklocal",
     "lint": "yarn lint:lib && yarn lint:demo",
     "lint:demo": "ng lint demo",

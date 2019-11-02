@@ -4,27 +4,6 @@
   display: none;
 }
 
-.markdown-copier::after {
-  display: none;
-  content: "";
-  position: absolute;
-  border-radius: 60%;
-  background-color: rgba(255, 255, 255, 0.59);
-  width: 4.5px;
-  height: 4.5px;
-  top: 8px;
-  right: 13px;
-  animation: ripple 1s;
-  -webkit-animation: ripple 1s;
-  opacity: 0;
-  overflow:hidden;
-}
-
-.markdown-copier {
-  position:absolute;
-  width:100%;
-  height:24px;
-}
 
 .markdown-copier-svg {
   position:absolute;
@@ -33,9 +12,6 @@
   height:24px;
 }
 
-.markdown-copier:active::after {
-  display: block;
-}
 
 @-webkit-keyframes ripple {
   from {
