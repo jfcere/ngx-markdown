@@ -1,15 +1,14 @@
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable, Optional, PLATFORM_ID, SecurityContext, EventEmitter } from '@angular/core';
+import { EventEmitter, Inject, Injectable, Optional, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as marked from 'marked';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { KatexOptions } from './katex-options';
 import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
-import { ClipboardRenderer } from './clipboard-renderer';
+
 
 declare var ClipboardJS;
 
@@ -101,17 +100,7 @@ export class MarkdownService {
     }
   }
 
-  getMarkdownOptions(emitter: EventEmitter<Element>): MarkedOptions {
-    if (this.isClipboardCopyEnabled(emitter)) {
-      const markedOptions = new MarkedOptions();
-      markedOptions.renderer = new ClipboardRenderer();
-      return markedOptions;
-    } else {
-      return this.options;
-    }
-  }
-
-  private isClipboardCopyEnabled(emitter: EventEmitter<Element>): boolean {
+  isClipboardCopyEnabled(emitter: EventEmitter<Element>): boolean {
     if (typeof ClipboardJS !== 'undefined' && ClipboardJS.isSupported() && this.isObserverPresent(emitter)) {
       return true;
     } else {
