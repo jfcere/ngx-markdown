@@ -2,6 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ElementRef } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 import { KatexOptions } from './katex-options';
 import { MarkdownComponent } from './markdown.component';
@@ -294,5 +295,27 @@ describe('MarkdownComponent', () => {
 
       expect(markdownService.renderKatex).toHaveBeenCalledWith(compiled, katexOptions);
     });
+
+    it('should emit `ready` when done parsing', async(() => {
+
+      const markdown = '# Markdown';
+      const compiled = '<h1 id="markdown">Markdown</h1>';
+
+      spyOn(markdownService, 'compile').and.returnValue(compiled);
+      spyOn(markdownService, 'renderKatex').and.returnValue(compiled);
+      spyOn(markdownService, 'highlight');
+
+      component.ready
+        .pipe(first())
+        .subscribe(() => {
+          expect(markdownService.compile).toHaveBeenCalled();
+          expect(markdownService.renderKatex).toHaveBeenCalled();
+          expect(markdownService.highlight).toHaveBeenCalled();
+          expect(component.element.nativeElement.innerHTML).toBe(compiled);
+        });
+
+      component.katex = true;
+      component.render(markdown);
+    }));
   });
 });

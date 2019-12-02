@@ -34,6 +34,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
 
   @Output() error = new EventEmitter<string>();
   @Output() load = new EventEmitter<string>();
+  @Output() ready = new EventEmitter<void>();
 
   private _katex = false;
   private _lineHighlight = false;
@@ -67,6 +68,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
     this.element.nativeElement.innerHTML = compiled;
     this.handlePlugins();
     this.markdownService.highlight(this.element.nativeElement);
+    this.ready.emit();
   }
 
   private coerceBooleanProperty(value: boolean): boolean {

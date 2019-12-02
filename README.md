@@ -336,7 +336,7 @@ https://angular.io/api/core/Component#preserveWhitespaces
 
 ### Component
 
-You can use `markdown` component to either parse static markdown directly from your HTML markup, load the content from a remote URL using `src` property or bind a variable to your component using `data` property. You can get a hook on load complete using `load` output event property or on loading error using `error` output event property.
+You can use `markdown` component to either parse static markdown directly from your HTML markup, load the content from a remote URL using `src` property or bind a variable to your component using `data` property. You can get a hook on load complete using `load` output event property, on loading error using `error` output event property or when parsing is completed using `ready` output event property.
 
 ```html
 <!-- static markdown -->
@@ -348,7 +348,7 @@ You can use `markdown` component to either parse static markdown directly from y
 <markdown [src]="'path/to/file.md'" (load)="onLoad($event)" (error)="onError($event)"></markdown>
 
 <!-- variable binding -->
-<markdown [data]="markdown"></markdown>
+<markdown [data]="markdown" (ready)="onReady()"></markdown>
 ```
 
 ### Directive
@@ -365,7 +365,7 @@ The same way the component works, you can use `markdown` directive to accomplish
 <div markdown [src]="'path/to/file.md'" (load)="onLoad($event)" (error)="onError($event)"></div>
 
 <!-- variable binding -->
-<div markdown [data]="markdown"></div>
+<div markdown [data]="markdown" (ready)="onReady()"></div>
 ```
 
 ### Pipe
