@@ -377,10 +377,10 @@
   dependencies:
     "@types/sizzle" "*"
 
-"@types/marked@^0.6.5":
-  version "0.6.5"
-  resolved "https://registry.yarnpkg.com/@types/marked/-/marked-0.6.5.tgz#3cf2a56ef615dad24aaf99784ef90a9eba4e29d8"
-  integrity sha512-6kBKf64aVfx93UJrcyEZ+OBM5nGv4RLsI6sR1Ar34bpgvGVRoyTgpxn4ZmtxOM5aDTAaaznYuYUH8bUX3Nk3YA==
+"@types/marked@^0.7.0":
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/@types/marked/-/marked-0.7.2.tgz#1393f076773b55cc7078c0fbeb86a497c69db97e"
+  integrity sha512-A3EDyNaq6OCcpaOia2HQ/tu2QYt8DKuj4ExP21VU3cU3HTo2FLslvbqa2T1vux910RHvuSVqpwKnnykSFcRWOA==
 
 "@types/materialize-css@~0.100.4":
   version "0.100.4"
@@ -4047,7 +4047,7 @@ karma@~4.1.0:
     tmp "0.0.33"
     useragent "2.3.0"
 
-katex@^0.11.1:
+katex@^0.11.0:
   version "0.11.1"
   resolved "https://registry.yarnpkg.com/katex/-/katex-0.11.1.tgz#df30ca40c565c9df01a466a00d53e079e84ffaa2"
   integrity sha512-5oANDICCTX0NqYIyAiFCCwjQ7ERu3DQG2JFHLbYOf+fXaMoH8eg/zOq5WSYJsKMi/QebW+Eh3gSM+oss1H/bww==
@@ -4670,10 +4670,10 @@ ng-packagr@^5.2.0:
     update-notifier "^3.0.0"
 
 "ngx-markdown@file:./lib":
-  version "8.1.2"
+  version "8.2.1"
   dependencies:
-    "@types/marked" "^0.6.5"
-    katex "^0.11.1"
+    "@types/marked" "^0.7.0"
+    katex "^0.11.0"
     marked "^0.7.0"
     prismjs "^1.16.0"
 
