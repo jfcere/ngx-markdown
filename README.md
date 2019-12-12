@@ -44,6 +44,7 @@ ngx-markdown is an [Angular](https://angular.io/) library that uses [marked](htt
 - [AoT compilation](#aot-compilation)
 - [Road map](#road-map)
 - [Contribution](#contribution)
+- [Support Development](#support-development)
 
 ## Installation
 
@@ -503,6 +504,14 @@ Contributions are always welcome, just make sure that ...
 - Your code style matches with the rest of the project
 - Unit tests pass
 - Linter passes
+
+## Support Development
+
+The use of this library is totally free and no donation is required.
+
+As the owner and primary maintainer of this project, I am putting a lot of time and effort beside my job, my family and my private time to bring the best support I can by answering questions, addressing issues and improving the library to provide more and more features over time.
+
+If this project has been useful, that it helped you or your business to save precious time, don't hesitate to give it a star and to consider a donation to support its maintenance and future development.
 
 ## License
 
