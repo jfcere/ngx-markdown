@@ -490,11 +490,9 @@ Building with AoT is part of the CI and is tested every time a commit occurs so 
 
 Here is the list of tasks that will be done on this library in the near future ...
 
-- ~~Add CircleCI integration~~
-- ~~Publish demo on GitHub pages~~
-- ~~Add variable binding feature~~
-- ~~Transpile library to Javascript~~
-- ~~Make Prism highlight optional~~
+- Update to Angular 9
+- Add support for emojis
+- Add copy-to-clipboard feature
 - Support Prism.js customizing options (line-numbers, line-height, ...)
 
 ## Contribution
