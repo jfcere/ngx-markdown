@@ -1,3 +1,4 @@
+export * from './katex-options';
 export * from './language.pipe';
 export * from './markdown.component';
 export * from './markdown.module';
