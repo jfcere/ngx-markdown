@@ -2,11 +2,17 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../out-tsc/app",
-    "module": "es2015",
     "types": [
       "jquery",
       "materialize-css",
       "node"
     ]
-  }
+  },
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
+  ]
 }

@@ -5,7 +5,7 @@
 # You can see what browsers were selected by your queries by running:
 #   npx browserslist
 
- > 0.5%
+> 0.5%
 last 2 versions
 Firefox ESR
 not dead

@@ -23,8 +23,8 @@ describe('MarkdownPipe', () => {
   });
 
   beforeEach(() => {
-    markdownService = TestBed.get(MarkdownService);
-    zone = TestBed.get(NgZone);
+    markdownService = TestBed.inject(MarkdownService);
+    zone = TestBed.inject(NgZone);
     pipe = new MarkdownPipe(elementRef, markdownService, zone);
   });
 

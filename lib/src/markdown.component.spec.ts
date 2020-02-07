@@ -26,7 +26,7 @@ describe('MarkdownComponent', () => {
   }));
 
   beforeEach(() => {
-    markdownService = TestBed.get(MarkdownService);
+    markdownService = TestBed.inject(MarkdownService);
     fixture = TestBed.createComponent(MarkdownComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
