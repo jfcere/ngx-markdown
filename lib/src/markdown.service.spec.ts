@@ -1,5 +1,5 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { SecurityContext, Type } from '@angular/core';
+import { SecurityContext } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { parse } from 'marked';
@@ -30,9 +30,9 @@ describe('MarkdowService', () => {
   });
 
   beforeEach(() => {
-    domSanitizer = TestBed.get(DomSanitizer as Type<DomSanitizer>);
-    http = TestBed.get(HttpTestingController as Type<HttpTestingController>);
-    markdownService = TestBed.get(MarkdownService);
+    domSanitizer = TestBed.inject(DomSanitizer);
+    http = TestBed.inject(HttpTestingController);
+    markdownService = TestBed.inject(MarkdownService);
   });
 
   describe('constructor', () => {

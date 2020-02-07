@@ -38,7 +38,7 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const httpClient = TestBed.get(HttpClient);
+      const httpClient = TestBed.inject(HttpClient);
 
       expect(httpClient instanceof HttpClient).toBeTruthy();
     });
@@ -51,7 +51,7 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const httpClient = TestBed.get(HttpClient, null);
+      const httpClient = TestBed.inject(HttpClient, null);
 
       expect(httpClient).toBeNull();
     });
@@ -69,27 +69,27 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const httpClient = TestBed.get(HttpClient, null);
+      const httpClient = TestBed.inject(HttpClient, null);
 
       expect(httpClient).toBeNull();
     });
 
     it('should provide marked options when provided', () => {
 
-      const mockMarkedOptions = 'mockMarkedOptions';
+      const mockMarkedOptions: MarkedOptions = { baseUrl: 'mock' };
 
       TestBed.configureTestingModule({
         imports: [
           MarkdownModule.forRoot({
             markedOptions: {
               provide: MarkedOptions,
-              useValue: 'mockMarkedOptions',
+              useValue: mockMarkedOptions,
             },
           }),
         ],
       });
 
-      const markedOptions = TestBed.get(MarkedOptions);
+      const markedOptions = TestBed.inject(MarkedOptions);
 
       expect(markedOptions).toBe(mockMarkedOptions);
     });
@@ -102,7 +102,7 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const markedOptions = TestBed.get(MarkedOptions);
+      const markedOptions = TestBed.inject(MarkedOptions);
 
       expect(markedOptions).toEqual(initialMarkedOptions['useValue']);
     });
@@ -115,7 +115,7 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const markedOptions = TestBed.get(MarkedOptions);
+      const markedOptions = TestBed.inject(MarkedOptions);
 
       expect(markedOptions).toEqual(initialMarkedOptions['useValue']);
     });
@@ -132,7 +132,7 @@ describe('MarkdownModule', () => {
 
     it('should inherit from forRoot providers', () => {
 
-      const mockMarkedOptions =  'mockMarkedOptions';
+      const mockMarkedOptions: MarkedOptions = { baseUrl: 'mock' };
 
       TestBed.configureTestingModule({
         imports: [
@@ -145,8 +145,8 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const httpClient = TestBed.get(HttpClient);
-      const markedOptions = TestBed.get(MarkedOptions);
+      const httpClient = TestBed.inject(HttpClient);
+      const markedOptions = TestBed.inject(MarkedOptions);
 
       expect(httpClient instanceof HttpClient).toBeTruthy();
       expect(markedOptions).toEqual(mockMarkedOptions);

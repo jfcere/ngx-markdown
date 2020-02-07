@@ -12,21 +12,21 @@ import { delay, first, tap } from 'rxjs/operators';
 })
 export class AppComponent implements OnInit {
   //#region markdown
-  blockquotes = require('raw-loader!./markdown/blockquotes.md');
-  codeAndSynthaxHighlighting = require('raw-loader!./markdown/code-and-synthax-highlighting.md');
-  emphasis = require('raw-loader!./markdown/emphasis.md');
-  headers = require('raw-loader!./markdown/headers.md');
-  horizontalRule = require('raw-loader!./markdown/horizontal-rule.md');
-  images = require('raw-loader!./markdown/images.md');
-  links = require('raw-loader!./markdown/links.md');
-  lists = require('raw-loader!./markdown/lists.md');
-  listsDot = require('raw-loader!./markdown/lists-dot.md');
-  tables = require('raw-loader!./markdown/tables.md');
+  blockquotes = require('raw-loader!./markdown/blockquotes.md').default;
+  codeAndSynthaxHighlighting = require('raw-loader!./markdown/code-and-synthax-highlighting.md').default;
+  emphasis = require('raw-loader!./markdown/emphasis.md').default;
+  headers = require('raw-loader!./markdown/headers.md').default;
+  horizontalRule = require('raw-loader!./markdown/horizontal-rule.md').default;
+  images = require('raw-loader!./markdown/images.md').default;
+  links = require('raw-loader!./markdown/links.md').default;
+  lists = require('raw-loader!./markdown/lists.md').default;
+  listsDot = require('raw-loader!./markdown/lists-dot.md').default;
+  tables = require('raw-loader!./markdown/tables.md').default;
   //#endregion
 
   //#region remote
-  demoPython = require('raw-loader!./remote/demo.py');
-  languagePipe = require('raw-loader!./remote/language-pipe.html');
+  demoPython = require('raw-loader!./remote/demo.py').default;
+  languagePipe = require('raw-loader!./remote/language-pipe.html').default;
   //#endregion
 
   //#region variable-binding
