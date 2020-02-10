@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { NgModule, SecurityContext } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
@@ -13,16 +13,7 @@ export function markedOptions(): MarkedOptions {
     return '<blockquote class="blockquote"><p>' + text + '</p></blockquote>';
   };
 
-  return {
-    renderer: renderer,
-    gfm: true,
-    tables: true,
-    breaks: false,
-    pedantic: false,
-    sanitize: false,
-    smartLists: true,
-    smartypants: false,
-  };
+  return { renderer };
 }
 
 @NgModule({
@@ -32,10 +23,8 @@ export function markedOptions(): MarkedOptions {
     HttpClientModule,
     MarkdownModule.forRoot({
       loader: HttpClient,
-      markedOptions: {
-        provide: MarkedOptions,
-        useFactory: markedOptions,
-      },
+      markedOptions: { provide: MarkedOptions, useFactory: markedOptions },
+      sanitize: SecurityContext.HTML, // default value
     }),
   ],
   declarations: [AppComponent],

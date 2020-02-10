@@ -1,10 +1,9 @@
-import { HttpClientModule } from '@angular/common/http';
 import { ElementRef, NgZone } from '@angular/core';
 import { fakeAsync, TestBed } from '@angular/core/testing';
 
+import { MarkdownModule } from './markdown.module';
 import { MarkdownPipe } from './markdown.pipe';
 import { MarkdownService } from './markdown.service';
-import { MarkedOptions } from './marked-options';
 
 describe('MarkdownPipe', () => {
   const elementRef = new ElementRef(document.createElement('div'));
@@ -14,10 +13,8 @@ describe('MarkdownPipe', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientModule],
-      providers: [
-        MarkdownService,
-        { provide: MarkedOptions, useValue: {} },
+      imports: [
+        MarkdownModule.forRoot(),
       ],
     });
   });

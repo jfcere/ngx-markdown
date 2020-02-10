@@ -24,9 +24,9 @@
     "katex"
   ],
   "dependencies": {
-    "@types/marked": "^0.7.0",
+    "@types/marked": "^0.7.2",
     "katex": "^0.11.0",
-    "marked": "^0.7.0",
+    "marked": "^0.8.0",
     "prismjs": "^1.16.0"
   },
   "peerDependencies": {

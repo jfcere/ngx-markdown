@@ -27,7 +27,7 @@
     "ng": "ng",
     "start": "yarn link:lib && ng serve",
     "build:demo": "ng build demo",
-    "build:lib": "ng build lib",
+    "build:lib": "ng build lib --prod",
     "postbuild:lib": "cpx ./README.md ./dist/lib && cpx ./LICENSE ./dist/lib",
     "link:lib": "rimraf node_modules/ngx-markdown && linklocal",
     "lint": "yarn lint:lib && yarn lint:demo",
