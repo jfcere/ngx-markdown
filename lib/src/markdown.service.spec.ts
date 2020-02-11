@@ -66,6 +66,12 @@ describe('MarkdowService', () => {
 
     describe('constructor', () => {
 
+      it('should initialize options', () => {
+
+        expect(markdownService.options).toBeDefined();
+        expect(markdownService.options.renderer).toBeDefined();
+      });
+
       it('should initialize renderer', () => {
 
         expect(markdownService.renderer).toBeDefined();

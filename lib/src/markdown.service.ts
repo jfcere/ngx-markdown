@@ -30,17 +30,13 @@ export class MarkdownService {
 
   private readonly initialMarkedOptions: MarkedOptions = {
     renderer: new MarkedRenderer(),
-    smartLists: true,
   };
 
   private _options: MarkedOptions;
+
   get options(): MarkedOptions { return this._options; }
   set options(value: MarkedOptions) {
-    this._options = Object.assign({},
-      { ...this.initialMarkedOptions },
-      this._options,
-      value,
-    );
+    this._options = { ...this.initialMarkedOptions, ...value };
   }
 
   get renderer(): MarkedRenderer { return this.options.renderer; }
