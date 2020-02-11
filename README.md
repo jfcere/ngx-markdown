@@ -236,16 +236,16 @@ imports: [
 
 As per ngx-markdown v9.0.0 **sanitization is enabled by default** and uses Angular `DomSanitizer` with `SecurityContext.HTML` to avoid XSS vulnerabilities. The `SecurityContext` level can be changed using the `sanitize` property when configuring `MarkdownModule`.
 
-For example, to turn off sanitization simply provide `SecurityContext.NONE`.
-
-```diff
+```typescript
 import { SecurityContext } from '@angular/core';
 
-imports: [
-  MarkdownModule.forRoot({
-+   sanitize: SecurityContext.NONE,
-  }),
-]
+// enable default sanitization
+MarkdownModule.forRoot()
+
+// turn off sanitization
+MarkdownModule.forRoot({
+  sanitize: SecurityContext.NONE
+})
 ```
 
 > :blue_book: Follow [Angular DomSanitizer](https://angular.io/api/platform-browser/DomSanitizer#sanitize) documentation for more information on sanitization and security contexts.
