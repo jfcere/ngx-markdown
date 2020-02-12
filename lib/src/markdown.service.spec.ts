@@ -7,6 +7,7 @@ import { parse } from 'marked';
 import { KatexOptions } from './katex-options';
 import { MarkdownModule } from './markdown.module';
 import { errorKatexNotLoaded, MarkdownService, SECURITY_CONTEXT } from './markdown.service';
+import { MarkedRenderer } from './marked-renderer';
 
 declare var Prism: any;
 declare var katex: any;
@@ -64,17 +65,45 @@ describe('MarkdowService', () => {
       markdownService = TestBed.inject(MarkdownService);
     });
 
-    describe('constructor', () => {
+    describe('options', () => {
 
-      it('should initialize options', () => {
+      it('should be initialized correctly', () => {
 
         expect(markdownService.options).toBeDefined();
         expect(markdownService.options.renderer).toBeDefined();
       });
 
-      it('should initialize renderer', () => {
+      it('should update correctly', () => {
+
+        const mockBaseUrl = 'mock-url';
+
+        markdownService.options = { baseUrl: mockBaseUrl };
+
+        expect(markdownService.options.baseUrl).toBe(mockBaseUrl);
+        expect(markdownService.options.renderer).toBeDefined();
+      });
+    });
+
+    describe('renderer', () => {
+
+      it('should be initialized correctly', () => {
 
         expect(markdownService.renderer).toBeDefined();
+      });
+
+      it('should update option.renderer when updated', () => {
+
+        const blockquote = (quote: string) => `<mock-blockquote>${quote}</mock-blockquote>`;
+
+        markdownService.renderer.blockquote = blockquote;
+
+        const quoteText = 'foobar';
+        const expectedBlockquote = blockquote(quoteText);
+        const rendererBlockquote = markdownService.renderer.blockquote(quoteText);
+        const optionsRendererBlockquote = markdownService.options.renderer.blockquote(quoteText);
+
+        expect(rendererBlockquote).toBe(expectedBlockquote);
+        expect(optionsRendererBlockquote).toBe(expectedBlockquote);
       });
     });
 
@@ -150,6 +179,16 @@ describe('MarkdowService', () => {
         expect(markdownService.compile(mockRaw, false)).toBe(expected);
         expect(markdownService.compile(mockRaw, null)).toBe(expected);
         expect(markdownService.compile(mockRaw, undefined)).toBe(expected);
+      });
+
+      it('should not decode HTML when not running on a server platform as it uses `document`', () => {
+
+        const mockRaw = '&lt;html&gt;';
+        const expected = '<p>&lt;html&gt;</p>\n';
+
+        markdownService['platform'] = 'server';
+
+        expect(markdownService.compile(mockRaw, true)).toBe(expected);
       });
 
       it('should not sanitize parsed markdown', () => {
