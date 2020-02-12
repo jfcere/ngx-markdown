@@ -7,7 +7,6 @@ import { parse } from 'marked';
 import { KatexOptions } from './katex-options';
 import { MarkdownModule } from './markdown.module';
 import { errorKatexNotLoaded, MarkdownService, SECURITY_CONTEXT } from './markdown.service';
-import { MarkedRenderer } from './marked-renderer';
 
 declare var Prism: any;
 declare var katex: any;
