@@ -123,7 +123,7 @@
           },
           "configurations": {
             "production": {
-              "project": "lib/ng-package.json"
+              "tsConfig": "lib/tsconfig.lib.prod.json"
             }
           }
         },

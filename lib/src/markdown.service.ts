@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable, Optional, PLATFORM_ID, SecurityContext } from '@angular/core';
+import { Inject, Injectable, InjectionToken, Optional, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as marked from 'marked';
 import { Observable } from 'rxjs';
@@ -23,17 +23,20 @@ export const errorKatexNotLoaded = '[ngx-markdown When using the [katex] attribu
 export const errorSrcWithoutHttpClient = '[ngx-markdown] When using the [src] attribute you *have to* pass the `HttpClient` as a parameter of the `forRoot` method. See README for more information';
 // tslint:enable:max-line-length
 
+export const SECURITY_CONTEXT = new InjectionToken<SecurityContext>('SECURITY_CONTEXT');
+
 @Injectable()
 export class MarkdownService {
 
+  private readonly initialMarkedOptions: MarkedOptions = {
+    renderer: new MarkedRenderer(),
+  };
+
   private _options: MarkedOptions;
+
   get options(): MarkedOptions { return this._options; }
   set options(value: MarkedOptions) {
-    this._options = Object.assign({},
-      { renderer: new MarkedRenderer() },
-      this._options,
-      value,
-    );
+    this._options = { ...this.initialMarkedOptions, ...value };
   }
 
   get renderer(): MarkedRenderer { return this.options.renderer; }
@@ -43,20 +46,19 @@ export class MarkdownService {
 
   constructor(
     @Inject(PLATFORM_ID) private platform: Object,
+    @Inject(SECURITY_CONTEXT) private securityContext: SecurityContext,
     @Optional() private http: HttpClient,
-    private domSanitizer: DomSanitizer,
-    options: MarkedOptions,
+    @Optional() options: MarkedOptions,
+    private sanitizer: DomSanitizer,
   ) {
     this.options = options;
   }
 
   compile(markdown: string, decodeHtml = false, markedOptions = this.options): string {
-    let precompiled = this.trimIndentation(markdown);
-    precompiled = decodeHtml ? this.decodeHtml(precompiled) : precompiled;
-    const compiled = marked.parse(precompiled, markedOptions);
-    return markedOptions.sanitize && !markedOptions.sanitizer
-      ? this.domSanitizer.sanitize(SecurityContext.HTML, compiled)
-      : compiled;
+    const trimmed = this.trimIndentation(markdown);
+    const decoded = decodeHtml ? this.decodeHtml(trimmed) : trimmed;
+    const compiled = marked.parse(decoded, markedOptions);
+    return this.sanitizer.sanitize(this.securityContext, compiled);
   }
 
   getSource(src: string): Observable<string> {

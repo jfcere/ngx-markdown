@@ -49,11 +49,6 @@ export class MarkedOptions {
   renderer?: MarkedRenderer;
 
   /**
-   * Sanitize the output. Ignore any HTML that has been input.
-   */
-  sanitize?: boolean;
-
-  /**
    * Shows an HTML error message when rendering fails.
    */
   silent?: boolean;
@@ -69,11 +64,6 @@ export class MarkedOptions {
   smartypants?: boolean;
 
   /**
-   * Enable GFM tables. This option requires the gfm option to be true.
-   */
-  tables?: boolean;
-
-  /**
    * Generate closing slash for self-closing tags (<br/> instead of <br>)
    */
   xhtml?: boolean;
@@ -82,9 +72,4 @@ export class MarkedOptions {
    * A function to highlight code blocks. The function takes three arguments: code, lang, and callback.
    */
   highlight?(code: string, lang: string, callback?: (error: any | undefined, code: string) => void): string;
-
-  /**
-   * Optionally sanitize found HTML with a sanitizer function.
-   */
-  sanitizer?(html: string): string;
 }

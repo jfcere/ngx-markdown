@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { ElementRef } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
@@ -6,8 +5,8 @@ import { first } from 'rxjs/operators';
 
 import { KatexOptions } from './katex-options';
 import { MarkdownComponent } from './markdown.component';
+import { MarkdownModule } from './markdown.module';
 import { MarkdownService } from './markdown.service';
-import { MarkedOptions } from './marked-options';
 
 describe('MarkdownComponent', () => {
   let fixture: ComponentFixture<MarkdownComponent>;
@@ -16,11 +15,8 @@ describe('MarkdownComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientModule],
-      declarations: [MarkdownComponent],
-      providers: [
-        { provide: MarkedOptions, useValue: {} },
-        MarkdownService,
+      imports: [
+        MarkdownModule.forRoot(),
       ],
     }).compileComponents();
   }));

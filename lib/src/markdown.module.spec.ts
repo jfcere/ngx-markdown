@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, SecurityContext } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 
-import { initialMarkedOptions, MarkdownModule } from './markdown.module';
-import { errorSrcWithoutHttpClient } from './markdown.service';
+import { MarkdownModule } from './markdown.module';
+import { errorSrcWithoutHttpClient, SECURITY_CONTEXT } from './markdown.service';
 import { MarkedOptions } from './marked-options';
 
 @Component({
@@ -29,7 +29,7 @@ describe('MarkdownModule', () => {
 
   describe('forRoot', () => {
 
-    it('should provide HttpClientModule when MarkdownModuleConfig.loader is provided', () => {
+    it('should provide HttpClient when MarkdownModuleConfig.loader is provided', () => {
 
       TestBed.configureTestingModule({
         imports: [
@@ -43,20 +43,7 @@ describe('MarkdownModule', () => {
       expect(httpClient instanceof HttpClient).toBeTruthy();
     });
 
-    it('should not provide HttpClientModule when MarkdownModuleConfig.loader is not provided', () => {
-
-      TestBed.configureTestingModule({
-        imports: [
-          MarkdownModule.forRoot(),
-        ],
-      });
-
-      const httpClient = TestBed.inject(HttpClient, null);
-
-      expect(httpClient).toBeNull();
-    });
-
-    it('should not provide HttpClientModule when MarkdownModuleConfig.markedOptions is provided', () => {
+    it('should not provide HttpClient when MarkdownModuleConfig is provided without loader', () => {
 
       TestBed.configureTestingModule({
         imports: [
@@ -74,7 +61,20 @@ describe('MarkdownModule', () => {
       expect(httpClient).toBeNull();
     });
 
-    it('should provide marked options when provided', () => {
+    it('should not provide HttpClient when MarkdownModuleConfig is not provided', () => {
+
+      TestBed.configureTestingModule({
+        imports: [
+          MarkdownModule.forRoot(),
+        ],
+      });
+
+      const httpClient = TestBed.inject(HttpClient, null);
+
+      expect(httpClient).toBeNull();
+    });
+
+    it('should provide MarkedOptions when MarkdownModuleConfig is provided with markedOptions', () => {
 
       const mockMarkedOptions: MarkedOptions = { baseUrl: 'mock' };
 
@@ -94,20 +94,7 @@ describe('MarkdownModule', () => {
       expect(markedOptions).toBe(mockMarkedOptions);
     });
 
-    it('should provide default marked options when not provided', () => {
-
-      TestBed.configureTestingModule({
-        imports: [
-          MarkdownModule.forRoot(),
-        ],
-      });
-
-      const markedOptions = TestBed.inject(MarkedOptions);
-
-      expect(markedOptions).toEqual(initialMarkedOptions['useValue']);
-    });
-
-    it('should provide default marked options when loader is provided provided', () => {
+    it('should not provide MarkedOptions when MarkdownModuleConfig is provided without markedOptions', () => {
 
       TestBed.configureTestingModule({
         imports: [
@@ -115,9 +102,66 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const markedOptions = TestBed.inject(MarkedOptions);
+      const markedOptions = TestBed.inject(MarkedOptions, null);
 
-      expect(markedOptions).toEqual(initialMarkedOptions['useValue']);
+      expect(markedOptions).toBeNull();
+    });
+
+    it('should not provide MarkedOptions when MarkdownModuleConfig is not provided', () => {
+
+      TestBed.configureTestingModule({
+        imports: [
+          MarkdownModule.forRoot(),
+        ],
+      });
+
+      const markedOptions = TestBed.inject(MarkedOptions, null);
+
+      expect(markedOptions).toBeNull();
+    });
+
+    it('should provide SecurityContext when MarkdownModuleConfig is provided with sanitize', () => {
+
+      TestBed.configureTestingModule({
+        imports: [
+          MarkdownModule.forRoot({ sanitize: SecurityContext.NONE }),
+        ],
+      });
+
+      const securityContext = TestBed.inject(SECURITY_CONTEXT);
+
+      expect(securityContext).toBe(SecurityContext.NONE);
+    });
+
+    it('should provide default SecurityContext when MarkdownModuleConfig is provided without sanitize', () => {
+
+      TestBed.configureTestingModule({
+        imports: [
+          MarkdownModule.forRoot({
+            markedOptions: {
+              provide: MarkedOptions,
+              useValue: 'mockMarkedOptions',
+            },
+          }),
+        ],
+      });
+
+      const securityContext = TestBed.inject(SECURITY_CONTEXT);
+
+      expect(securityContext).toBe(SecurityContext.HTML);
+    });
+
+    it('should provide default SecurityContext when MarkdownModuleConfig is not provided', () => {
+
+      TestBed.configureTestingModule({
+        imports: [
+          MarkdownModule.forRoot(),
+        ],
+      });
+
+      const securityContext = TestBed.inject(SECURITY_CONTEXT);
+
+      expect(securityContext).toBe(SecurityContext.HTML);
     });
   });
 
@@ -140,6 +184,7 @@ describe('MarkdownModule', () => {
           MarkdownModule.forRoot({
             loader: HttpClient,
             markedOptions: { provide: MarkedOptions, useValue: mockMarkedOptions },
+            sanitize: SecurityContext.NONE,
           }),
           MarkdownModule.forChild(),
         ],
@@ -147,9 +192,11 @@ describe('MarkdownModule', () => {
 
       const httpClient = TestBed.inject(HttpClient);
       const markedOptions = TestBed.inject(MarkedOptions);
+      const securityContext = TestBed.inject(SECURITY_CONTEXT);
 
       expect(httpClient instanceof HttpClient).toBeTruthy();
       expect(markedOptions).toEqual(mockMarkedOptions);
+      expect(securityContext).toBe(SecurityContext.NONE);
     });
   });
 
