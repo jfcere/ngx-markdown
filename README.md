@@ -203,9 +203,6 @@ public options: KatexOptions = {
 
 ## Configuration
 
-> :warning: Sanitization of parsed markdown is not enabled by default which can expose your application to XSS vulnerabilities. It is recommended that you enable it by setting `sanitize: true` through [markedOptions](#markedoptions) when importing `MarkdownModule`.  	
-:soon: _Take note that sanitization will be enabled by default on next major update._
-
 ### Main application module
 
 You must import `MarkdownModule` inside your main application module (usually named AppModule) with `forRoot` to be able to use `markdown` component and/or directive.
@@ -235,6 +232,24 @@ imports: [
 ],
 ```
 
+#### Sanitization
+
+As per ngx-markdown v9.0.0 **sanitization is enabled by default** and uses Angular `DomSanitizer` with `SecurityContext.HTML` to avoid XSS vulnerabilities. The `SecurityContext` level can be changed using the `sanitize` property when configuring `MarkdownModule`.
+
+```typescript
+import { SecurityContext } from '@angular/core';
+
+// enable default sanitization
+MarkdownModule.forRoot()
+
+// turn off sanitization
+MarkdownModule.forRoot({
+  sanitize: SecurityContext.NONE
+})
+```
+
+> :blue_book: Follow [Angular DomSanitizer](https://angular.io/api/platform-browser/DomSanitizer#sanitize) documentation for more information on sanitization and security contexts.
+
 #### MarkedOptions
 
 Optionally, markdown parsing can be configured by passing [MarkedOptions](https://marked.js.org/#/USING_ADVANCED.md#options) to the `forRoot` method of `MarkdownModule`.
@@ -259,10 +274,8 @@ MarkdownModule.forRoot({
     provide: MarkedOptions,
     useValue: {
       gfm: true,
-      tables: true,
       breaks: false,
       pedantic: false,
-      sanitize: false,
       smartLists: true,
       smartypants: false,
     },
@@ -290,10 +303,8 @@ export function markedOptionsFactory(): MarkedOptions {
   return {
     renderer: renderer,
     gfm: true,
-    tables: true,
     breaks: false,
     pedantic: false,
-    sanitize: false,
     smartLists: true,
     smartypants: false,
   };

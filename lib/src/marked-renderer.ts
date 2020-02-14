@@ -1,3 +1,1 @@
-import { Renderer } from 'marked';
-
-export class MarkedRenderer extends Renderer { }
+export { Renderer as MarkedRenderer } from 'marked';
