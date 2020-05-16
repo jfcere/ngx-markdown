@@ -178,13 +178,13 @@ describe('MarkdownComponent', () => {
       const raw = '### Raw';
       const decoded = '<h3>Compiled</h3>';
 
-      spyOn(markdownService, 'compile').and.callFake((markdown: string, decodeHtml: boolean) => {
+      spyOn(markdownService, 'compile').and.callFake((markdown: string, decodeHtml: boolean, emojify: boolean) => {
         return decodeHtml ? decoded : null;
       });
 
       component.render(raw, true);
 
-      expect(markdownService.compile).toHaveBeenCalledWith(raw, true);
+      expect(markdownService.compile).toHaveBeenCalledWith(raw, true, false);
       expect(component.element.nativeElement.innerHTML).toBe(decoded);
     });
 
@@ -193,28 +193,28 @@ describe('MarkdownComponent', () => {
       const raw = '### Raw';
       const undecoded = '<h3>Compiled-Undecoded</h3>';
 
-      spyOn(markdownService, 'compile').and.callFake((markdown: string, decodeHtml: boolean) => {
+      spyOn(markdownService, 'compile').and.callFake((markdown: string, decodeHtml: boolean, emojify: boolean) => {
         return decodeHtml ? null : undecoded;
       });
 
       component.render(raw);
 
-      expect(markdownService.compile).toHaveBeenCalledWith(raw, false);
+      expect(markdownService.compile).toHaveBeenCalledWith(raw, false, false);
       expect(component.element.nativeElement.innerHTML).toBe(undecoded);
 
       component.render(raw, false);
 
-      expect(markdownService.compile).toHaveBeenCalledWith(raw, false);
+      expect(markdownService.compile).toHaveBeenCalledWith(raw, false, false);
       expect(component.element.nativeElement.innerHTML).toBe(undecoded);
 
       component.render(raw, null);
 
-      expect(markdownService.compile).toHaveBeenCalledWith(raw, false);
+      expect(markdownService.compile).toHaveBeenCalledWith(raw, false, false);
       expect(component.element.nativeElement.innerHTML).toBe(undecoded);
 
       component.render(raw, undefined);
 
-      expect(markdownService.compile).toHaveBeenCalledWith(raw, false);
+      expect(markdownService.compile).toHaveBeenCalledWith(raw, false, false);
       expect(component.element.nativeElement.innerHTML).toBe(undecoded);
     });
 
@@ -227,7 +227,7 @@ describe('MarkdownComponent', () => {
 
       component.render(raw);
 
-      expect(markdownService.compile).toHaveBeenCalledWith(raw, false);
+      expect(markdownService.compile).toHaveBeenCalledWith(raw, false, false);
       expect(component.element.nativeElement.innerHTML).toBe(compiled);
     });
 
@@ -274,6 +274,22 @@ describe('MarkdownComponent', () => {
       component.render(markdown);
 
       expect(getHTMLPreElement().attributes.getNamedItem('data-line-offset').value).toBe('5');
+    });
+
+    it('should apply emoji plugin correctly', () => {
+
+      const raw = 'I :heart: ngx-markdown';
+      const emojified = 'I ❤️ ngx-markdown';
+
+      spyOn(markdownService, 'compile').and.callFake((markdown: string, decodeHtml: boolean, emojify: boolean) => {
+        return emojify ? emojified : null;
+      });
+
+      component.emoji = true;
+      component.render(raw);
+
+      expect(markdownService.compile).toHaveBeenCalledWith(raw, false, true);
+      expect(component.element.nativeElement.innerHTML).toBe(emojified);
     });
 
     it('should apply katex plugin correctly', () => {

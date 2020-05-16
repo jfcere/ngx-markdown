@@ -6,9 +6,10 @@ import { parse } from 'marked';
 
 import { KatexOptions } from './katex-options';
 import { MarkdownModule } from './markdown.module';
-import { errorKatexNotLoaded, MarkdownService, SECURITY_CONTEXT } from './markdown.service';
+import { errorJoyPixelsNotLoaded, errorKatexNotLoaded, MarkdownService, SECURITY_CONTEXT } from './markdown.service';
 
 declare var Prism: any;
+declare var joypixels: any;
 declare var katex: any;
 
 describe('MarkdowService', () => {
@@ -197,6 +198,51 @@ describe('MarkdowService', () => {
 
         expect(markdownService.compile(mockRaw, false)).toBe(expected);
         expect(markdownService.compile(mockRaw, false)).toBe(expected);
+      });
+
+      it('should throw when emojify is true but emoji-toolkit is not loaded', () => {
+
+        global['joypixels'] = undefined;
+
+        expect(() => markdownService.compile('I :heart: ngx-markdown', false, true)).toThrowError(errorJoyPixelsNotLoaded);
+
+        global['joypixels'] = { shortnameToUnicode: undefined };
+
+        expect(() => markdownService.compile('I :heart: ngx-markdown', false, true)).toThrowError(errorJoyPixelsNotLoaded);
+      });
+
+      it('should call joypixels when emojify is true', () => {
+
+        const mockRaw = 'I :heart: ngx-markdown';
+        const mockEmojified = 'I ❤️ ngx-markdown';
+
+        global['joypixels'] = { shortnameToUnicode: () => {} };
+
+        spyOn(joypixels, 'shortnameToUnicode').and.returnValue(mockEmojified);
+
+        expect(markdownService.compile(mockRaw, false, true)).toEqual(parse(mockEmojified));
+        expect(joypixels.shortnameToUnicode).toHaveBeenCalledWith(mockRaw);
+      });
+
+      it('should not call joypixels when emojify is omitted/false/null/undefined', () => {
+
+        const mockRaw = '### Markdown-x';
+
+        global['joypixels'] = { shortnameToUnicode: () => {} };
+
+        spyOn(joypixels, 'shortnameToUnicode');
+
+        const useCases = [
+          () => markdownService.compile(mockRaw, false),
+          () => markdownService.compile(mockRaw, false, false),
+          () => markdownService.compile(mockRaw, false, null),
+          () => markdownService.compile(mockRaw, false, undefined),
+        ];
+
+        useCases.forEach(func => {
+          func();
+          expect(joypixels.shortnameToUnicode).not.toHaveBeenCalled();
+        });
       });
     });
 

@@ -10,6 +10,10 @@ import { KatexOptions } from './katex-options';
 import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
 
+declare var joypixels: {
+  shortnameToUnicode(input: string): string;
+};
+
 declare var katex: {
   renderToString(tex: string, options?: KatexOptions): string;
 };
@@ -19,8 +23,9 @@ declare var Prism: {
 };
 
 // tslint:disable:max-line-length
-export const errorKatexNotLoaded = '[ngx-markdown When using the [katex] attribute you *have to* include KaTeX files to `angular.json` or use imports. See README for more information';
-export const errorSrcWithoutHttpClient = '[ngx-markdown] When using the [src] attribute you *have to* pass the `HttpClient` as a parameter of the `forRoot` method. See README for more information';
+export const errorJoyPixelsNotLoaded = '[ngx-markdown] When using the `emoji` attribute you *have to* include Emoji-Toolkit files to `angular.json` or use imports. See README for more information';
+export const errorKatexNotLoaded = '[ngx-markdown] When using the `katex` attribute you *have to* include KaTeX files to `angular.json` or use imports. See README for more information';
+export const errorSrcWithoutHttpClient = '[ngx-markdown] When using the `src` attribute you *have to* pass the `HttpClient` as a parameter of the `forRoot` method. See README for more information';
 // tslint:enable:max-line-length
 
 export const SECURITY_CONTEXT = new InjectionToken<SecurityContext>('SECURITY_CONTEXT');
@@ -54,10 +59,11 @@ export class MarkdownService {
     this.options = options;
   }
 
-  compile(markdown: string, decodeHtml = false, markedOptions = this.options): string {
+  compile(markdown: string, decodeHtml = false, emojify = false,  markedOptions = this.options): string {
     const trimmed = this.trimIndentation(markdown);
     const decoded = decodeHtml ? this.decodeHtml(trimmed) : trimmed;
-    const compiled = marked.parse(decoded, markedOptions);
+    const emojified = emojify ? this.renderEmoji(decoded) : decoded;
+    const compiled = marked.parse(emojified, markedOptions);
     return this.sanitizer.sanitize(this.securityContext, compiled);
   }
 
@@ -104,6 +110,13 @@ export class MarkdownService {
     return extension !== 'md'
       ? '```' + extension + '\n' + markdown + '\n```'
       : markdown;
+  }
+
+  private renderEmoji(html: string) {
+    if (typeof joypixels === 'undefined' || typeof joypixels.shortnameToUnicode === 'undefined') {
+      throw new Error(errorJoyPixelsNotLoaded);
+    }
+    return joypixels.shortnameToUnicode(html);
   }
 
   private trimIndentation(markdown: string): string {

@@ -28,10 +28,14 @@
 
 # ngx-markdown
 
-ngx-markdown is an [Angular](https://angular.io/) library that uses [marked](https://github.com/chjj/marked) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for syntax highlight.
+ngx-markdown is an [Angular](https://angular.io/) library that combines...
+- [marked](http://marked.js.org/) to parse markdown to HTML
+- [Prism.js](http://prismjs.com/) for language syntax highlight
+- [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) for emoji support
+- [KaTeX](https://katex.org/) for math expression rendering
 
-- Demo available @ [https://jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown)
-- StackBlitz available @ [https://stackblitz.com/edit/ngx-markdown](https://stackblitz.com/edit/ngx-markdown)
+Demo available @ [https://jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown)  
+StackBlitz available @ [https://stackblitz.com/edit/ngx-markdown](https://stackblitz.com/edit/ngx-markdown)
 
 ### Table of contents
 
@@ -151,6 +155,30 @@ Use `line` input property to specify the line(s) to highlight and optionally the
 
 ```html
 <markdown [src]="path/to/file.js" lineHighlight [line]="'6, 10-16'" [lineOffset]="5"></markdown>
+```
+
+### Emoji support
+
+> :bell: Emoji support is **optional**, skip this step if you are not planning to use it
+
+To activate [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) for emoji suppport you will need to include...
+- Emoji-Toolkit library - `node_modules/emoji-toolkit/lib/js/joypixels.min.js`
+
+If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
+
+```diff
+"scripts": [
+  "node_modules/marked/lib/marked.js",
++ "node_modules/emoji-toolkit/lib/js/joypixels.min.js",
+]
+```
+
+#### Emoji plugin
+
+Using `markdown` component and/or directive, you will be able to use the `emoji` property to activate [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) plugin that converts emoji shortnames such as `:heart:` to native unicode emojis.
+
+```html
+<markdown emoji>I :heart: ngx-markdown</markdown>
 ```
 
 ### Math rendering

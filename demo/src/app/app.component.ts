@@ -61,6 +61,10 @@ export class MarkdownDemoComponent {
 }`;
   //#endregion
 
+  //#region emoji
+  emojiMarkdown = `#### I :heart: ngx-markdown`;
+  //#endregion
+
   //#region katex
   katexMarkdown =
 `#### \`katex\` directive example
