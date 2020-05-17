@@ -262,7 +262,7 @@ imports: [
 
 #### Sanitization
 
-As per ngx-markdown v9.0.0 **sanitization is enabled by default** and uses Angular `DomSanitizer` with `SecurityContext.HTML` to avoid XSS vulnerabilities. The `SecurityContext` level can be changed using the `sanitize` property when configuring `MarkdownModule`.
+As of ngx-markdown v9.0.0 **sanitization is enabled by default** and uses Angular `DomSanitizer` with `SecurityContext.HTML` to avoid XSS vulnerabilities. The `SecurityContext` level can be changed using the `sanitize` property when configuring `MarkdownModule`.
 
 ```typescript
 import { SecurityContext } from '@angular/core';
