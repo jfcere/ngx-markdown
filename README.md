@@ -181,6 +181,8 @@ Using `markdown` component and/or directive, you will be able to use the `emoji`
 <markdown emoji>I :heart: ngx-markdown</markdown>
 ```
 
+> :blue_book: You can refer to this [Emoji Cheat Sheet](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md) for a complete list of _shortnames_.
+
 ### Math rendering
 
 > :bell: Math rendering is **optional**, skip this step if you are not planning to use it
