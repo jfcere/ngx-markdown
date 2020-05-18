@@ -130,6 +130,8 @@ section:first-of-type {
   padding: 13px;
 }
 
+.emoji-usage,
+.emoji-textarea,
 .katex-usage,
 .katex-textarea,
 .pipe-usage,
@@ -143,6 +145,10 @@ section:first-of-type {
   }
 }
 
+.emoji-textarea {
+  min-height: 80px;
+}
+
 .katex-textarea {
   min-height: 220px;
 }
@@ -152,6 +158,7 @@ section:first-of-type {
   min-height: 320px;
 }
 
+.emoji-textarea,
 .katex-textarea,
 .pipe-textarea,
 .variable-textarea {
@@ -160,6 +167,7 @@ section:first-of-type {
   padding: 8px;
 }
 
+.emoji-usage,
 .katex-usage,
 .pipe-usage,
 .variable-binding {

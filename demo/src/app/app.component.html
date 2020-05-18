@@ -32,6 +32,7 @@
         <li><a href="#variable-binding">Variable Binding</a></li>
         <li><a href="#pipe">Pipe Usage</a></li>
         <li class="menu-subtitle"><span>Plugins</span></li>
+        <li><a href="#emoji">Emoji</a></li>
         <li><a href="#line-numbers">Line Numbers</a></li>
         <li><a href="#line-highlight">Line Highlight</a></li>
         <li><a href="#katex">KaTeX</a></li>
@@ -199,6 +200,34 @@
 
       <textarea class="pipe-textarea" [(ngModel)]="typescriptMarkdown"></textarea>
       <div class="pipe-usage" [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown"></div>
+    </section>
+
+    <!-- PLUGINS - Emoji -->
+    <section id="emoji">
+      <h2 class="subtitle">Emoji plugin</h2>
+
+      <markdown ngPreserveWhitespaces>
+        #### Emoji-Toolkit file to include
+        ```javascript
+        node_modules/emoji-toolkit/lib/js/joypixels.min.js
+        ```
+        #### Directive
+        `emoji` - activate emoji plugin
+        ### Example
+      </markdown>
+
+      <markdown>
+        Using `emoji` input property on `markdown` component or directive (this is not available when using pipe or service) allows you to convert shortnames to native unicode emojis.
+      </markdown>
+
+      <markdown [src]="'app/remote/emoji.html'"></markdown>
+
+      <markdown>
+        The example below illustrate `emoji` directive in action.
+      </markdown>
+
+      <textarea class="emoji-textarea" [(ngModel)]="emojiMarkdown"></textarea>
+      <markdown class="emoji-usage" [data]="emojiMarkdown" emoji></markdown>
     </section>
 
     <!-- PLUGINS - LineNumbers -->

@@ -28,10 +28,14 @@
 
 # ngx-markdown
 
-ngx-markdown is an [Angular](https://angular.io/) library that uses [marked](https://github.com/chjj/marked) to parse markdown to html combined with [Prism.js](http://prismjs.com/) for syntax highlight.
+ngx-markdown is an [Angular](https://angular.io/) library that combines...
+- [marked](http://marked.js.org/) to parse markdown to HTML
+- [Prism.js](http://prismjs.com/) for language syntax highlight
+- [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) for emoji support
+- [KaTeX](https://katex.org/) for math expression rendering
 
-- Demo available @ [https://jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown)
-- StackBlitz available @ [https://stackblitz.com/edit/ngx-markdown](https://stackblitz.com/edit/ngx-markdown)
+Demo available @ [https://jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown)  
+StackBlitz available @ [https://stackblitz.com/edit/ngx-markdown](https://stackblitz.com/edit/ngx-markdown)
 
 ### Table of contents
 
@@ -153,6 +157,32 @@ Use `line` input property to specify the line(s) to highlight and optionally the
 <markdown [src]="path/to/file.js" lineHighlight [line]="'6, 10-16'" [lineOffset]="5"></markdown>
 ```
 
+### Emoji support
+
+> :bell: Emoji support is **optional**, skip this step if you are not planning to use it
+
+To activate [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) for emoji suppport you will need to include...
+- Emoji-Toolkit library - `node_modules/emoji-toolkit/lib/js/joypixels.min.js`
+
+If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
+
+```diff
+"scripts": [
+  "node_modules/marked/lib/marked.js",
++ "node_modules/emoji-toolkit/lib/js/joypixels.min.js",
+]
+```
+
+#### Emoji plugin
+
+Using `markdown` component and/or directive, you will be able to use the `emoji` property to activate [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) plugin that converts emoji shortnames such as `:heart:` to native unicode emojis.
+
+```html
+<markdown emoji>I :heart: ngx-markdown</markdown>
+```
+
+> :blue_book: You can refer to this [Emoji Cheat Sheet](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md) for a complete list of _shortnames_.
+
 ### Math rendering
 
 > :bell: Math rendering is **optional**, skip this step if you are not planning to use it
@@ -234,7 +264,7 @@ imports: [
 
 #### Sanitization
 
-As per ngx-markdown v9.0.0 **sanitization is enabled by default** and uses Angular `DomSanitizer` with `SecurityContext.HTML` to avoid XSS vulnerabilities. The `SecurityContext` level can be changed using the `sanitize` property when configuring `MarkdownModule`.
+As of ngx-markdown v9.0.0 **sanitization is enabled by default** and uses Angular `DomSanitizer` with `SecurityContext.HTML` to avoid XSS vulnerabilities. The `SecurityContext` level can be changed using the `sanitize` property when configuring `MarkdownModule`.
 
 ```typescript
 import { SecurityContext } from '@angular/core';
@@ -502,9 +532,8 @@ Building with AoT is part of the CI and is tested every time a commit occurs so 
 Here is the list of tasks that will be done on this library in the near future ...
 
 - Update Marked to 1.0
-- Add support for emojis
 - Add copy-to-clipboard feature
-- Support Prism.js customizing options (line-numbers, line-height, ...)
+- Add a FAQ section to the README.md
 
 ## Contribution
 
