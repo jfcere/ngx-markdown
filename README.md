@@ -531,7 +531,6 @@ Building with AoT is part of the CI and is tested every time a commit occurs so 
 
 Here is the list of tasks that will be done on this library in the near future ...
 
-- Update Marked to 1.0
 - Add copy-to-clipboard feature
 - Add a FAQ section to the README.md
 
