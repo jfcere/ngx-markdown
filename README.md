@@ -29,7 +29,7 @@
 # ngx-markdown
 
 ngx-markdown is an [Angular](https://angular.io/) library that combines...
-- [marked](http://marked.js.org/) to parse markdown to HTML
+- [Marked](http://marked.js.org/) to parse markdown to HTML
 - [Prism.js](http://prismjs.com/) for language syntax highlight
 - [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) for emoji support
 - [KaTeX](https://katex.org/) for math expression rendering
@@ -60,7 +60,7 @@ To add ngx-markdown library to your `package.json` use the following command.
 npm install ngx-markdown --save
 ```
 
-As the library is using [marked](https://github.com/chjj/marked) parser you will need to add `node_modules/marked/lib/marked.js` to your application.
+As the library is using [Marked](https://github.com/chjj/marked) parser you will need to add `node_modules/marked/lib/marked.js` to your application.
 
 If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
 

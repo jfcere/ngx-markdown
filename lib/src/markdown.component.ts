@@ -10,20 +10,25 @@ import { PrismPlugin } from './prism-plugin';
   template: '<ng-content></ng-content>',
 })
 export class MarkdownComponent implements OnChanges, AfterViewInit {
+
+  protected static ngAcceptInputType_emoji: boolean | '';
+  protected static ngAcceptInputType_katex: boolean | '';
+  protected static ngAcceptInputType_lineHighlight: boolean | '';
+  protected static ngAcceptInputType_lineNumbers: boolean | '';
+
   @Input() data: string;
   @Input() src: string;
+
+  // Plugin - emoji
+  @Input()
+  get emoji(): boolean { return this._emoji; }
+  set emoji(value: boolean) { this._emoji = this.coerceBooleanProperty(value); }
 
   // Plugin - katex
   @Input()
   get katex(): boolean { return this._katex; }
   set katex(value: boolean) { this._katex = this.coerceBooleanProperty(value); }
   @Input() katexOptions: KatexOptions;
-
-  // Plugin - lineNumbers
-  @Input()
-  get lineNumbers(): boolean { return this._lineNumbers; }
-  set lineNumbers(value: boolean) { this._lineNumbers = this.coerceBooleanProperty(value); }
-  @Input() start: number;
 
   // Plugin - lineHighlight
   @Input()
@@ -32,10 +37,11 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   @Input() line: string | string[];
   @Input() lineOffset: number;
 
-  // Plugin - emoji
+  // Plugin - lineNumbers
   @Input()
-  get emoji(): boolean { return this._emoji; }
-  set emoji(value: boolean) { this._emoji = this.coerceBooleanProperty(value); }
+  get lineNumbers(): boolean { return this._lineNumbers; }
+  set lineNumbers(value: boolean) { this._lineNumbers = this.coerceBooleanProperty(value); }
+  @Input() start: number;
 
   // Event emitters
   @Output() error = new EventEmitter<string>();
@@ -78,7 +84,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
     this.ready.emit();
   }
 
-  private coerceBooleanProperty(value: boolean): boolean {
+  private coerceBooleanProperty(value: boolean | ''): boolean {
     return value != null && `${value}` !== 'false';
   }
 
