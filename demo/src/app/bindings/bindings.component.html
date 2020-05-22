@@ -1,0 +1,75 @@
+<app-scrollspy-nav-layout [headings]="headings">
+  <h1>Bindings</h1>
+
+  <section>
+    <h2 id="remote-url">Remote Url</h2>
+
+    <markdown>
+      Using component with `src` property to fetch remote markdown file `app/bindings/remote/demo.md`
+    </markdown>
+
+    <markdown [src]="'app/bindings/remote/demo.md'"></markdown>
+
+    <markdown>
+      Using component with static `python` code block
+    </markdown>
+
+    <markdown>{{ demoPython | language: 'python' }}</markdown>
+
+    <markdown>
+      Using directive with `src` property to fetch remote html file `app/bindings/remote/demo.html`
+    </markdown>
+
+    <div markdown [src]="'app/bindings/remote/demo.html'"></div>
+
+    <markdown>
+      Using directive with `src` property to fetch remote C++ file `app/bindings/remote/demo.cpp`
+    </markdown>
+
+    <div markdown [src]="'app/bindings/remote/demo.cpp'"></div>
+  </section>
+
+  <section>
+    <h2 id="variable-binding">Variable Binding</h2>
+
+    <markdown>
+      Using component or directive with `data` property allow to bind a variable that will update the DOM when value changes
+    </markdown>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="16px">
+      <mat-form-field appearance="fill" color="accent" fxFlex.gt-sm="calc(50% - 8px)">
+        <textarea matInput [(ngModel)]="markdown"></textarea>
+      </mat-form-field>
+
+      <markdown [data]="markdown" fxFlex.gt-sm="calc(50% - 8px)"></markdown>
+    </div>
+
+    <markdown>
+      Using `language` pipe you can specify the language of the variable content for synthax highlights
+    </markdown>
+
+    <markdown [src]="'app/bindings/remote/language-pipe.html'"></markdown>
+  </section>
+
+  <section>
+    <h2 id="pipe-usage">Pipe Usage</h2>
+
+    <markdown>
+      Using `markdown` pipe to transform markdown to HTML allow you to chain pipe transformations and will update the DOM when value changes
+    </markdown>
+
+    <markdown [src]="'app/bindings/remote/markdown-pipe.html'"></markdown>
+
+    <markdown>
+      In the following example using the synthax above, `typescriptMarkdown` property does not contain any `back-ticks` to set the content language but will be chain with `language` pipe instead to specify synthax highlights language along with `markdown` pipe for conversion
+    </markdown>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="16px">
+      <mat-form-field appearance="fill" color="accent" fxFlex.gt-sm="calc(50% - 8px)">
+        <textarea matInput [(ngModel)]="typescriptMarkdown"></textarea>
+      </mat-form-field>
+
+      <div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown" fxFlex.gt-sm="calc(50% - 8px)"></div>
+    </div>
+  </section>
+</app-scrollspy-nav-layout>

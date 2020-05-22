@@ -19,9 +19,9 @@
       "dom"
     ],
     "paths": {
-      "ngx-markdown": [
-        "lib/src"
-      ]
+      "@shared/*": ["demo/src/app/shared/*"],
+      "@app/*": ["demo/src/app/*"],
+      "ngx-markdown": ["lib/src"]
     }
   },
   "angularCompilerOptions": {

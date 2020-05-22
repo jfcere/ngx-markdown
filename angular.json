@@ -26,33 +26,36 @@
             "assets": [
               "demo/src/favicon.ico",
               "demo/src/assets",
-              "demo/src/app/markdown",
-              "demo/src/app/remote"
+              "demo/src/app/bindings/remote",
+              "demo/src/app/syntax-highlight/remote",
+              "demo/src/app/plugins/remote"
             ],
             "styles": [
               "demo/src/styles.scss",
-              "node_modules/prismjs/themes/prism.css",
+              "demo/src/scss/material-theme.scss",
+              "demo/src/scss/prism-theme.scss",
               "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css",
               "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",
-              "node_modules/katex/dist/katex.min.css",
-              "node_modules/materialize-css/dist/css/materialize.min.css"
+              "node_modules/katex/dist/katex.min.css"
             ],
             "scripts": [
               "node_modules/marked/lib/marked.js",
-              "node_modules/emoji-toolkit/lib/js/joypixels.js",
               "node_modules/prismjs/prism.js",
+              "node_modules/prismjs/plugins/highlight-keywords/prism-highlight-keywords.min.js",
               "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.js",
               "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.js",
+              "node_modules/prismjs/components/prism-bash.min.js",
               "node_modules/prismjs/components/prism-c.min.js",
               "node_modules/prismjs/components/prism-cpp.min.js",
+              "node_modules/prismjs/components/prism-diff.min.js",
               "node_modules/prismjs/components/prism-javascript.min.js",
               "node_modules/prismjs/components/prism-latex.min.js",
+              "node_modules/prismjs/components/prism-markup.min.js",
               "node_modules/prismjs/components/prism-markdown.min.js",
               "node_modules/prismjs/components/prism-python.min.js",
               "node_modules/prismjs/components/prism-typescript.min.js",
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/katex/dist/katex.min.js",
-              "node_modules/materialize-css/dist/js/materialize.min.js"
+              "node_modules/emoji-toolkit/lib/js/joypixels.js",
+              "node_modules/katex/dist/katex.min.js"
             ]
           },
           "configurations": {

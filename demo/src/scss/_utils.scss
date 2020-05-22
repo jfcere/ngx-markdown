@@ -1,0 +1,6 @@
+@function soften-color($color, $percent) {
+  @if lightness($color) < 50% {
+    @return lighten($color, $percent);
+  }
+  @return darken($color, $percent/2);
+}

@@ -1,0 +1,20 @@
+<div fxLayout="row" fxLayoutGap="40px">
+  <div fxFlex="1 1 calc(100% - 220px)">
+    <ng-content></ng-content>
+    <div class="footer">
+      <mat-divider></mat-divider>
+      <markdown emoji class="footer-text" fxLayout="row" fxLayoutAlign.gt-xs="center">
+        Crafted with :heart: by **jfcere** <span style="margin:0 .15em;">•</span> Follow on [GitHub](https://github.com/jfcere)
+      </markdown>
+    </div>
+    <button class="scrollup-button--fixed" mat-fab color="accent" fxHide.gt-sm (click)="onScrollUp()" *ngIf="showScrollUpButton" [@zoomAnimation]>
+      <img src="assets/icon-chevron-up.svg">
+    </button>
+  </div>
+  <div class="sticky" fxLayout="column" fxFlex="1 0 180px" fxFlexAlign="flex-start" fxHide.lt-md>
+    <app-scrollspy-nav [headings]="headings"></app-scrollspy-nav>
+    <button class="scrollup-button" mat-mini-fab color="accent" (click)="onScrollUp()" *ngIf="showScrollUpButton" [@zoomAnimation]>
+      <img src="assets/icon-chevron-up.svg">
+    </button>
+  </div>
+</div>
