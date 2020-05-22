@@ -1,181 +1,79 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { MarkdownService } from 'ngx-markdown';
-import { of } from 'rxjs';
-import { delay, first, tap } from 'rxjs/operators';
+import { DOCUMENT } from '@angular/common';
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, Inject, OnInit, ViewChild } from '@angular/core';
+import { Route, Router, RouterOutlet } from '@angular/router';
 
+import { AnchorService } from '@shared/anchor/anchor.service';
+import { ROUTE_ANIMATION } from './app.animation';
 
-// tslint:disable:max-line-length
 @Component({
+  animations: [ROUTE_ANIMATION],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
-  //#region markdown
-  blockquotes = require('raw-loader!./markdown/blockquotes.md').default;
-  codeAndSynthaxHighlighting = require('raw-loader!./markdown/code-and-synthax-highlighting.md').default;
-  emphasis = require('raw-loader!./markdown/emphasis.md').default;
-  headers = require('raw-loader!./markdown/headers.md').default;
-  horizontalRule = require('raw-loader!./markdown/horizontal-rule.md').default;
-  images = require('raw-loader!./markdown/images.md').default;
-  links = require('raw-loader!./markdown/links.md').default;
-  lists = require('raw-loader!./markdown/lists.md').default;
-  listsDot = require('raw-loader!./markdown/lists-dot.md').default;
-  tables = require('raw-loader!./markdown/tables.md').default;
-  //#endregion
 
-  //#region remote
-  demoPython = require('raw-loader!./remote/demo.py').default;
-  languagePipe = require('raw-loader!./remote/language-pipe.html').default;
-  //#endregion
+  private readonly stickyClassName = 'mat-tab-nav-bar--sticky';
 
-  //#region variable-binding
-  markdown =
-`### Markdown example
----
-This is an **example** where we bind a variable to the \`markdown\` component that is also bind to a textarea.
+  routes: Route[];
+  theme = 'light';
 
-#### example.component.ts
-\`\`\`typescript
-public markdown = "# Markdown";
-\`\`\`
+  @ViewChild('tabHeader', { read: ElementRef, static: true })
+  tabHeader: ElementRef;
 
-#### example.component.html
-\`\`\`html
-<textarea [(ngModel)]="markdown"></textarea>
-<markdown [data]="markdown"></markdown>
-\`\`\``;
-  //#endregion
-
-  //#region pipe
-  typescriptMarkdown =
-`import { Component } from '@angular/core';
-
-@Component({
-  selector: 'markdown-demo',
-  templateUrl: './markdown-demo.component.html',
-  styleUrls: ['./markdown-demo.component.scss'],
-})
-export class MarkdownDemoComponent {
-  public pipeMarkdown = '# Markdown';
-}`;
-  //#endregion
-
-  //#region emoji
-  emojiMarkdown = `#### I :heart: ngx-markdown`;
-  //#endregion
-
-  //#region katex
-  katexMarkdown =
-`#### \`katex\` directive example
-
-\`\`\`latex
-f(x) = \\int_{-\\infty}^\\infty \\hat f(\\xi) e^{2 \\pi i \\xi x} d\\xi
-\`\`\`
-
-$f(x) = \\int_{-\\infty}^\\infty \\hat f(\\xi) e^{2 \\pi i \\xi x} d\\xi$
-
-> If you can understand this, you're a genius!`;
-  //#endregion
-
-  protected _titleIsAnimating = false;
-  protected _pushpinIsOn = false;
-
-  @HostListener('window:resize')
-  onWindowResize() {
-    this.initPushpin();
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    this.anchorService.interceptClick(event);
   }
 
   @HostListener('window:scroll')
   onWindowScroll() {
-    this.animateTitle();
-    this.animateScrollTop();
+    const tabHeader = this.tabHeader.nativeElement as HTMLElement;
+    const tabHeaderOffset = Math.ceil(tabHeader.offsetTop);
+    const windowOffset = Math.ceil(window.pageYOffset);
+    const hasStickyClass = tabHeader.classList.contains(this.stickyClassName);
+    if (!hasStickyClass && windowOffset >= tabHeaderOffset) {
+      tabHeader.classList.add(this.stickyClassName);
+    }
+    if (hasStickyClass && windowOffset < tabHeaderOffset) {
+      tabHeader.classList.remove(this.stickyClassName);
+    }
   }
 
   constructor(
-    private markdownService: MarkdownService,
+    @Inject(DOCUMENT) private document: Document,
+    private anchorService: AnchorService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
-    this.initMarkdown();
-    this.initPushpin();
-    this.initScrollSpy();
+    this.routes = this.router.config.filter(route => route.data && route.data.label);
+    this.setTheme(localStorage.getItem('theme') || 'light');
   }
 
-  onPageUp() {
-    $('html, body').animate({ scrollTop: 0 }, {
-      duration: 400,
-      queue: false,
-      easing: 'easeOutCubic',
-    });
+  handleFragment() {
+    this.anchorService.scrollToAnchor();
   }
 
-  private animateScrollTop() {
-    const scrollTop = $('.fixed-action-btn button');
-    const windowOffset = window.pageYOffset;
-    const hasScaleInClass = scrollTop.hasClass('scale-in');
-    const targetScaleInClass = windowOffset > 100 ? true : false;
-    // scale-in
-    if (!hasScaleInClass && targetScaleInClass) {
-      scrollTop.addClass('scale-in');
-      of(null).pipe(
-        tap(() => scrollTop.addClass('pulse')),
-        delay(1000),
-        tap(() => scrollTop.removeClass('pulse')),
-        first(),
-      ).subscribe();
+  setTheme(theme: string) {
+    this.theme = theme;
+    const bodyClassList = this.document.querySelector('body').classList;
+    const removeClassList = /\w*-theme\b/.exec(bodyClassList.value);
+    if (removeClassList) {
+      bodyClassList.remove(...removeClassList);
     }
-    // scale-out
-    if (hasScaleInClass && !targetScaleInClass) {
-      scrollTop.removeClass('scale-in');
-    }
+    bodyClassList.add(`${this.theme}-theme`);
+    localStorage.setItem('theme', this.theme);
   }
 
-  private animateTitle() {
-    const title = $('.title a');
-    const titleOffset = title[0].offsetTop;
-    const windowOffset = window.pageYOffset;
-    const currentFontSize = title[0].style.fontSize;
-    const targetFontSize = windowOffset > titleOffset ? '2.28rem' : '2.92rem';
-
-    if (currentFontSize !== targetFontSize && !this._titleIsAnimating) {
-      title.animate({ fontSize: targetFontSize }, {
-        duration: 200,
-        queue: false,
-        easing: 'easeOutCubic',
-        start: () => this._titleIsAnimating = true,
-        complete: () => this._titleIsAnimating = false,
-      });
-    }
+  getRouteAnimation(outlet: RouterOutlet) {
+    return outlet
+      && outlet.activatedRouteData
+      && outlet.activatedRouteData.label;
   }
 
-  private initMarkdown() {
-    this.markdownService.renderer.heading = (text: string, level: number) => {
-      const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
-      return '<h' + level + '>' +
-               '<a name="' + escapedText + '" class="anchor" href="#' + escapedText + '">' +
-                 '<span class="header-link"></span>' +
-               '</a>' + text +
-             '</h' + level + '>';
-    };
-  }
-
-  private initPushpin() {
-    const tableOfContent = $('.table-of-contents');
-    // add pushpin
-    if (!this._pushpinIsOn && window.innerWidth > 992) {
-      const pushpinTop = tableOfContent.parent().offset().top;
-      tableOfContent.pushpin({ top: pushpinTop });
-      this._pushpinIsOn = true;
-    }
-    // remove pushpin
-    if (this._pushpinIsOn && window.innerWidth <= 992) {
-      tableOfContent.pushpin('remove' as any);
-      this._pushpinIsOn = false;
-    }
-  }
-
-  private initScrollSpy() {
-    $('section').scrollSpy();
+  toggleTheme() {
+    this.setTheme(this.theme === 'light' ? 'dark' : 'light');
   }
 }

@@ -1,0 +1,22 @@
+@import '~@angular/material/theming';
+
+@mixin scrollspy-nav-component-theme($theme) {
+  $accent: map-get($theme, accent);
+  $foreground: map-get($theme, foreground);
+
+  ul.scrollspy-nav {
+
+    li {
+      border-left: 2px solid mat-color($accent);
+      box-shadow: inset 1px 0 0 mat-color($accent);
+
+      &:not(.active) {
+        box-shadow: inset 1px 0 0 mat-color($foreground, text, .21);
+
+        a:not(:hover) {
+          color: mat-color($foreground, text);
+        }
+      }
+    }
+  }
+}

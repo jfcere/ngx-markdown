@@ -1,0 +1,13 @@
+@import '~@angular/material/theming';
+
+@mixin app-component-theme($theme) {
+  $primary: map-get($theme, primary);
+
+  .mat-toolbar.mat-primary {
+    background: linear-gradient(90deg, mat-color($primary) 15%, darken(mat-color($primary), 4%) 100%);
+  }
+
+  .mat-tab-nav-bar.mat-background-primary {
+    background: mat-color($primary);
+  }
+}

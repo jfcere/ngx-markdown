@@ -1,229 +1,97 @@
+@import "~@angular/material/theming";
+
+// variables
+
+$viewport-max-width: 960px;
+$viewport-offset-x: 16px;
+
+// mixins
+
+@mixin viewport-width($padding: true) {
+  margin: 0 auto;
+  max-width: $viewport-max-width;
+
+  @if ($padding) {
+    padding-left: $viewport-offset-x;
+    padding-right: $viewport-offset-x;
+  }
+}
+
+// style
+
 :host {
   display: block;
-  font-size: 13px;
-  margin: 0 auto 3rem;
-  max-width: 1170px;
 }
 
-::ng-deep code:not([class*="language-"]) {
-  background: #f5f5f5;
-  border-radius: 2px;
-  color: #dd4a68;
-  padding: 2px 4px;
+.mat-tab-nav-bar--sticky {
+  @include mat-elevation(6);
+  transition: box-shadow .3s ease-out;
 }
 
-.fixed-action-btn {
-  @media (max-width: 992px) {
-    bottom: 16px;
-    right: 16px;
-  }
-}
+.mat-tab-nav-bar ::ng-deep {
+  position: sticky;
+  top: 0;
+  z-index: 24;
 
-svg.center {
-  display: flex;
-  margin: 0 auto;
-}
-
-::ng-deep {
-  h1 {
-    font-size: 2.92rem;
+  .mat-ink-bar {
+    border-radius: 3px 3px 0 0;
+    height: 3px;
   }
 
-  h2 {
-    font-size: 2.28rem
-  }
-
-  h3 {
-    font-size: 1.64rem;
-  }
-
-  h4 {
-    font-size: 1.21rem;
-  }
-
-  h5 {
-    font-size: 1.1rem;
-  }
-
-  h6 {
-    font-size: 1rem;
-  }
-}
-
-.title {
-  margin-bottom: 0;
-
-  a {
-    color: #c7254e;
-    height: 1.8rem;
-    transition: padding 300ms ease-out;
-
-    &:not(:hover) {
-      padding: 0;
-    }
-
-    &:hover {
-      color: #ff3e6f;
-      border-left-width: 2px;
-    }
-  }
-}
-
-.title-based-on {
-  color: #690;
-  font-weight: 300;
-  margin-top: 4px;
-
-  a {
-    border: 0;
-    color: #0089ec;
+  .mat-tab-link {
+    margin: 0 $viewport-offset-x;
+    min-width: 0;
     padding: 0;
+    text-decoration: none;
+    transition: all 0.2s ease-out;
+  }
+
+  .mat-tab-link:not(.mat-tab-label-active):hover {
+    transform: translateY(-1px);
+  }
+
+  .mat-tab-link:hover,
+  .mat-tab-label-active {
+    opacity: 1;
+  }
+
+  .mat-tab-link-container {
+    @include viewport-width($padding: false);
+  }
+
+  // start - workaround for responsive tabs
+  .mat-tab-header-pagination {
+    display: none !important;
+  }
+
+  .mat-tab-link-container {
+    overflow: auto;
+  }
+
+  .mat-tab-list {
+    transform: unset !important;
+  }
+  // end - workaround
+}
+
+.mat-toolbar ::ng-deep {
+
+  .mat-toolbar-row {
+    @include viewport-width();
+  }
+
+  .mat-icon-button {
+    transition: all 0.2s ease-out;
 
     &:hover {
-      opacity: 0.87;
+      transform: translateY(-2px);
     }
   }
 }
 
-.menu-subtitle {
-  margin: 4px 0;
+.outlet-wrapper {
+  @include viewport-width();
+  margin-top: $viewport-offset-x;
+  margin-bottom: $viewport-offset-x;
   position: relative;
-
-  span {
-    background: #ffffff;
-    padding-right: 8px;
-    text-transform: uppercase;
-  }
-
-  &:before {
-    background: rgba(0,0,0,0.14);
-    content: "";
-    display: block;
-    height: 1px;
-    width: 100%;
-    z-index: -1;
-    position: absolute;
-    top: 11px;
-
-    @media (min-width: 993px) {
-      width: 225px;
-    }
-  }
-}
-
-section:first-of-type {
-  @media (min-width: 993px) {
-    margin-top: 118px;
-  }
-}
-
-.subtitle {
-  border-bottom: 1px solid rgba(0,0,0,0.14);
-  padding-bottom: 1rem;
-  margin: 3rem 0 2rem;
-}
-
-::ng-deep pre {
-  background: #f5f5f5 !important;
-  border-color: transparent !important;
-  margin-bottom: 24px;
-  padding: 13px;
-}
-
-.emoji-usage,
-.emoji-textarea,
-.katex-usage,
-.katex-textarea,
-.pipe-usage,
-.pipe-textarea,
-.variable-binding,
-.variable-textarea {
-  width: 49%;
-
-  @media (max-width: 992px) {
-    width: 100%;
-  }
-}
-
-.emoji-textarea {
-  min-height: 80px;
-}
-
-.katex-textarea {
-  min-height: 220px;
-}
-
-.pipe-textarea,
-.variable-textarea {
-  min-height: 320px;
-}
-
-.emoji-textarea,
-.katex-textarea,
-.pipe-textarea,
-.variable-textarea {
-  border-radius: 4px;
-  margin-top: 8px;
-  padding: 8px;
-}
-
-.emoji-usage,
-.katex-usage,
-.pipe-usage,
-.variable-binding {
-  display: block;
-  float: right;
-}
-
-/* materialize global css reset for demo puprose */
-markdown {
-  ::ng-deep {
-    blockquote {
-      padding: 0 1em;
-      color: rgba(0,0,0,0.535);
-      border-left: 0.25em solid rgba(0,0,0,0.11);
-    }
-
-    table {
-      border-spacing: 0;
-      border-collapse: collapse;
-      margin-bottom: 16px;
-
-      th,
-      td {
-        padding: 6px 13px;
-        border: 1px solid #ddd;
-
-        &[align="left"] {
-          text-align: left;
-        }
-
-        &[align="center"] {
-          text-align: center;
-        }
-
-        &[align="right"] {
-          text-align: right;
-        }
-      }
-
-      tr:nth-child(2n) {
-        background-color: rgba(0,0,0,0.03);
-      }
-    }
-
-    ul {
-      list-style-type: inherit;
-      padding-left: 40px !important;
-    }
-
-    li {
-      list-style-type: inherit;
-    }
-
-    ul ul,
-    ol ul {
-      list-style-type: circle;
-    }
-  }
 }

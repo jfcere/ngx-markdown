@@ -1,0 +1,79 @@
+html,
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-size: 15px;
+}
+
+blockquote {
+  overflow: auto;
+}
+
+pre {
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.4);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.7);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+  }
+}
+
+section {
+  margin-top: 40px;
+}
+
+table {
+  width: 100%;
+
+  th {
+    color: rgba(0,0,0,.54);
+    font-size: 12px;
+    font-weight: 500;
+    height: 56px;
+  }
+
+  th[align=""],
+  th:not([align]) {
+    text-align: left;
+  }
+
+  td {
+    font-size: 15px;
+    height: 48px;
+  }
+
+  td,
+  th {
+    padding: 0;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgba(0,0,0,.12);
+  }
+}
+
+textarea {
+  font-family: monospace !important;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+* {
+  box-sizing: border-box;
+}

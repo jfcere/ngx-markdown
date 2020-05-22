@@ -1,0 +1,79 @@
+@import "~@angular/material/theming";
+
+@import "utils";
+@import "light-theme";
+@import "dark-theme";
+
+@import "../app/app.component.theme";
+@import "../app/shared/scrollspy-nav/scrollspy-nav.component.theme";
+
+@mixin native-element-theme($theme, $name) {
+  $accent: map-get($theme, accent);
+  $primary: map-get($theme, primary);
+  $foreground: map-get($theme, foreground);
+
+  a,
+  a:active,
+  a:focus,
+  a:visited {
+    color: mat-color($accent, A400);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  blockquote {
+    background: mat-color($primary, 300, 0.14);
+    border-left: 4px solid mat-color($accent);
+    border-radius: 4px;
+    color: soften-color(mat-color($foreground, base), 40%);
+    margin: 20px 0;
+    padding: 1px 20px;
+  }
+
+  code:not([class*="language-"]) {
+    background: mat-color($foreground, secondary-text, 0.07);
+    border-radius: 3px;
+    font-size: 1em;
+    padding: 0px 6px 2px;
+  }
+
+  hr {
+    border-color: mat-color($foreground, divider);
+    border-style: solid;
+    border-width: 1px 0 0 0;
+  }
+
+  table {
+    th {
+      color: mat-color($foreground, secondary-text);
+    }
+
+    td,
+    th {
+      border-bottom-color: mat-color($foreground, divider);
+    }
+  }
+}
+
+@mixin theme($theme, $name) {
+  .#{$name}-theme {
+    @include angular-material-theme($theme);
+    @include native-element-theme($theme, $name);
+    @include app-component-theme($theme);
+    @include scrollspy-nav-component-theme($theme);
+  }
+}
+
+@mixin material-core() {
+  $font-family: "Google Sans", "Helvetica Neue", sans-serif;
+  $mat-typography: mat-typography-config($font-family);
+  body { font-family: $font-family; }
+  @include mat-core($mat-typography);
+}
+
+@include material-core();
+@include theme($light-theme, 'light');
+@include theme($dark-theme, 'dark');
