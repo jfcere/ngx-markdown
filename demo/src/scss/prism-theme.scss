@@ -1,4 +1,3 @@
-/* PrismJS 1.15.0
 /**
  * prism.js Visual Studio Code Theme
  * @author Visual Studio Code
@@ -88,7 +87,7 @@
  .token.property,
  .token.constant,
  .token.symbol {
-   color: #f8c555;
+   color: #51b6c4;
  }
 
  .token.builtin,
@@ -181,6 +180,15 @@
 .language-typescript .keyword-implements,
 .language-typescript .keyword-new,
 .language-typescript .keyword-private,
-.language-typescript .keyword-public {
+.language-typescript .keyword-public,
+.language-typescript .keyword-this {
   color: #569CD6;
+}
+
+.language-typescript .keyword-void {
+  color: #4EC9B0;
+}
+
+.language-typescript .import-member {
+  color: #9CDCFE;
 }

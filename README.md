@@ -428,7 +428,7 @@ import { Component, OnInit } from '@angular/core';
 import { MarkdownService } from 'ngx-markdown';
 
 @Component({ ... })
-export class ExampleComponent implements OnInit() {
+export class ExampleComponent implements OnInit {
   constructor(private markdownService: MarkdownService) { }
 
   ngOnInit() {
@@ -454,7 +454,7 @@ import { MarkdownService } from 'ngx-markdown';
   selector: 'app-example',
   template: '<markdown># Heading</markdown>',
 })
-export class ExampleComponent implements OnInit() {
+export class ExampleComponent implements OnInit {
   constructor(private markdownService: MarkdownService) { }
 
   ngOnInit() {
