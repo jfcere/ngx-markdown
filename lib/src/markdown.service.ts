@@ -91,7 +91,10 @@ export class MarkdownService {
     if (typeof katex === 'undefined' || typeof katex.renderToString === 'undefined') {
       throw new Error(errorKatexNotLoaded);
     }
-    return html.replace(/\$([^\s][^$]*?[^\s])\$/gm, (_, tex) => katex.renderToString(tex, options));
+    return html
+            .replace(/&amp;/gm, '&')
+            .replace(/( \\ )+/gm, ' \\\\ ')
+            .replace(/\$([^\s][^$]*?[^\s])\$/gm, (_, tex) => katex.renderToString(tex, options));
   }
 
   private decodeHtml(html: string): string {
