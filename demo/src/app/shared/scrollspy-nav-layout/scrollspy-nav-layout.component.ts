@@ -17,11 +17,11 @@ export class ScrollspyNavLayoutComponent {
   showScrollUpButton = false;
 
   @HostListener('window:scroll')
-  onWindowScroll() {
+  onWindowScroll(): void {
     this.showScrollUpButton = Math.ceil(window.pageYOffset) > 64;
   }
 
-  onScrollUp() {
+  onScrollUp(): void {
     window.scrollTo(0, 0);
     location.hash = '';
   }

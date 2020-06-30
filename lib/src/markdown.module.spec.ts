@@ -22,7 +22,7 @@ import { MarkedOptions } from './marked-options';
 })
 class HostComponent {
   markdown = '# Markdown Title';
-  src: string;
+  src: string | undefined;
 }
 
 describe('MarkdownModule', () => {
@@ -218,7 +218,7 @@ describe('MarkdownModule', () => {
 
       fixture.detectChanges();
 
-      const title = (fixture.nativeElement as HTMLElement).textContent.trim();
+      const title = (fixture.nativeElement as HTMLElement).textContent!.trim();
 
       expect(title).toEqual('Markdown Title');
     });

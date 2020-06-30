@@ -20,23 +20,23 @@ export class ScrollspyNavComponent implements OnChanges, OnDestroy {
     private zone: NgZone,
   ) { }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes.headings && changes.headings.currentValue) {
       this.setScrollSpy();
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroyScrollSpy();
   }
 
-  destroyScrollSpy() {
+  destroyScrollSpy(): void {
     if (this.scrollSpy) {
       this.scrollSpy.destroy();
     }
   }
 
-  setScrollSpy() {
+  setScrollSpy(): void {
     if (this.scrollSpy) {
       this.scrollSpy.setup();
       return;

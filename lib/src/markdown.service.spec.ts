@@ -8,6 +8,7 @@ import { KatexOptions } from './katex-options';
 import { MarkdownModule } from './markdown.module';
 import { errorJoyPixelsNotLoaded, errorKatexNotLoaded, MarkdownService, SECURITY_CONTEXT } from './markdown.service';
 
+declare var global: any;
 declare var Prism: any;
 declare var joypixels: any;
 declare var katex: any;
@@ -42,7 +43,7 @@ describe('MarkdowService', () => {
         const sanitized = domSanitizer.sanitize(securityContext, parse(mockRaw));
         const unsanitized = parse(mockRaw);
 
-        expect(markdownService.compile(mockRaw, false)).toBe(sanitized);
+        expect(markdownService.compile(mockRaw, false)).toBe(sanitized!);
         expect(markdownService.compile(mockRaw, false)).not.toBe(unsanitized);
       });
     });
@@ -100,7 +101,7 @@ describe('MarkdowService', () => {
         const quoteText = 'foobar';
         const expectedBlockquote = blockquote(quoteText);
         const rendererBlockquote = markdownService.renderer.blockquote(quoteText);
-        const optionsRendererBlockquote = markdownService.options.renderer.blockquote(quoteText);
+        const optionsRendererBlockquote = markdownService.options.renderer!.blockquote(quoteText);
 
         expect(rendererBlockquote).toBe(expectedBlockquote);
         expect(optionsRendererBlockquote).toBe(expectedBlockquote);
@@ -118,8 +119,8 @@ describe('MarkdowService', () => {
 
       it('should return empty string when raw is null/undefined/empty', () => {
 
-        expect(markdownService.compile(null)).toBe('');
-        expect(markdownService.compile(undefined)).toBe('');
+        expect(markdownService.compile(null!)).toBe('');
+        expect(markdownService.compile(undefined!)).toBe('');
         expect(markdownService.compile('')).toBe('');
       });
 
@@ -177,7 +178,7 @@ describe('MarkdowService', () => {
 
         expect(markdownService.compile(mockRaw)).toBe(expected);
         expect(markdownService.compile(mockRaw, false)).toBe(expected);
-        expect(markdownService.compile(mockRaw, null)).toBe(expected);
+        expect(markdownService.compile(mockRaw, null!)).toBe(expected);
         expect(markdownService.compile(mockRaw, undefined)).toBe(expected);
       });
 
@@ -235,7 +236,7 @@ describe('MarkdowService', () => {
         const useCases = [
           () => markdownService.compile(mockRaw, false),
           () => markdownService.compile(mockRaw, false, false),
-          () => markdownService.compile(mockRaw, false, null),
+          () => markdownService.compile(mockRaw, false, null!),
           () => markdownService.compile(mockRaw, false, undefined),
         ];
 
@@ -253,15 +254,13 @@ describe('MarkdowService', () => {
         const mockSrc = 'file-x.md';
         const mockResponse = 'response-x';
 
-        let result: string;
-
         markdownService
           .getSource(mockSrc)
-          .subscribe(data => result = data);
+          .subscribe(data => {
+            expect(data).toEqual(mockResponse);
+          });
 
         http.expectOne(mockSrc).flush(mockResponse);
-
-        expect(result).toEqual(mockResponse);
       });
 
       it('should return src content with language tick when file extension is not .md', () => {
@@ -269,15 +268,14 @@ describe('MarkdowService', () => {
         const mockSrc = './src-example/file.cpp';
         const mockResponse = 'response-x';
 
-        let result: string;
-
         markdownService
           .getSource(mockSrc)
-          .subscribe(data => result = data);
+          .subscribe(data => {
+            expect(data).toEqual('```cpp\n' + mockResponse + '\n```');
+          });
 
         http.expectOne(mockSrc).flush(mockResponse);
 
-        expect(result).toEqual('```cpp\n' + mockResponse + '\n```');
       });
 
       it('should return src content without language tick when file extension is .md', () => {
@@ -285,15 +283,13 @@ describe('MarkdowService', () => {
         const mockSrc = './src-example/file.md';
         const mockResponse = 'response-x';
 
-        let result: string;
-
         markdownService
           .getSource(mockSrc)
-          .subscribe(data => result = data);
+          .subscribe(data => {
+            expect(data).toEqual(mockResponse);
+          });
 
         http.expectOne(mockSrc).flush(mockResponse);
-
-        expect(result).toEqual(mockResponse);
       });
 
       it('should ignore query parameters when resolving file extension', () => {
@@ -301,15 +297,13 @@ describe('MarkdowService', () => {
         const mockSrc = './src-example/file.js?param=123&another=abc';
         const mockResponse = 'response-x';
 
-        let result: string;
-
         markdownService
           .getSource(mockSrc)
-          .subscribe(data => result = data);
+          .subscribe(data => {
+            expect(data).toEqual('```js\n' + mockResponse + '\n```');
+          });
 
         http.expectOne(mockSrc).flush(mockResponse);
-
-        expect(result).toEqual('```js\n' + mockResponse + '\n```');
       });
     });
 
@@ -388,7 +382,7 @@ describe('MarkdowService', () => {
 
         const useCases = [
           () => markdownService.highlight(),
-          () => markdownService.highlight(null),
+          () => markdownService.highlight(null!),
           () => markdownService.highlight(undefined),
         ];
 

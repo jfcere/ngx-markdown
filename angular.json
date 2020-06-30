@@ -9,6 +9,9 @@
       "projectType": "application",
       "prefix": "app",
       "schematics": {
+        "@schematics/angular:application": {
+          "strict": true
+        },
         "@schematics/angular:component": {
           "styleext": "scss"
         }
@@ -56,6 +59,10 @@
               "node_modules/prismjs/components/prism-typescript.min.js",
               "node_modules/emoji-toolkit/lib/js/joypixels.js",
               "node_modules/katex/dist/katex.min.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "gumshoejs",
+              "hammerjs"
             ]
           },
           "configurations": {
@@ -77,13 +84,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
                 }
               ]
             }

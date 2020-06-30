@@ -23,12 +23,12 @@ export class AppComponent implements OnInit {
   tabHeader: ElementRef;
 
   @HostListener('document:click', ['$event'])
-  onDocumentClick(event: Event) {
+  onDocumentClick(event: Event): void {
     this.anchorService.interceptClick(event);
   }
 
   @HostListener('window:scroll')
-  onWindowScroll() {
+  onWindowScroll(): void {
     const tabHeader = this.tabHeader.nativeElement as HTMLElement;
     const tabHeaderOffset = Math.ceil(tabHeader.offsetTop);
     const windowOffset = Math.ceil(window.pageYOffset);
@@ -47,18 +47,18 @@ export class AppComponent implements OnInit {
     private router: Router,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.routes = this.router.config.filter(route => route.data && route.data.label);
     this.setTheme(localStorage.getItem('theme') || 'light');
   }
 
-  handleFragment() {
+  handleFragment(): void {
     this.anchorService.scrollToAnchor();
   }
 
-  setTheme(theme: string) {
+  setTheme(theme: string): void {
     this.theme = theme;
-    const bodyClassList = this.document.querySelector('body').classList;
+    const bodyClassList = this.document.querySelector('body')!.classList;
     const removeClassList = /\w*-theme\b/.exec(bodyClassList.value);
     if (removeClassList) {
       bodyClassList.remove(...removeClassList);
@@ -67,13 +67,13 @@ export class AppComponent implements OnInit {
     localStorage.setItem('theme', this.theme);
   }
 
-  getRouteAnimation(outlet: RouterOutlet) {
+  getRouteAnimation(outlet: RouterOutlet): string {
     return outlet
       && outlet.activatedRouteData
       && outlet.activatedRouteData.label;
   }
 
-  toggleTheme() {
+  toggleTheme(): void {
     this.setTheme(this.theme === 'light' ? 'dark' : 'light');
   }
 }

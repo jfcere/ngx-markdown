@@ -179,7 +179,7 @@ describe('MarkdownComponent', () => {
       const decoded = '<h3>Compiled</h3>';
 
       spyOn(markdownService, 'compile').and.callFake((markdown: string, decodeHtml: boolean, emojify: boolean) => {
-        return decodeHtml ? decoded : null;
+        return decodeHtml ? decoded : '';
       });
 
       component.render(raw, true);
@@ -194,7 +194,7 @@ describe('MarkdownComponent', () => {
       const undecoded = '<h3>Compiled-Undecoded</h3>';
 
       spyOn(markdownService, 'compile').and.callFake((markdown: string, decodeHtml: boolean, emojify: boolean) => {
-        return decodeHtml ? null : undecoded;
+        return decodeHtml ? '' : undecoded;
       });
 
       component.render(raw);
@@ -207,7 +207,7 @@ describe('MarkdownComponent', () => {
       expect(markdownService.compile).toHaveBeenCalledWith(raw, false, false);
       expect(component.element.nativeElement.innerHTML).toBe(undecoded);
 
-      component.render(raw, null);
+      component.render(raw, null!);
 
       expect(markdownService.compile).toHaveBeenCalledWith(raw, false, false);
       expect(component.element.nativeElement.innerHTML).toBe(undecoded);
@@ -248,13 +248,13 @@ describe('MarkdownComponent', () => {
       component.lineNumbers = true;
       component.render(markdown);
 
-      expect(getHTMLPreElement().classList).toContain('line-numbers');
-      expect(getHTMLPreElement().attributes.getNamedItem('data-start')).toBeNull();
+      expect(getHTMLPreElement()?.classList).toContain('line-numbers');
+      expect(getHTMLPreElement()?.attributes.getNamedItem('data-start')).toBeNull();
 
       component.start = 5;
       component.render(markdown);
 
-      expect(getHTMLPreElement().attributes.getNamedItem('data-start').value).toBe('5');
+      expect(getHTMLPreElement()?.attributes.getNamedItem('data-start')?.value).toBe('5');
     });
 
     it('should handle lineHighlight plugin correctly', () => {
@@ -266,14 +266,14 @@ describe('MarkdownComponent', () => {
       component.line = '6, 10-16';
       component.render(markdown);
 
-      expect(getHTMLPreElement().classList).toContain('line-highlight');
-      expect(getHTMLPreElement().attributes.getNamedItem('data-line').value).toBe('6, 10-16');
-      expect(getHTMLPreElement().attributes.getNamedItem('data-line-offset')).toBeNull();
+      expect(getHTMLPreElement()?.classList).toContain('line-highlight');
+      expect(getHTMLPreElement()?.attributes.getNamedItem('data-line')?.value).toBe('6, 10-16');
+      expect(getHTMLPreElement()?.attributes.getNamedItem('data-line-offset')).toBeNull();
 
       component.lineOffset = 5;
       component.render(markdown);
 
-      expect(getHTMLPreElement().attributes.getNamedItem('data-line-offset').value).toBe('5');
+      expect(getHTMLPreElement()?.attributes.getNamedItem('data-line-offset')?.value).toBe('5');
     });
 
     it('should apply emoji plugin correctly', () => {
@@ -282,7 +282,7 @@ describe('MarkdownComponent', () => {
       const emojified = 'I ❤️ ngx-markdown';
 
       spyOn(markdownService, 'compile').and.callFake((markdown: string, decodeHtml: boolean, emojify: boolean) => {
-        return emojify ? emojified : null;
+        return emojify ? emojified : '';
       });
 
       component.emoji = true;

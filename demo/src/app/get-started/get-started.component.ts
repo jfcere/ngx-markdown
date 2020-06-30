@@ -14,22 +14,22 @@ export class GetStartedComponent {
     private elementRef: ElementRef<HTMLElement>,
   ) { }
 
-  onLoad() {
+  onLoad(): void {
     this.stripContent();
     this.setHeadings();
   }
 
-  private setHeadings() {
-    const headings = [];
+  private setHeadings(): void {
+    const headings: Element[] = [];
     this.elementRef.nativeElement
       .querySelectorAll('h2')
       .forEach(x => headings.push(x));
     this.headings = headings;
   }
 
-  private stripContent() {
+  private stripContent(): void {
     this.elementRef.nativeElement
-      .querySelector('markdown')
+      .querySelector('markdown')!
       .querySelectorAll('markdown > p:nth-child(-n + 2), #ngx-markdown, #table-of-contents + ul, #table-of-contents')
       .forEach(x => x.remove());
   }
