@@ -37,14 +37,14 @@ export class MarkdownService {
     renderer: new MarkedRenderer(),
   };
 
-  private _options: MarkedOptions;
+  private _options: MarkedOptions | undefined;
 
-  get options(): MarkedOptions { return this._options; }
+  get options(): MarkedOptions { return this._options!; }
   set options(value: MarkedOptions) {
     this._options = { ...this.initialMarkedOptions, ...value };
   }
 
-  get renderer(): MarkedRenderer { return this.options.renderer; }
+  get renderer(): MarkedRenderer { return this.options.renderer!; }
   set renderer(value: MarkedRenderer) {
     this.options.renderer = value;
   }
@@ -64,7 +64,7 @@ export class MarkdownService {
     const decoded = decodeHtml ? this.decodeHtml(trimmed) : trimmed;
     const emojified = emojify ? this.renderEmoji(decoded) : decoded;
     const compiled = marked.parse(emojified, markedOptions);
-    return this.sanitizer.sanitize(this.securityContext, compiled);
+    return this.sanitizer.sanitize(this.securityContext, compiled) || '';
   }
 
   getSource(src: string): Observable<string> {
@@ -76,7 +76,7 @@ export class MarkdownService {
       .pipe(map(markdown => this.handleExtension(src, markdown)));
   }
 
-  highlight(element?: Element | Document) {
+  highlight(element?: Element | Document): void {
     if (isPlatformBrowser(this.platform) && typeof Prism !== 'undefined') {
       if (!element) {
         element = document;
@@ -112,7 +112,7 @@ export class MarkdownService {
       : markdown;
   }
 
-  private renderEmoji(html: string) {
+  private renderEmoji(html: string): string {
     if (typeof joypixels === 'undefined' || typeof joypixels.shortnameToUnicode === 'undefined') {
       throw new Error(errorJoyPixelsNotLoaded);
     }

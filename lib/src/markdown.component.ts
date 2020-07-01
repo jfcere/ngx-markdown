@@ -16,8 +16,8 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   protected static ngAcceptInputType_lineHighlight: boolean | '';
   protected static ngAcceptInputType_lineNumbers: boolean | '';
 
-  @Input() data: string;
-  @Input() src: string;
+  @Input() data: string | undefined;
+  @Input() src: string | undefined;
 
   // Plugin - emoji
   @Input()
@@ -28,20 +28,20 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   @Input()
   get katex(): boolean { return this._katex; }
   set katex(value: boolean) { this._katex = this.coerceBooleanProperty(value); }
-  @Input() katexOptions: KatexOptions;
+  @Input() katexOptions: KatexOptions | undefined;
 
   // Plugin - lineHighlight
   @Input()
   get lineHighlight(): boolean { return this._lineHighlight; }
   set lineHighlight(value: boolean) { this._lineHighlight = this.coerceBooleanProperty(value); }
-  @Input() line: string | string[];
-  @Input() lineOffset: number;
+  @Input() line: string | string[] | undefined;
+  @Input() lineOffset: number | undefined;
 
   // Plugin - lineNumbers
   @Input()
   get lineNumbers(): boolean { return this._lineNumbers; }
   set lineNumbers(value: boolean) { this._lineNumbers = this.coerceBooleanProperty(value); }
-  @Input() start: number;
+  @Input() start: number | undefined;
 
   // Event emitters
   @Output() error = new EventEmitter<string>();
@@ -58,7 +58,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
     public markdownService: MarkdownService,
   ) { }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     if (this.data != null) {
       this.handleData();
       return;
@@ -69,13 +69,13 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
     }
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     if (!this.data && !this.src) {
       this.handleTransclusion();
     }
   }
 
-  render(markdown: string, decodeHtml = false) {
+  render(markdown: string, decodeHtml = false): void {
     let compiled = this.markdownService.compile(markdown, decodeHtml, this.emoji);
     compiled = this.katex ? this.markdownService.renderKatex(compiled, this.katexOptions) : compiled;
     this.element.nativeElement.innerHTML = compiled;
@@ -88,13 +88,13 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
     return value != null && `${value}` !== 'false';
   }
 
-  private handleData() {
-    this.render(this.data);
+  private handleData(): void {
+    this.render(this.data!);
   }
 
-  private handleSrc() {
+  private handleSrc(): void {
     this.markdownService
-      .getSource(this.src)
+      .getSource(this.src!)
       .subscribe(
         markdown => {
           this.render(markdown);
@@ -104,11 +104,11 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
       );
   }
 
-  private handleTransclusion() {
+  private handleTransclusion(): void {
     this.render(this.element.nativeElement.innerHTML, true);
   }
 
-  private handlePlugins() {
+  private handlePlugins(): void {
     if (this.lineHighlight) {
       this.setPluginClass(this.element.nativeElement, PrismPlugin.LineHighlight);
       this.setPluginOptions(this.element.nativeElement, { dataLine: this.line, dataLineOffset: this.lineOffset });
@@ -119,7 +119,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
     }
   }
 
-  private setPluginClass(element: HTMLElement, plugin: string | string[]) {
+  private setPluginClass(element: HTMLElement, plugin: string | string[]): void {
     const preElements = element.querySelectorAll('pre');
     for (let i = 0; i < preElements.length; i++) {
       const classes = plugin instanceof Array ? plugin : [plugin];
@@ -127,7 +127,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
     }
   }
 
-  private setPluginOptions(element: HTMLElement, options: object) {
+  private setPluginOptions(element: HTMLElement, options: { [key: string]: any }): void {
     const preElements = element.querySelectorAll('pre');
     for (let i = 0; i < preElements.length; i++) {
       Object.keys(options).forEach(option => {
@@ -140,7 +140,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
     }
   }
 
-  private toLispCase(value: string) {
+  private toLispCase(value: string): string {
     const upperChars = value.match(/([A-Z])/g);
     if (!upperChars) {
       return value;

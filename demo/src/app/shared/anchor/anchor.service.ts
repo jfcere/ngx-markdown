@@ -29,12 +29,12 @@ export class AnchorService {
    * when `href` is an internal URL not handled by `routerLink` directive.
    * @param event The event to evaluated for link click.
    */
-  interceptClick(event: Event): boolean {
+  interceptClick(event: Event): void {
     const element = event.target;
     if (!(element instanceof HTMLAnchorElement)) {
       return;
     }
-    const href = element.getAttribute('href');
+    const href = element.getAttribute('href') || '';
     if (this.isExternalUrl(href) || this.isRouterLink(element)) {
       return;
     }
@@ -47,7 +47,7 @@ export class AnchorService {
    * @param url Destination path to navigate to.
    * @param replaceUrl If `true`, replaces current state in browser history.
    */
-  navigate(url: string, replaceUrl = false) {
+  navigate(url: string, replaceUrl = false): void {
     const urlTree = this.getUrlTree(url);
     this.router.navigated = false;
     this.router.navigateByUrl(urlTree, { replaceUrl });
@@ -70,7 +70,7 @@ export class AnchorService {
   /**
    * Scroll view to the anchor corresponding to current route fragment.
    */
-  scrollToAnchor() {
+  scrollToAnchor(): void {
     const url = this.router.parseUrl(this.router.url);
     if (url.fragment) {
       this.navigate(this.router.url, true);
@@ -79,7 +79,7 @@ export class AnchorService {
 
   private getUrlTree(url: string): UrlTree {
     const urlPath = this.stripFragment(url) || this.stripFragment(this.router.url);
-    const urlFragment = this.router.parseUrl(url).fragment;
+    const urlFragment = this.router.parseUrl(url).fragment || undefined;
     return this.router.createUrlTree([urlPath], { relativeTo: this.route, fragment: urlFragment });
   }
 
@@ -92,6 +92,6 @@ export class AnchorService {
   }
 
   private stripFragment(url: string): string {
-    return /[^#]*/.exec(url)[0];
+    return /[^#]*/.exec(url)![0];
   }
 }

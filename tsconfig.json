@@ -1,32 +1,14 @@
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "target": "es2015",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2018",
-      "dom"
-    ],
-    "paths": {
-      "@shared/*": ["demo/src/app/shared/*"],
-      "@app/*": ["demo/src/app/*"],
-      "ngx-markdown": ["lib/src"]
+  "files": [],
+  "references": [
+    {
+      "path": "./demo/tsconfig.app.json"
+    },
+    {
+      "path": "./lib/tsconfig.lib.json"
+    },
+    {
+      "path": "./lib/tsconfig.spec.json"
     }
-  },
-  "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
-    "strictTemplates": true,
-    "strictInjectionParameters": true
-  }
+  ]
 }

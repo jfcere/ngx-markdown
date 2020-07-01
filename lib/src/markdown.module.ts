@@ -26,7 +26,7 @@ const sharedDeclarations = [
   declarations: sharedDeclarations,
 })
 export class MarkdownModule {
-  static forRoot(markdownModuleConfig?: MarkdownModuleConfig): ModuleWithProviders {
+  static forRoot(markdownModuleConfig?: MarkdownModuleConfig): ModuleWithProviders<MarkdownModule> {
     return {
       ngModule: MarkdownModule,
       providers: [
@@ -43,7 +43,7 @@ export class MarkdownModule {
     };
   }
 
-  static forChild(): ModuleWithProviders {
+  static forChild(): ModuleWithProviders<MarkdownModule> {
     return {
       ngModule: MarkdownModule,
     };

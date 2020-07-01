@@ -25,12 +25,12 @@ $f(x) = \\int_{-\\infty}^\\infty \\hat f(\\xi) e^{2 \\pi i \\xi x} d\\xi$`;
     private elementRef: ElementRef<HTMLElement>,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.setHeadings();
   }
 
-  private setHeadings() {
-    const headings = [];
+  private setHeadings(): void {
+    const headings: Element[] = [];
     this.elementRef.nativeElement
       .querySelectorAll('h2')
       .forEach(x => headings.push(x));
