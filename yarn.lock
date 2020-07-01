@@ -6473,7 +6473,7 @@ ng-packagr@~10.0.0:
     update-notifier "^4.0.0"
 
 "ngx-markdown@file:./lib":
-  version "10.0.0-beta.0"
+  version "10.0.0"
   dependencies:
     "@types/marked" "^1.1.0"
     emoji-toolkit "^5.5.0"
