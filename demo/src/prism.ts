@@ -9,7 +9,7 @@ Prism.languages.typescript = Prism.languages.extend('typescript', {
 
   'class-name': [
     // existing pattern
-    ...Prism.languages.typescript['class-name'],
+    Prism.languages.typescript['class-name'],
 
     // constructor(private foo:Foo, bar: Bar) { }
     // function foo(): Bar {}
