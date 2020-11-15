@@ -129,13 +129,13 @@ describe('MarkdowService', () => {
         const mockRaw =  [
           '',               // wait for line with non-whitespaces
           '  * list',       // find first line with non-whitespaces to set offset
-          '    * sub-list', // keep indent while removing from previous row offset
+          '     * sub-list', // keep indent while removing from previous row offset
         ].join('\n');
 
         const expected = [
           '',
           '* list',
-          '  * sub-list',
+          '   * sub-list',
         ].join('\n');
 
         expect(markdownService.compile(mockRaw)).toBe(parse(expected));
@@ -146,7 +146,7 @@ describe('MarkdowService', () => {
         const mockRaw =  [
           '   ',              // first line with only whitespaces should not determine indent offset
           '  * list',         // find first line with non-whitespaces to set offset
-          '    * sub-list',   // keep indent while removing from previous row offset
+          '     * sub-list',   // keep indent while removing from previous row offset
           '  ',               // keep blank line
           ' Negative indent', // keep line with negative offset according to first non-whitespaces line indent
           '  Lorem Ipsum',    // keep indent like equals to first non-whitespaces line ident
@@ -154,7 +154,7 @@ describe('MarkdowService', () => {
 
         const expected = [
           '* list',
-          '  * sub-list',
+          '   * sub-list',
           '',
           'Negative indent',
           'Lorem Ipsum',
