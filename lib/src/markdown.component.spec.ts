@@ -1,5 +1,5 @@
 import { ElementRef } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { first } from 'rxjs/operators';
 
@@ -13,7 +13,7 @@ describe('MarkdownComponent', () => {
   let component: MarkdownComponent;
   let markdownService: MarkdownService;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         MarkdownModule.forRoot(),
@@ -60,7 +60,7 @@ describe('MarkdownComponent', () => {
 
   describe('src', () => {
 
-    it('should call render with retreived content when set', async(() => {
+    it('should call render with retreived content when set', waitForAsync(() => {
 
       const mockSrc = './src-example/file.md';
       const mockContent = 'source-content';
@@ -308,7 +308,7 @@ describe('MarkdownComponent', () => {
       expect(markdownService.renderKatex).toHaveBeenCalledWith(compiled, katexOptions);
     });
 
-    it('should emit `ready` when done parsing', async(() => {
+    it('should emit `ready` when done parsing', waitForAsync(() => {
 
       const markdown = '# Markdown';
       const compiled = '<h1 id="markdown">Markdown</h1>';
