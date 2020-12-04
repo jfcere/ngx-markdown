@@ -182,7 +182,7 @@ describe('MarkdowService', () => {
         expect(markdownService.compile(mockRaw, undefined)).toBe(expected);
       });
 
-      it('should not decode HTML when not running on a server platform as it uses `document`', () => {
+      it('should not decode HTML when platform is not browser as it uses `document`', () => {
 
         const mockRaw = '&lt;html&gt;';
         const expected = '<p>&lt;html&gt;</p>\n';
@@ -244,6 +244,20 @@ describe('MarkdowService', () => {
           func();
           expect(joypixels.shortnameToUnicode).not.toHaveBeenCalled();
         });
+      });
+
+      it('should not call joypixels or throw when platform is not browser', () => {
+
+        const mockRaw = 'I :heart: ngx-markdown';
+
+        global['joypixels'] = { shortnameToUnicode: () => {} };
+
+        spyOn(joypixels, 'shortnameToUnicode');
+
+        markdownService['platform'] = 'server';
+
+        expect(() => markdownService.compile(mockRaw, false, true)).not.toThrowError();
+        expect(joypixels.shortnameToUnicode).not.toHaveBeenCalled();
       });
     });
 
@@ -308,6 +322,20 @@ describe('MarkdowService', () => {
     });
 
     describe('highlight', () => {
+
+      it('should not call Prism or throw when platform is not browser', () => {
+
+        const mockHtmlElement = document.createElement('div');
+
+        global['Prism'] = { highlightAllUnder: () => {} };
+
+        spyOn(Prism, 'highlightAllUnder');
+
+        markdownService['platform'] = 'server';
+
+        expect(() => markdownService.highlight(mockHtmlElement)).not.toThrow();
+        expect(Prism.highlightAllUnder).not.toHaveBeenCalled();
+      });
 
       it('should not call Prism when not available', () => {
 
@@ -395,6 +423,20 @@ describe('MarkdowService', () => {
     });
 
     describe('renderKatex', () => {
+
+      it('should not call katex or throw when platform is not browser', () => {
+
+        const mockRaw = '$E=mc^2$';
+
+        global['katex'] = { renderToString: (tex: string, options?: KatexOptions) => '' };
+
+        spyOn(katex, 'renderToString');
+
+        markdownService['platform'] = 'server';
+
+        expect(() => markdownService.renderKatex(mockRaw)).not.toThrowError();
+        expect(katex.renderToString).not.toHaveBeenCalled();
+      });
 
       it('should throw when katex is called but not loaded', () => {
 
