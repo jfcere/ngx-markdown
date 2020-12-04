@@ -77,7 +77,10 @@ export class MarkdownService {
   }
 
   highlight(element?: Element | Document): void {
-    if (isPlatformBrowser(this.platform) && typeof Prism !== 'undefined') {
+    if (!isPlatformBrowser(this.platform)) {
+      return;
+    }
+    if (typeof Prism !== 'undefined') {
       if (!element) {
         element = document;
       }
@@ -88,6 +91,9 @@ export class MarkdownService {
   }
 
   renderKatex(html: string, options?: KatexOptions): string {
+    if (!isPlatformBrowser(this.platform)) {
+      return html;
+    }
     if (typeof katex === 'undefined' || typeof katex.renderToString === 'undefined') {
       throw new Error(errorKatexNotLoaded);
     }
@@ -95,12 +101,12 @@ export class MarkdownService {
   }
 
   private decodeHtml(html: string): string {
-    if (isPlatformBrowser(this.platform)) {
-      const textarea = document.createElement('textarea');
-      textarea.innerHTML = html;
-      return textarea.value;
+    if (!isPlatformBrowser(this.platform)) {
+      return html;
     }
-    return html;
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = html;
+    return textarea.value;
   }
 
   private handleExtension(src: string, markdown: string): string {
@@ -113,6 +119,9 @@ export class MarkdownService {
   }
 
   private renderEmoji(html: string): string {
+    if (!isPlatformBrowser(this.platform)) {
+      return html;
+    }
     if (typeof joypixels === 'undefined' || typeof joypixels.shortnameToUnicode === 'undefined') {
       throw new Error(errorJoyPixelsNotLoaded);
     }
