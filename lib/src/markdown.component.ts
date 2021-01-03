@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
 import { KatexOptions } from './katex-options';
 import { MarkdownService } from './markdown.service';
@@ -62,7 +62,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
     this.loadContent();
   }
 
-  loadContent() {
+  loadContent(): void {
     if (this.data != null) {
       this.handleData();
       return;
@@ -79,7 +79,6 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
     }
 
     this.markdownService._trigger$.subscribe(() => {
-      console.info('change called')
       this.loadContent();
     });
   }

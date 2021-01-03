@@ -114,7 +114,7 @@ describe('MarkdowService', () => {
 
         markdownService._trigger$.subscribe(res => {
           expect(res).toBe(1);
-        })
+        });
 
         markdownService.reload();
       });

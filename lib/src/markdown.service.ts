@@ -1,13 +1,12 @@
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable, InjectionToken, Optional, PLATFORM_ID, QueryList, SecurityContext, ViewChildren } from '@angular/core';
+import { Inject, Injectable, InjectionToken, Optional, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as marked from 'marked';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { KatexOptions } from './katex-options';
-import { MarkdownComponent } from './markdown.component';
 import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
 
@@ -70,7 +69,7 @@ export class MarkdownService {
     return this.sanitizer.sanitize(this.securityContext, compiled) || '';
   }
 
-  reload() {
+  reload(): void {
     this._trigger$.next(1);
   }
 
