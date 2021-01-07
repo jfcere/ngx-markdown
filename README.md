@@ -89,6 +89,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 + "node_modules/prismjs/themes/prism-okaidia.css"
 ],
 "scripts": [
+  "node_modules/marked/lib/marked.js",
 + "node_modules/prismjs/prism.js",
 + "node_modules/prismjs/components/prism-csharp.min.js", # c-sharp language syntax
 + "node_modules/prismjs/components/prism-css.min.js" # css language syntax
@@ -111,6 +112,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 + "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css"
 ],
 "scripts": [
+  "node_modules/marked/lib/marked.js",
   "node_modules/prismjs/prism.js",
   "node_modules/prismjs/components/prism-csharp.min.js",
   "node_modules/prismjs/components/prism-css.min.js",
@@ -142,6 +144,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 + "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css"
 ],
 "scripts": [
+  "node_modules/marked/lib/marked.js",
   "node_modules/prismjs/prism.js",
   "node_modules/prismjs/components/prism-csharp.min.js",
   "node_modules/prismjs/components/prism-css.min.js",
