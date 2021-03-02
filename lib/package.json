@@ -37,6 +37,6 @@
     "@angular/core": "^11.0.0",
     "@angular/platform-browser": "^11.0.0",
     "rxjs": "^6.6.0",
-    "zone.js": "^0.10.2"
+    "zone.js": "^0.10.2 || ^0.11.3"
   }
 }
