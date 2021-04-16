@@ -17,7 +17,7 @@ describe('LanguagePipe', () => {
     });
   });
 
-  it('should replace langauge with empty string when null/undefined', () => {
+  it('should replace language with empty string when null/undefined', () => {
     const markdown = '# Markdown';
     const languages: any[] = [null, undefined];
 
