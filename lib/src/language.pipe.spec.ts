@@ -7,8 +7,28 @@ describe('LanguagePipe', () => {
     pipe = new LanguagePipe();
   });
 
+  it('should replace value with empty string when null/undefined', () => {
+    const markdowns: any[] = [null, undefined];
+    const language = 'language';
+
+    markdowns.forEach(markdown => {
+      const result = pipe.transform(markdown, language);
+      expect(result).toBe('```' + language + '\n\n```');
+    });
+  });
+
+  it('should replace language with empty string when null/undefined', () => {
+    const markdown = '# Markdown';
+    const languages: any[] = [null, undefined];
+
+    languages.forEach(language => {
+      const result = pipe.transform(markdown, language);
+      expect(result).toBe('```\n' + markdown + '\n```');
+    });
+  });
+
   it('should log error and return value when value is not a string', () => {
-    const markdowns: any[] = [undefined, null, 0, {}, [], /regex/];
+    const markdowns: any[] = [0, {}, [], /regex/];
 
     spyOn(console, 'error');
 
@@ -22,7 +42,7 @@ describe('LanguagePipe', () => {
 
   it('should log error and return value when parameter is not a string', () => {
     const markdown = '# Markdown';
-    const languages: any[] = [undefined, null, 0, {}, [], /regex/];
+    const languages: any[] = [0, {}, [], /regex/];
 
     spyOn(console, 'error');
 
