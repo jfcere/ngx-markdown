@@ -47,7 +47,7 @@ jobs:
       # Build the source code
       - run:
           name: Build
-          command: yarn build:lib --prod
+          command: yarn build:lib
   deploy:
     docker:
       - image: circleci/node:12-browsers

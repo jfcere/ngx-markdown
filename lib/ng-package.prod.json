@@ -8,5 +8,5 @@
       "marked": "marked"
     }
   },
-  "whitelistedNonPeerDependencies": ["."]
+  "allowedNonPeerDependencies": ["."]
 }

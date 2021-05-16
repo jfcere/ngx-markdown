@@ -27,8 +27,8 @@
   "scripts": {
     "ng": "ng",
     "start": "yarn link:lib && ng serve",
-    "build:demo": "ng build demo",
-    "build:lib": "ng build lib --prod",
+    "build:demo": "ng build demo --configuration production",
+    "build:lib": "ng build lib --configuration production",
     "postbuild:lib": "cpx ./README.md ./dist/lib && cpx ./LICENSE ./dist/lib",
     "link:lib": "rimraf node_modules/ngx-markdown && linklocal",
     "lint": "yarn lint:lib && yarn lint:demo",
@@ -39,7 +39,7 @@
     "type-check:lib": "tsc --project ./lib/tsconfig.lib.json --noEmit",
     "test": "ng test",
     "coveralls": "cat \"./coverage/lcov.info\" | \"./node_modules/coveralls/bin/coveralls.js\"",
-    "gh-pages:build": "yarn build:demo --prod --aot --base-href /ngx-markdown/",
+    "gh-pages:build": "yarn build:demo --aot --base-href /ngx-markdown/",
     "gh-pages:deploy": "angular-cli-ghpages --dir=\"dist/demo\" --name=\"CircleCI\" --email=\"circleci@email.com\" --no-silent",
     "publish:lib": "npm publish ./dist/lib"
   },
