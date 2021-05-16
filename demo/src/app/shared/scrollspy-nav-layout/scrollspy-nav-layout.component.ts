@@ -12,7 +12,7 @@ import { ZOOM_ANIMATION } from './scrollspy-nav-layout.animation';
 export class ScrollspyNavLayoutComponent {
 
   @Input()
-  headings: Element[];
+  headings: Element[] | undefined;
 
   showScrollUpButton = false;
 

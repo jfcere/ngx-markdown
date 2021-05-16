@@ -11,9 +11,9 @@ import { first } from 'rxjs/operators';
 export class ScrollspyNavComponent implements OnChanges, OnDestroy {
 
   @Input()
-  headings: Element[];
+  headings: Element[] | undefined;
 
-  private scrollSpy: Gumshoe;
+  private scrollSpy: Gumshoe | undefined;
 
   constructor(
     private elementRef: ElementRef<HTMLElement>,

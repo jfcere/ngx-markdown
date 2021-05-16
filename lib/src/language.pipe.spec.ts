@@ -36,7 +36,7 @@ describe('LanguagePipe', () => {
       const result = pipe.transform(markdown, markdown);
 
       expect(result).toBe(markdown);
-      expect(console.error).toHaveBeenCalledWith(`LanguagePipe has been invoked with an invalid value type [${markdown}]`);
+      expect(console.error).toHaveBeenCalledWith(`LanguagePipe has been invoked with an invalid value type [${typeof markdown}]`);
     });
   });
 
@@ -50,7 +50,7 @@ describe('LanguagePipe', () => {
       const result = pipe.transform(markdown, language);
 
       expect(result).toBe(markdown);
-      expect(console.error).toHaveBeenCalledWith(`LanguagePipe has been invoked with an invalid parameter [${language}]`);
+      expect(console.error).toHaveBeenCalledWith(`LanguagePipe has been invoked with an invalid parameter [${typeof language}]`);
     });
   });
 

@@ -8,7 +8,7 @@ import { errorSrcWithoutHttpClient, SECURITY_CONTEXT } from './markdown.service'
 import { MarkedOptions } from './marked-options';
 
 @Component({
-  // tslint:disable-next-line:component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'host-comp',
   template: `
     <div *ngIf="src; else dataTemplate">
@@ -203,7 +203,7 @@ describe('MarkdownModule', () => {
   describe('without HttpClient', () => {
 
     beforeEach(waitForAsync(() => {
-      TestBed.configureTestingModule({
+      void TestBed.configureTestingModule({
         imports: [
           CommonModule,
           MarkdownModule.forRoot(),

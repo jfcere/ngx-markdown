@@ -13,11 +13,11 @@ export class LanguagePipe implements PipeTransform {
       language = '';
     }
     if (typeof value !== 'string') {
-      console.error(`LanguagePipe has been invoked with an invalid value type [${value}]`);
+      console.error(`LanguagePipe has been invoked with an invalid value type [${typeof value}]`);
       return value;
     }
     if (typeof language !== 'string') {
-      console.error(`LanguagePipe has been invoked with an invalid parameter [${language}]`);
+      console.error(`LanguagePipe has been invoked with an invalid parameter [${typeof language}]`);
       return value;
     }
     return '```' + language + '\n' +  value + '\n```';

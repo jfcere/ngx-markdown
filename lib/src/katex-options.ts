@@ -1,4 +1,4 @@
-// tslint:disable: no-redundant-jsdoc
+/* eslint-disable */
 export class KatexOptions {
     /**
      * If `true`, math will be rendered in display mode

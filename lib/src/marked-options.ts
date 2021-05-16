@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { MarkedRenderer } from './marked-renderer';
 
 export class MarkedOptions {

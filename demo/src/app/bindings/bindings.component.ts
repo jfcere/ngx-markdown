@@ -42,7 +42,7 @@ export class MarkdownDemoComponent {
   public pipeMarkdown = '# Markdown';
 }`;
 
-  headings: Element[];
+  headings: Element[] | undefined;
 
   constructor(
     private elementRef: ElementRef<HTMLElement>,

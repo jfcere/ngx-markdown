@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /**
  * Prism language extension
  * https://prismjs.com/extending.html
  */
 
-declare var Prism: any;
+declare let Prism: any;
 
 Prism.languages.typescript = Prism.languages.extend('typescript', {
 
@@ -31,7 +34,7 @@ Prism.languages.typescript = Prism.languages.extend('typescript', {
 
     // import { foo, bar } from 'baz';
     {
-      pattern: /(import\s*{)\s*([^\}]*)/,
+      pattern: /(import\s*{)\s*([^}]*)/,
       lookbehind: true,
       inside: {
         'import-member': /([^,]+)/,

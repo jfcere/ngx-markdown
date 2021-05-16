@@ -8,7 +8,7 @@ import { ChangeDetectionStrategy, Component, ElementRef } from '@angular/core';
 })
 export class GetStartedComponent {
 
-  headings: Element[];
+  headings: Element[] | undefined;
 
   constructor(
     private elementRef: ElementRef<HTMLElement>,
