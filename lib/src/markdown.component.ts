@@ -5,7 +5,7 @@ import { MarkdownService } from './markdown.service';
 import { PrismPlugin } from './prism-plugin';
 
 @Component({
-  // tslint:disable-next-line:component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'markdown, [markdown]',
   template: '<ng-content></ng-content>',
 })
@@ -85,7 +85,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   }
 
   private coerceBooleanProperty(value: boolean | ''): boolean {
-    return value != null && `${value}` !== 'false';
+    return value != null && `${String(value)}` !== 'false';
   }
 
   private handleData(): void {
@@ -127,12 +127,12 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
     }
   }
 
-  private setPluginOptions(element: HTMLElement, options: { [key: string]: any }): void {
+  private setPluginOptions(element: HTMLElement, options: { [key: string]: number | string | string[] | undefined }): void {
     const preElements = element.querySelectorAll('pre');
     for (let i = 0; i < preElements.length; i++) {
       Object.keys(options).forEach(option => {
         const attributeValue = options[option];
-        if (!!attributeValue) {
+        if (attributeValue) {
           const attributeName = this.toLispCase(option);
           preElements.item(i).setAttribute(attributeName, attributeValue.toString());
         }

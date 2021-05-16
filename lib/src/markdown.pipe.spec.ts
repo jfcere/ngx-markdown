@@ -45,7 +45,7 @@ describe('MarkdownPipe', () => {
       const result = pipe.transform(markdown);
 
       expect(result).toBe(markdown);
-      expect(console.error).toHaveBeenCalledWith(`MarkdownPipe has been invoked with an invalid value type [${markdown}]`);
+      expect(console.error).toHaveBeenCalledWith(`MarkdownPipe has been invoked with an invalid value type [${typeof markdown}]`);
     });
   });
 

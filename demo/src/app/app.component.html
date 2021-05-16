@@ -4,8 +4,8 @@
     <span fxFlex></span>
     <button mat-icon-button (click)="toggleTheme()">
       <mat-icon>
-        <img [hidden]="theme == 'light'" src="assets/icon-light-on.svg">
-        <img [hidden]="theme == 'dark'" src="assets/icon-light-off.svg">
+        <img [hidden]="theme === 'light'" src="assets/icon-light-on.svg">
+        <img [hidden]="theme === 'dark'" src="assets/icon-light-off.svg">
       </mat-icon>
     </button>
     <a mat-icon-button href="https://github.com/jfcere/ngx-markdown">

@@ -8,10 +8,10 @@ import { KatexOptions } from './katex-options';
 import { MarkdownModule } from './markdown.module';
 import { errorJoyPixelsNotLoaded, errorKatexNotLoaded, MarkdownService, SECURITY_CONTEXT } from './markdown.service';
 
-declare var global: any;
-declare var Prism: any;
-declare var joypixels: any;
-declare var katex: any;
+declare let global: any;
+declare let Prism: any;
+declare let joypixels: any;
+declare let katex: any;
 
 describe('MarkdowService', () => {
   let domSanitizer: DomSanitizer;

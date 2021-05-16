@@ -10,23 +10,23 @@ import { KatexOptions } from './katex-options';
 import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
 
-declare var joypixels: {
+declare let joypixels: {
   shortnameToUnicode(input: string): string;
 };
 
-declare var katex: {
+declare let katex: {
   renderToString(tex: string, options?: KatexOptions): string;
 };
 
-declare var Prism: {
+declare let Prism: {
   highlightAllUnder: (element: Element | Document) => void;
 };
 
-// tslint:disable:max-line-length
+/* eslint-disable max-len */
 export const errorJoyPixelsNotLoaded = '[ngx-markdown] When using the `emoji` attribute you *have to* include Emoji-Toolkit files to `angular.json` or use imports. See README for more information';
 export const errorKatexNotLoaded = '[ngx-markdown] When using the `katex` attribute you *have to* include KaTeX files to `angular.json` or use imports. See README for more information';
 export const errorSrcWithoutHttpClient = '[ngx-markdown] When using the `src` attribute you *have to* pass the `HttpClient` as a parameter of the `forRoot` method. See README for more information';
-// tslint:enable:max-line-length
+/* eslint-enable max-len */
 
 export const SECURITY_CONTEXT = new InjectionToken<SecurityContext>('SECURITY_CONTEXT');
 
@@ -112,7 +112,7 @@ export class MarkdownService {
   private handleExtension(src: string, markdown: string): string {
     const extension = src
       ? src.split('?')[0].split('.').splice(-1).join()
-      : null;
+      : '';
     return extension !== 'md'
       ? '```' + extension + '\n' + markdown + '\n```'
       : markdown;
@@ -145,7 +145,7 @@ export class MarkdownService {
         if (isNaN(indentStart)) {
           indentStart = lineIdentStart;
         }
-        return !!lineIdentStart
+        return lineIdentStart
           ? line.substring(lineIdentStart)
           : line;
       }).join('\n');

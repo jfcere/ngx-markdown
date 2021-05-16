@@ -14,7 +14,7 @@ describe('MarkdownComponent', () => {
   let markdownService: MarkdownService;
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+    void TestBed.configureTestingModule({
       imports: [
         MarkdownModule.forRoot(),
       ],

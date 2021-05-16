@@ -33,12 +33,16 @@ jobs:
       - run:
           name: Push coverage artifacts
           command: yarn coveralls
+      # Type check the source code
+      - run:
+          name: Type-Check
+          command: yarn type-check:lib
       # Lint the source code
       - run:
           name: Lint
           command: yarn lint:ci
       - store_artifacts:
-          path: tslint.xml
+          path: eslint.xml
           prefix: lint
       # Build the source code
       - run:

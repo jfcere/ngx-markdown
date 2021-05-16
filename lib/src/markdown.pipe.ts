@@ -20,7 +20,7 @@ export class MarkdownPipe implements PipeTransform {
     }
 
     if (typeof value !== 'string') {
-      console.error(`MarkdownPipe has been invoked with an invalid value type [${value}]`);
+      console.error(`MarkdownPipe has been invoked with an invalid value type [${typeof value}]`);
       return value;
     }
 

@@ -8,7 +8,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular
 })
 export class SyntaxHighlightComponent implements OnInit {
 
-  headings: Element[];
+  headings: Element[] | undefined;
 
   myValue = `print('hello-world')`;
 
