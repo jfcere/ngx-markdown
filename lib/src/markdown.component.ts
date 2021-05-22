@@ -110,7 +110,6 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
 
   private handlePlugins(): void {
     if (this.lineHighlight) {
-      this.setPluginClass(this.element.nativeElement, PrismPlugin.LineHighlight);
       this.setPluginOptions(this.element.nativeElement, { dataLine: this.line, dataLineOffset: this.lineOffset });
     }
     if (this.lineNumbers) {
