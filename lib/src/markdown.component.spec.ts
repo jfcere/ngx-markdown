@@ -266,7 +266,6 @@ describe('MarkdownComponent', () => {
       component.line = '6, 10-16';
       component.render(markdown);
 
-      expect(getHTMLPreElement()?.classList).toContain('line-highlight');
       expect(getHTMLPreElement()?.attributes.getNamedItem('data-line')?.value).toBe('6, 10-16');
       expect(getHTMLPreElement()?.attributes.getNamedItem('data-line-offset')).toBeNull();
 
