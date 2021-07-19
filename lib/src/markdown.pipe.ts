@@ -14,7 +14,7 @@ export class MarkdownPipe implements PipeTransform {
     private zone: NgZone,
   ) { }
 
-  transform(value: string): string {
+  transform(value: string, inline: boolean = false): string {
     if (value == null) {
       return '';
     }
@@ -24,7 +24,7 @@ export class MarkdownPipe implements PipeTransform {
       return value;
     }
 
-    const markdown = this.markdownService.compile(value);
+    const markdown = this.markdownService.compile(value, false, false, inline);
 
     this.zone.onStable
       .pipe(first())

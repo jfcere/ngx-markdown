@@ -59,11 +59,11 @@ export class MarkdownService {
     this.options = options;
   }
 
-  compile(markdown: string, decodeHtml = false, emojify = false,  markedOptions = this.options): string {
+  compile(markdown: string, decodeHtml = false, emojify = false, inline = false,  markedOptions = this.options): string {
     const trimmed = this.trimIndentation(markdown);
     const decoded = decodeHtml ? this.decodeHtml(trimmed) : trimmed;
     const emojified = emojify ? this.renderEmoji(decoded) : decoded;
-    const compiled = marked.parse(emojified, markedOptions);
+    const compiled = inline ? marked.parseInline(emojified, markedOptions) : marked.parse(emojified, markedOptions);
     return this.sanitizer.sanitize(this.securityContext, compiled) || '';
   }
 

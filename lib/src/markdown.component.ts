@@ -19,6 +19,10 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   @Input() data: string | undefined;
   @Input() src: string | undefined;
 
+  @Input()
+  get inline(): boolean { return this._inline; }
+  set inline(value: boolean) { this._inline = this.coerceBooleanProperty(value); }
+
   // Plugin - emoji
   @Input()
   get emoji(): boolean { return this._emoji; }
@@ -48,6 +52,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   @Output() load = new EventEmitter<string>();
   @Output() ready = new EventEmitter<void>();
 
+  private _inline = false;
   private _emoji = false;
   private _katex = false;
   private _lineHighlight = false;
@@ -76,7 +81,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   }
 
   render(markdown: string, decodeHtml = false): void {
-    let compiled = this.markdownService.compile(markdown, decodeHtml, this.emoji);
+    let compiled = this.markdownService.compile(markdown, decodeHtml, this.emoji, this.inline);
     compiled = this.katex ? this.markdownService.renderKatex(compiled, this.katexOptions) : compiled;
     this.element.nativeElement.innerHTML = compiled;
     this.handlePlugins();

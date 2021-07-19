@@ -394,6 +394,9 @@ You can use `markdown` component to either parse static markdown directly from y
 
 <!-- variable binding -->
 <markdown [data]="markdown" (ready)="onReady()"></markdown>
+
+<!-- inline parser, omitting rendering top-level paragraph -->
+<markdown [data]="markdown" [inline]="true"></markdown>
 ```
 
 ### Directive
@@ -420,6 +423,12 @@ Using `markdown` pipe to transform markdown to HTML allow you to chain pipe tran
 ```html
 <!-- chain `language` pipe with `markdown` pipe to convert typescriptMarkdown variable content -->
 <div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown"></div>
+```
+Add pipe parameter `true` for using inline parser, omitting rendering top-level paragraph.
+
+```html
+<!-- chain `language` pipe with `markdown` pipe to convert typescriptMarkdown variable content -->
+<div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown:true"></div>
 ```
 
 ### Service
