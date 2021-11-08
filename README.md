@@ -197,7 +197,7 @@ Using `markdown` component and/or directive, you will be able to use the `comman
 
 For a server command line, specify the user and host names using the `user` and `host` input properties. The resulting prompt displays a `#` for the root user and `$` for all other users. For any other command line, such as a Windows prompt, you may specify the entire prompt using the `prompt` input property.
 
-Optional: You may specify the lines to be presented as output (no prompt and no highlighting) through the `output` property in the following simple format:
+You may also specify the lines to be presented as output (no prompt and no highlighting) through the `output` property in the following simple format:
 
 - A single number refers to the line with that number
 - Ranges are denoted by two numbers, separated with a hyphen (-)
@@ -214,7 +214,7 @@ Optional: You may specify the lines to be presented as output (no prompt and no 
 </markdown>
 ```
 
-Optionaly, to automatically present some lines as output without providing the line numbers, you can prefix those lines with any string and specify the prefix using the `filterOutput` input property. For example, `[filterOutput]="'(out)'"` will treat lines beginning with `(out)` as output and remove the prefix.
+Optionally, to automatically present some lines as output without providing the line numbers, you can prefix those lines with any string and specify the prefix using the `filterOutput` input property. For example, `[filterOutput]="'(out)'"` will treat lines beginning with `(out)` as output and remove the prefix.
 
 ```html
 <markdown
