@@ -6192,7 +6192,7 @@ ng-packagr@^13.0.3:
     esbuild "^0.13.0"
 
 "ngx-markdown@file:./lib":
-  version "13.0.0-beta.0"
+  version "13.0.0"
   dependencies:
     "@types/marked" "^2.0.0"
     emoji-toolkit "^6.6.0"
