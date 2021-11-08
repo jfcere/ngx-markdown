@@ -171,10 +171,10 @@ Use `line` input property to specify the line(s) to highlight and optionally the
 
 #### Command Line Plugin
 
-o use the [command line plugin](https://prismjs.com/plugins/command-line/) that displays a command line with a prompt and, optionally, the output/response from the commands, you will need to include the following files from `prismjs/plugins/command-line` directory to your application:
+To use the [command line plugin](https://prismjs.com/plugins/command-line/) that displays a command line with a prompt and, optionally, the output/response from the commands, you will need to include the following files from `prismjs/plugins/command-line` directory to your application:
 
-- CSS styling for line highlight - `prism-command-line.css`
-- line highlight plugin script - `prism-command-line.js`
+- CSS styling for command line - `prism-command-line.css`
+- command line plugin script - `prism-command-line.js`
 
 If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
 
@@ -211,6 +211,20 @@ Optional: You may specify the lines to be presented as output (no prompt and no 
   [host]="'remotehost'"
   [output]="'2, 4-8'"
   [src]="'path/to/file.bash'">
+</markdown>
+```
+
+Optionaly, to automatically present some lines as output without providing the line numbers, you can prefix those lines with any string and specify the prefix using the `filterOutput` input property. For example, `[filterOutput]="'(out)'"` will treat lines beginning with `(out)` as output and remove the prefix.
+
+```html
+<markdown
+  commandLine
+  [prompt]="'PS C:\Users\Chris>'"
+  [filterOutput]="'(out)'">
+  Get-Date
+  (out)
+  (out)Sunday, November 7, 2021 8:19:21 PM
+  (out)
 </markdown>
 ```
 
