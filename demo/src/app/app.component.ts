@@ -49,7 +49,7 @@ export class AppComponent implements OnInit {
     private anchorService: AnchorService,
     private router: Router,
   ) {
-    this.routes = this.router.config.filter(route => route.data && route.data.label);
+    this.routes = this.router.config.filter(route => route.data && route.data['label']);
   }
 
   ngOnInit(): void {
@@ -74,7 +74,7 @@ export class AppComponent implements OnInit {
   getRouteAnimation(outlet: RouterOutlet): string {
     return outlet
       && outlet.activatedRouteData
-      && outlet.activatedRouteData.label as string;
+      && outlet.activatedRouteData['label'] as string;
   }
 
   toggleTheme(): void {
