@@ -221,10 +221,12 @@ Optionaly, to automatically present some lines as output without providing the l
   commandLine
   [prompt]="'PS C:\Users\Chris>'"
   [filterOutput]="'(out)'">
+  ```powershell
   Get-Date
   (out)
   (out)Sunday, November 7, 2021 8:19:21 PM
   (out)
+  `​``
 </markdown>
 ```
 
