@@ -202,4 +202,112 @@
 
     <markdown [src]="'app/plugins/remote/katex-options.html'"></markdown>
   </section>
+
+  <!-- PLUGINS - CommandLine -->
+  <section>
+    <h2 id="command-line">Command Line plugin</h2>
+
+    <markdown ngPreserveWhitespaces emoji="">
+      #### Prism file(s) to include
+      ```javascript
+      node_modules/prismjs/plugins/command-line/prism-command-line.css
+      node_modules/prismjs/plugins/command-line/prism-command-line.min.js
+      ```
+      #### Directive
+      `commandLine` - activate command-line display
+      #### Attributes
+      `host` - host name<br>
+      `output` - lines to be presented as output (optional)<br>
+      `filterOutput` - prefix to automatically present lines as output (optional)<br>
+      `prompt` - data prompt<br>
+      `user` - user name<br>
+      ### Example
+    </markdown>
+
+    <markdown ngPreserveWhitespaces>
+      Root user without output
+
+      ```html
+      &lt;markdown
+        commandLine
+        [user]="'root'"
+        [host]="'localhost'"
+        [src]="'path/to/file.bash'">
+      &lt;/markdown>
+      ```
+    </markdown>
+
+    <markdown
+      commandLine
+      [user]="'root'"
+      [host]="'localhost'"
+      [src]="'app/plugins/remote/root-user-without-output.bash'">
+    </markdown>
+
+    <markdown ngPreserveWhitespaces>
+      Non-Root User With Output
+
+      ```html
+      &lt;markdown
+        commandLine
+        [user]="'chris'"
+        [host]="'remotehost'"
+        [output]="'2, 4-8'"
+        [src]="'path/to/file.bash'">
+      &lt;/markdown>
+      ```
+    </markdown>
+
+    <markdown commandLine
+      [user]="'chris'"
+      [host]="'remotehost'"
+      [output]="'2, 4-8'"
+      [src]="'app/plugins/remote/non-root-user-with-output.bash'">
+    </markdown>
+
+    <markdown ngPreserveWhitespaces>
+      Windows PowerShell With Output
+
+      ```html
+      &lt;markdown
+        commandLine
+        [prompt]="'PS C:\Users\Chris>'"
+        [output]="'2-19'"
+        [src]="'path/to/file.bash'">
+      &lt;/markdown>
+      ```
+    </markdown>
+
+    <markdown
+      commandLine
+      [prompt]="'PS C:\Users\Chris>'"
+      [output]="'2-19'"
+      [src]="'app/plugins/remote/windows-powershell-with-output.powershell'">
+    </markdown>
+
+    <markdown ngPreserveWhitespaces>
+      Windows PowerShell With Filter Output
+
+      ```html
+      &lt;markdown
+        commandLine
+        [prompt]="'PS C:\Users\Chris>'"
+        [filterOutput]="'(out)'">
+        ```powershell
+        Get-Date
+        (out)
+        (out)Sunday, November 7, 2021 8:19:21 PM
+        (out)
+        `​``
+      &lt;/markdown>
+      ```
+    </markdown>
+
+    <markdown
+      commandLine
+      [prompt]="'PS C:\Users\Chris>'"
+      [filterOutput]="'(out)'"
+      [src]="'app/plugins/remote/windows-powershell-with-filter-output.powershell'">
+    </markdown>
+  </section>
 </app-scrollspy-nav-layout>

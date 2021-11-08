@@ -125,7 +125,11 @@ Using `markdown` component and/or directive, you will be able to use the `lineNu
 Additionally, you can use `start` input property to specify the offset number for the first display line.
 
 ```html
-<markdown [src]="path/to/file.js" lineNumbers [start]="5"></markdown>
+<markdown
+  lineNumbers
+  [start]="5"
+  [src]="path/to/file.js">
+</markdown>
 ```
 
 #### Line Highlight plugin
@@ -157,7 +161,73 @@ Using `markdown` component and/or directive, you will be able to use the `lineHi
 Use `line` input property to specify the line(s) to highlight and optionally there is a `lineOffset` property to specify the starting line of code your snippet represents.
 
 ```html
-<markdown [src]="path/to/file.js" lineHighlight [line]="'6, 10-16'" [lineOffset]="5"></markdown>
+<markdown
+  lineHighlight
+  [line]="'6, 10-16'"
+  [lineOffset]="5"
+  [src]="path/to/file.js">
+</markdown>
+```
+
+#### Command Line Plugin
+
+To use the [command line plugin](https://prismjs.com/plugins/command-line/) that displays a command line with a prompt and, optionally, the output/response from the commands, you will need to include the following files from `prismjs/plugins/command-line` directory to your application:
+
+- CSS styling for command line - `prism-command-line.css`
+- command line plugin script - `prism-command-line.js`
+
+If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
+
+```diff
+"styles": [
+  "src/styles.css",
+  "node_modules/prismjs/themes/prism-okaidia.css",
++ "node_modules/prismjs/plugins/command-line/prism-command-line.css"
+],
+"scripts": [
+  "node_modules/marked/lib/marked.js",
+  "node_modules/prismjs/prism.js",
+  "node_modules/prismjs/components/prism-csharp.min.js",
+  "node_modules/prismjs/components/prism-css.min.js",
++ "node_modules/prismjs/plugins/command-line/prism-command-line.js"
+]
+```
+
+Using `markdown` component and/or directive, you will be able to use the `commandLine` property to activate the plugin. The property can be used in combination with either `data` for variable binding, `src` for remote content or using transclusion for static markdown.
+
+For a server command line, specify the user and host names using the `user` and `host` input properties. The resulting prompt displays a `#` for the root user and `$` for all other users. For any other command line, such as a Windows prompt, you may specify the entire prompt using the `prompt` input property.
+
+Optional: You may specify the lines to be presented as output (no prompt and no highlighting) through the `output` property in the following simple format:
+
+- A single number refers to the line with that number
+- Ranges are denoted by two numbers, separated with a hyphen (-)
+- Multiple line numbers or ranges are separated by commas
+- Whitespace is allowed anywhere and will be stripped off
+
+```html
+<markdown
+  commandLine
+  [user]="'chris'"
+  [host]="'remotehost'"
+  [output]="'2, 4-8'"
+  [src]="'path/to/file.bash'">
+</markdown>
+```
+
+Optionaly, to automatically present some lines as output without providing the line numbers, you can prefix those lines with any string and specify the prefix using the `filterOutput` input property. For example, `[filterOutput]="'(out)'"` will treat lines beginning with `(out)` as output and remove the prefix.
+
+```html
+<markdown
+  commandLine
+  [prompt]="'PS C:\Users\Chris>'"
+  [filterOutput]="'(out)'">
+  ```powershell
+  Get-Date
+  (out)
+  (out)Sunday, November 7, 2021 8:19:21 PM
+  (out)
+  `​``
+</markdown>
 ```
 
 ### Emoji support
@@ -181,7 +251,9 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 Using `markdown` component and/or directive, you will be able to use the `emoji` property to activate [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) plugin that converts emoji shortnames such as `:heart:` to native unicode emojis.
 
 ```html
-<markdown emoji>I :heart: ngx-markdown</markdown>
+<markdown emoji>
+  I :heart: ngx-markdown
+</markdown>
 ```
 
 > :blue_book: You can refer to this [Emoji Cheat Sheet](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md) for a complete list of _shortnames_.
@@ -212,7 +284,10 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 Using `markdown` component and/or directive, you will be able to use the `katex` property to activate [KaTeX](https://katex.org/) plugin that render mathematical expression to HTML.
 
 ```html
-<markdown [src]="path/to/file.md" katex></markdown>
+<markdown
+  katex
+  [src]="path/to/file.md">
+</markdown>
 ```
 
 Optionally, you can use `katexOptions` property to specify [KaTeX options](https://katex.org/docs/options.html).
@@ -229,7 +304,11 @@ public options: KatexOptions = {
 ```
 
 ```html
-<markdown [src]="path/to/file.md" katex [katexOptions]="options"></markdown>
+<markdown
+  katex
+  [katexOptions]="options"
+  [src]="path/to/file.md">
+</markdown>
 ```
 
 > :blue_book: Follow official [KaTeX options](https://katex.org/docs/options.html) documentation for more details on the available options.
@@ -390,10 +469,17 @@ You can use `markdown` component to either parse static markdown directly from y
 </markdown>
 
 <!-- loaded from remote url -->
-<markdown [src]="'path/to/file.md'" (load)="onLoad($event)" (error)="onError($event)"></markdown>
+<markdown
+  [src]="'path/to/file.md'"
+  (load)="onLoad($event)"
+  (error)="onError($event)">
+</markdown>
 
 <!-- variable binding -->
-<markdown [data]="markdown" (ready)="onReady()"></markdown>
+<markdown
+  [data]="markdown"
+  (ready)="onReady()">
+</markdown>
 ```
 
 ### Directive
@@ -407,10 +493,17 @@ The same way the component works, you can use `markdown` directive to accomplish
 </div>
 
 <!-- loaded from remote url -->
-<div markdown [src]="'path/to/file.md'" (load)="onLoad($event)" (error)="onError($event)"></div>
+<div markdown
+  [src]="'path/to/file.md'"
+  (load)="onLoad($event)"
+  (error)="onError($event)">
+</div>
 
 <!-- variable binding -->
-<div markdown [data]="markdown" (ready)="onReady()"></div>
+<div markdown
+  [data]="markdown"
+  (ready)="onReady()">
+</div>
 ```
 
 ### Pipe

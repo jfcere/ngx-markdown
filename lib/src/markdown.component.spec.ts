@@ -240,6 +240,43 @@ describe('MarkdownComponent', () => {
       expect(markdownService.highlight).toHaveBeenCalledWith(component.element.nativeElement);
     });
 
+    it('should handle commandline plugin correctly', () => {
+
+      const markdown = '```powershell\nGet-Date\n\nSunday, November 7, 2021 8:19:21 PM\n\n```';
+      const getHTMLPreElement = () => (fixture.nativeElement as HTMLElement).querySelector('pre');
+
+      component.commandLine = true;
+      component.render(markdown);
+
+      expect(getHTMLPreElement()?.classList).toContain('command-line');
+      expect(getHTMLPreElement()?.attributes.getNamedItem('data-start')).toBeNull();
+
+      component.filterOutput = '(out)';
+      component.render(markdown);
+
+      expect(getHTMLPreElement()?.attributes.getNamedItem('data-filter-output')?.value).toBe('(out)');
+
+      component.host = 'localhost';
+      component.render(markdown);
+
+      expect(getHTMLPreElement()?.attributes.getNamedItem('data-host')?.value).toBe('localhost');
+
+      component.prompt = 'PS C:\\Users\\Chris>';
+      component.render(markdown);
+
+      expect(getHTMLPreElement()?.attributes.getNamedItem('data-prompt')?.value).toBe('PS C:\\Users\\Chris>');
+
+      component.output = '2-4';
+      component.render(markdown);
+
+      expect(getHTMLPreElement()?.attributes.getNamedItem('data-output')?.value).toBe('2-4');
+
+      component.user = 'root';
+      component.render(markdown);
+
+      expect(getHTMLPreElement()?.attributes.getNamedItem('data-user')?.value).toBe('root');
+    });
+
     it('should handle lineNumbers plugin correctly', () => {
 
       const markdown = '```javascript\nconst random = \'Math.random();\n```';
