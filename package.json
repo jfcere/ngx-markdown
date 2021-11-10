@@ -76,7 +76,7 @@
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "@typescript-eslint/parser": "4.33.0",
     "angular-cli-ghpages": "^0.5.3",
-    "coveralls": "^2.13.3",
+    "coveralls": "^3.1.1",
     "cpx": "^1.5.0",
     "eslint": "^7.32.0",
     "eslint-import-resolver-typescript": "~2.5.0",
