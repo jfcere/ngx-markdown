@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { SecurityContext } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
-import { parse } from 'marked';
+import { marked } from 'marked';
 
 import { KatexOptions } from './katex-options';
 import { MarkdownModule } from './markdown.module';
@@ -40,8 +40,8 @@ describe('MarkdowService', () => {
         const securityContext = TestBed.inject(SECURITY_CONTEXT);
 
         const mockRaw = '### Markdown-x';
-        const sanitized = domSanitizer.sanitize(securityContext, parse(mockRaw));
-        const unsanitized = parse(mockRaw);
+        const sanitized = domSanitizer.sanitize(securityContext, marked(mockRaw));
+        const unsanitized = marked(mockRaw);
 
         expect(markdownService.compile(mockRaw, false)).toBe(sanitized!);
         expect(markdownService.compile(mockRaw, false)).not.toBe(unsanitized);
@@ -100,8 +100,8 @@ describe('MarkdowService', () => {
 
         const quoteText = 'foobar';
         const expectedBlockquote = blockquote(quoteText);
-        const rendererBlockquote = markdownService.renderer.blockquote(quoteText);
-        const optionsRendererBlockquote = markdownService.options.renderer!.blockquote(quoteText);
+        const rendererBlockquote = (markdownService.renderer as any).blockquote(quoteText);
+        const optionsRendererBlockquote = (markdownService.options.renderer as any)!.blockquote(quoteText);
 
         expect(rendererBlockquote).toBe(expectedBlockquote);
         expect(optionsRendererBlockquote).toBe(expectedBlockquote);
@@ -114,7 +114,7 @@ describe('MarkdowService', () => {
 
         const mockRaw = '### Markdown-x';
 
-        expect(markdownService.compile(mockRaw)).toBe(parse(mockRaw));
+        expect(markdownService.compile(mockRaw)).toBe(marked(mockRaw));
       });
 
       it('should return empty string when raw is null/undefined/empty', () => {
@@ -138,7 +138,7 @@ describe('MarkdowService', () => {
           '   * sub-list',
         ].join('\n');
 
-        expect(markdownService.compile(mockRaw)).toBe(parse(expected));
+        expect(markdownService.compile(mockRaw)).toBe(marked(expected));
       });
 
       it('should return line with indent correctly', () => {
@@ -160,7 +160,7 @@ describe('MarkdowService', () => {
           'Lorem Ipsum',
         ].join('\n');
 
-        expect(markdownService.compile(mockRaw)).toBe(parse(expected));
+        expect(markdownService.compile(mockRaw)).toBe(marked(expected));
       });
 
       it('should decode HTML correctly when decodeHtml is true ', () => {
@@ -195,7 +195,7 @@ describe('MarkdowService', () => {
       it('should not sanitize parsed markdown', () => {
 
         const mockRaw = '### Markdown-x';
-        const expected = parse(mockRaw);
+        const expected = marked(mockRaw);
 
         expect(markdownService.compile(mockRaw, false)).toBe(expected);
         expect(markdownService.compile(mockRaw, false)).toBe(expected);
@@ -221,7 +221,7 @@ describe('MarkdowService', () => {
 
         spyOn(joypixels, 'shortnameToUnicode').and.returnValue(mockEmojified);
 
-        expect(markdownService.compile(mockRaw, false, true)).toEqual(parse(mockEmojified));
+        expect(markdownService.compile(mockRaw, false, true)).toEqual(marked(mockEmojified));
         expect(joypixels.shortnameToUnicode).toHaveBeenCalledWith(mockRaw);
       });
 

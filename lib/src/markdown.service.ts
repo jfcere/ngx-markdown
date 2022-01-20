@@ -2,7 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, InjectionToken, Optional, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import * as marked from 'marked';
+import { marked } from 'marked';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -63,7 +63,7 @@ export class MarkdownService {
     const trimmed = this.trimIndentation(markdown);
     const decoded = decodeHtml ? this.decodeHtml(trimmed) : trimmed;
     const emojified = emojify ? this.renderEmoji(decoded) : decoded;
-    const compiled = marked.parse(emojified, markedOptions);
+    const compiled = marked(emojified, markedOptions);
     return this.sanitizer.sanitize(this.securityContext, compiled) || '';
   }
 
