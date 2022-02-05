@@ -25,7 +25,7 @@
     "emoji"
   ],
   "dependencies": {
-    "@types/marked": "^4.0.1",
+    "@types/marked": "^4.0.2",
     "emoji-toolkit": "^6.6.0",
     "katex": "^0.15.1",
     "marked": "^4.0.10",
