@@ -60,13 +60,13 @@ To add ngx-markdown library to your `package.json` use the following command.
 npm install ngx-markdown --save
 ```
 
-As the library is using [Marked](https://github.com/chjj/marked) parser you will need to add `node_modules/marked/lib/marked.js` to your application.
+As the library is using [Marked](https://github.com/chjj/marked) parser you will need to add `node_modules/marked/marked.min.js` to your application.
 
 If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
 
 ```diff
 "scripts": [
-+ "node_modules/marked/lib/marked.js"
++ "node_modules/marked/marked.min.js"
 ]
 ```
 
@@ -89,7 +89,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 + "node_modules/prismjs/themes/prism-okaidia.css"
 ],
 "scripts": [
-  "node_modules/marked/lib/marked.js",
+  "node_modules/marked/marked.min.js",
 + "node_modules/prismjs/prism.js",
 + "node_modules/prismjs/components/prism-csharp.min.js", # c-sharp language syntax
 + "node_modules/prismjs/components/prism-css.min.js" # css language syntax
@@ -112,7 +112,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 + "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css"
 ],
 "scripts": [
-  "node_modules/marked/lib/marked.js",
+  "node_modules/marked/marked.min.js",
   "node_modules/prismjs/prism.js",
   "node_modules/prismjs/components/prism-csharp.min.js",
   "node_modules/prismjs/components/prism-css.min.js",
@@ -144,7 +144,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 + "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css"
 ],
 "scripts": [
-  "node_modules/marked/lib/marked.js",
+  "node_modules/marked/marked.min.js",
   "node_modules/prismjs/prism.js",
   "node_modules/prismjs/components/prism-csharp.min.js",
   "node_modules/prismjs/components/prism-css.min.js",
@@ -171,7 +171,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 
 ```diff
 "scripts": [
-  "node_modules/marked/lib/marked.js",
+  "node_modules/marked/marked.min.js",
 + "node_modules/emoji-toolkit/lib/js/joypixels.min.js",
 ]
 ```
@@ -202,7 +202,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 + "node_modules/katex/dist/katex.min.css"
 ],
 "scripts": [
-  "node_modules/marked/lib/marked.js",
+  "node_modules/marked/marked.min.js",
 + "node_modules/katex/dist/katex.min.js",
 ]
 ```

@@ -42,7 +42,7 @@
               "node_modules/katex/dist/katex.min.css"
             ],
             "scripts": [
-              "node_modules/marked/lib/marked.js",
+              "node_modules/marked/marked.min.js",
               "node_modules/prismjs/prism.js",
               "node_modules/prismjs/plugins/highlight-keywords/prism-highlight-keywords.min.js",
               "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.js",
