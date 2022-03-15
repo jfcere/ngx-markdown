@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, Output } from '@angular/core';
 
 import { KatexOptions } from './katex-options';
 import { MarkdownService } from './markdown.service';
@@ -68,6 +68,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   constructor(
     public element: ElementRef<HTMLElement>,
     public markdownService: MarkdownService,
+    private ngZone: NgZone
   ) { }
 
   ngOnChanges(): void {
@@ -92,7 +93,11 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
     compiled = this.katex ? this.markdownService.renderKatex(compiled, this.katexOptions) : compiled;
     this.element.nativeElement.innerHTML = compiled;
     this.handlePlugins();
-    this.markdownService.highlight(this.element.nativeElement);
+    // Do not call `Prism.highlightAllUnder` within the Angular zone since it may have asynchronous
+    // calls internally within the `prismjs` code.
+    this.ngZone.runOutsideAngular(() =>
+      this.markdownService.highlight(this.element.nativeElement)
+    );
     this.ready.emit();
   }
 
