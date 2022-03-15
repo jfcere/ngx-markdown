@@ -28,9 +28,15 @@ export class MarkdownPipe implements PipeTransform {
 
     const markdown = this.markdownService.compile(value);
 
-    this.zone.onStable
-      .pipe(first())
-      .subscribe(() => this.markdownService.highlight(this.elementRef.nativeElement));
+    // Normally this isn't in the zone, but it can cause major performance regressions for apps
+    // using `zone-patch-rxjs` because it'll call `Prism.highlightAllUnder` within the Angular zone.
+    this.zone.runOutsideAngular(() => {
+      this.zone.onStable
+        .pipe(first())
+        .subscribe(() =>
+          this.markdownService.highlight(this.elementRef.nativeElement)
+        );
+    });
 
     return this.domSanitizer.bypassSecurityTrustHtml(markdown);
   }
