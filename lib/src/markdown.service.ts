@@ -91,6 +91,7 @@ export class MarkdownService {
   }
 
   renderKatex(html: string, options?: KatexOptions): string {
+    console.log("Just testing if this works.");
     if (!isPlatformBrowser(this.platform)) {
       return html;
     }
