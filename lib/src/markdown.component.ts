@@ -70,6 +70,11 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
     public markdownService: MarkdownService,
   ) { }
 
+  ngOnInit(): void {
+    this.katexOptions = new KatexOptions();
+    this.katexOptions['displayMode'] = false;
+  }
+
   ngOnChanges(): void {
     if (this.data != null) {
       this.handleData();
