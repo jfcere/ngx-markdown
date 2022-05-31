@@ -91,14 +91,21 @@ export class MarkdownService {
   }
 
   renderKatex(html: string, options?: KatexOptions): string {
-    console.log("Just testing if this works.");
     if (!isPlatformBrowser(this.platform)) {
       return html;
     }
     if (typeof katex === 'undefined' || typeof katex.renderToString === 'undefined') {
       throw new Error(errorKatexNotLoaded);
     }
-    return html.replace(/\$([^\s][^$]*?[^\s])\$/gm, (_, tex) => katex.renderToString(tex, options));
+    const inlineLatexRegex = /\$([^\s]*?[^$]*?[^\s]*?)\$/gm;
+    const displayLatexRegex = /\$\$([^\s]*?[^$]*?[^\s]*?)\$\$/;
+    //Replace display mode math first.
+    options!['displayMode'] = true;
+    const replaceDisplayMode = html.replace(displayLatexRegex, (_, tex) => katex.renderToString(tex, options));
+    console.log("REPLACED DISPLAY MODE:", replaceDisplayMode);
+    options!['displayMode'] = false;
+    const fullLatexProcessed = replaceDisplayMode.replace(inlineLatexRegex, (_, tex) => katex.renderToString(tex, options));
+    return fullLatexProcessed;
   }
 
   private decodeHtml(html: string): string {
