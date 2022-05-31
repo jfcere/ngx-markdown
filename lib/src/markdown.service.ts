@@ -97,7 +97,14 @@ export class MarkdownService {
     if (typeof katex === 'undefined' || typeof katex.renderToString === 'undefined') {
       throw new Error(errorKatexNotLoaded);
     }
-    return html.replace(/\$([^\s][^$]*?[^\s])\$/gm, (_, tex) => katex.renderToString(tex, options));
+    const inlineLatexRegex = /\$([^\s]*?[^$]*?[^\s]*?)\$/gm;
+    const displayLatexRegex = /\$\$([^\s]*?[^$]*?[^\s]*?)\$\$/;
+    //Replace display mode math first.
+    options!['displayMode'] = true;
+    const replaceDisplayMode = html.replace(displayLatexRegex, (_, tex) => katex.renderToString(tex, options));
+    options!['displayMode'] = false;
+    const fullLatexProcessed = replaceDisplayMode.replace(inlineLatexRegex, (_, tex) => katex.renderToString(tex, options));
+    return fullLatexProcessed;
   }
 
   private decodeHtml(html: string): string {
