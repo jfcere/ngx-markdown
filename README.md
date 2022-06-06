@@ -33,6 +33,7 @@ ngx-markdown is an [Angular](https://angular.io/) library that combines...
 - [Prism.js](http://prismjs.com/) for language syntax highlight
 - [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) for emoji support
 - [KaTeX](https://katex.org/) for math expression rendering
+- [Mermaid](https://mermaid-js.github.io/) for diagrams and charts visualization
 
 Demo available @ [https://jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown)  
 StackBlitz available @ [https://stackblitz.com/edit/ngx-markdown](https://stackblitz.com/edit/ngx-markdown)
@@ -281,7 +282,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 
 #### KaTeX plugin
 
-Using `markdown` component and/or directive, you will be able to use the `katex` property to activate [KaTeX](https://katex.org/) plugin that render mathematical expression to HTML.
+Using `markdown` component and/or directive, you will be able to use the `katex` property to activate [KaTeX](https://katex.org/) plugin that renders mathematical expression to HTML.
 
 ```html
 <markdown
@@ -312,6 +313,56 @@ public options: KatexOptions = {
 ```
 
 > :blue_book: Follow official [KaTeX options](https://katex.org/docs/options.html) documentation for more details on the available options.
+
+### Diagrams tool
+
+> :bell: Diagram support is **optional**, skip this step if you are not planning to use it
+
+To activate [Mermaid](https://mermaid-js.github.io/) diagramming and charting tool you will need to include...
+- Mermaid JavaScript library - `node_modules/mermaid/dist/mermaid.min.js` file
+
+If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
+
+```diff
+"scripts": [
+  "node_modules/marked/marked.min.js",
++ "node_modules/mermaid/dist/mermaid.min.js",
+]
+```
+
+#### Mermaid plugin
+
+Using `markdown` component and/or directive, you will be able to use the `mermaid` property to activate [Mermaid](https://mermaid-js.github.io/) plugin that renders Markdown-inspired text definitions to create and modify diagrams dynamically.
+
+```html
+<markdown
+  mermaid
+  [src]="path/to/file.md">
+</markdown>
+```
+
+Optionally, you can specify mermaid [configuration options](https://mermaid-js.github.io/mermaid/#/Setup?id=configuration) using `mermaidOptions` property.
+
+```typescript
+import { MermaidAPI } from 'ngx-markdown';
+
+public options: MermaidAPI.Config = {
+  fontFamily: '"trebuchet ms", verdana, arial, sans-serif',
+  logLevel: MermaidAPI.LogLevel.Info,
+  theme: MermaidAPI.Theme.Dark,
+  ...
+};
+```
+
+```html
+<markdown
+  mermaid
+  [mermaidOptions]="options"
+  [src]="'path/to/file.md'">
+</markdown>
+```
+
+> :blue_book: Follow official [Mermaid](https://mermaid-js.github.io/) documentation for more details on diagrams and charts syntax.
 
 ## Configuration
 
