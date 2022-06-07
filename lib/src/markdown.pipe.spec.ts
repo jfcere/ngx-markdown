@@ -52,19 +52,19 @@ describe('MarkdownPipe', () => {
     });
   });
 
-  it('should apply synthax highlight when zone is stable', fakeAsync(() => {
+  it('should render element through MarkdownService when zone is stable', fakeAsync(() => {
 
     const markdown = '# Markdown';
 
-    spyOn(markdownService, 'highlight');
+    spyOn(markdownService, 'render');
 
     pipe.transform(markdown);
 
-    expect(markdownService.highlight).not.toHaveBeenCalled();
+    expect(markdownService.render).not.toHaveBeenCalled();
 
     zone.onStable.emit(null);
 
-    expect(markdownService.highlight).toHaveBeenCalledWith(elementRef.nativeElement);
+    expect(markdownService.render).toHaveBeenCalledWith(elementRef.nativeElement);
   }));
 
   it('should return compiled markdown', () => {
@@ -73,12 +73,12 @@ describe('MarkdownPipe', () => {
     const mockCompiled = 'compiled-x';
     const mockBypassSecurity = 'bypass-x';
 
-    spyOn(markdownService, 'compile').and.returnValue(mockCompiled);
+    spyOn(markdownService, 'parse').and.returnValue(mockCompiled);
     spyOn(domSanitizer, 'bypassSecurityTrustHtml').and.returnValue(mockBypassSecurity);
 
     const result = pipe.transform(markdown);
 
-    expect(markdownService.compile).toHaveBeenCalledWith(markdown);
+    expect(markdownService.parse).toHaveBeenCalledWith(markdown);
     expect(domSanitizer.bypassSecurityTrustHtml).toHaveBeenCalledWith(mockCompiled);
     expect(result).toBe(mockBypassSecurity);
   });

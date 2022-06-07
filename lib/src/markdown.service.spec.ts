@@ -6,12 +6,14 @@ import { marked } from 'marked';
 
 import { KatexOptions } from './katex-options';
 import { MarkdownModule } from './markdown.module';
-import { errorJoyPixelsNotLoaded, errorKatexNotLoaded, MarkdownService, SECURITY_CONTEXT } from './markdown.service';
+import { errorJoyPixelsNotLoaded, errorKatexNotLoaded, errorMermaidNotLoaded, MarkdownService, SECURITY_CONTEXT } from './markdown.service';
+import { MermaidAPI } from './mermaid-options';
 
 declare let global: any;
 declare let Prism: any;
 declare let joypixels: any;
 declare let katex: any;
+declare let mermaid: any;
 
 describe('MarkdowService', () => {
   let domSanitizer: DomSanitizer;
@@ -20,7 +22,7 @@ describe('MarkdowService', () => {
 
   describe('with SecurityContext.HTML', () => {
 
-    describe('compile', () => {
+    describe('parse', () => {
 
       beforeEach(() => {
         TestBed.configureTestingModule({
@@ -28,9 +30,7 @@ describe('MarkdowService', () => {
             MarkdownModule.forRoot({ sanitize: SecurityContext.HTML }),
           ],
         });
-      });
 
-      beforeEach(() => {
         domSanitizer = TestBed.inject(DomSanitizer);
         markdownService = TestBed.inject(MarkdownService);
       });
@@ -43,8 +43,8 @@ describe('MarkdowService', () => {
         const sanitized = domSanitizer.sanitize(securityContext, marked(mockRaw));
         const unsanitized = marked(mockRaw);
 
-        expect(markdownService.compile(mockRaw, false)).toBe(sanitized!);
-        expect(markdownService.compile(mockRaw, false)).not.toBe(unsanitized);
+        expect(markdownService.parse(mockRaw, { decodeHtml: false })).toBe(sanitized!);
+        expect(markdownService.parse(mockRaw, { decodeHtml: false })).not.toBe(unsanitized);
       });
     });
   });
@@ -59,9 +59,7 @@ describe('MarkdowService', () => {
           MarkdownModule.forRoot({ sanitize: SecurityContext.NONE }),
         ],
       });
-    });
 
-    beforeEach(() => {
       http = TestBed.inject(HttpTestingController);
       markdownService = TestBed.inject(MarkdownService);
     });
@@ -108,20 +106,26 @@ describe('MarkdowService', () => {
       });
     });
 
-    describe('compile', () => {
+    describe('parse', () => {
 
-      it('should return parsed markdown correctly', () => {
+      it('should extend marked renderer when mermaid is true', () => {
 
-        const mockRaw = '### Markdown-x';
+        const mermaid = 'graph TD; A-->B;';
+        const mockRaw = `\`\`\`mermaid\n${mermaid}\n\`\`\``;
 
-        expect(markdownService.compile(mockRaw)).toBe(marked(mockRaw));
+        const parsed = markdownService.parse(mockRaw, { mermaid: true });
+
+        expect(parsed).toBe(`<div class="mermaid">${mermaid}</div>`);
       });
 
-      it('should return empty string when raw is null/undefined/empty', () => {
+      it('should not extend marked renderer when mermaid is false', () => {
 
-        expect(markdownService.compile(null!)).toBe('');
-        expect(markdownService.compile(undefined!)).toBe('');
-        expect(markdownService.compile('')).toBe('');
+        const mermaid = 'graph TD; A-->B;';
+        const mockRaw = `\`\`\`mermaid\n${mermaid}\n\`\`\``;
+
+        const parsed = markdownService.parse(mockRaw, { mermaid: false });
+
+        expect(parsed).toBe(marked(mockRaw));
       });
 
       it('should remove leading whitespaces offset while keeping indent', () => {
@@ -138,7 +142,7 @@ describe('MarkdowService', () => {
           '   * sub-list',
         ].join('\n');
 
-        expect(markdownService.compile(mockRaw)).toBe(marked(expected));
+        expect(markdownService.parse(mockRaw)).toBe(marked(expected));
       });
 
       it('should return line with indent correctly', () => {
@@ -160,7 +164,7 @@ describe('MarkdowService', () => {
           'Lorem Ipsum',
         ].join('\n');
 
-        expect(markdownService.compile(mockRaw)).toBe(marked(expected));
+        expect(markdownService.parse(mockRaw)).toBe(marked(expected));
       });
 
       it('should decode HTML correctly when decodeHtml is true ', () => {
@@ -168,7 +172,7 @@ describe('MarkdowService', () => {
         const mockRaw = '&lt;html&gt;';
         const expected = '<html>';
 
-        expect(markdownService.compile(mockRaw, true)).toBe(expected);
+        expect(markdownService.parse(mockRaw, { decodeHtml: true })).toBe(expected);
       });
 
       it('should not decode HTML when decodeHtml is omitted/false/null/undefined', () => {
@@ -176,43 +180,34 @@ describe('MarkdowService', () => {
         const mockRaw = '&lt;html&gt;';
         const expected = '<p>&lt;html&gt;</p>\n';
 
-        expect(markdownService.compile(mockRaw)).toBe(expected);
-        expect(markdownService.compile(mockRaw, false)).toBe(expected);
-        expect(markdownService.compile(mockRaw, null!)).toBe(expected);
-        expect(markdownService.compile(mockRaw, undefined)).toBe(expected);
+        expect(markdownService.parse(mockRaw)).toBe(expected);
+        expect(markdownService.parse(mockRaw, { decodeHtml: false })).toBe(expected);
+        expect(markdownService.parse(mockRaw, { decodeHtml: null! })).toBe(expected);
+        expect(markdownService.parse(mockRaw, { decodeHtml: undefined })).toBe(expected);
       });
 
       it('should not decode HTML when platform is not browser as it uses `document`', () => {
 
         const mockRaw = '&lt;html&gt;';
-        const expected = '<p>&lt;html&gt;</p>\n';
+        const expected = '&lt;html&gt;';
 
         markdownService['platform'] = 'server';
 
-        expect(markdownService.compile(mockRaw, true)).toBe(expected);
+        expect(markdownService.parse(mockRaw, { decodeHtml: true })).toBe(expected);
       });
 
-      it('should not sanitize parsed markdown', () => {
-
-        const mockRaw = '### Markdown-x';
-        const expected = marked(mockRaw);
-
-        expect(markdownService.compile(mockRaw, false)).toBe(expected);
-        expect(markdownService.compile(mockRaw, false)).toBe(expected);
-      });
-
-      it('should throw when emojify is true but emoji-toolkit is not loaded', () => {
+      it('should throw when emoji is true but emoji-toolkit is not loaded', () => {
 
         global['joypixels'] = undefined;
 
-        expect(() => markdownService.compile('I :heart: ngx-markdown', false, true)).toThrowError(errorJoyPixelsNotLoaded);
+        expect(() => markdownService.parse('I :heart: ngx-markdown', { decodeHtml: false, emoji: true })).toThrowError(errorJoyPixelsNotLoaded);
 
         global['joypixels'] = { shortnameToUnicode: undefined };
 
-        expect(() => markdownService.compile('I :heart: ngx-markdown', false, true)).toThrowError(errorJoyPixelsNotLoaded);
+        expect(() => markdownService.parse('I :heart: ngx-markdown', { decodeHtml: false, emoji: true })).toThrowError(errorJoyPixelsNotLoaded);
       });
 
-      it('should call joypixels when emojify is true', () => {
+      it('should call joypixels when emoji is true', () => {
 
         const mockRaw = 'I :heart: ngx-markdown';
         const mockEmojified = 'I ❤️ ngx-markdown';
@@ -221,11 +216,11 @@ describe('MarkdowService', () => {
 
         spyOn(joypixels, 'shortnameToUnicode').and.returnValue(mockEmojified);
 
-        expect(markdownService.compile(mockRaw, false, true)).toEqual(marked(mockEmojified));
+        expect(markdownService.parse(mockRaw, { decodeHtml: false, emoji: true })).toEqual(marked(mockEmojified));
         expect(joypixels.shortnameToUnicode).toHaveBeenCalledWith(mockRaw);
       });
 
-      it('should not call joypixels when emojify is omitted/false/null/undefined', () => {
+      it('should not call joypixels when emoji is omitted/false/null/undefined', () => {
 
         const mockRaw = '### Markdown-x';
 
@@ -234,10 +229,10 @@ describe('MarkdowService', () => {
         spyOn(joypixels, 'shortnameToUnicode');
 
         const useCases = [
-          () => markdownService.compile(mockRaw, false),
-          () => markdownService.compile(mockRaw, false, false),
-          () => markdownService.compile(mockRaw, false, null!),
-          () => markdownService.compile(mockRaw, false, undefined),
+          () => markdownService.parse(mockRaw, { decodeHtml: false }),
+          () => markdownService.parse(mockRaw, { decodeHtml: false, emoji: false }),
+          () => markdownService.parse(mockRaw, { decodeHtml: false, emoji: null! }),
+          () => markdownService.parse(mockRaw, { decodeHtml: false, emoji: undefined }),
         ];
 
         useCases.forEach(func => {
@@ -256,8 +251,280 @@ describe('MarkdowService', () => {
 
         markdownService['platform'] = 'server';
 
-        expect(() => markdownService.compile(mockRaw, false, true)).not.toThrowError();
+        expect(() => markdownService.parse(mockRaw, { decodeHtml: false, emoji: true })).not.toThrowError();
         expect(joypixels.shortnameToUnicode).not.toHaveBeenCalled();
+      });
+
+      it('should call katex when katex is true', () => {
+
+        const mockRaw = '$E=mc^2$';
+        const katexOptions = { displayMode: true };
+
+        global['katex'] = { renderToString: (tex: string, options?: KatexOptions) => '' };
+
+        spyOn(katex, 'renderToString');
+
+        markdownService.parse(mockRaw, { katex: true, katexOptions });
+
+        expect(katex.renderToString).toHaveBeenCalledWith(mockRaw.replace(/\$/gm, ''), katexOptions);
+      });
+
+      it('should not call katex when katex is omitted/false/null/undefined', () => {
+
+        const mockRaw = '$E=mc^2$';
+
+        global['katex'] = { renderToString: (tex: string, options?: KatexOptions) => '' };
+
+        spyOn(katex, 'renderToString');
+
+        const useCases = [
+          () => markdownService.parse(mockRaw),
+          () => markdownService.parse(mockRaw, { katex: false }),
+          () => markdownService.parse(mockRaw, { katex: null! }),
+          () => markdownService.parse(mockRaw, { katex: undefined }),
+        ];
+
+        useCases.forEach(func => {
+          func();
+          expect(katex.renderToString).not.toHaveBeenCalled();
+        });
+      });
+
+      it('should not call katex or throw when platform is not browser', () => {
+
+        const mockRaw = '$E=mc^2$';
+
+        global['katex'] = { renderToString: (tex: string, options?: KatexOptions) => '' };
+
+        spyOn(katex, 'renderToString');
+
+        markdownService['platform'] = 'server';
+
+        expect(() => markdownService.parse(mockRaw, { katex: true })).not.toThrowError();
+        expect(katex.renderToString).not.toHaveBeenCalled();
+      });
+
+      it('should throw when katex is called but not loaded', () => {
+
+        const mockRaw = '$E=mc^2$';
+
+        global['katex'] = undefined;
+
+        expect(() => markdownService.parse(mockRaw, { katex: true })).toThrowError(errorKatexNotLoaded);
+
+        global['katex'] = { renderToString: undefined };
+
+        expect(() => markdownService.parse(mockRaw, { katex: true })).toThrowError(errorKatexNotLoaded);
+      });
+
+      it('should call katex with math expressions', () => {
+
+        global['katex'] = { renderToString: (tex: string, options?: KatexOptions) => '' };
+
+        spyOn(katex, 'renderToString');
+
+        const useCases = [
+          { tex: '$E=mc^2$' },
+          { tex: '$x^2 + y^2 = z^2$', options: { displayMode: true } },
+        ];
+
+        useCases.forEach(useCase => {
+          markdownService.parse(useCase.tex, { katex: true, katexOptions: useCase.options });
+          expect(katex.renderToString).toHaveBeenCalledWith(useCase.tex.replace(/\$/gm, ''), useCase.options);
+          katex.renderToString.calls.reset();
+        });
+      });
+
+      it('should not parse markdown when platform is not browser', () => {
+
+        const mockRaw = '### Markdown-x';
+        const expected = mockRaw;
+
+        markdownService['platform'] = 'server';
+
+        expect(() => markdownService.parse(mockRaw)).not.toThrowError();
+        expect(markdownService.parse(mockRaw)).toBe(expected);
+      });
+
+      it('should return parsed markdown correctly', () => {
+
+        const mockRaw = '### Markdown-x';
+
+        expect(markdownService.parse(mockRaw)).toBe(marked(mockRaw));
+      });
+
+      it('should return empty string when raw is null/undefined/empty', () => {
+
+        expect(markdownService.parse(null!)).toBe('');
+        expect(markdownService.parse(undefined!)).toBe('');
+        expect(markdownService.parse('')).toBe('');
+      });
+
+      it('should not sanitize parsed markdown', () => {
+
+        const mockRaw = '### Markdown-x';
+        const expected = marked(mockRaw);
+
+        expect(markdownService.parse(mockRaw, { decodeHtml: false })).toBe(expected);
+      });
+    });
+
+    describe('render', () => {
+      it('should render mermaid with default options when mermaid is true and options are omitted', () => {
+
+        const elementOne = document.createElement('div');
+        elementOne.classList.add('mermaid');
+
+        const elementTwo = document.createElement('div');
+        elementTwo.classList.add('mermaid');
+
+        const container = document.createElement('div');
+        container.append(elementOne);
+        container.append(elementTwo);
+
+        const expected = container.querySelectorAll('.mermaid');
+
+        global['mermaid'] = {
+          initialize: (options: MermaidAPI.Config) => {},
+          init: (nodes: string | Node | NodeList) => {},
+        };
+
+        spyOn(mermaid, 'initialize');
+        spyOn(mermaid, 'init');
+
+        markdownService.render(container, { mermaid: true });
+
+        expect(mermaid.initialize).toHaveBeenCalledWith({ startOnLoad: false });
+        expect(mermaid.init).toHaveBeenCalledWith(expected);
+      });
+
+      it('should render mermaid with provided options when at least one element is found', () => {
+
+        const element = document.createElement('div');
+        element.classList.add('mermaid');
+        element.innerHTML = 'graph TD; A-->B;';
+
+        const container = document.createElement('div');
+        container.append(element);
+
+        const expected = container.querySelectorAll('.mermaid');
+        const mermaidOptions: MermaidAPI.Config = { darkMode: true };
+
+        global['mermaid'] = {
+          initialize: (options: MermaidAPI.Config) => {},
+          init: (nodes: string | Node | NodeList) => {},
+        };
+
+        spyOn(mermaid, 'initialize');
+        spyOn(mermaid, 'init');
+
+        markdownService.render(container, { mermaid: true, mermaidOptions });
+
+        expect(mermaid.initialize).toHaveBeenCalledWith(mermaidOptions);
+        expect(mermaid.init).toHaveBeenCalledWith(expected);
+      });
+
+      it('should not render mermaid when mermaid is omitted/false/null/undefined', () => {
+
+        const element = document.createElement('div');
+        element.classList.add('mermaid');
+
+        const container = document.createElement('div');
+        container.append(element);
+
+        global['mermaid'] = {
+          initialize: (options: MermaidAPI.Config) => {},
+          init: (nodes: string | Node | NodeList) => {},
+        };
+
+        spyOn(mermaid, 'initialize');
+        spyOn(mermaid, 'init');
+
+        const useCases = [
+          () => markdownService.render(container),
+          () => markdownService.render(container, { mermaid: false }),
+          () => markdownService.render(container, { mermaid: null! }),
+          () => markdownService.render(container, { mermaid: undefined }),
+        ];
+
+        useCases.forEach(func => {
+          func();
+          expect(mermaid.initialize).not.toHaveBeenCalled();
+          expect(mermaid.init).not.toHaveBeenCalled();
+        });
+      });
+
+      it('should not render mermaid or throw when platform is not browser', () => {
+
+        const element = document.createElement('div');
+        element.classList.add('mermaid');
+
+        const container = document.createElement('div');
+        container.append(element);
+
+        global['mermaid'] = {
+          initialize: (options: MermaidAPI.Config) => {},
+          init: (nodes: string | Node | NodeList) => {},
+        };
+
+        spyOn(mermaid, 'initialize');
+        spyOn(mermaid, 'init');
+
+        markdownService['platform'] = 'server';
+
+        expect(() => markdownService.render(container, { mermaid: true })).not.toThrowError();
+        expect(mermaid.initialize).not.toHaveBeenCalled();
+        expect(mermaid.init).not.toHaveBeenCalled();
+      });
+
+      it('should throw when mermaid is called but not loaded', () => {
+
+        const element = document.createElement('div');
+        element.classList.add('mermaid');
+
+        const container = document.createElement('div');
+        container.append(element);
+
+        global['mermaid'] = undefined;
+
+        expect(() => markdownService.render(container, { mermaid: true })).toThrowError(errorMermaidNotLoaded);
+
+        global['mermaid'] = { initialize: undefined };
+        global['mermaid'] = { init: undefined };
+
+        expect(() => markdownService.render(container, { mermaid: true })).toThrowError(errorMermaidNotLoaded);
+      });
+
+      it('should not render mermaid when no elements are found', () => {
+
+        const element = document.createElement('div');
+        element.classList.add('not-mermaid');
+
+        const container = document.createElement('div');
+        container.append(element);
+
+        global['mermaid'] = {
+          initialize: (options: MermaidAPI.Config) => {},
+          init: (nodes: string | Node | NodeList) => {},
+        };
+
+        spyOn(mermaid, 'initialize');
+        spyOn(mermaid, 'init');
+
+        expect(() => markdownService.render(container, { mermaid: true })).not.toThrowError();
+        expect(mermaid.initialize).not.toHaveBeenCalled();
+        expect(mermaid.init).not.toHaveBeenCalled();
+      });
+
+      it('should highlight element', () => {
+
+        const element = document.createElement('div');
+
+        spyOn(markdownService, 'highlight');
+
+        markdownService.render(element);
+
+        expect(markdownService.highlight).toHaveBeenCalled();
       });
     });
 
@@ -418,52 +685,6 @@ describe('MarkdowService', () => {
           func();
           expect(Prism.highlightAllUnder).toHaveBeenCalledWith(document);
           Prism.highlightAllUnder.calls.reset();
-        });
-      });
-    });
-
-    describe('renderKatex', () => {
-
-      it('should not call katex or throw when platform is not browser', () => {
-
-        const mockRaw = '$E=mc^2$';
-
-        global['katex'] = { renderToString: (tex: string, options?: KatexOptions) => '' };
-
-        spyOn(katex, 'renderToString');
-
-        markdownService['platform'] = 'server';
-
-        expect(() => markdownService.renderKatex(mockRaw)).not.toThrowError();
-        expect(katex.renderToString).not.toHaveBeenCalled();
-      });
-
-      it('should throw when katex is called but not loaded', () => {
-
-        global['katex'] = undefined;
-
-        expect(() => markdownService.renderKatex('$example$')).toThrowError(errorKatexNotLoaded);
-
-        global['katex'] = { renderToString: undefined };
-
-        expect(() => markdownService.renderKatex('$example$')).toThrowError(errorKatexNotLoaded);
-      });
-
-      it('should call katex with math expressions', () => {
-
-        global['katex'] = { renderToString: (tex: string, options?: KatexOptions) => '' };
-
-        spyOn(katex, 'renderToString');
-
-        const useCases = [
-          { tex: '$E=mc^2$' },
-          { tex: '$x^2 + y^2 = z^2$', options: { displayMode: true } },
-        ];
-
-        useCases.forEach(useCase => {
-          markdownService.renderKatex(useCase.tex, useCase.options);
-          expect(katex.renderToString).toHaveBeenCalledWith(useCase.tex.replace(/\$/gm, ''), useCase.options);
-          katex.renderToString.calls.reset();
         });
       });
     });

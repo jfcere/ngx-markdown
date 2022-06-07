@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, SecurityContext } from '@angular/core';
-import { TestBed, waitForAsync } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { MarkdownModule } from './markdown.module';
 import { errorSrcWithoutHttpClient, SECURITY_CONTEXT } from './markdown.service';
@@ -202,15 +202,15 @@ describe('MarkdownModule', () => {
 
   describe('without HttpClient', () => {
 
-    beforeEach(waitForAsync(() => {
-      void TestBed.configureTestingModule({
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
         imports: [
           CommonModule,
           MarkdownModule.forRoot(),
         ],
         declarations: [HostComponent],
       }).compileComponents();
-    }));
+    });
 
     it('should render the markdown if not passing src attribute', () => {
 

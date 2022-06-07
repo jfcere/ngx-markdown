@@ -49,7 +49,7 @@
     "@angular/common": "~13.0.0",
     "@angular/compiler": "~13.0.0",
     "@angular/core": "~13.0.0",
-    "@angular/flex-layout": "12.0.0-beta.35",
+    "@angular/flex-layout": "13.0.0-beta.38",
     "@angular/forms": "~13.0.0",
     "@angular/material": "~13.0.0",
     "@angular/platform-browser": "~13.0.0",
