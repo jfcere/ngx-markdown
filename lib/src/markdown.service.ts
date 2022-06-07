@@ -74,7 +74,7 @@ export class MarkdownService {
   };
 
   private readonly DEFAULT_MARKED_OPTIONS: MarkedOptions = {
-    renderer: this.extendRenderer(new MarkedRenderer()),
+    renderer: new MarkedRenderer(),
   };
 
   private readonly DEFAULT_MERMAID_OPTIONS: MermaidAPI.Config = {
@@ -181,19 +181,9 @@ export class MarkdownService {
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const defaultCode = renderer.code;
     renderer.code = function (code: string, language: string | undefined, isEscaped: boolean) {
-      const mermaidSearchResult = /^sequenceDiagram/.exec(code)
-      || /^graph/.exec(code)
-      || /^flowchart/.exec(code)
-      || /^erDiagram/.exec(code)
-      || /^journey/.exec(code)
-      || /^gantt/.exec(code)
-      || /^pie/.exec(code)
-      || /^requirementDiagram/.exec(code)
-      || /^gitGraph/.exec(code);
-      const rendererCode = mermaidSearchResult !== null && mermaidSearchResult.length > 0
+      return language === 'mermaid'
         ? `<div class="mermaid">${code}</div>`
         : defaultCode.call(this, code, language, isEscaped);
-      return rendererCode;
     };
 
     extendedRenderer.ɵNgxMarkdownRendererExtended = true;

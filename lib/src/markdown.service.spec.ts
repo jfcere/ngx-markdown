@@ -108,18 +108,24 @@ describe('MarkdowService', () => {
 
     describe('parse', () => {
 
-      it('should return parsed markdown correctly', () => {
+      it('should extend marked renderer when mermaid is true', () => {
 
-        const mockRaw = '### Markdown-x';
+        const mermaid = 'graph TD; A-->B;';
+        const mockRaw = `\`\`\`mermaid\n${mermaid}\n\`\`\``;
 
-        expect(markdownService.parse(mockRaw)).toBe(marked(mockRaw));
+        const parsed = markdownService.parse(mockRaw, { mermaid: true });
+
+        expect(parsed).toBe(`<div class="mermaid">${mermaid}</div>`);
       });
 
-      it('should return empty string when raw is null/undefined/empty', () => {
+      it('should not extend marked renderer when mermaid is false', () => {
 
-        expect(markdownService.parse(null!)).toBe('');
-        expect(markdownService.parse(undefined!)).toBe('');
-        expect(markdownService.parse('')).toBe('');
+        const mermaid = 'graph TD; A-->B;';
+        const mockRaw = `\`\`\`mermaid\n${mermaid}\n\`\`\``;
+
+        const parsed = markdownService.parse(mockRaw, { mermaid: false });
+
+        expect(parsed).toBe(marked(mockRaw));
       });
 
       it('should remove leading whitespaces offset while keeping indent', () => {
@@ -338,6 +344,20 @@ describe('MarkdowService', () => {
 
         expect(() => markdownService.parse(mockRaw)).not.toThrowError();
         expect(markdownService.parse(mockRaw)).toBe(expected);
+      });
+
+      it('should return parsed markdown correctly', () => {
+
+        const mockRaw = '### Markdown-x';
+
+        expect(markdownService.parse(mockRaw)).toBe(marked(mockRaw));
+      });
+
+      it('should return empty string when raw is null/undefined/empty', () => {
+
+        expect(markdownService.parse(null!)).toBe('');
+        expect(markdownService.parse(undefined!)).toBe('');
+        expect(markdownService.parse('')).toBe('');
       });
 
       it('should not sanitize parsed markdown', () => {
