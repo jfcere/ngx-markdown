@@ -1,6 +1,7 @@
 <app-scrollspy-nav-layout [headings]="headings">
   <h1>Plugins</h1>
 
+  <!-- PLUGINS - Emoji -->
   <section>
     <h2 id="emoji">Emoji plugin</h2>
 
@@ -37,6 +38,7 @@
     </markdown>
   </section>
 
+  <!-- PLUGINS - Line Numbers -->
   <section>
     <h2 id="line-numbers">Line Numbers plugin</h2>
 
@@ -88,18 +90,19 @@
       function root(x, n) &#123;
         try &#123;
           var negate = n % 2 == 1 && x < 0;
-          if(negate)
+          if (negate)
             x = -x;
           var possible = Math.pow(x, 1 / n);
           n = Math.pow(possible, n);
-          if(Math.abs(x - n) < 1 && (x > 0 == n > 0))
+          if (Math.abs(x - n) < 1 && (x > 0 == n > 0))
             return negate ? -possible : possible;
-        } catch(e)&#123; }
+        } catch (e) &#123; }
       }
       ```
     </markdown>
   </section>
 
+  <!-- PLUGINS - Line Highlight -->
   <section>
     <h2 id="line-highlight">Line Highlight plugin</h2>
 
@@ -136,71 +139,16 @@
       function root(x, n) &#123;
         try &#123;
           var negate = n % 2 == 1 && x < 0;
-          if(negate)
+          if (negate)
             x = -x;
           var possible = Math.pow(x, 1 / n);
           n = Math.pow(possible, n);
-          if(Math.abs(x - n) < 1 && (x > 0 == n > 0))
+          if (Math.abs(x - n) < 1 && (x > 0 == n > 0))
             return negate ? -possible : possible;
-        } catch(e)&#123; }
+        } catch (e) &#123; }
       }
       ```
     </markdown>
-  </section>
-
-  <section>
-    <h2 id="katex">KaTeX plugin</h2>
-
-    <markdown ngPreserveWhitespaces>
-      #### KaTeX files to include
-      ```javascript
-      node_modules/katex/dist/katex.min.css
-      node_modules/katex/dist/katex.min.js
-      ```
-      #### Directive
-      `katex` - activate KaTeX plugin
-      #### Attributes
-      `katexOptions` - math rendering [options](https://katex.org/docs/options.html)<br>
-      ### Example
-    </markdown>
-
-    <markdown>
-      You can render KaTex expression by adding `katex` directive on the `markdown` component/directive.
-    </markdown>
-
-    <markdown [src]="'app/plugins/remote/katex.html'"></markdown>
-
-    <markdown>
-      The example below illustrate `katex` directive in action.
-    </markdown>
-
-    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="16px">
-      <mat-form-field appearance="fill" color="accent" fxFlex.gt-sm="calc(50% - 8px)">
-        <textarea matInput [(ngModel)]="katexMarkdown"></textarea>
-      </mat-form-field>
-
-      <markdown [data]="katexMarkdown" katex fxFlex.gt-sm="calc(50% - 8px)"></markdown>
-    </div>
-
-    <markdown ngPreserveWhitespaces>
-      Optionally, you can specify math rendering [options](https://katex.org/docs/options.html) using `katexOptions` property.
-
-      **example.component.ts**
-      ```typescript
-      import &#123; KatexOptions } from 'ngx-markdown';
-
-      public options: KatexOptions = &#123;
-        displayMode: true,
-        throwOnError: false,
-        errorColor: '#cc0000',
-        ...
-      };
-      ```
-
-      **example.component.html**
-    </markdown>
-
-    <markdown [src]="'app/plugins/remote/katex-options.html'"></markdown>
   </section>
 
   <!-- PLUGINS - CommandLine -->
@@ -308,6 +256,121 @@
       [prompt]="'PS C:\Users\Chris>'"
       [filterOutput]="'(out)'"
       [src]="'app/plugins/remote/windows-powershell-with-filter-output.powershell'">
+    </markdown>
+  </section>
+
+  <!-- PLUGINS - Katex -->
+  <section>
+    <h2 id="katex">KaTeX plugin</h2>
+
+    <markdown ngPreserveWhitespaces>
+      #### KaTeX files to include
+      ```javascript
+      node_modules/katex/dist/katex.min.css
+      node_modules/katex/dist/katex.min.js
+      ```
+      #### Directive
+      `katex` - activate KaTeX plugin
+      #### Attributes
+      `katexOptions` - math rendering [options](https://katex.org/docs/options.html)<br>
+      ### Example
+    </markdown>
+
+    <markdown>
+      You can render KaTex expression by adding `katex` directive on the `markdown` component/directive.
+    </markdown>
+
+    <markdown [src]="'app/plugins/remote/katex.html'"></markdown>
+
+    <markdown>
+      The example below illustrate `katex` directive in action.
+    </markdown>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="16px">
+      <mat-form-field appearance="fill" color="accent" fxFlex.gt-sm="calc(50% - 8px)">
+        <textarea matInput [(ngModel)]="katexMarkdown"></textarea>
+      </mat-form-field>
+
+      <markdown [data]="katexMarkdown" katex fxFlex.gt-sm="calc(50% - 8px)"></markdown>
+    </div>
+
+    <markdown ngPreserveWhitespaces>
+      Optionally, you can specify math rendering [options](https://katex.org/docs/options.html) using `katexOptions` property.
+
+      **example.component.ts**
+      ```typescript
+      import &#123; KatexOptions } from 'ngx-markdown';
+
+      public options: KatexOptions = &#123;
+        displayMode: true,
+        throwOnError: false,
+        errorColor: '#cc0000',
+        ...
+      };
+      ```
+
+      **example.component.html**
+    </markdown>
+
+    <markdown [src]="'app/plugins/remote/katex-options.html'"></markdown>
+  </section>
+
+  <!-- PLUGINS - Mermaid -->
+  <section>
+    <h2 id="mermaid">Mermaid plugin</h2>
+
+    <markdown ngPreserveWhitespaces>
+      #### Mermaid file to include
+      ```javascript
+      node_modules/mermaid/dist/mermaid.min.js
+      ```
+      #### Directive
+      `mermaid` - activate mermaid plugin
+      #### Attributes
+      `mermaidOptions` - mermaid [configuration options](https://mermaid-js.github.io/mermaid/#/Setup?id=configuration)<br>
+      ### Example
+    </markdown>
+
+    <markdown>
+      Using `mermaid` input property on `markdown` component or directive (this is not available when using pipe or service) allows you to use [mermaid](https://mermaid-js.github.io/) syntax to generate diagrams and flowcharts.
+    </markdown>
+
+    <markdown [src]="'app/plugins/remote/mermaid.html'"></markdown>
+
+    <markdown>
+      The example below illustrate `mermaid` directive in action.
+    </markdown>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="16px">
+      <mat-form-field appearance="fill" color="accent" fxFlex.gt-sm="calc(50% - 8px)">
+        <textarea matInput [(ngModel)]="mermaidMarkdown"></textarea>
+      </mat-form-field>
+
+      <markdown [data]="mermaidMarkdown" mermaid [mermaidOptions]="mermaidOptions" fxFlex.gt-sm="calc(50% - 8px)"></markdown>
+    </div>
+
+    <markdown ngPreserveWhitespaces>
+      Optionally, you can specify mermaid [configuration options](https://mermaid-js.github.io/mermaid/#/Setup?id=configuration) using `mermaidOptions` property.
+
+      **example.component.ts**
+      ```typescript
+      import &#123; MermaidAPI } from 'ngx-markdown';
+
+      public options: MermaidAPI.Config = &#123;
+        fontFamily: '"trebuchet ms", verdana, arial, sans-serif',
+        logLevel: MermaidAPI.LogLevel.Info,
+        theme: MermaidAPI.Theme.Dark,
+        ...
+      };
+      ```
+
+      **example.component.html**
+    </markdown>
+
+    <markdown [src]="'app/plugins/remote/mermaid-options.html'"></markdown>
+
+    <markdown emoji>
+      > :blue_book: You can refer to this [Mermaid](https://mermaid-js.github.io/) documentation for complete usage syntax.
     </markdown>
   </section>
 </app-scrollspy-nav-layout>

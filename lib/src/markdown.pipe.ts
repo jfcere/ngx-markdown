@@ -26,11 +26,11 @@ export class MarkdownPipe implements PipeTransform {
       return value;
     }
 
-    const markdown = this.markdownService.compile(value);
+    const markdown = this.markdownService.parse(value);
 
     this.zone.onStable
       .pipe(first())
-      .subscribe(() => this.markdownService.highlight(this.elementRef.nativeElement));
+      .subscribe(() => this.markdownService.render(this.elementRef.nativeElement));
 
     return this.domSanitizer.bypassSecurityTrustHtml(markdown);
   }
