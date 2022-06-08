@@ -181,6 +181,7 @@ describe('MarkdownComponent', () => {
 
       spyOn(markdownService, 'parse');
 
+      component.inline = true;
       component.emoji = false;
       component.katex = true;
       component.katexOptions = katexOptions;
@@ -189,6 +190,7 @@ describe('MarkdownComponent', () => {
 
       expect(markdownService.parse).toHaveBeenCalledWith(raw, {
         decodeHtml: true,
+        inline: true,
         emoji: false,
         katex: true,
         katexOptions: katexOptions,
@@ -294,6 +296,7 @@ describe('MarkdownComponent', () => {
 
       expect(markdownService.parse).toHaveBeenCalledWith(raw, {
         decodeHtml: false,
+        inline: false,
         emoji: true,
         katex: false,
         katexOptions: undefined,
@@ -316,6 +319,7 @@ describe('MarkdownComponent', () => {
 
       expect(markdownService.parse).toHaveBeenCalledWith(raw, {
         decodeHtml: false,
+        inline: false,
         emoji: false,
         katex: false,
         katexOptions: undefined,
