@@ -20,7 +20,7 @@
     [routerLink]="route.path"
     routerLinkActive>
     <img src="assets/icon-{{route.path}}.svg">
-    <span>{{ route.data?.label }}</span>
+    <span>{{ route.data?.['label'] }}</span>
   </a>
 </nav>
 

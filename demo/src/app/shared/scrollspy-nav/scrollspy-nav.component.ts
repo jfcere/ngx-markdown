@@ -21,7 +21,7 @@ export class ScrollspyNavComponent implements OnChanges, OnDestroy {
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.headings && changes.headings.currentValue) {
+    if (changes['headings']?.currentValue) {
       this.setScrollSpy();
     }
   }

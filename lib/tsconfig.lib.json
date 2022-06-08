@@ -9,10 +9,6 @@
     "types": [
       "marked"
     ],
-    "lib": [
-      "dom",
-      "es2015"
-    ]
   },
   "angularCompilerOptions": {
     "skipTemplateCodegen": true,

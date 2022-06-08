@@ -1,25 +1,26 @@
 import { ElementRef } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { first } from 'rxjs/operators';
 
 import { KatexOptions } from './katex-options';
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownModule } from './markdown.module';
-import { MarkdownService } from './markdown.service';
+import { MarkdownService, ParseOptions } from './markdown.service';
+import { MermaidAPI } from './mermaid-options';
 
 describe('MarkdownComponent', () => {
   let fixture: ComponentFixture<MarkdownComponent>;
   let component: MarkdownComponent;
   let markdownService: MarkdownService;
 
-  beforeEach(waitForAsync(() => {
-    void TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         MarkdownModule.forRoot(),
       ],
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     markdownService = TestBed.inject(MarkdownService);
@@ -60,7 +61,7 @@ describe('MarkdownComponent', () => {
 
   describe('src', () => {
 
-    it('should call render with retreived content when set', waitForAsync(() => {
+    it('should call render with retreived content when set', () => {
 
       const mockSrc = './src-example/file.md';
       const mockContent = 'source-content';
@@ -74,7 +75,7 @@ describe('MarkdownComponent', () => {
 
       expect(markdownService.getSource).toHaveBeenCalledWith(mockSrc);
       expect(component.render).toHaveBeenCalledWith(mockContent);
-    }));
+    });
 
     it('should return value correctly when get', () => {
 
@@ -173,71 +174,77 @@ describe('MarkdownComponent', () => {
 
   describe('render', () => {
 
-    it('should set innerHTML with compiled/decoded html markdown when decodeHtml is true', () => {
+    it('should parse markdown through MarkdownService', () => {
 
       const raw = '### Raw';
-      const decoded = '<h3>Compiled</h3>';
+      const katexOptions: KatexOptions = { displayMode: true };
 
-      spyOn(markdownService, 'compile').and.callFake((markdown: string, decodeHtml: boolean, emojify: boolean) => {
-        return decodeHtml ? decoded : '';
+      spyOn(markdownService, 'parse');
+
+      component.inline = true;
+      component.emoji = false;
+      component.katex = true;
+      component.katexOptions = katexOptions;
+      component.mermaid = false;
+      component.render(raw, true);
+
+      expect(markdownService.parse).toHaveBeenCalledWith(raw, {
+        decodeHtml: true,
+        inline: true,
+        emoji: false,
+        katex: true,
+        katexOptions: katexOptions,
+        mermaid: false,
       });
+    });
+
+    it('should set innerHTML with parsed markdown', () => {
+
+      const raw = '### Raw';
+      const parsed = '<h3>Compiled</h3>';
+
+      spyOn(markdownService, 'parse').and.returnValue(parsed);
 
       component.render(raw, true);
 
-      expect(markdownService.compile).toHaveBeenCalledWith(raw, true, false);
-      expect(component.element.nativeElement.innerHTML).toBe(decoded);
+      expect(component.element.nativeElement.innerHTML).toBe(parsed);
     });
 
-    it('should set innerHTML with compiled/undecoded html markdown when decodeHtml is omitted/false/null/undefined', () => {
+    it('should handle commandline plugin correctly', () => {
 
-      const raw = '### Raw';
-      const undecoded = '<h3>Compiled-Undecoded</h3>';
+      const markdown = '```powershell\nGet-Date\n\nSunday, November 7, 2021 8:19:21 PM\n\n```';
+      const getHTMLPreElement = () => (fixture.nativeElement as HTMLElement).querySelector('pre');
 
-      spyOn(markdownService, 'compile').and.callFake((markdown: string, decodeHtml: boolean, emojify: boolean) => {
-        return decodeHtml ? '' : undecoded;
-      });
+      component.commandLine = true;
+      component.render(markdown);
 
-      component.render(raw);
+      expect(getHTMLPreElement()?.classList).toContain('command-line');
+      expect(getHTMLPreElement()?.attributes.getNamedItem('data-start')).toBeNull();
 
-      expect(markdownService.compile).toHaveBeenCalledWith(raw, false, false);
-      expect(component.element.nativeElement.innerHTML).toBe(undecoded);
+      component.filterOutput = '(out)';
+      component.render(markdown);
 
-      component.render(raw, false);
+      expect(getHTMLPreElement()?.attributes.getNamedItem('data-filter-output')?.value).toBe('(out)');
 
-      expect(markdownService.compile).toHaveBeenCalledWith(raw, false, false);
-      expect(component.element.nativeElement.innerHTML).toBe(undecoded);
+      component.host = 'localhost';
+      component.render(markdown);
 
-      component.render(raw, null!);
+      expect(getHTMLPreElement()?.attributes.getNamedItem('data-host')?.value).toBe('localhost');
 
-      expect(markdownService.compile).toHaveBeenCalledWith(raw, false, false);
-      expect(component.element.nativeElement.innerHTML).toBe(undecoded);
+      component.prompt = 'PS C:\\Users\\Chris>';
+      component.render(markdown);
 
-      component.render(raw, undefined);
+      expect(getHTMLPreElement()?.attributes.getNamedItem('data-prompt')?.value).toBe('PS C:\\Users\\Chris>');
 
-      expect(markdownService.compile).toHaveBeenCalledWith(raw, false, false);
-      expect(component.element.nativeElement.innerHTML).toBe(undecoded);
-    });
+      component.output = '2-4';
+      component.render(markdown);
 
-    it('should set innerHTML with compiled/decoded html markdown', () => {
+      expect(getHTMLPreElement()?.attributes.getNamedItem('data-output')?.value).toBe('2-4');
 
-      const raw = '### Raw';
-      const compiled = '<h3>Compiled</h3>';
+      component.user = 'root';
+      component.render(markdown);
 
-      spyOn(markdownService, 'compile').and.returnValue(compiled);
-
-      component.render(raw);
-
-      expect(markdownService.compile).toHaveBeenCalledWith(raw, false, false);
-      expect(component.element.nativeElement.innerHTML).toBe(compiled);
-    });
-
-    it('should apply highlight', () => {
-
-      spyOn(markdownService, 'highlight');
-
-      component.render('### Raw');
-
-      expect(markdownService.highlight).toHaveBeenCalledWith(component.element.nativeElement);
+      expect(getHTMLPreElement()?.attributes.getNamedItem('data-user')?.value).toBe('root');
     });
 
     it('should handle lineNumbers plugin correctly', () => {
@@ -280,53 +287,68 @@ describe('MarkdownComponent', () => {
       const raw = 'I :heart: ngx-markdown';
       const emojified = 'I ❤️ ngx-markdown';
 
-      spyOn(markdownService, 'compile').and.callFake((markdown: string, decodeHtml: boolean, emojify: boolean) => {
-        return emojify ? emojified : '';
+      spyOn(markdownService, 'parse').and.callFake((markdown: string, { emoji }: ParseOptions) => {
+        return emoji ? emojified : '';
       });
 
       component.emoji = true;
       component.render(raw);
 
-      expect(markdownService.compile).toHaveBeenCalledWith(raw, false, true);
+      expect(markdownService.parse).toHaveBeenCalledWith(raw, {
+        decodeHtml: false,
+        inline: false,
+        emoji: true,
+        katex: false,
+        katexOptions: undefined,
+        mermaid: false,
+      });
       expect(component.element.nativeElement.innerHTML).toBe(emojified);
     });
 
-    it('should apply katex plugin correctly', () => {
+    it('should render html element through MarkdownService', () => {
+      const raw = '### Raw';
+      const parsed = '<h3>Compiled</h3>';
+      const mermaidOptions: MermaidAPI.Config = { darkMode: true };
 
-      const markdown = '$E=mc^2$';
-      const katexOptions: KatexOptions = { errorColor: '#ff00dd', throwOnError: true };
-      const compiled = '<p>$E=mc^2$</p>';
+      spyOn(markdownService, 'parse').and.returnValue(parsed);
+      spyOn(markdownService, 'render');
 
-      spyOn(markdownService, 'compile').and.returnValue(compiled);
-      spyOn(markdownService, 'renderKatex');
+      component.mermaid = true;
+      component.mermaidOptions = mermaidOptions;
+      component.render(raw);
 
-      component.katex = true;
-      component.katexOptions = katexOptions;
-      component.render(markdown);
+      expect(markdownService.parse).toHaveBeenCalledWith(raw, {
+        decodeHtml: false,
+        inline: false,
+        emoji: false,
+        katex: false,
+        katexOptions: undefined,
+        mermaid: true,
+      });
 
-      expect(markdownService.renderKatex).toHaveBeenCalledWith(compiled, katexOptions);
+      expect(markdownService.render).toHaveBeenCalledWith(component.element.nativeElement, {
+        mermaid: true,
+        mermaidOptions: mermaidOptions,
+      });
     });
 
-    it('should emit `ready` when done parsing', waitForAsync(() => {
+    it('should emit `ready` when parsing and rendering is done', () => {
 
       const markdown = '# Markdown';
-      const compiled = '<h1 id="markdown">Markdown</h1>';
+      const parsed = '<h1 id="markdown">Markdown</h1>';
 
-      spyOn(markdownService, 'compile').and.returnValue(compiled);
-      spyOn(markdownService, 'renderKatex').and.returnValue(compiled);
-      spyOn(markdownService, 'highlight');
+      spyOn(markdownService, 'parse').and.returnValue(parsed);
+      spyOn(markdownService, 'render');
 
       component.ready
         .pipe(first())
         .subscribe(() => {
-          expect(markdownService.compile).toHaveBeenCalled();
-          expect(markdownService.renderKatex).toHaveBeenCalled();
-          expect(markdownService.highlight).toHaveBeenCalled();
-          expect(component.element.nativeElement.innerHTML).toBe(compiled);
+          expect(markdownService.parse).toHaveBeenCalled();
+          expect(component.element.nativeElement.innerHTML).toBe(parsed);
+          expect(markdownService.render).toHaveBeenCalled();
         });
 
-      component.katex = true;
       component.render(markdown);
-    }));
+    });
   });
 });

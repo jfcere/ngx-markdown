@@ -3,10 +3,7 @@
   "dest": "../dist/lib",
   "deleteDestPath": true,
   "lib": {
-    "entryFile": "public_api.ts",
-    "umdModuleIds": {
-      "marked": "marked"
-    }
+    "entryFile": "public_api.ts"
   },
   "allowedNonPeerDependencies": ["."]
 }
