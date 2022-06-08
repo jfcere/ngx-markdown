@@ -3,7 +3,7 @@ import { fakeAsync, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { MarkdownModule } from './markdown.module';
-import { MarkdownPipe } from './markdown.pipe';
+import { MarkdownPipe, MarkdownPipeOptions } from './markdown.pipe';
 import { MarkdownService } from './markdown.service';
 
 describe('MarkdownPipe', () => {
@@ -55,16 +55,17 @@ describe('MarkdownPipe', () => {
   it('should render element through MarkdownService when zone is stable', fakeAsync(() => {
 
     const markdown = '# Markdown';
+    const mockPipeOptions: MarkdownPipeOptions = { mermaid: true, mermaidOptions: { darkMode: true } };
 
     spyOn(markdownService, 'render');
 
-    pipe.transform(markdown);
+    pipe.transform(markdown, mockPipeOptions);
 
     expect(markdownService.render).not.toHaveBeenCalled();
 
     zone.onStable.emit(null);
 
-    expect(markdownService.render).toHaveBeenCalledWith(elementRef.nativeElement);
+    expect(markdownService.render).toHaveBeenCalledWith(elementRef.nativeElement, mockPipeOptions);
   }));
 
   it('should return compiled markdown', () => {
@@ -72,13 +73,14 @@ describe('MarkdownPipe', () => {
     const markdown = '# Markdown';
     const mockCompiled = 'compiled-x';
     const mockBypassSecurity = 'bypass-x';
+    const mockPipeOptions: MarkdownPipeOptions = { inline: true, emoji: true };
 
     spyOn(markdownService, 'parse').and.returnValue(mockCompiled);
     spyOn(domSanitizer, 'bypassSecurityTrustHtml').and.returnValue(mockBypassSecurity);
 
-    const result = pipe.transform(markdown);
+    const result = pipe.transform(markdown, mockPipeOptions);
 
-    expect(markdownService.parse).toHaveBeenCalledWith(markdown);
+    expect(markdownService.parse).toHaveBeenCalledWith(markdown, mockPipeOptions);
     expect(domSanitizer.bypassSecurityTrustHtml).toHaveBeenCalledWith(mockCompiled);
     expect(result).toBe(mockBypassSecurity);
   });

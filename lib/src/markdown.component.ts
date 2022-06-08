@@ -22,6 +22,10 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   @Input() data: string | undefined;
   @Input() src: string | undefined;
 
+  @Input()
+  get inline(): boolean { return this._inline; }
+  set inline(value: boolean) { this._inline = this.coerceBooleanProperty(value); }
+
   // Plugin - emoji
   @Input()
   get emoji(): boolean { return this._emoji; }
@@ -69,10 +73,11 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
 
   private _commandLine = false;
   private _emoji = false;
+  private _inline = false;
   private _katex = false;
-  private _mermaid = false;
   private _lineHighlight = false;
   private _lineNumbers = false;
+  private _mermaid = false;
 
   constructor(
     public element: ElementRef<HTMLElement>,
@@ -99,6 +104,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   render(markdown: string, decodeHtml = false): void {
     const parsed = this.markdownService.parse(markdown, {
       decodeHtml,
+      inline: this.inline,
       emoji: this.emoji,
       katex: this.katex,
       katexOptions: this.katexOptions,

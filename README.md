@@ -531,6 +531,12 @@ You can use `markdown` component to either parse static markdown directly from y
   [data]="markdown"
   (ready)="onReady()">
 </markdown>
+
+<!-- inline parser, omitting rendering top-level paragraph -->
+<markdown
+  [data]="markdown"
+  [inline]="true">
+</markdown>
 ```
 
 ### Directive
@@ -566,9 +572,31 @@ Using `markdown` pipe to transform markdown to HTML allow you to chain pipe tran
 <div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown"></div>
 ```
 
+The `markdown` pipe allow you to use all the same plugins as the component by providing the options parameters.
+
+```html
+<!-- provide options parameters to activate plugins or for configuration -->
+<div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown : { emoji: true, inline: true }"></div>
+```
+
+This is the `MarkdownPipeOptions` parameters interface, those options are the same as the ones available for the `markdown` component:
+
+```typescript
+export interface MarkdownPipeOptions {
+  decodeHtml?: boolean;
+  inline?: boolean;
+  emoji?: boolean;
+  katex?: boolean;
+  katexOptions?: KatexOptions;
+  mermaid?: boolean;
+  mermaidOptions?: MermaidAPI.Config;
+  markedOptions?: MarkedOptions;
+}
+```
+
 ### Service
 
-You can use `MarkdownService` to have access to markdown parser and syntax highlight methods.
+You can use `MarkdownService` to have access to markdown parsing, rendering and syntax highlight methods.
 
 ```typescript
 import { Component, OnInit } from '@angular/core';
@@ -580,7 +608,7 @@ export class ExampleComponent implements OnInit {
 
   ngOnInit() {
     // outputs: <p>I am using <strong>markdown</strong>.</p>
-    console.log(this.markdownService.compile('I am using __markdown__.'));
+    console.log(this.markdownService.parse('I am using __markdown__.'));
   }
 }
 ```

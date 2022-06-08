@@ -40,6 +40,7 @@ export const SECURITY_CONTEXT = new InjectionToken<SecurityContext>('SECURITY_CO
 
 export interface ParseOptions {
   decodeHtml?: boolean;
+  inline?: boolean;
   emoji?: boolean;
   katex?: boolean;
   katexOptions?: KatexOptions;
@@ -61,6 +62,7 @@ export class MarkdownService {
 
   private readonly DEFAULT_COMPILE_OPTIONS: ParseOptions = {
     decodeHtml: false,
+    inline: false,
     emoji: false,
     katex: false,
     katexOptions: undefined,
@@ -106,6 +108,7 @@ export class MarkdownService {
   parse(markdown: string, options: ParseOptions = this.DEFAULT_COMPILE_OPTIONS): string {
     const {
       decodeHtml,
+      inline,
       emoji,
       katex,
       katexOptions,
@@ -121,7 +124,7 @@ export class MarkdownService {
     const decoded = decodeHtml ? this.decodeHtml(trimmed) : trimmed;
     const emojified = emoji ? this.renderEmoji(decoded) : decoded;
     const katexed = katex ? this.renderKatex(emojified, katexOptions) : emojified;
-    const marked = this.renderMarked(katexed, markedOptions);
+    const marked = this.renderMarked(katexed, markedOptions, inline);
 
     return this.sanitizer.sanitize(this.securityContext, marked) || '';
   }
@@ -200,11 +203,14 @@ export class MarkdownService {
       : markdown;
   }
 
-  private renderMarked(html: string, markedOptions: MarkedOptions): string {
+  private renderMarked(html: string, markedOptions: MarkedOptions, inline = false): string {
     if (!isPlatformBrowser(this.platform)) {
       return html;
     }
-    return marked(html, markedOptions);
+    if (inline) {
+      return marked.parseInline(html, markedOptions);
+    }
+    return marked.parse(html, markedOptions);
   }
 
   private renderEmoji(html: string): string {
