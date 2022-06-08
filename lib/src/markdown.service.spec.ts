@@ -40,8 +40,8 @@ describe('MarkdowService', () => {
         const securityContext = TestBed.inject(SECURITY_CONTEXT);
 
         const mockRaw = '### Markdown-x';
-        const sanitized = domSanitizer.sanitize(securityContext, marked(mockRaw));
-        const unsanitized = marked(mockRaw);
+        const sanitized = domSanitizer.sanitize(securityContext, marked.parse(mockRaw));
+        const unsanitized = marked.parse(mockRaw);
 
         expect(markdownService.parse(mockRaw, { decodeHtml: false })).toBe(sanitized!);
         expect(markdownService.parse(mockRaw, { decodeHtml: false })).not.toBe(unsanitized);
@@ -125,7 +125,7 @@ describe('MarkdowService', () => {
 
         const parsed = markdownService.parse(mockRaw, { mermaid: false });
 
-        expect(parsed).toBe(marked(mockRaw));
+        expect(parsed).toBe(marked.parse(mockRaw));
       });
 
       it('should remove leading whitespaces offset while keeping indent', () => {
@@ -142,7 +142,7 @@ describe('MarkdowService', () => {
           '   * sub-list',
         ].join('\n');
 
-        expect(markdownService.parse(mockRaw)).toBe(marked(expected));
+        expect(markdownService.parse(mockRaw)).toBe(marked.parse(expected));
       });
 
       it('should return line with indent correctly', () => {
@@ -164,7 +164,7 @@ describe('MarkdowService', () => {
           'Lorem Ipsum',
         ].join('\n');
 
-        expect(markdownService.parse(mockRaw)).toBe(marked(expected));
+        expect(markdownService.parse(mockRaw)).toBe(marked.parse(expected));
       });
 
       it('should decode HTML correctly when decodeHtml is true ', () => {
@@ -216,7 +216,7 @@ describe('MarkdowService', () => {
 
         spyOn(joypixels, 'shortnameToUnicode').and.returnValue(mockEmojified);
 
-        expect(markdownService.parse(mockRaw, { decodeHtml: false, emoji: true })).toEqual(marked(mockEmojified));
+        expect(markdownService.parse(mockRaw, { decodeHtml: false, emoji: true })).toEqual(marked.parse(mockEmojified));
         expect(joypixels.shortnameToUnicode).toHaveBeenCalledWith(mockRaw);
       });
 
@@ -346,11 +346,27 @@ describe('MarkdowService', () => {
         expect(markdownService.parse(mockRaw)).toBe(expected);
       });
 
-      it('should return parsed markdown correctly', () => {
+      it('should return inline parsed markdown when inline is true', () => {
 
         const mockRaw = '### Markdown-x';
 
-        expect(markdownService.parse(mockRaw)).toBe(marked(mockRaw));
+        expect(markdownService.parse(mockRaw, { inline: true })).toBe(marked.parseInline(mockRaw));
+      });
+
+      it('should return parsed markdown when inline is omitted/false/null/undefined', () => {
+
+        const mockRaw = '### Markdown-x';
+
+        const useCases = [
+          () => markdownService.parse(mockRaw),
+          () => markdownService.parse(mockRaw, { inline: false }),
+          () => markdownService.parse(mockRaw, { inline: null! }),
+          () => markdownService.parse(mockRaw, { inline: undefined }),
+        ];
+
+        useCases.forEach(func => {
+          expect(func()).toBe(marked.parse(mockRaw));
+        });
       });
 
       it('should return empty string when raw is null/undefined/empty', () => {
@@ -363,7 +379,7 @@ describe('MarkdowService', () => {
       it('should not sanitize parsed markdown', () => {
 
         const mockRaw = '### Markdown-x';
-        const expected = marked(mockRaw);
+        const expected = marked.parse(mockRaw);
 
         expect(markdownService.parse(mockRaw, { decodeHtml: false })).toBe(expected);
       });
