@@ -12,7 +12,6 @@ import { MermaidAPI } from './mermaid-options';
 declare let global: any;
 declare let Prism: any;
 declare let joypixels: any;
-declare let katex: any;
 declare let mermaid: any;
 
 describe('MarkdowService', () => {
