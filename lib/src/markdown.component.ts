@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, O
 
 import { KatexOptions } from './katex-options';
 import { MarkdownService } from './markdown.service';
+import { MermaidAPI } from './mermaid-options';
 import { PrismPlugin } from './prism-plugin';
 
 @Component({
@@ -13,12 +14,17 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
 
   protected static ngAcceptInputType_emoji: boolean | '';
   protected static ngAcceptInputType_katex: boolean | '';
+  protected static ngAcceptInputType_mermaid: boolean | '';
   protected static ngAcceptInputType_lineHighlight: boolean | '';
   protected static ngAcceptInputType_lineNumbers: boolean | '';
   protected static ngAcceptInputType_commandLine: boolean | '';
 
   @Input() data: string | undefined;
   @Input() src: string | undefined;
+
+  @Input()
+  get inline(): boolean { return this._inline; }
+  set inline(value: boolean) { this._inline = this.coerceBooleanProperty(value); }
 
   // Plugin - emoji
   @Input()
@@ -30,6 +36,12 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   get katex(): boolean { return this._katex; }
   set katex(value: boolean) { this._katex = this.coerceBooleanProperty(value); }
   @Input() katexOptions: KatexOptions | undefined;
+
+  // Plugin - mermaid
+  @Input()
+  get mermaid(): boolean { return this._mermaid; }
+  set mermaid(value: boolean) { this._mermaid = this.coerceBooleanProperty(value); }
+  @Input() mermaidOptions: MermaidAPI.Config | undefined;
 
   // Plugin - lineHighlight
   @Input()
@@ -61,9 +73,11 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
 
   private _commandLine = false;
   private _emoji = false;
+  private _inline = false;
   private _katex = false;
   private _lineHighlight = false;
   private _lineNumbers = false;
+  private _mermaid = false;
 
   constructor(
     public element: ElementRef<HTMLElement>,
@@ -88,11 +102,24 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   }
 
   render(markdown: string, decodeHtml = false): void {
-    let compiled = this.markdownService.compile(markdown, decodeHtml, this.emoji);
-    compiled = this.katex ? this.markdownService.renderKatex(compiled, this.katexOptions) : compiled;
-    this.element.nativeElement.innerHTML = compiled;
+    const parsed = this.markdownService.parse(markdown, {
+      decodeHtml,
+      inline: this.inline,
+      emoji: this.emoji,
+      mermaid: this.mermaid,
+    });
+
+    this.element.nativeElement.innerHTML = parsed;
+
     this.handlePlugins();
-    this.markdownService.highlight(this.element.nativeElement);
+
+    this.markdownService.render(this.element.nativeElement, {
+      katex: this.katex,
+      katexOptions: this.katexOptions,
+      mermaid: this.mermaid,
+      mermaidOptions: this.mermaidOptions,
+    });
+
     this.ready.emit();
   }
 

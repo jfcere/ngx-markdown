@@ -2,7 +2,9 @@ import { ElementRef, NgZone, Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { first } from 'rxjs/operators';
 
-import { MarkdownService } from './markdown.service';
+import { MarkdownService, ParseOptions, RenderOptions } from './markdown.service';
+
+export type MarkdownPipeOptions = ParseOptions & RenderOptions;
 
 @Pipe({
   name: 'markdown',
@@ -16,7 +18,7 @@ export class MarkdownPipe implements PipeTransform {
     private zone: NgZone,
   ) { }
 
-  transform(value: string): SafeHtml {
+  transform(value: string, options?: MarkdownPipeOptions): SafeHtml {
     if (value == null) {
       return '';
     }
@@ -26,11 +28,11 @@ export class MarkdownPipe implements PipeTransform {
       return value;
     }
 
-    const markdown = this.markdownService.compile(value);
+    const markdown = this.markdownService.parse(value, options);
 
     this.zone.onStable
       .pipe(first())
-      .subscribe(() => this.markdownService.highlight(this.elementRef.nativeElement));
+      .subscribe(() => this.markdownService.render(this.elementRef.nativeElement, options));
 
     return this.domSanitizer.bypassSecurityTrustHtml(markdown);
   }

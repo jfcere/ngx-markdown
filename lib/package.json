@@ -29,6 +29,7 @@
     "emoji-toolkit": "^6.6.0",
     "katex": "^0.15.1",
     "marked": "^4.0.10",
+    "mermaid": "^9.0.1",
     "prismjs": "^1.28.0",
     "tslib": "^2.3.0"
   },

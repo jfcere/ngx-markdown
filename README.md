@@ -33,6 +33,7 @@ ngx-markdown is an [Angular](https://angular.io/) library that combines...
 - [Prism.js](http://prismjs.com/) for language syntax highlight
 - [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) for emoji support
 - [KaTeX](https://katex.org/) for math expression rendering
+- [Mermaid](https://mermaid-js.github.io/) for diagrams and charts visualization
 
 Demo available @ [https://jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown)  
 StackBlitz available @ [https://stackblitz.com/edit/ngx-markdown](https://stackblitz.com/edit/ngx-markdown)
@@ -264,6 +265,7 @@ Using `markdown` component and/or directive, you will be able to use the `emoji`
 
 To activate [KaTeX](https://katex.org/) math rendering you will need to include...
 - KaTex JavaScript library - `node_modules/katex/dist/katex.min.js` file
+- KaTex Auto-Render extension - `node_modules/katex/dist/contrib/auto-render.min.js,` file
 - KaTex CSS customization - `node_modules/katex/dist/katex.min.css` file
 
 If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
@@ -276,12 +278,13 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 "scripts": [
   "node_modules/marked/marked.min.js",
 + "node_modules/katex/dist/katex.min.js",
++ "node_modules/katex/dist/contrib/auto-render.min.js",
 ]
 ```
 
 #### KaTeX plugin
 
-Using `markdown` component and/or directive, you will be able to use the `katex` property to activate [KaTeX](https://katex.org/) plugin that render mathematical expression to HTML.
+Using `markdown` component and/or directive, you will be able to use the `katex` property to activate [KaTeX](https://katex.org/) plugin that renders mathematical expression to HTML.
 
 ```html
 <markdown
@@ -290,7 +293,7 @@ Using `markdown` component and/or directive, you will be able to use the `katex`
 </markdown>
 ```
 
-Optionally, you can use `katexOptions` property to specify [KaTeX options](https://katex.org/docs/options.html).
+Optionally, you can use `katexOptions` property to specify both the [KaTeX options](https://katex.org/docs/options.html) and the [KaTeX Auto-Render options](https://katex.org/docs/autorender.html#api).
 
 ```typescript
 import { KatexOptions } from 'ngx-markdown';
@@ -299,6 +302,7 @@ public options: KatexOptions = {
   displayMode: true,
   throwOnError: false,
   errorColor: '#cc0000',
+  delimiters: [...],
   ...
 };
 ```
@@ -311,7 +315,57 @@ public options: KatexOptions = {
 </markdown>
 ```
 
-> :blue_book: Follow official [KaTeX options](https://katex.org/docs/options.html) documentation for more details on the available options.
+> :blue_book: Follow official [KaTeX options](https://katex.org/docs/options.html) and [KaTeX Auto-Render options](https://katex.org/docs/autorender.html#api) documentation for more details on the available options.
+
+### Diagrams tool
+
+> :bell: Diagram support is **optional**, skip this step if you are not planning to use it
+
+To activate [Mermaid](https://mermaid-js.github.io/) diagramming and charting tool you will need to include...
+- Mermaid JavaScript library - `node_modules/mermaid/dist/mermaid.min.js` file
+
+If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
+
+```diff
+"scripts": [
+  "node_modules/marked/marked.min.js",
++ "node_modules/mermaid/dist/mermaid.min.js",
+]
+```
+
+#### Mermaid plugin
+
+Using `markdown` component and/or directive, you will be able to use the `mermaid` property to activate [Mermaid](https://mermaid-js.github.io/) plugin that renders Markdown-inspired text definitions to create and modify diagrams dynamically.
+
+```html
+<markdown
+  mermaid
+  [src]="path/to/file.md">
+</markdown>
+```
+
+Optionally, you can specify mermaid [configuration options](https://mermaid-js.github.io/mermaid/#/Setup?id=configuration) using `mermaidOptions` property.
+
+```typescript
+import { MermaidAPI } from 'ngx-markdown';
+
+public options: MermaidAPI.Config = {
+  fontFamily: '"trebuchet ms", verdana, arial, sans-serif',
+  logLevel: MermaidAPI.LogLevel.Info,
+  theme: MermaidAPI.Theme.Dark,
+  ...
+};
+```
+
+```html
+<markdown
+  mermaid
+  [mermaidOptions]="options"
+  [src]="'path/to/file.md'">
+</markdown>
+```
+
+> :blue_book: Follow official [Mermaid](https://mermaid-js.github.io/) documentation for more details on diagrams and charts syntax.
 
 ## Configuration
 
@@ -480,6 +534,12 @@ You can use `markdown` component to either parse static markdown directly from y
   [data]="markdown"
   (ready)="onReady()">
 </markdown>
+
+<!-- inline parser, omitting rendering top-level paragraph -->
+<markdown
+  [data]="markdown"
+  [inline]="true">
+</markdown>
 ```
 
 ### Directive
@@ -515,9 +575,31 @@ Using `markdown` pipe to transform markdown to HTML allow you to chain pipe tran
 <div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown"></div>
 ```
 
+The `markdown` pipe allow you to use all the same plugins as the component by providing the options parameters.
+
+```html
+<!-- provide options parameters to activate plugins or for configuration -->
+<div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown : { emoji: true, inline: true }"></div>
+```
+
+This is the `MarkdownPipeOptions` parameters interface, those options are the same as the ones available for the `markdown` component:
+
+```typescript
+export interface MarkdownPipeOptions {
+  decodeHtml?: boolean;
+  inline?: boolean;
+  emoji?: boolean;
+  katex?: boolean;
+  katexOptions?: KatexOptions;
+  mermaid?: boolean;
+  mermaidOptions?: MermaidAPI.Config;
+  markedOptions?: MarkedOptions;
+}
+```
+
 ### Service
 
-You can use `MarkdownService` to have access to markdown parser and syntax highlight methods.
+You can use `MarkdownService` to have access to markdown parsing, rendering and syntax highlight methods.
 
 ```typescript
 import { Component, OnInit } from '@angular/core';
@@ -529,7 +611,7 @@ export class ExampleComponent implements OnInit {
 
   ngOnInit() {
     // outputs: <p>I am using <strong>markdown</strong>.</p>
-    console.log(this.markdownService.compile('I am using __markdown__.'));
+    console.log(this.markdownService.parse('I am using __markdown__.'));
   }
 }
 ```

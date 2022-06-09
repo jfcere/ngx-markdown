@@ -50,6 +50,7 @@
               "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.js",
               "node_modules/prismjs/components/prism-bash.min.js",
               "node_modules/prismjs/components/prism-c.min.js",
+              "node_modules/prismjs/components/prism-clike.min.js",
               "node_modules/prismjs/components/prism-cpp.min.js",
               "node_modules/prismjs/components/prism-diff.min.js",
               "node_modules/prismjs/components/prism-javascript.min.js",
@@ -60,7 +61,9 @@
               "node_modules/prismjs/components/prism-python.min.js",
               "node_modules/prismjs/components/prism-typescript.min.js",
               "node_modules/emoji-toolkit/lib/js/joypixels.js",
-              "node_modules/katex/dist/katex.min.js"
+              "node_modules/katex/dist/katex.min.js",
+              "node_modules/katex/dist/contrib/auto-render.min.js",
+              "node_modules/mermaid/dist/mermaid.min.js"
             ],
             "allowedCommonJsDependencies": [
               "gumshoejs",
