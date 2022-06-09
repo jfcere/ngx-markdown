@@ -12,7 +12,6 @@ import { MermaidAPI } from './mermaid-options';
 declare let global: any;
 declare let Prism: any;
 declare let joypixels: any;
-declare let katex: any;
 declare let mermaid: any;
 
 describe('MarkdowService', () => {
@@ -255,86 +254,6 @@ describe('MarkdowService', () => {
         expect(joypixels.shortnameToUnicode).not.toHaveBeenCalled();
       });
 
-      it('should call katex when katex is true', () => {
-
-        const mockRaw = '$E=mc^2$';
-        const katexOptions = { displayMode: true };
-
-        global['katex'] = { renderToString: (tex: string, options?: KatexOptions) => '' };
-
-        spyOn(katex, 'renderToString');
-
-        markdownService.parse(mockRaw, { katex: true, katexOptions });
-
-        expect(katex.renderToString).toHaveBeenCalledWith(mockRaw.replace(/\$/gm, ''), katexOptions);
-      });
-
-      it('should not call katex when katex is omitted/false/null/undefined', () => {
-
-        const mockRaw = '$E=mc^2$';
-
-        global['katex'] = { renderToString: (tex: string, options?: KatexOptions) => '' };
-
-        spyOn(katex, 'renderToString');
-
-        const useCases = [
-          () => markdownService.parse(mockRaw),
-          () => markdownService.parse(mockRaw, { katex: false }),
-          () => markdownService.parse(mockRaw, { katex: null! }),
-          () => markdownService.parse(mockRaw, { katex: undefined }),
-        ];
-
-        useCases.forEach(func => {
-          func();
-          expect(katex.renderToString).not.toHaveBeenCalled();
-        });
-      });
-
-      it('should not call katex or throw when platform is not browser', () => {
-
-        const mockRaw = '$E=mc^2$';
-
-        global['katex'] = { renderToString: (tex: string, options?: KatexOptions) => '' };
-
-        spyOn(katex, 'renderToString');
-
-        markdownService['platform'] = 'server';
-
-        expect(() => markdownService.parse(mockRaw, { katex: true })).not.toThrowError();
-        expect(katex.renderToString).not.toHaveBeenCalled();
-      });
-
-      it('should throw when katex is called but not loaded', () => {
-
-        const mockRaw = '$E=mc^2$';
-
-        global['katex'] = undefined;
-
-        expect(() => markdownService.parse(mockRaw, { katex: true })).toThrowError(errorKatexNotLoaded);
-
-        global['katex'] = { renderToString: undefined };
-
-        expect(() => markdownService.parse(mockRaw, { katex: true })).toThrowError(errorKatexNotLoaded);
-      });
-
-      it('should call katex with math expressions', () => {
-
-        global['katex'] = { renderToString: (tex: string, options?: KatexOptions) => '' };
-
-        spyOn(katex, 'renderToString');
-
-        const useCases = [
-          { tex: '$E=mc^2$' },
-          { tex: '$x^2 + y^2 = z^2$', options: { displayMode: true } },
-        ];
-
-        useCases.forEach(useCase => {
-          markdownService.parse(useCase.tex, { katex: true, katexOptions: useCase.options });
-          expect(katex.renderToString).toHaveBeenCalledWith(useCase.tex.replace(/\$/gm, ''), useCase.options);
-          katex.renderToString.calls.reset();
-        });
-      });
-
       it('should not parse markdown when platform is not browser', () => {
 
         const mockRaw = '### Markdown-x';
@@ -386,6 +305,128 @@ describe('MarkdowService', () => {
     });
 
     describe('render', () => {
+      const KATEX_DEFAULT_OPTIONS: KatexOptions = {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+          { left: "\\(", right: "\\)", display: false },
+          { left: "\\begin{equation}", right: "\\end{equation}", display: true },
+          { left: "\\begin{align}", right: "\\end{align}", display: true },
+          { left: "\\begin{alignat}", right: "\\end{alignat}", display: true },
+          { left: "\\begin{gather}", right: "\\end{gather}", display: true },
+          { left: "\\begin{CD}", right: "\\end{CD}", display: true },
+          { left: "\\[", right: "\\]", display: true },
+        ],
+      };
+
+      it('should render katex when katex is true', () => {
+
+        const element = document.createElement('div');
+        element.innerHTML = '$E=mc^2$';
+
+        const container = document.createElement('div');
+        container.append(element);
+
+        const katexOptions = { strict: 'error', ignoredClasses: ['ignore'] };
+
+        global['katex'] = {};
+        global['renderMathInElement'] = (elem: HTMLElement, options?: KatexOptions) => {};
+
+        spyOn(global, 'renderMathInElement');
+
+        markdownService.render(container, { katex: true, katexOptions });
+
+        expect(global['renderMathInElement']).toHaveBeenCalledWith(container, {
+          ...katexOptions,
+          ...KATEX_DEFAULT_OPTIONS,
+        });
+      });
+
+      it('should not render katex when katex is omitted/false/null/undefined', () => {
+
+        const element = document.createElement('div');
+        element.innerHTML = '$E=mc^2$';
+
+        global['katex'] = {};
+        global['renderMathInElement'] = (elem: HTMLElement, options?: KatexOptions) => {};
+
+        spyOn(global, 'renderMathInElement');
+
+        const useCases = [
+          () => markdownService.render(element),
+          () => markdownService.render(element, { katex: false }),
+          () => markdownService.render(element, { katex: null! }),
+          () => markdownService.render(element, { katex: undefined }),
+        ];
+
+        useCases.forEach(func => {
+          func();
+          expect(global['renderMathInElement']).not.toHaveBeenCalled();
+        });
+      });
+
+      it('should not render katex or throw when platform is not browser', () => {
+
+        const element = document.createElement('div');
+        element.innerHTML = '$E=mc^2$';
+
+        global['katex'] = {};
+        global['renderMathInElement'] = (elem: HTMLElement, options?: KatexOptions) => {};
+
+        spyOn(global, 'renderMathInElement');
+
+        markdownService['platform'] = 'server';
+
+        expect(() => markdownService.render(element, { katex: true })).not.toThrowError();
+        expect(global['renderMathInElement']).not.toHaveBeenCalled();
+      });
+
+      it('should throw when katex is called but not loaded', () => {
+
+        const element = document.createElement('div');
+        element.innerHTML = '$E=mc^2$';
+
+        global['katex'] = undefined;
+
+        expect(() => markdownService.render(element, { katex: true })).toThrowError(errorKatexNotLoaded);
+
+        global['katex'] = {};
+        global['renderMathInElement'] = undefined;
+
+        expect(() => markdownService.render(element, { katex: true })).toThrowError(errorKatexNotLoaded);
+      });
+
+      it('should render katex with math expressions', () => {
+
+        const element = document.createElement('div');
+        element.innerHTML = '$E=mc^2$';
+
+        global['katex'] = {};
+        global['renderMathInElement'] = (elem: HTMLElement, options?: KatexOptions) => {};
+
+        spyOn(global, 'renderMathInElement');
+
+        const createElement = (innerHTML: string): HTMLElement => {
+          const element = document.createElement('div');
+          element.innerHTML = innerHTML;
+          return element;
+        };
+
+        const useCases = [
+          { element: createElement('$E=mc^2$') },
+          { element: createElement('$$x^2 + y^2 = z^2$$'), options: { ignoredClasses: ['error'] } },
+        ];
+
+        useCases.forEach(useCase => {
+          markdownService.render(useCase.element, { katex: true, katexOptions: useCase.options });
+          expect(global['renderMathInElement']).toHaveBeenCalledWith(useCase.element, {
+            ...useCase.options,
+            ...KATEX_DEFAULT_OPTIONS,
+          });
+          global['renderMathInElement'].calls.reset();
+        });
+      });
+
       it('should render mermaid with default options when mermaid is true and options are omitted', () => {
 
         const elementOne = document.createElement('div');

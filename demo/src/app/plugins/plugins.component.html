@@ -268,11 +268,12 @@
       ```javascript
       node_modules/katex/dist/katex.min.css
       node_modules/katex/dist/katex.min.js
+      node_modules/katex/dist/contrib/auto-render.min.js
       ```
       #### Directive
       `katex` - activate KaTeX plugin
       #### Attributes
-      `katexOptions` - math rendering [options](https://katex.org/docs/options.html)<br>
+      `katexOptions` - combine [KaTeX options](https://katex.org/docs/options.html) and [Auto-Renderer options](https://katex.org/docs/autorender.html#api)<br>
       ### Example
     </markdown>
 
@@ -295,7 +296,7 @@
     </div>
 
     <markdown ngPreserveWhitespaces>
-      Optionally, you can specify math rendering [options](https://katex.org/docs/options.html) using `katexOptions` property.
+      Optionally, you can specify both [KaTeX options](https://katex.org/docs/options.html) and [Auto-Renderer options](https://katex.org/docs/autorender.html#api) using `katexOptions` property.
 
       **example.component.ts**
       ```typescript
@@ -305,6 +306,7 @@
         displayMode: true,
         throwOnError: false,
         errorColor: '#cc0000',
+        delimiters: [...],
         ...
       };
       ```

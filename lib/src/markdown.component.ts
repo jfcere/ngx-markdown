@@ -106,8 +106,6 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
       decodeHtml,
       inline: this.inline,
       emoji: this.emoji,
-      katex: this.katex,
-      katexOptions: this.katexOptions,
       mermaid: this.mermaid,
     });
 
@@ -116,6 +114,8 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
     this.handlePlugins();
 
     this.markdownService.render(this.element.nativeElement, {
+      katex: this.katex,
+      katexOptions: this.katexOptions,
       mermaid: this.mermaid,
       mermaidOptions: this.mermaidOptions,
     });
