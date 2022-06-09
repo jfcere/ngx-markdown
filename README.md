@@ -265,6 +265,7 @@ Using `markdown` component and/or directive, you will be able to use the `emoji`
 
 To activate [KaTeX](https://katex.org/) math rendering you will need to include...
 - KaTex JavaScript library - `node_modules/katex/dist/katex.min.js` file
+- KaTex Auto-Render extension - `node_modules/katex/dist/contrib/auto-render.min.js,` file
 - KaTex CSS customization - `node_modules/katex/dist/katex.min.css` file
 
 If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
@@ -277,6 +278,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 "scripts": [
   "node_modules/marked/marked.min.js",
 + "node_modules/katex/dist/katex.min.js",
++ "node_modules/katex/dist/contrib/auto-render.min.js",
 ]
 ```
 
@@ -291,7 +293,7 @@ Using `markdown` component and/or directive, you will be able to use the `katex`
 </markdown>
 ```
 
-Optionally, you can use `katexOptions` property to specify [KaTeX options](https://katex.org/docs/options.html).
+Optionally, you can use `katexOptions` property to specify both the [KaTeX options](https://katex.org/docs/options.html) and the [KaTeX Auto-Render options](https://katex.org/docs/autorender.html#api).
 
 ```typescript
 import { KatexOptions } from 'ngx-markdown';
@@ -300,6 +302,7 @@ public options: KatexOptions = {
   displayMode: true,
   throwOnError: false,
   errorColor: '#cc0000',
+  delimiters: [...],
   ...
 };
 ```
@@ -312,7 +315,7 @@ public options: KatexOptions = {
 </markdown>
 ```
 
-> :blue_book: Follow official [KaTeX options](https://katex.org/docs/options.html) documentation for more details on the available options.
+> :blue_book: Follow official [KaTeX options](https://katex.org/docs/options.html) and [KaTeX Auto-Render options](https://katex.org/docs/autorender.html#api) documentation for more details on the available options.
 
 ### Diagrams tool
 

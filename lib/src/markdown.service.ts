@@ -11,20 +11,23 @@ import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
 import { MermaidAPI } from './mermaid-options';
 
+// emoji
 declare let joypixels: {
   shortnameToUnicode(input: string): string;
 };
 
-declare let katex: {
-  renderToString(tex: string, options?: KatexOptions): string;
-};
+// katex
+declare let katex: unknown;
+declare function renderMathInElement(elem: HTMLElement, options?: KatexOptions): void;
 
+// mermaid
 declare let mermaid: {
   initialize: (options: MermaidAPI.Config) => void;
   init: (nodes: string | Node | NodeList) => void;
   parse: (text: string) => string;
 };
 
+// prism
 declare let Prism: {
   highlightAllUnder: (element: Element | Document) => void;
 };
@@ -42,13 +45,13 @@ export interface ParseOptions {
   decodeHtml?: boolean;
   inline?: boolean;
   emoji?: boolean;
-  katex?: boolean;
-  katexOptions?: KatexOptions;
   mermaid?: boolean;
   markedOptions?: MarkedOptions;
 }
 
 export interface RenderOptions {
+  katex?: boolean;
+  katexOptions?: KatexOptions;
   mermaid?: boolean;
   mermaidOptions?: MermaidAPI.Config;
 }
@@ -64,19 +67,33 @@ export class MarkdownService {
     decodeHtml: false,
     inline: false,
     emoji: false,
-    katex: false,
-    katexOptions: undefined,
     mermaid: false,
     markedOptions: undefined,
   };
 
   private readonly DEFAULT_RENDER_OPTIONS: RenderOptions = {
+    katex: false,
+    katexOptions: undefined,
     mermaid: false,
     mermaidOptions: undefined,
   };
 
   private readonly DEFAULT_MARKED_OPTIONS: MarkedOptions = {
     renderer: new MarkedRenderer(),
+  };
+
+  private readonly DEFAULT_KATEX_OPTIONS: KatexOptions = {
+    delimiters: [
+      { left: "$$", right: "$$", display: true },
+      { left: "$", right: "$", display: false },
+      { left: "\\(", right: "\\)", display: false },
+      { left: "\\begin{equation}", right: "\\end{equation}", display: true },
+      { left: "\\begin{align}", right: "\\end{align}", display: true },
+      { left: "\\begin{alignat}", right: "\\end{alignat}", display: true },
+      { left: "\\begin{gather}", right: "\\end{gather}", display: true },
+      { left: "\\begin{CD}", right: "\\end{CD}", display: true },
+      { left: "\\[", right: "\\]", display: true },
+    ],
   };
 
   private readonly DEFAULT_MERMAID_OPTIONS: MermaidAPI.Config = {
@@ -110,8 +127,6 @@ export class MarkdownService {
       decodeHtml,
       inline,
       emoji,
-      katex,
-      katexOptions,
       mermaid,
       markedOptions = this.DEFAULT_MARKED_OPTIONS,
     } = options;
@@ -123,18 +138,22 @@ export class MarkdownService {
     const trimmed = this.trimIndentation(markdown);
     const decoded = decodeHtml ? this.decodeHtml(trimmed) : trimmed;
     const emojified = emoji ? this.renderEmoji(decoded) : decoded;
-    const katexed = katex ? this.renderKatex(emojified, katexOptions) : emojified;
-    const marked = this.renderMarked(katexed, markedOptions, inline);
+    const marked = this.renderMarked(emojified, markedOptions, inline);
 
     return this.sanitizer.sanitize(this.securityContext, marked) || '';
   }
 
   render(element: HTMLElement, options: RenderOptions = this.DEFAULT_RENDER_OPTIONS): void {
     const {
+      katex,
+      katexOptions,
       mermaid,
       mermaidOptions,
     } = options;
 
+    if (katex) {
+      this.renderKatex(element, katexOptions);
+    }
     if (mermaid) {
       this.renderMermaid(element, mermaidOptions);
     }
@@ -223,14 +242,17 @@ export class MarkdownService {
     return joypixels.shortnameToUnicode(html);
   }
 
-  private renderKatex(html: string, options?: KatexOptions): string {
+  private renderKatex(element: HTMLElement, options?: KatexOptions): void {
     if (!isPlatformBrowser(this.platform)) {
-      return html;
+      return;
     }
-    if (typeof katex === 'undefined' || typeof katex.renderToString === 'undefined') {
+    if (typeof katex === 'undefined' || typeof renderMathInElement === 'undefined') {
       throw new Error(errorKatexNotLoaded);
     }
-    return html.replace(/\$([^\s][^$]*?[^\s])\$/gm, (_, tex) => katex.renderToString(tex, options));
+    renderMathInElement(element, {
+      ...options,
+      ...this.DEFAULT_KATEX_OPTIONS,
+    });
   }
 
   private renderMermaid(element: HTMLElement, options: MermaidAPI.Config = this.DEFAULT_MERMAID_OPTIONS): void {

@@ -177,14 +177,11 @@ describe('MarkdownComponent', () => {
     it('should parse markdown through MarkdownService', () => {
 
       const raw = '### Raw';
-      const katexOptions: KatexOptions = { displayMode: true };
 
       spyOn(markdownService, 'parse');
 
       component.inline = true;
       component.emoji = false;
-      component.katex = true;
-      component.katexOptions = katexOptions;
       component.mermaid = false;
       component.render(raw, true);
 
@@ -192,8 +189,6 @@ describe('MarkdownComponent', () => {
         decodeHtml: true,
         inline: true,
         emoji: false,
-        katex: true,
-        katexOptions: katexOptions,
         mermaid: false,
       });
     });
@@ -298,8 +293,6 @@ describe('MarkdownComponent', () => {
         decodeHtml: false,
         inline: false,
         emoji: true,
-        katex: false,
-        katexOptions: undefined,
         mermaid: false,
       });
       expect(component.element.nativeElement.innerHTML).toBe(emojified);
@@ -308,11 +301,14 @@ describe('MarkdownComponent', () => {
     it('should render html element through MarkdownService', () => {
       const raw = '### Raw';
       const parsed = '<h3>Compiled</h3>';
+      const katexOptions: KatexOptions = { displayMode: true };
       const mermaidOptions: MermaidAPI.Config = { darkMode: true };
 
       spyOn(markdownService, 'parse').and.returnValue(parsed);
       spyOn(markdownService, 'render');
 
+      component.katex = true;
+      component.katexOptions = katexOptions;
       component.mermaid = true;
       component.mermaidOptions = mermaidOptions;
       component.render(raw);
@@ -321,12 +317,12 @@ describe('MarkdownComponent', () => {
         decodeHtml: false,
         inline: false,
         emoji: false,
-        katex: false,
-        katexOptions: undefined,
         mermaid: true,
       });
 
       expect(markdownService.render).toHaveBeenCalledWith(component.element.nativeElement, {
+        katex: true,
+        katexOptions: katexOptions,
         mermaid: true,
         mermaidOptions: mermaidOptions,
       });
