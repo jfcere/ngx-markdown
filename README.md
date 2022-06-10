@@ -33,6 +33,7 @@ ngx-markdown is an [Angular](https://angular.io/) library that combines...
 - [Prism.js](http://prismjs.com/) for language syntax highlight
 - [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) for emoji support
 - [KaTeX](https://katex.org/) for math expression rendering
+- [Mermaid](https://mermaid-js.github.io/) for diagrams and charts visualization
 
 Demo available @ [https://jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown)  
 StackBlitz available @ [https://stackblitz.com/edit/ngx-markdown](https://stackblitz.com/edit/ngx-markdown)
@@ -60,13 +61,13 @@ To add ngx-markdown library to your `package.json` use the following command.
 npm install ngx-markdown --save
 ```
 
-As the library is using [Marked](https://github.com/chjj/marked) parser you will need to add `node_modules/marked/lib/marked.js` to your application.
+As the library is using [Marked](https://github.com/chjj/marked) parser you will need to add `node_modules/marked/marked.min.js` to your application.
 
 If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
 
 ```diff
 "scripts": [
-+ "node_modules/marked/lib/marked.js"
++ "node_modules/marked/marked.min.js"
 ]
 ```
 
@@ -89,6 +90,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 + "node_modules/prismjs/themes/prism-okaidia.css"
 ],
 "scripts": [
+  "node_modules/marked/marked.min.js",
 + "node_modules/prismjs/prism.js",
 + "node_modules/prismjs/components/prism-csharp.min.js", # c-sharp language syntax
 + "node_modules/prismjs/components/prism-css.min.js" # css language syntax
@@ -111,6 +113,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 + "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css"
 ],
 "scripts": [
+  "node_modules/marked/marked.min.js",
   "node_modules/prismjs/prism.js",
   "node_modules/prismjs/components/prism-csharp.min.js",
   "node_modules/prismjs/components/prism-css.min.js",
@@ -123,7 +126,11 @@ Using `markdown` component and/or directive, you will be able to use the `lineNu
 Additionally, you can use `start` input property to specify the offset number for the first display line.
 
 ```html
-<markdown [src]="path/to/file.js" lineNumbers [start]="5"></markdown>
+<markdown
+  lineNumbers
+  [start]="5"
+  [src]="path/to/file.js">
+</markdown>
 ```
 
 #### Line Highlight plugin
@@ -142,6 +149,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 + "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css"
 ],
 "scripts": [
+  "node_modules/marked/marked.min.js",
   "node_modules/prismjs/prism.js",
   "node_modules/prismjs/components/prism-csharp.min.js",
   "node_modules/prismjs/components/prism-css.min.js",
@@ -154,7 +162,73 @@ Using `markdown` component and/or directive, you will be able to use the `lineHi
 Use `line` input property to specify the line(s) to highlight and optionally there is a `lineOffset` property to specify the starting line of code your snippet represents.
 
 ```html
-<markdown [src]="path/to/file.js" lineHighlight [line]="'6, 10-16'" [lineOffset]="5"></markdown>
+<markdown
+  lineHighlight
+  [line]="'6, 10-16'"
+  [lineOffset]="5"
+  [src]="path/to/file.js">
+</markdown>
+```
+
+#### Command Line Plugin
+
+To use the [command line plugin](https://prismjs.com/plugins/command-line/) that displays a command line with a prompt and, optionally, the output/response from the commands, you will need to include the following files from `prismjs/plugins/command-line` directory to your application:
+
+- CSS styling for command line - `prism-command-line.css`
+- command line plugin script - `prism-command-line.js`
+
+If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
+
+```diff
+"styles": [
+  "src/styles.css",
+  "node_modules/prismjs/themes/prism-okaidia.css",
++ "node_modules/prismjs/plugins/command-line/prism-command-line.css"
+],
+"scripts": [
+  "node_modules/marked/marked.min.js",
+  "node_modules/prismjs/prism.js",
+  "node_modules/prismjs/components/prism-csharp.min.js",
+  "node_modules/prismjs/components/prism-css.min.js",
++ "node_modules/prismjs/plugins/command-line/prism-command-line.js"
+]
+```
+
+Using `markdown` component and/or directive, you will be able to use the `commandLine` property to activate the plugin. The property can be used in combination with either `data` for variable binding, `src` for remote content or using transclusion for static markdown.
+
+For a server command line, specify the user and host names using the `user` and `host` input properties. The resulting prompt displays a `#` for the root user and `$` for all other users. For any other command line, such as a Windows prompt, you may specify the entire prompt using the `prompt` input property.
+
+You may also specify the lines to be presented as output (no prompt and no highlighting) through the `output` property in the following simple format:
+
+- A single number refers to the line with that number
+- Ranges are denoted by two numbers, separated with a hyphen (-)
+- Multiple line numbers or ranges are separated by commas
+- Whitespace is allowed anywhere and will be stripped off
+
+```html
+<markdown
+  commandLine
+  [user]="'chris'"
+  [host]="'remotehost'"
+  [output]="'2, 4-8'"
+  [src]="'path/to/file.bash'">
+</markdown>
+```
+
+Optionally, to automatically present some lines as output without providing the line numbers, you can prefix those lines with any string and specify the prefix using the `filterOutput` input property. For example, `[filterOutput]="'(out)'"` will treat lines beginning with `(out)` as output and remove the prefix.
+
+```html
+<markdown
+  commandLine
+  [prompt]="'PS C:\Users\Chris>'"
+  [filterOutput]="'(out)'">
+  ```powershell
+  Get-Date
+  (out)
+  (out)Sunday, November 7, 2021 8:19:21 PM
+  (out)
+  `​``
+</markdown>
 ```
 
 ### Emoji support
@@ -168,7 +242,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 
 ```diff
 "scripts": [
-  "node_modules/marked/lib/marked.js",
+  "node_modules/marked/marked.min.js",
 + "node_modules/emoji-toolkit/lib/js/joypixels.min.js",
 ]
 ```
@@ -178,7 +252,9 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 Using `markdown` component and/or directive, you will be able to use the `emoji` property to activate [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) plugin that converts emoji shortnames such as `:heart:` to native unicode emojis.
 
 ```html
-<markdown emoji>I :heart: ngx-markdown</markdown>
+<markdown emoji>
+  I :heart: ngx-markdown
+</markdown>
 ```
 
 > :blue_book: You can refer to this [Emoji Cheat Sheet](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md) for a complete list of _shortnames_.
@@ -189,6 +265,7 @@ Using `markdown` component and/or directive, you will be able to use the `emoji`
 
 To activate [KaTeX](https://katex.org/) math rendering you will need to include...
 - KaTex JavaScript library - `node_modules/katex/dist/katex.min.js` file
+- KaTex Auto-Render extension - `node_modules/katex/dist/contrib/auto-render.min.js,` file
 - KaTex CSS customization - `node_modules/katex/dist/katex.min.css` file
 
 If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
@@ -199,20 +276,24 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 + "node_modules/katex/dist/katex.min.css"
 ],
 "scripts": [
-  "node_modules/marked/lib/marked.js",
+  "node_modules/marked/marked.min.js",
 + "node_modules/katex/dist/katex.min.js",
++ "node_modules/katex/dist/contrib/auto-render.min.js",
 ]
 ```
 
 #### KaTeX plugin
 
-Using `markdown` component and/or directive, you will be able to use the `katex` property to activate [KaTeX](https://katex.org/) plugin that render mathematical expression to HTML.
+Using `markdown` component and/or directive, you will be able to use the `katex` property to activate [KaTeX](https://katex.org/) plugin that renders mathematical expression to HTML.
 
 ```html
-<markdown [src]="path/to/file.md" katex></markdown>
+<markdown
+  katex
+  [src]="path/to/file.md">
+</markdown>
 ```
 
-Optionally, you can use `katexOptions` property to specify [KaTeX options](https://katex.org/docs/options.html).
+Optionally, you can use `katexOptions` property to specify both the [KaTeX options](https://katex.org/docs/options.html) and the [KaTeX Auto-Render options](https://katex.org/docs/autorender.html#api).
 
 ```typescript
 import { KatexOptions } from 'ngx-markdown';
@@ -221,15 +302,70 @@ public options: KatexOptions = {
   displayMode: true,
   throwOnError: false,
   errorColor: '#cc0000',
+  delimiters: [...],
   ...
 };
 ```
 
 ```html
-<markdown [src]="path/to/file.md" katex [katexOptions]="options"></markdown>
+<markdown
+  katex
+  [katexOptions]="options"
+  [src]="path/to/file.md">
+</markdown>
 ```
 
-> :blue_book: Follow official [KaTeX options](https://katex.org/docs/options.html) documentation for more details on the available options.
+> :blue_book: Follow official [KaTeX options](https://katex.org/docs/options.html) and [KaTeX Auto-Render options](https://katex.org/docs/autorender.html#api) documentation for more details on the available options.
+
+### Diagrams tool
+
+> :bell: Diagram support is **optional**, skip this step if you are not planning to use it
+
+To activate [Mermaid](https://mermaid-js.github.io/) diagramming and charting tool you will need to include...
+- Mermaid JavaScript library - `node_modules/mermaid/dist/mermaid.min.js` file
+
+If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
+
+```diff
+"scripts": [
+  "node_modules/marked/marked.min.js",
++ "node_modules/mermaid/dist/mermaid.min.js",
+]
+```
+
+#### Mermaid plugin
+
+Using `markdown` component and/or directive, you will be able to use the `mermaid` property to activate [Mermaid](https://mermaid-js.github.io/) plugin that renders Markdown-inspired text definitions to create and modify diagrams dynamically.
+
+```html
+<markdown
+  mermaid
+  [src]="path/to/file.md">
+</markdown>
+```
+
+Optionally, you can specify mermaid [configuration options](https://mermaid-js.github.io/mermaid/#/Setup?id=configuration) using `mermaidOptions` property.
+
+```typescript
+import { MermaidAPI } from 'ngx-markdown';
+
+public options: MermaidAPI.Config = {
+  fontFamily: '"trebuchet ms", verdana, arial, sans-serif',
+  logLevel: MermaidAPI.LogLevel.Info,
+  theme: MermaidAPI.Theme.Dark,
+  ...
+};
+```
+
+```html
+<markdown
+  mermaid
+  [mermaidOptions]="options"
+  [src]="'path/to/file.md'">
+</markdown>
+```
+
+> :blue_book: Follow official [Mermaid](https://mermaid-js.github.io/) documentation for more details on diagrams and charts syntax.
 
 ## Configuration
 
@@ -387,10 +523,23 @@ You can use `markdown` component to either parse static markdown directly from y
 </markdown>
 
 <!-- loaded from remote url -->
-<markdown [src]="'path/to/file.md'" (load)="onLoad($event)" (error)="onError($event)"></markdown>
+<markdown
+  [src]="'path/to/file.md'"
+  (load)="onLoad($event)"
+  (error)="onError($event)">
+</markdown>
 
 <!-- variable binding -->
-<markdown [data]="markdown" (ready)="onReady()"></markdown>
+<markdown
+  [data]="markdown"
+  (ready)="onReady()">
+</markdown>
+
+<!-- inline parser, omitting rendering top-level paragraph -->
+<markdown
+  [data]="markdown"
+  [inline]="true">
+</markdown>
 ```
 
 ### Directive
@@ -404,10 +553,17 @@ The same way the component works, you can use `markdown` directive to accomplish
 </div>
 
 <!-- loaded from remote url -->
-<div markdown [src]="'path/to/file.md'" (load)="onLoad($event)" (error)="onError($event)"></div>
+<div markdown
+  [src]="'path/to/file.md'"
+  (load)="onLoad($event)"
+  (error)="onError($event)">
+</div>
 
 <!-- variable binding -->
-<div markdown [data]="markdown" (ready)="onReady()"></div>
+<div markdown
+  [data]="markdown"
+  (ready)="onReady()">
+</div>
 ```
 
 ### Pipe
@@ -419,9 +575,31 @@ Using `markdown` pipe to transform markdown to HTML allow you to chain pipe tran
 <div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown"></div>
 ```
 
+The `markdown` pipe allow you to use all the same plugins as the component by providing the options parameters.
+
+```html
+<!-- provide options parameters to activate plugins or for configuration -->
+<div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown : { emoji: true, inline: true }"></div>
+```
+
+This is the `MarkdownPipeOptions` parameters interface, those options are the same as the ones available for the `markdown` component:
+
+```typescript
+export interface MarkdownPipeOptions {
+  decodeHtml?: boolean;
+  inline?: boolean;
+  emoji?: boolean;
+  katex?: boolean;
+  katexOptions?: KatexOptions;
+  mermaid?: boolean;
+  mermaidOptions?: MermaidAPI.Config;
+  markedOptions?: MarkedOptions;
+}
+```
+
 ### Service
 
-You can use `MarkdownService` to have access to markdown parser and syntax highlight methods.
+You can use `MarkdownService` to have access to markdown parsing, rendering and syntax highlight methods.
 
 ```typescript
 import { Component, OnInit } from '@angular/core';
@@ -433,7 +611,7 @@ export class ExampleComponent implements OnInit {
 
   ngOnInit() {
     // outputs: <p>I am using <strong>markdown</strong>.</p>
-    console.log(this.markdownService.compile('I am using __markdown__.'));
+    console.log(this.markdownService.parse('I am using __markdown__.'));
   }
 }
 ```
@@ -485,11 +663,23 @@ This code will output the following HTML:
 
 ## Re-render Markdown
 
-You might need to re-render Markdown after making a change. If you've updated the text, this would be done automatically however if the change is internal to Markdown such as it's settings, you will need to inform Markdown to update.
+In some situations, you might need to re-render markdown after making changes. If you've updated the text this would be done automatically, however if the changes are internal to the library such as rendering options, you will need to inform the `MarkdownService` that it needs to update.
 
-`this.markdownService.reload()`
+To do so, inject the `MarkdownService` and call the `reload()` function as shown below.
 
-Click [here](/rerender) to view demo.
+```typescript
+import { MarkdownService } from 'ngx-markdown';
+
+constructor(
+  private markdownService: MarkdownService,
+) { }
+
+update() {
+  this.markdownService.reload();
+}
+```
+
+For an exemple, refer to the [re-render](https://jfcere.github.io/ngx-markdown/rerender) demo page.
 
 ## Syntax highlight
 

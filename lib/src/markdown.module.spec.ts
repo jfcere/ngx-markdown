@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, SecurityContext } from '@angular/core';
-import { TestBed, waitForAsync } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { MarkdownModule } from './markdown.module';
 import { errorSrcWithoutHttpClient, SECURITY_CONTEXT } from './markdown.service';
 import { MarkedOptions } from './marked-options';
 
 @Component({
-  // tslint:disable-next-line:component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'host-comp',
   template: `
     <div *ngIf="src; else dataTemplate">
@@ -202,15 +202,15 @@ describe('MarkdownModule', () => {
 
   describe('without HttpClient', () => {
 
-    beforeEach(waitForAsync(() => {
-      TestBed.configureTestingModule({
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
         imports: [
           CommonModule,
           MarkdownModule.forRoot(),
         ],
         declarations: [HostComponent],
       }).compileComponents();
-    }));
+    });
 
     it('should render the markdown if not passing src attribute', () => {
 

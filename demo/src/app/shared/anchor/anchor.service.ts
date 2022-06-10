@@ -50,7 +50,7 @@ export class AnchorService {
   navigate(url: string, replaceUrl = false): void {
     const urlTree = this.getUrlTree(url);
     this.router.navigated = false;
-    this.router.navigateByUrl(urlTree, { replaceUrl });
+    void this.router.navigateByUrl(urlTree, { replaceUrl });
   }
 
   /**

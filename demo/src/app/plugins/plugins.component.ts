@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular/core';
+import { MermaidAPI } from 'ngx-markdown';
 
 @Component({
   selector: 'app-plugins',
@@ -19,7 +20,21 @@ f(x) = \\int_{-\\infty}^\\infty \\hat f(\\xi) e^{2 \\pi i \\xi x} d\\xi
 
 $f(x) = \\int_{-\\infty}^\\infty \\hat f(\\xi) e^{2 \\pi i \\xi x} d\\xi$`;
 
-  headings: Element[];
+  mermaidMarkdown =
+`\`\`\`mermaid
+graph TD;
+  A-->B;
+  A-->C;
+  B-->D;
+  C-->D;
+\`\`\``;
+
+  mermaidOptions: MermaidAPI.Config = {
+    fontFamily: 'inherit',
+    theme: MermaidAPI.Theme.Dark,
+  };
+
+  headings: Element[] | undefined;
 
   constructor(
     private elementRef: ElementRef<HTMLElement>,

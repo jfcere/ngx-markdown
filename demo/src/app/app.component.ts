@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   theme = 'light';
 
   @ViewChild('tabHeader', { read: ElementRef, static: true })
-  tabHeader: ElementRef;
+  tabHeader: ElementRef | undefined;
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event): void {
@@ -29,6 +29,9 @@ export class AppComponent implements OnInit {
 
   @HostListener('window:scroll')
   onWindowScroll(): void {
+    if (this.tabHeader == null) {
+      return;
+    }
     const tabHeader = this.tabHeader.nativeElement as HTMLElement;
     const tabHeaderOffset = Math.ceil(tabHeader.offsetTop);
     const windowOffset = Math.ceil(window.pageYOffset);
@@ -45,10 +48,11 @@ export class AppComponent implements OnInit {
     @Inject(DOCUMENT) private document: Document,
     private anchorService: AnchorService,
     private router: Router,
-  ) { }
+  ) {
+    this.routes = this.router.config.filter(route => route.data && route.data['label']);
+  }
 
   ngOnInit(): void {
-    this.routes = this.router.config.filter(route => route.data && route.data.label);
     this.setTheme(localStorage.getItem('theme') || 'light');
   }
 
@@ -70,7 +74,7 @@ export class AppComponent implements OnInit {
   getRouteAnimation(outlet: RouterOutlet): string {
     return outlet
       && outlet.activatedRouteData
-      && outlet.activatedRouteData.label;
+      && outlet.activatedRouteData['label'] as string;
   }
 
   toggleTheme(): void {

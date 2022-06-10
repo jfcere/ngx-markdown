@@ -11,9 +11,9 @@ import { first } from 'rxjs/operators';
 export class ScrollspyNavComponent implements OnChanges, OnDestroy {
 
   @Input()
-  headings: Element[];
+  headings: Element[] | undefined;
 
-  private scrollSpy: Gumshoe;
+  private scrollSpy: Gumshoe | undefined;
 
   constructor(
     private elementRef: ElementRef<HTMLElement>,
@@ -21,7 +21,7 @@ export class ScrollspyNavComponent implements OnChanges, OnDestroy {
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.headings && changes.headings.currentValue) {
+    if (changes['headings']?.currentValue) {
       this.setScrollSpy();
     }
   }

@@ -1,23 +1,31 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 
 import { KatexOptions } from './katex-options';
 import { MarkdownService } from './markdown.service';
+import { MermaidAPI } from './mermaid-options';
 import { PrismPlugin } from './prism-plugin';
 
 @Component({
-  // tslint:disable-next-line:component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'markdown, [markdown]',
   template: '<ng-content></ng-content>',
 })
-export class MarkdownComponent implements OnChanges, AfterViewInit {
+export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
 
   protected static ngAcceptInputType_emoji: boolean | '';
   protected static ngAcceptInputType_katex: boolean | '';
+  protected static ngAcceptInputType_mermaid: boolean | '';
   protected static ngAcceptInputType_lineHighlight: boolean | '';
   protected static ngAcceptInputType_lineNumbers: boolean | '';
+  protected static ngAcceptInputType_commandLine: boolean | '';
 
   @Input() data: string | undefined;
   @Input() src: string | undefined;
+
+  @Input()
+  get inline(): boolean { return this._inline; }
+  set inline(value: boolean) { this._inline = this.coerceBooleanProperty(value); }
 
   // Plugin - emoji
   @Input()
@@ -29,6 +37,12 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   get katex(): boolean { return this._katex; }
   set katex(value: boolean) { this._katex = this.coerceBooleanProperty(value); }
   @Input() katexOptions: KatexOptions | undefined;
+
+  // Plugin - mermaid
+  @Input()
+  get mermaid(): boolean { return this._mermaid; }
+  set mermaid(value: boolean) { this._mermaid = this.coerceBooleanProperty(value); }
+  @Input() mermaidOptions: MermaidAPI.Config | undefined;
 
   // Plugin - lineHighlight
   @Input()
@@ -43,15 +57,30 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   set lineNumbers(value: boolean) { this._lineNumbers = this.coerceBooleanProperty(value); }
   @Input() start: number | undefined;
 
+  // Plugin - commandLine
+  @Input()
+  get commandLine(): boolean { return this._commandLine; }
+  set commandLine(value: boolean) { this._commandLine = this.coerceBooleanProperty(value); }
+  @Input() filterOutput: string | undefined;
+  @Input() host: string | undefined;
+  @Input() prompt: string | undefined;
+  @Input() output: string | undefined;
+  @Input() user: string | undefined;
+
   // Event emitters
   @Output() error = new EventEmitter<string>();
   @Output() load = new EventEmitter<string>();
   @Output() ready = new EventEmitter<void>();
 
+  private _commandLine = false;
   private _emoji = false;
+  private _inline = false;
   private _katex = false;
   private _lineHighlight = false;
   private _lineNumbers = false;
+  private _mermaid = false;
+
+  private readonly destroyed$ = new Subject<void>();
 
   constructor(
     public element: ElementRef<HTMLElement>,
@@ -78,22 +107,40 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
       this.handleTransclusion();
     }
 
-    this.markdownService._trigger$.subscribe(() => {
-      this.loadContent();
-    });
+    this.markdownService._reload$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => this.loadContent());
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   render(markdown: string, decodeHtml = false): void {
-    let compiled = this.markdownService.compile(markdown, decodeHtml, this.emoji);
-    compiled = this.katex ? this.markdownService.renderKatex(compiled, this.katexOptions) : compiled;
-    this.element.nativeElement.innerHTML = compiled;
+    const parsed = this.markdownService.parse(markdown, {
+      decodeHtml,
+      inline: this.inline,
+      emoji: this.emoji,
+      mermaid: this.mermaid,
+    });
+
+    this.element.nativeElement.innerHTML = parsed;
+
     this.handlePlugins();
-    this.markdownService.highlight(this.element.nativeElement);
+
+    this.markdownService.render(this.element.nativeElement, {
+      katex: this.katex,
+      katexOptions: this.katexOptions,
+      mermaid: this.mermaid,
+      mermaidOptions: this.mermaidOptions,
+    });
+
     this.ready.emit();
   }
 
   private coerceBooleanProperty(value: boolean | ''): boolean {
-    return value != null && `${value}` !== 'false';
+    return value != null && `${String(value)}` !== 'false';
   }
 
   private handleData(): void {
@@ -117,8 +164,17 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   }
 
   private handlePlugins(): void {
+    if (this.commandLine) {
+      this.setPluginClass(this.element.nativeElement, PrismPlugin.CommandLine);
+      this.setPluginOptions(this.element.nativeElement, {
+        dataFilterOutput: this.filterOutput,
+        dataHost: this.host,
+        dataPrompt: this.prompt,
+        dataOutput: this.output,
+        dataUser: this.user,
+      });
+    }
     if (this.lineHighlight) {
-      this.setPluginClass(this.element.nativeElement, PrismPlugin.LineHighlight);
       this.setPluginOptions(this.element.nativeElement, { dataLine: this.line, dataLineOffset: this.lineOffset });
     }
     if (this.lineNumbers) {
@@ -135,12 +191,12 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
     }
   }
 
-  private setPluginOptions(element: HTMLElement, options: { [key: string]: any }): void {
+  private setPluginOptions(element: HTMLElement, options: { [key: string]: number | string | string[] | undefined }): void {
     const preElements = element.querySelectorAll('pre');
     for (let i = 0; i < preElements.length; i++) {
       Object.keys(options).forEach(option => {
         const attributeValue = options[option];
-        if (!!attributeValue) {
+        if (attributeValue) {
           const attributeName = this.toLispCase(option);
           preElements.item(i).setAttribute(attributeName, attributeValue.toString());
         }

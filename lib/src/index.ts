@@ -6,4 +6,5 @@ export * from './markdown.pipe';
 export * from './markdown.service';
 export * from './marked-options';
 export * from './marked-renderer';
+export * from './mermaid-options';
 export * from './prism-plugin';

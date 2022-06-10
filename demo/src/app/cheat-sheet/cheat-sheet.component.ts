@@ -19,7 +19,7 @@ export class CheatSheetComponent implements OnInit {
   listsDot = require('raw-loader!./markdown/lists-dot.md').default;
   tables = require('raw-loader!./markdown/tables.md').default;
 
-  headings: Element[];
+  headings: Element[] | undefined;
 
   constructor(
     private elementRef: ElementRef<HTMLElement>,

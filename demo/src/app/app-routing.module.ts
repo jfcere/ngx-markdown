@@ -1,16 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MarkdownRerenderComponent } from './markdown-rerender/markdown-rerender.component';
 
 const routes: Routes = [
   {
     path: 'get-started',
     loadChildren: () => import('./get-started/get-started.module').then(m => m.GetStartedModule),
     data: { label: 'Get Started' },
-  },
-  {
-    path: 'rerender',
-    component: MarkdownRerenderComponent
   },
   {
     path: 'cheat-sheet',
@@ -31,6 +26,11 @@ const routes: Routes = [
     path: 'plugins',
     loadChildren: () => import('./plugins/plugins.module').then(m => m.PluginsModule),
     data: { label: 'Plugins' },
+  },
+  {
+    path: 're-render',
+    loadChildren: () => import('./rerender/rerender.module').then(m => m.RerenderModule),
+    data: { label: 'Re-render' },
   },
   {
     path: '**',
