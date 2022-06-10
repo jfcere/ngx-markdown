@@ -9,7 +9,7 @@ import { MarkdownService, MarkedRenderer } from 'ngx-markdown';
 })
 export class RerenderComponent implements OnInit, OnDestroy {
 
-  private _accentColor = "";
+  private _accentColor = '';
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   private _oriHeadingCode = MarkedRenderer.prototype.heading;
@@ -60,7 +60,7 @@ const language = 'typescript';
   private changeAccentColor(): void {
     const styleAttribute = this.accentColor
       ? ` style="color: ${this.accentColor}"`
-      : "";
+      : '';
 
     this.overrideRenderer(styleAttribute);
 
