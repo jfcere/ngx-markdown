@@ -112,7 +112,8 @@ export class MarkdownService {
     this.options.renderer = value;
   }
 
-  _reload$ = new Subject<void>();
+  private readonly _reload$ = new Subject<void>();
+  readonly reload$ = this._reload$.asObservable();
 
   constructor(
     @Inject(PLATFORM_ID) private platform: Object,

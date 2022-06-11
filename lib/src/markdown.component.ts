@@ -107,7 +107,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
       this.handleTransclusion();
     }
 
-    this.markdownService._reload$
+    this.markdownService.reload$
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => this.loadContent());
   }

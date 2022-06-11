@@ -12,7 +12,7 @@ export class RerenderComponent implements OnInit, OnDestroy {
   private _accentColor = '';
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  private _oriHeadingCode = MarkedRenderer.prototype.heading;
+  private _defaultMarkedRendererHeading = MarkedRenderer.prototype.heading;
 
   get accentColor(): string {
     return this._accentColor;
@@ -74,7 +74,7 @@ const language = 'typescript';
   }
 
   private resetRenderer(): void {
-    this.markdownService.renderer.heading = this._oriHeadingCode;
+    this.markdownService.renderer.heading = this._defaultMarkedRendererHeading;
   }
 
   private setHeadings(): void {

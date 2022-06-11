@@ -9,14 +9,14 @@ import { RerenderRoutingModule } from './rerender-routing.module';
 import { RerenderComponent } from './rerender.component';
 
 @NgModule({
-    imports: [
-      FormsModule,
-      MarkdownModule.forChild(),
-      MatInputModule,
-      RerenderRoutingModule,
-      ScrollspyNavLayoutModule,
-      SharedModule,
-    ],
-    declarations: [RerenderComponent],
-  })
-  export class RerenderModule { }
+  imports: [
+    FormsModule,
+    MarkdownModule.forChild(),
+    MatInputModule,
+    RerenderRoutingModule,
+    ScrollspyNavLayoutModule,
+    SharedModule,
+  ],
+  declarations: [RerenderComponent],
+})
+export class RerenderModule { }

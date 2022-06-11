@@ -588,9 +588,9 @@ describe('MarkdowService', () => {
 
     describe('reload', () => {
 
-      it('should request reload through trigger$ subject', (done) => {
+      it('should request reload through reload$ subject', (done) => {
 
-        markdownService._reload$
+        markdownService.reload$
           .pipe(first())
           .subscribe(() => {
             expect(true).toBeTruthy();
