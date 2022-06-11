@@ -3,6 +3,7 @@ import { SecurityContext } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { marked } from 'marked';
+import { first } from 'rxjs';
 
 import { KatexOptions } from './katex-options';
 import { MarkdownModule } from './markdown.module';
@@ -582,6 +583,21 @@ describe('MarkdowService', () => {
         markdownService.render(element);
 
         expect(markdownService.highlight).toHaveBeenCalled();
+      });
+    });
+
+    describe('reload', () => {
+
+      it('should request reload through reload$ subject', (done) => {
+
+        markdownService.reload$
+          .pipe(first())
+          .subscribe(() => {
+            expect(true).toBeTruthy();
+            done();
+          });
+
+        markdownService.reload();
       });
     });
 

@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 
 import { KatexOptions } from './katex-options';
 import { MarkdownService } from './markdown.service';
@@ -10,7 +11,7 @@ import { PrismPlugin } from './prism-plugin';
   selector: 'markdown, [markdown]',
   template: '<ng-content></ng-content>',
 })
-export class MarkdownComponent implements OnChanges, AfterViewInit {
+export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
 
   protected static ngAcceptInputType_emoji: boolean | '';
   protected static ngAcceptInputType_katex: boolean | '';
@@ -79,12 +80,18 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
   private _lineNumbers = false;
   private _mermaid = false;
 
+  private readonly destroyed$ = new Subject<void>();
+
   constructor(
     public element: ElementRef<HTMLElement>,
     public markdownService: MarkdownService,
   ) { }
 
   ngOnChanges(): void {
+    this.loadContent();
+  }
+
+  loadContent(): void {
     if (this.data != null) {
       this.handleData();
       return;
@@ -99,6 +106,15 @@ export class MarkdownComponent implements OnChanges, AfterViewInit {
     if (!this.data && !this.src) {
       this.handleTransclusion();
     }
+
+    this.markdownService.reload$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => this.loadContent());
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   render(markdown: string, decodeHtml = false): void {
