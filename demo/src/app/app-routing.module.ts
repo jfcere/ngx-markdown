@@ -28,6 +28,11 @@ const routes: Routes = [
     data: { label: 'Plugins' },
   },
   {
+    path: 're-render',
+    loadChildren: () => import('./rerender/rerender.module').then(m => m.RerenderModule),
+    data: { label: 'Re-render' },
+  },
+  {
     path: '**',
     redirectTo: 'get-started',
   },

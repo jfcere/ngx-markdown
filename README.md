@@ -661,6 +661,26 @@ This code will output the following HTML:
 
 > :blue_book: Follow official [marked.renderer](https://marked.js.org/#/USING_PRO.md#renderer) documentation for the list of tokens that can be overriden.
 
+## Re-render Markdown
+
+In some situations, you might need to re-render markdown after making changes. If you've updated the text this would be done automatically, however if the changes are internal to the library such as rendering options, you will need to inform the `MarkdownService` that it needs to update.
+
+To do so, inject the `MarkdownService` and call the `reload()` function as shown below.
+
+```typescript
+import { MarkdownService } from 'ngx-markdown';
+
+constructor(
+  private markdownService: MarkdownService,
+) { }
+
+update() {
+  this.markdownService.reload();
+}
+```
+
+For an exemple, refer to the [re-render](https://jfcere.github.io/ngx-markdown/rerender) demo page.
+
 ## Syntax highlight
 
 When using static markdown you are responsible to provide the code block with related language.

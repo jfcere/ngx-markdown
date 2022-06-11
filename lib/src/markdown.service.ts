@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, InjectionToken, Optional, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { marked, Renderer } from 'marked';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { KatexOptions } from './katex-options';
@@ -63,7 +63,7 @@ export class ExtendedRenderer extends Renderer {
 @Injectable()
 export class MarkdownService {
 
-  private readonly DEFAULT_COMPILE_OPTIONS: ParseOptions = {
+  private readonly DEFAULT_PARSE_OPTIONS: ParseOptions = {
     decodeHtml: false,
     inline: false,
     emoji: false,
@@ -112,6 +112,9 @@ export class MarkdownService {
     this.options.renderer = value;
   }
 
+  private readonly _reload$ = new Subject<void>();
+  readonly reload$ = this._reload$.asObservable();
+
   constructor(
     @Inject(PLATFORM_ID) private platform: Object,
     @Inject(SECURITY_CONTEXT) private securityContext: SecurityContext,
@@ -122,13 +125,13 @@ export class MarkdownService {
     this.options = options;
   }
 
-  parse(markdown: string, options: ParseOptions = this.DEFAULT_COMPILE_OPTIONS): string {
+  parse(markdown: string, options: ParseOptions = this.DEFAULT_PARSE_OPTIONS): string {
     const {
       decodeHtml,
       inline,
       emoji,
       mermaid,
-      markedOptions = this.DEFAULT_MARKED_OPTIONS,
+      markedOptions = this.options,
     } = options;
 
     if (mermaid) {
@@ -159,6 +162,10 @@ export class MarkdownService {
     }
 
     this.highlight(element);
+  }
+
+  reload(): void {
+    this._reload$.next();
   }
 
   getSource(src: string): Observable<string> {
