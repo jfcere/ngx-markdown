@@ -5,3 +5,56 @@
 textarea {
   min-height: 180px;
 }
+
+// Clipboard default button
+
+.btn-clipboard-default ::ng-deep .markdown-clipboard-button {
+  background-color: rgba(255, 255, 255, 0.07);
+  border: none;
+  border-radius: 4px;
+  color: #ffffff;
+  cursor: pointer;
+  font-family: 'Google Sans', Helvetica, sans-serif;
+  font-size: 11px;
+  padding: 4px 0;
+  width: 50px;
+  transition: all 250ms ease-out;
+
+  &:hover,
+  &:focus {
+    background-color: rgba(255, 255, 255, 0.14);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &.copied {
+    background-color: rgba(0, 255, 0, 0.1);
+    color: #00ff00;
+  }
+}
+
+// Clipboard template styling
+
+.btn-clipboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1e1e1e;
+  border: 1px solid #666666;
+  border-radius: 4px;
+  padding: 6px;
+  cursor: pointer;
+  transition: all 200ms ease-out;
+
+  &:active,
+  &:hover {
+    border-color: #888888;
+  }
+
+  &:active {
+    background-color: #3e3e3e;
+    transform: scale(0.95);
+  }
+}

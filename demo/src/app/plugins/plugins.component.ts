@@ -1,13 +1,21 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular/core';
-import { MermaidAPI } from 'ngx-markdown';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ClipboardOptions, MermaidAPI } from 'ngx-markdown';
+
+import { ClipboardButtonComponent } from '@shared/clipboard-button';
 
 @Component({
   selector: 'app-plugins',
   templateUrl: './plugins.component.html',
   styleUrls: ['./plugins.component.scss'],
+  providers: [
+    { provide: ClipboardOptions, useValue: {} },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PluginsComponent implements OnInit {
+
+  readonly clipboardButton = ClipboardButtonComponent;
 
   emojiMarkdown = `# I :heart: ngx-markdown`;
 
@@ -38,10 +46,19 @@ graph TD;
 
   constructor(
     private elementRef: ElementRef<HTMLElement>,
+    private snackbar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
     this.setHeadings();
+  }
+
+  onCopyToClipboard(): void {
+    this.snackbar.open('Copied to clipboard via ng-template!', undefined, {
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'bottom',
+    });
   }
 
   private setHeadings(): void {

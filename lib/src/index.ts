@@ -1,3 +1,4 @@
+export * from './clipboard-options';
 export * from './katex-options';
 export * from './language.pipe';
 export * from './markdown.component';

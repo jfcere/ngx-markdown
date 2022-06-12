@@ -1,5 +1,6 @@
 import { ModuleWithProviders, NgModule, Provider, SecurityContext } from '@angular/core';
 
+import { ClipboardButtonComponent } from './clipboard-button.component';
 import { LanguagePipe } from './language.pipe';
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownPipe } from './markdown.pipe';
@@ -11,19 +12,26 @@ import { MarkdownService, SECURITY_CONTEXT } from './markdown.service';
 // their own instance of `HttpClientModule`
 export interface MarkdownModuleConfig {
   loader?: Provider;
+  clipboardOptions?: Provider;
   markedOptions?: Provider;
   sanitize?: SecurityContext;
 }
 
 const sharedDeclarations = [
+  ClipboardButtonComponent,
   LanguagePipe,
   MarkdownComponent,
   MarkdownPipe,
 ];
 
+const sharedEntryComponents = [
+  ClipboardButtonComponent,
+];
+
 @NgModule({
   exports: sharedDeclarations,
   declarations: sharedDeclarations,
+  entryComponents: sharedEntryComponents,
 })
 export class MarkdownModule {
   static forRoot(markdownModuleConfig?: MarkdownModuleConfig): ModuleWithProviders<MarkdownModule> {
@@ -33,6 +41,7 @@ export class MarkdownModule {
         MarkdownService,
         markdownModuleConfig && markdownModuleConfig.loader || [],
         markdownModuleConfig && markdownModuleConfig.markedOptions || [],
+        markdownModuleConfig && markdownModuleConfig.clipboardOptions || [],
         {
           provide: SECURITY_CONTEXT,
           useValue: markdownModuleConfig && markdownModuleConfig.sanitize != null

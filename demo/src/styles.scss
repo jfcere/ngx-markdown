@@ -13,6 +13,10 @@ blockquote {
   overflow: auto;
 }
 
+p, ul {
+  line-height: 1.5;
+}
+
 pre {
   &::-webkit-scrollbar {
     height: 8px;

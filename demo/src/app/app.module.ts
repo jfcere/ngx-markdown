@@ -5,10 +5,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
+import { ClipboardOptions, MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
 
 import { AnchorModule } from '@shared/anchor/anchor.module';
 import { AnchorService } from '@shared/anchor/anchor.service';
+import { ClipboardButtonComponent } from '@shared/clipboard-button/clipboard-button.component';
 import { SharedModule } from '@shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -36,6 +37,12 @@ export function markedOptionsFactory(anchorService: AnchorService): MarkedOption
         provide: MarkedOptions,
         useFactory: markedOptionsFactory,
         deps: [AnchorService],
+      },
+      clipboardOptions: {
+        provide: ClipboardOptions,
+        useValue: {
+          buttonComponent: ClipboardButtonComponent,
+        },
       },
       sanitize: SecurityContext.NONE,
     }),
