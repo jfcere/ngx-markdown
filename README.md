@@ -34,6 +34,7 @@ ngx-markdown is an [Angular](https://angular.io/) library that combines...
 - [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) for emoji support
 - [KaTeX](https://katex.org/) for math expression rendering
 - [Mermaid](https://mermaid-js.github.io/) for diagrams and charts visualization
+- [Clipboard.js](https://clipboardjs.com/) to copy code blocks to clipboard
 
 Demo available @ [https://jfcere.github.io/ngx-markdown](https://jfcere.github.io/ngx-markdown)  
 StackBlitz available @ [https://stackblitz.com/edit/ngx-markdown](https://stackblitz.com/edit/ngx-markdown)
