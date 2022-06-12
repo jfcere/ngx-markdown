@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, SecurityContext } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { ClipboardButtonComponent } from './clipboard-button.component';
 import { ClipboardOptions } from './clipboard-options';
 
 import { MarkdownModule } from './markdown.module';
