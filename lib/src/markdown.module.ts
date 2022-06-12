@@ -40,8 +40,8 @@ export class MarkdownModule {
       providers: [
         MarkdownService,
         markdownModuleConfig && markdownModuleConfig.loader || [],
-        markdownModuleConfig && markdownModuleConfig.markedOptions || [],
         markdownModuleConfig && markdownModuleConfig.clipboardOptions || [],
+        markdownModuleConfig && markdownModuleConfig.markedOptions || [],
         {
           provide: SECURITY_CONTEXT,
           useValue: markdownModuleConfig && markdownModuleConfig.sanitize != null
