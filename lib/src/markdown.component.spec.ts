@@ -20,9 +20,7 @@ describe('MarkdownComponent', () => {
         MarkdownModule.forRoot(),
       ],
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     markdownService = TestBed.inject(MarkdownService);
     fixture = TestBed.createComponent(MarkdownComponent);
     component = fixture.componentInstance;

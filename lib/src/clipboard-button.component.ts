@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { timer } from 'rxjs';
 
+const BUTTON_TEXT_COPY = 'Copy';
+const BUTTON_TEXT_COPIED = 'Copied';
+
 @Component({
   selector: 'markdown-clipboard',
   template: `
@@ -14,13 +17,10 @@ import { timer } from 'rxjs';
 })
 export class ClipboardButtonComponent {
 
-  private readonly copyText = 'Copy';
-  private readonly copiedText = 'Copied';
-
   get text(): string {
     return this.copied
-      ? this.copiedText
-      : this.copyText;
+      ? BUTTON_TEXT_COPIED
+      : BUTTON_TEXT_COPY;
   }
 
   copied = false;

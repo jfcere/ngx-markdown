@@ -9,6 +9,7 @@ import { ClipboardOptions, MarkdownModule, MarkedOptions, MarkedRenderer } from 
 
 import { AnchorModule } from '@shared/anchor/anchor.module';
 import { AnchorService } from '@shared/anchor/anchor.service';
+import { ClipboardButtonModule } from '@shared/clipboard-button';
 import { ClipboardButtonComponent } from '@shared/clipboard-button/clipboard-button.component';
 import { SharedModule } from '@shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
@@ -30,6 +31,7 @@ export function markedOptionsFactory(anchorService: AnchorService): MarkedOption
     AnchorModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ClipboardButtonModule,
     HttpClientModule,
     MarkdownModule.forRoot({
       loader: HttpClient,

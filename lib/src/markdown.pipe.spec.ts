@@ -19,9 +19,7 @@ describe('MarkdownPipe', () => {
         MarkdownModule.forRoot(),
       ],
     });
-  });
 
-  beforeEach(() => {
     domSanitizer = TestBed.inject(DomSanitizer);
     markdownService = TestBed.inject(MarkdownService);
     zone = TestBed.inject(NgZone);
