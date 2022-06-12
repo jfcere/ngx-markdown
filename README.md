@@ -367,6 +367,106 @@ public options: MermaidAPI.Config = {
 
 > :blue_book: Follow official [Mermaid](https://mermaid-js.github.io/) documentation for more details on diagrams and charts syntax.
 
+### Copy-to-clipboard
+
+> :bell: Copy-to-clipboard support is **optional**, skip this step if you are not planning to use it
+
+To activate [Clipboard](https://clipboardjs.com/) allowing copy-to-clipboard you will need to include...
+- Clipboard JavaScript library - `node_modules/clipboard/dist/clipboard.min.js` file
+
+If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
+
+```diff
+"scripts": [
+  "node_modules/marked/marked.min.js",
++ "node_modules/clipboard/dist/clipboard.min.js",
+]
+```
+
+#### Clipboard plugin
+
+Using `markdown` component and/or directive, you will be able to use the `clipboard` property to activate [Clipboard](https://clipboardjs.com/) plugin that enable copy-to-clipboard for code block from a single click.
+
+```html
+<markdown
+  clipboard
+  [src]="path/to/file.md">
+</markdown>
+```
+
+#### Default button
+
+The `clipboard` plugin provide an unstyled default button with a default behavior out of the box if no alternative is used.
+
+To customize the default button styling, use the `.markdown-clipboard-button` CSS selector in your global `styles.css/scss` file. You can also customized the "copied" state happening after the button is clicked using the `.copied` CSS selector.
+
+#### Using global configuration
+
+You can provide a custom component to use globaly across your application with the `clipboardOptions` via `MarkdownModule.forRoot()` import configuration.
+
+```typescript
+MarkdownModule.forRoot({
+  ...
+  clipboardOptions: {
+    provide: ClipboardOptions,
+    useValue: {
+      buttonComponent: ClipboardButtonComponent,
+    },
+  },
+}),
+```
+
+#### Using a component
+
+You can also provide your custom component using the `clipboardButtonComponent` input property when using the `clipboard` directive.
+
+```typescript
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-clipboard-button',
+  template: `<button (click)="onClick()">Copy</button>`,
+})
+export class ClipboardButtonComponent {
+  onClick() {
+    alert('Copied to clipboard!');
+  }
+}
+```
+
+```typescript
+import { ClipboardButtonComponent } from './clipboard-button-component';
+
+@Component({ ... })
+export class ExampleComponent {
+  readonly clipboardButton = ClipboardButtonComponent;
+}
+```
+
+```html
+<markdown 
+  clipboard 
+  [clipboardButtonComponent]="clipboardButton">
+</markdown>
+```
+
+#### Using ng-template
+
+Alternatively, the `clipboard` directive can be used in conjonction with `ng-template` to provide a custom button implementation via the `clipboardButtonTemplate` input property on the `markdown` component.
+
+```html
+<ng-template #buttonTemplate>
+  <button (click)="onCopyToClipboard()">...</button>
+</ng-template>
+
+<markdown 
+  clipboard 
+  [clipboardButtonTemplate]="buttonTemplate">
+</markdown>
+```
+
+> :blue_book: Refer to the ngx-markdown [clipboard plugin demo](https://jfcere.github.io/ngx-markdown/plugins#clipboard) for live examples.
+
 ## Configuration
 
 ### Main application module
