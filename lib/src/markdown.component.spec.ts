@@ -1,12 +1,13 @@
-import { ElementRef } from '@angular/core';
+import { ElementRef, TemplateRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { first } from 'rxjs/operators';
+import { ClipboardRenderOptions } from './clipboard-options';
 
 import { KatexOptions } from './katex-options';
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownModule } from './markdown.module';
-import { MarkdownService, ParseOptions } from './markdown.service';
+import { MarkdownService } from './markdown.service';
 import { MermaidAPI } from './mermaid-options';
 
 describe('MarkdownComponent', () => {
@@ -284,36 +285,22 @@ describe('MarkdownComponent', () => {
       expect(getHTMLPreElement()?.attributes.getNamedItem('data-line-offset')?.value).toBe('5');
     });
 
-    it('should apply emoji plugin correctly', () => {
-
-      const raw = 'I :heart: ngx-markdown';
-      const emojified = 'I ❤️ ngx-markdown';
-
-      spyOn(markdownService, 'parse').and.callFake((markdown: string, { emoji }: ParseOptions) => {
-        return emoji ? emojified : '';
-      });
-
-      component.emoji = true;
-      component.render(raw);
-
-      expect(markdownService.parse).toHaveBeenCalledWith(raw, {
-        decodeHtml: false,
-        inline: false,
-        emoji: true,
-        mermaid: false,
-      });
-      expect(component.element.nativeElement.innerHTML).toBe(emojified);
-    });
-
     it('should render html element through MarkdownService', () => {
       const raw = '### Raw';
       const parsed = '<h3>Compiled</h3>';
+      const clipboardOptions: ClipboardRenderOptions = {
+        buttonComponent: class mockButtonComponent {},
+        buttonTemplate: new class mockTemplateRef {} as TemplateRef<unknown>,
+      };
       const katexOptions: KatexOptions = { displayMode: true };
       const mermaidOptions: MermaidAPI.Config = { darkMode: true };
 
       spyOn(markdownService, 'parse').and.returnValue(parsed);
       spyOn(markdownService, 'render');
 
+      component.clipboard = true;
+      component.clipboardButtonComponent = clipboardOptions.buttonComponent;
+      component.clipboardButtonTemplate = clipboardOptions.buttonTemplate;
       component.katex = true;
       component.katexOptions = katexOptions;
       component.mermaid = true;
@@ -327,12 +314,17 @@ describe('MarkdownComponent', () => {
         mermaid: true,
       });
 
-      expect(markdownService.render).toHaveBeenCalledWith(component.element.nativeElement, {
-        katex: true,
-        katexOptions: katexOptions,
-        mermaid: true,
-        mermaidOptions: mermaidOptions,
-      });
+      expect(markdownService.render).toHaveBeenCalledWith(
+        component.element.nativeElement,
+        {
+          clipboard: true,
+          clipboardOptions: clipboardOptions,
+          katex: true,
+          katexOptions: katexOptions,
+          mermaid: true,
+          mermaidOptions: mermaidOptions,
+        },
+        component.viewContainerRef);
     });
 
     it('should emit `ready` when parsing and rendering is done', () => {

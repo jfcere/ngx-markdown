@@ -1,15 +1,26 @@
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable, InjectionToken, Optional, PLATFORM_ID, SecurityContext } from '@angular/core';
+import { EmbeddedViewRef, Inject, Injectable, InjectionToken, Optional, PLATFORM_ID, SecurityContext, ViewContainerRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { marked, Renderer } from 'marked';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { ClipboardButtonComponent } from './clipboard-button.component';
+import { ClipboardOptions, ClipboardRenderOptions } from './clipboard-options';
 import { KatexOptions } from './katex-options';
 import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
 import { MermaidAPI } from './mermaid-options';
+
+// clipboard
+declare let ClipboardJS: {
+  new (
+    selector: string | Element | NodeListOf<Element>,
+    options?: { text?(elem: Element): string; },
+  ): typeof ClipboardJS;
+  destroy(): void;
+};
 
 // emoji
 declare let joypixels: {
@@ -36,6 +47,8 @@ declare let Prism: {
 export const errorJoyPixelsNotLoaded = '[ngx-markdown] When using the `emoji` attribute you *have to* include Emoji-Toolkit files to `angular.json` or use imports. See README for more information';
 export const errorKatexNotLoaded = '[ngx-markdown] When using the `katex` attribute you *have to* include KaTeX files to `angular.json` or use imports. See README for more information';
 export const errorMermaidNotLoaded = '[ngx-markdown] When using the `mermaid` attribute you *have to* include Mermaid files to `angular.json` or use imports. See README for more information';
+export const errorClipboardNotLoaded = '[ngx-markdown] When using the `clipboard` attribute you *have to* include Clipboard files to `angular.json` or use imports. See README for more information';
+export const errorClipboardViewContainerRequired = '[ngx-markdown] When using the `clipboard` attribute you *have to* provide the `viewContainerRef` parameter to `MarkdownService.render()` function';
 export const errorSrcWithoutHttpClient = '[ngx-markdown] When using the `src` attribute you *have to* pass the `HttpClient` as a parameter of the `forRoot` method. See README for more information';
 /* eslint-enable max-len */
 
@@ -50,6 +63,8 @@ export interface ParseOptions {
 }
 
 export interface RenderOptions {
+  clipboard?: boolean;
+  clipboardOptions?: ClipboardRenderOptions;
   katex?: boolean;
   katexOptions?: KatexOptions;
   mermaid?: boolean;
@@ -72,6 +87,8 @@ export class MarkdownService {
   };
 
   private readonly DEFAULT_RENDER_OPTIONS: RenderOptions = {
+    clipboard: false,
+    clipboardOptions: undefined,
     katex: false,
     katexOptions: undefined,
     mermaid: false,
@@ -100,10 +117,14 @@ export class MarkdownService {
     startOnLoad: false,
   };
 
+  private readonly DEFAULT_CLIPBOARD_OPTIONS: ClipboardOptions = {
+    buttonComponent: ClipboardButtonComponent,
+  };
+
   private _options: MarkedOptions | undefined;
 
   get options(): MarkedOptions { return this._options!; }
-  set options(value: MarkedOptions) {
+  set options(value: MarkedOptions | undefined) {
     this._options = { ...this.DEFAULT_MARKED_OPTIONS, ...value };
   }
 
@@ -119,6 +140,7 @@ export class MarkdownService {
     @Inject(PLATFORM_ID) private platform: Object,
     @Inject(SECURITY_CONTEXT) private securityContext: SecurityContext,
     @Optional() private http: HttpClient,
+    @Optional() private clipboardOptions: ClipboardOptions,
     @Optional() options: MarkedOptions,
     private sanitizer: DomSanitizer,
   ) {
@@ -146,19 +168,34 @@ export class MarkdownService {
     return this.sanitizer.sanitize(this.securityContext, marked) || '';
   }
 
-  render(element: HTMLElement, options: RenderOptions = this.DEFAULT_RENDER_OPTIONS): void {
+  render(element: HTMLElement, options: RenderOptions = this.DEFAULT_RENDER_OPTIONS, viewContainerRef?: ViewContainerRef): void {
     const {
+      clipboard,
+      clipboardOptions,
       katex,
       katexOptions,
       mermaid,
       mermaidOptions,
     } = options;
 
+    if (clipboard) {
+      this.renderClipboard(element, viewContainerRef, {
+        ...this.DEFAULT_CLIPBOARD_OPTIONS,
+        ...this.clipboardOptions,
+        ...clipboardOptions,
+      });
+    }
     if (katex) {
-      this.renderKatex(element, katexOptions);
+      this.renderKatex(element, {
+        ...this.DEFAULT_KATEX_OPTIONS,
+        ...katexOptions,
+      });
     }
     if (mermaid) {
-      this.renderMermaid(element, mermaidOptions);
+      this.renderMermaid(element, {
+        ...this.DEFAULT_MERMAID_OPTIONS,
+        ...mermaidOptions,
+      });
     }
 
     this.highlight(element);
@@ -261,17 +298,85 @@ export class MarkdownService {
     return joypixels.shortnameToUnicode(html);
   }
 
-  private renderKatex(element: HTMLElement, options?: KatexOptions): void {
+  private renderKatex(element: HTMLElement, options: KatexOptions): void {
     if (!isPlatformBrowser(this.platform)) {
       return;
     }
     if (typeof katex === 'undefined' || typeof renderMathInElement === 'undefined') {
       throw new Error(errorKatexNotLoaded);
     }
-    renderMathInElement(element, {
-      ...options,
-      ...this.DEFAULT_KATEX_OPTIONS,
-    });
+    renderMathInElement(element, options);
+  }
+
+  private renderClipboard(element: HTMLElement, viewContainerRef: ViewContainerRef | undefined, options: ClipboardRenderOptions): void {
+    if (typeof ClipboardJS === 'undefined') {
+      throw new Error(errorClipboardNotLoaded);
+    }
+    if (!viewContainerRef) {
+      throw new Error(errorClipboardViewContainerRequired);
+    }
+
+    const {
+      buttonComponent,
+      buttonTemplate,
+    } = options;
+
+    // target every <pre> elements
+    const preElements = element.querySelectorAll('pre');
+    for (let i = 0; i < preElements.length; i++) {
+      const preElement = preElements.item(i);
+
+      // create <pre> wrapper element
+      const preWrapperElement = document.createElement('div');
+      preWrapperElement.style.position = 'relative';
+      preElement.parentNode!.insertBefore(preWrapperElement, preElement);
+      preWrapperElement.appendChild(preElement);
+
+      // create toolbar element
+      const toolbarWrapperElement = document.createElement('div');
+      toolbarWrapperElement.style.position = 'absolute';
+      toolbarWrapperElement.style.top = '.5em';
+      toolbarWrapperElement.style.right = '.5em';
+      toolbarWrapperElement.style.opacity = '0';
+      toolbarWrapperElement.style.transition = 'opacity 250ms ease-out';
+      preWrapperElement.insertAdjacentElement('beforeend', toolbarWrapperElement);
+
+      // register listener to show/hide toolbar
+      preElement.onmouseover = () => toolbarWrapperElement.style.opacity = '1';
+      preElement.onmouseout = () => toolbarWrapperElement.style.opacity = '0';
+
+      // declare embeddedViewRef holding variable
+      let embeddedViewRef: EmbeddedViewRef<unknown>;
+
+      // use provided component via input property
+      // or provided via ClipboardOptions provider
+      if (buttonComponent) {
+        const componentRef = viewContainerRef.createComponent(buttonComponent);
+        embeddedViewRef = componentRef.hostView as EmbeddedViewRef<unknown>;
+      }
+      // use provided template via input property
+      else if (buttonTemplate) {
+        embeddedViewRef = viewContainerRef.createEmbeddedView(buttonTemplate);
+      }
+      // use default component
+      else {
+        const componentRef = viewContainerRef.createComponent(ClipboardButtonComponent);
+        embeddedViewRef = componentRef.hostView as EmbeddedViewRef<unknown>;
+      }
+
+      // declare clipboard instance variable
+      let clipboardInstance: typeof ClipboardJS;
+
+      // attach clipboard.js to root node
+      embeddedViewRef.rootNodes.forEach((node: HTMLElement) => {
+        node.onmouseover = () => toolbarWrapperElement.style.opacity = '1';
+        toolbarWrapperElement.appendChild(node);
+        clipboardInstance = new ClipboardJS(node, { text: () => preElement.innerText });
+      });
+
+      // destroy clipboard instance when view is destroyed
+      embeddedViewRef.onDestroy(() => clipboardInstance.destroy());
+    }
   }
 
   private renderMermaid(element: HTMLElement, options: MermaidAPI.Config = this.DEFAULT_MERMAID_OPTIONS): void {

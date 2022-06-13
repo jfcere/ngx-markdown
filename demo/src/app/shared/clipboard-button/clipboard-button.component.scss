@@ -1,3 +1,5 @@
+@import '~@angular/material/theming';
+
 .btn-clipboard {
   height: 30px;
   width: 30px;
@@ -5,4 +7,5 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #1E1E1E;
 }

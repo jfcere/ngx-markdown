@@ -466,7 +466,10 @@ describe('MarkdowService', () => {
         container.append(element);
 
         const expected = container.querySelectorAll('.mermaid');
-        const mermaidOptions: MermaidAPI.Config = { darkMode: true };
+        const mermaidOptions: MermaidAPI.Config = {
+          startOnLoad: false,
+          darkMode: true,
+        };
 
         global['mermaid'] = {
           initialize: (options: MermaidAPI.Config) => {},
