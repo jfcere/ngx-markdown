@@ -3,6 +3,8 @@ jobs:
   build:
     docker:
       - image: cimg/node:16.15-browsers
+        environment:
+          CHROME_BIN: /usr/bin/google-chrome
     steps:
       # Checkout the code from the branch into the working_directory
       - checkout
