@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, SecurityContext } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { ClipboardOptions } from './clipboard-options';
 
+import { ClipboardOptions } from './clipboard-options';
 import { MarkdownModule } from './markdown.module';
 import { errorSrcWithoutHttpClient, SECURITY_CONTEXT } from './markdown.service';
 import { MarkedOptions } from './marked-options';
