@@ -162,8 +162,8 @@ export class MarkdownService {
 
     const trimmed = this.trimIndentation(markdown);
     const decoded = decodeHtml ? this.decodeHtml(trimmed) : trimmed;
-    const emojified = emoji ? this.renderEmoji(decoded) : decoded;
-    const marked = this.renderMarked(emojified, markedOptions, inline);
+    const emojified = emoji ? this.parseEmoji(decoded) : decoded;
+    const marked = this.parseMarked(emojified, markedOptions, inline);
 
     return this.sanitizer.sanitize(this.securityContext, marked) || '';
   }
@@ -278,7 +278,7 @@ export class MarkdownService {
       : markdown;
   }
 
-  private renderMarked(html: string, markedOptions: MarkedOptions, inline = false): string {
+  private parseMarked(html: string, markedOptions: MarkedOptions, inline = false): string {
     if (!isPlatformBrowser(this.platform)) {
       return html;
     }
@@ -288,7 +288,7 @@ export class MarkdownService {
     return marked.parse(html, markedOptions);
   }
 
-  private renderEmoji(html: string): string {
+  private parseEmoji(html: string): string {
     if (!isPlatformBrowser(this.platform)) {
       return html;
     }
