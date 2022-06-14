@@ -77,20 +77,20 @@ describe('MarkdownPipe', () => {
     expect(markdownService.render).toHaveBeenCalledWith(elementRef.nativeElement, mockPipeOptions, viewContainerRef);
   }));
 
-  it('should return compiled markdown', () => {
+  it('should return parsed markdown', () => {
 
     const markdown = '# Markdown';
-    const mockCompiled = 'compiled-x';
+    const mockParsed = 'compiled-x';
     const mockBypassSecurity = 'bypass-x';
     const mockPipeOptions: MarkdownPipeOptions = { inline: true, emoji: true };
 
-    spyOn(markdownService, 'parse').and.returnValue(mockCompiled);
+    spyOn(markdownService, 'parse').and.returnValue(mockParsed);
     spyOn(domSanitizer, 'bypassSecurityTrustHtml').and.returnValue(mockBypassSecurity);
 
     const result = pipe.transform(markdown, mockPipeOptions);
 
     expect(markdownService.parse).toHaveBeenCalledWith(markdown, mockPipeOptions);
-    expect(domSanitizer.bypassSecurityTrustHtml).toHaveBeenCalledWith(mockCompiled);
+    expect(domSanitizer.bypassSecurityTrustHtml).toHaveBeenCalledWith(mockParsed);
     expect(result).toBe(mockBypassSecurity);
   });
 });

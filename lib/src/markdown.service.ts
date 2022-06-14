@@ -17,7 +17,7 @@ import { MermaidAPI } from './mermaid-options';
 declare let ClipboardJS: {
   new (
     selector: string | Element | NodeListOf<Element>,
-    options?: { text?(elem: Element): string; },
+    options?: { text?: (elem: Element) => string; },
   ): typeof ClipboardJS;
   destroy(): void;
 };
@@ -118,7 +118,7 @@ export class MarkdownService {
   };
 
   private readonly DEFAULT_CLIPBOARD_OPTIONS: ClipboardOptions = {
-    buttonComponent: ClipboardButtonComponent,
+    buttonComponent: undefined,
   };
 
   private _options: MarkedOptions | undefined;
@@ -309,6 +309,9 @@ export class MarkdownService {
   }
 
   private renderClipboard(element: HTMLElement, viewContainerRef: ViewContainerRef | undefined, options: ClipboardRenderOptions): void {
+    if (!isPlatformBrowser(this.platform)) {
+      return;
+    }
     if (typeof ClipboardJS === 'undefined') {
       throw new Error(errorClipboardNotLoaded);
     }
