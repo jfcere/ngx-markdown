@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { timer } from 'rxjs';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { distinctUntilChanged, map, mapTo, merge, of, shareReplay, startWith, Subject, switchMap, timer } from 'rxjs';
 
 const BUTTON_TEXT_COPY = 'Copy';
 const BUTTON_TEXT_COPIED = 'Copied';
@@ -9,36 +9,33 @@ const BUTTON_TEXT_COPIED = 'Copied';
   template: `
     <button
       class="markdown-clipboard-button"
-      [class.copied]="copied"
+      [class.copied]="copied$ | async"
       (click)="onCopyToClipboardClick()"
-    >{{ text }}</button>
+    >{{ copiedText$ | async }}</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClipboardButtonComponent {
 
-  get text(): string {
-    return this.copied
+  private _buttonClick$ = new Subject<void>();
+
+  readonly copied$ = this._buttonClick$.pipe(
+    switchMap(() => merge(
+      of(true),
+      timer(3000).pipe(mapTo(false)),
+    )),
+    distinctUntilChanged(),
+    shareReplay(1),
+  );
+
+  readonly copiedText$ = this.copied$.pipe(
+    startWith(false),
+    map(copied => copied
       ? BUTTON_TEXT_COPIED
-      : BUTTON_TEXT_COPY;
-  }
-
-  copied = false;
-
-  constructor(
-    private changeDetectorRef: ChangeDetectorRef,
-  ) { }
+      : BUTTON_TEXT_COPY),
+  );
 
   onCopyToClipboardClick(): void {
-    if (this.copied) {
-      return;
-    }
-
-    this.copied = true;
-
-    timer(3000).subscribe(() => {
-      this.copied = false;
-      this.changeDetectorRef.markForCheck();
-    });
+    this._buttonClick$.next();
   }
 }

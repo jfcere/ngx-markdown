@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Provider, SecurityContext } from '@angular/core';
 
 import { ClipboardButtonComponent } from './clipboard-button.component';
@@ -29,6 +30,7 @@ const sharedEntryComponents = [
 ];
 
 @NgModule({
+  imports: [CommonModule],
   exports: sharedDeclarations,
   declarations: sharedDeclarations,
   entryComponents: sharedEntryComponents,
