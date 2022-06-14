@@ -3,6 +3,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, SecurityContext } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { ClipboardOptions } from './clipboard-options';
 import { MarkdownModule } from './markdown.module';
 import { errorSrcWithoutHttpClient, SECURITY_CONTEXT } from './markdown.service';
 import { MarkedOptions } from './marked-options';
@@ -72,6 +73,39 @@ describe('MarkdownModule', () => {
       const httpClient = TestBed.inject(HttpClient, null);
 
       expect(httpClient).toBeNull();
+    });
+
+    it('should provide ClipboardOptions when MarkdownModuleConfig is provided with clipboardOptions', () => {
+
+      const mockClipboardOptions: ClipboardOptions = { buttonComponent: class mockClipboardButtonComponent {} };
+
+      TestBed.configureTestingModule({
+        imports: [
+          MarkdownModule.forRoot({
+            clipboardOptions: {
+              provide: ClipboardOptions,
+              useValue: mockClipboardOptions,
+            },
+          }),
+        ],
+      });
+
+      const clipboardOptions = TestBed.inject(ClipboardOptions);
+
+      expect(clipboardOptions).toBe(mockClipboardOptions);
+    });
+
+    it('should not provide ClipboardOptions when MarkdownModuleConfig is provided without clipboardOptions', () => {
+
+      TestBed.configureTestingModule({
+        imports: [
+          MarkdownModule.forRoot({ loader: HttpClient }),
+        ],
+      });
+
+      const clipboardOptions = TestBed.inject(ClipboardOptions, null);
+
+      expect(clipboardOptions).toBeNull();
     });
 
     it('should provide MarkedOptions when MarkdownModuleConfig is provided with markedOptions', () => {
@@ -177,12 +211,14 @@ describe('MarkdownModule', () => {
     it('should inherit from forRoot providers', () => {
 
       const mockMarkedOptions: MarkedOptions = { baseUrl: 'mock' };
+      const mockClipboardOptions: ClipboardOptions = { buttonComponent: class mockClipboardButtonComponent {} };
 
       TestBed.configureTestingModule({
         imports: [
           HttpClientModule,
           MarkdownModule.forRoot({
             loader: HttpClient,
+            clipboardOptions: { provide: ClipboardOptions, useValue: mockClipboardOptions },
             markedOptions: { provide: MarkedOptions, useValue: mockMarkedOptions },
             sanitize: SecurityContext.NONE,
           }),
@@ -191,10 +227,12 @@ describe('MarkdownModule', () => {
       });
 
       const httpClient = TestBed.inject(HttpClient);
+      const clipboardOptions = TestBed.inject(ClipboardOptions);
       const markedOptions = TestBed.inject(MarkedOptions);
       const securityContext = TestBed.inject(SECURITY_CONTEXT);
 
       expect(httpClient instanceof HttpClient).toBeTruthy();
+      expect(clipboardOptions).toEqual(mockClipboardOptions);
       expect(markedOptions).toEqual(mockMarkedOptions);
       expect(securityContext).toBe(SecurityContext.NONE);
     });
