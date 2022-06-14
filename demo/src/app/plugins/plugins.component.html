@@ -375,4 +375,138 @@
       > :blue_book: You can refer to this [Mermaid](https://mermaid-js.github.io/) documentation for complete usage syntax.
     </markdown>
   </section>
+
+  <!-- PLUGINS - Clipboard -->
+  <section>
+    <h2 id="clipboard">Clipboard plugin</h2>
+
+    <markdown ngPreserveWhitespaces>
+      #### Clipboard file(s) to include
+      ```javascript
+      node_modules/clipboard/dist/clipboard.min.js
+      ```
+      #### Directive
+      `clipboard` - activate copy-to-clipboard plugin
+      #### Attributes
+      `clipboardButtonComponent` - component `Type&lt;any>` to use as copy-to-clipboard button
+      `clipboardButtonTemplate` - template reference `TemplateRef&lt;T>` to use as copy-to-clipboard button
+      ### Example
+    </markdown>
+
+    <markdown clipboard ngPreserveWhitespaces>
+      #### Default button
+
+      The `clipboard` plugin provide an unstyled default button with a default behavior out of the box if no alternative is used.
+
+      ```javascript
+      const example = 'rollover me to see the default clipboard button appears!';
+      ```
+    </markdown>
+
+    <markdown class="btn-clipboard-default" emoji clipboard ngPreserveWhitespaces>
+      #### Customize default button
+
+      To customize the default button styling, use the `.markdown-clipboard-button` CSS selector in your global `styles.css/scss` file. You can also customized the "copied" state happening after the button is clicked using the `.copied` CSS selector.
+
+      ```css
+      .markdown-clipboard-button &#123;
+        background-color: rgba(255, 255, 255, 0.07);
+        border: none;
+        border-radius: 4px;
+        color: #ffffff;
+        cursor: pointer;
+        font-size: 11px;
+        padding: 4px 0;
+        width: 50px;
+        transition: all 250ms ease-out;
+      }
+
+      .markdown-clipboard-button:hover &#123;
+        background-color: rgba(255, 255, 255, 0.14);
+      }
+
+      .markdown-clipboard-button:active &#123;
+        transform: scale(0.95);
+      }
+
+      .markdown-clipboard-button.copied &#123;
+        background-color: rgba(0, 255, 0, 0.1);
+        color: #00ff00;
+      }
+      ```
+    </markdown>
+
+    <markdown clipboard [clipboardButtonComponent]="clipboardButton" ngPreserveWhitespaces>
+      #### Using global configuration
+
+      You can provide a custom component to use globaly across your application with the `clipboardOptions` via `MarkdownModule.forRoot()` import configuration.
+
+      ```typescript
+      MarkdownModule.forRoot(&#123;
+        ...
+        clipboardOptions: &#123;
+          provide: ClipboardOptions,
+          useValue: &#123;
+            buttonComponent: ClipboardButtonComponent,
+          },
+        },
+      }),
+      ```
+    </markdown>
+
+    <markdown clipboard [clipboardButtonComponent]="clipboardButton" ngPreserveWhitespaces ngNonBindable>
+      #### Using a component
+
+      You can also provide your custom component using the `clipboardButtonComponent` input property when using the `clipboard` directive.
+
+      ```typescript
+      import &#123; Component } from '@angular/core';
+
+      @Component(&#123;
+        selector: 'app-clipboard-button',
+        template: `&lt;button (click)="onClick()">Copy&lt;/button>`,
+      })
+      export class ClipboardButtonComponent &#123;
+        onClick() &#123;
+          alert('Copied to clipboard!');
+        }
+      }
+      ```
+
+      ```typescript
+      import &#123; ClipboardButtonComponent } from './clipboard-button-component';
+
+      @Component(&#123; ... })
+      export class ExampleComponent &#123;
+        readonly clipboardButton = ClipboardButtonComponent;
+      }
+      ```
+
+      ```html
+      &lt;markdown clipboard [clipboardButtonComponent]="clipboardButton">&lt;/markdown>
+      ```
+    </markdown>
+
+    <ng-template #buttonTemplate>
+      <button class="btn-clipboard" (click)="onCopyToClipboard()">
+        <svg style="width:16px;height:16px" viewBox="0 0 24 24">
+          <path fill="#fff" d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M7,7H17V5H19V19H5V5H7V7Z" />
+        </svg>
+      </button>
+    </ng-template>
+
+    <markdown clipboard [clipboardButtonTemplate]="buttonTemplate" ngPreserveWhitespaces>
+      #### Using ng-template
+
+      Alternatively, the `clipboard` directive can be used in conjonction with `ng-template` to provide a custom button implementation via the `clipboardButtonTemplate` input property on the `markdown` component.
+
+      ```html
+      &lt;ng-template #buttonTemplate>
+        &lt;button (click)="onCopyToClipboard()">...&lt;/button>
+      &lt;/ng-template>
+
+      &lt;markdown clipboard [clipboardButtonTemplate]="buttonTemplate">&lt;/markdown>
+      ```
+    </markdown>
+  </section>
 </app-scrollspy-nav-layout>

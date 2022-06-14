@@ -1,4 +1,4 @@
-import { ElementRef, NgZone } from '@angular/core';
+import { ElementRef, NgZone, ViewContainerRef } from '@angular/core';
 import { fakeAsync, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -8,24 +8,33 @@ import { MarkdownService } from './markdown.service';
 
 describe('MarkdownPipe', () => {
   let domSanitizer: DomSanitizer;
-  const elementRef = new ElementRef(document.createElement('div'));
+  let elementRef: ElementRef;
   let markdownService: MarkdownService;
   let pipe: MarkdownPipe;
+  let viewContainerRef: ViewContainerRef;
   let zone: NgZone;
+
+  const elementRefSpy = jasmine.createSpyObj<ElementRef>([], { nativeElement: document.createElement('div') });
+  const viewContainerRefSpy = jasmine.createSpyObj<ViewContainerRef>(['createComponent']);
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         MarkdownModule.forRoot(),
       ],
+      providers: [
+        { provide: ElementRef, useValue: elementRefSpy },
+        { provide: ViewContainerRef, useValue: viewContainerRefSpy },
+      ],
     });
-  });
 
-  beforeEach(() => {
+    elementRef = TestBed.inject(ElementRef);
     domSanitizer = TestBed.inject(DomSanitizer);
     markdownService = TestBed.inject(MarkdownService);
+    viewContainerRef = TestBed.inject(ViewContainerRef);
     zone = TestBed.inject(NgZone);
-    pipe = new MarkdownPipe(domSanitizer, elementRef, markdownService, zone);
+
+    pipe = new MarkdownPipe(domSanitizer, elementRef, markdownService, viewContainerRef, zone);
   });
 
   it('should return empty string when value is null/undefined', () => {
@@ -65,23 +74,23 @@ describe('MarkdownPipe', () => {
 
     zone.onStable.emit(null);
 
-    expect(markdownService.render).toHaveBeenCalledWith(elementRef.nativeElement, mockPipeOptions);
+    expect(markdownService.render).toHaveBeenCalledWith(elementRef.nativeElement, mockPipeOptions, viewContainerRef);
   }));
 
-  it('should return compiled markdown', () => {
+  it('should return parsed markdown', () => {
 
     const markdown = '# Markdown';
-    const mockCompiled = 'compiled-x';
+    const mockParsed = 'compiled-x';
     const mockBypassSecurity = 'bypass-x';
     const mockPipeOptions: MarkdownPipeOptions = { inline: true, emoji: true };
 
-    spyOn(markdownService, 'parse').and.returnValue(mockCompiled);
+    spyOn(markdownService, 'parse').and.returnValue(mockParsed);
     spyOn(domSanitizer, 'bypassSecurityTrustHtml').and.returnValue(mockBypassSecurity);
 
     const result = pipe.transform(markdown, mockPipeOptions);
 
     expect(markdownService.parse).toHaveBeenCalledWith(markdown, mockPipeOptions);
-    expect(domSanitizer.bypassSecurityTrustHtml).toHaveBeenCalledWith(mockCompiled);
+    expect(domSanitizer.bypassSecurityTrustHtml).toHaveBeenCalledWith(mockParsed);
     expect(result).toBe(mockBypassSecurity);
   });
 });

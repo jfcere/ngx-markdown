@@ -1,4 +1,4 @@
-import { ElementRef, NgZone, Pipe, PipeTransform } from '@angular/core';
+import { ElementRef, NgZone, Pipe, PipeTransform, ViewContainerRef } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { first } from 'rxjs/operators';
 
@@ -15,6 +15,7 @@ export class MarkdownPipe implements PipeTransform {
     private domSanitizer: DomSanitizer,
     private elementRef: ElementRef<HTMLElement>,
     private markdownService: MarkdownService,
+    private viewContainerRef: ViewContainerRef,
     private zone: NgZone,
   ) { }
 
@@ -32,7 +33,7 @@ export class MarkdownPipe implements PipeTransform {
 
     this.zone.onStable
       .pipe(first())
-      .subscribe(() => this.markdownService.render(this.elementRef.nativeElement, options));
+      .subscribe(() => this.markdownService.render(this.elementRef.nativeElement, options, this.viewContainerRef));
 
     return this.domSanitizer.bypassSecurityTrustHtml(markdown);
   }

@@ -1,8 +1,21 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output } from '@angular/core';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  Output,
+  TemplateRef,
+  Type,
+  ViewContainerRef,
+} from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 
 import { KatexOptions } from './katex-options';
-import { MarkdownService } from './markdown.service';
+import { MarkdownService, ParseOptions, RenderOptions } from './markdown.service';
 import { MermaidAPI } from './mermaid-options';
 import { PrismPlugin } from './prism-plugin';
 
@@ -13,6 +26,7 @@ import { PrismPlugin } from './prism-plugin';
 })
 export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
 
+  protected static ngAcceptInputType_clipboard: boolean | '';
   protected static ngAcceptInputType_emoji: boolean | '';
   protected static ngAcceptInputType_katex: boolean | '';
   protected static ngAcceptInputType_mermaid: boolean | '';
@@ -26,6 +40,13 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input()
   get inline(): boolean { return this._inline; }
   set inline(value: boolean) { this._inline = this.coerceBooleanProperty(value); }
+
+  // Plugin - clipboard
+  @Input()
+  get clipboard(): boolean { return this._clipboard; }
+  set clipboard(value: boolean) { this._clipboard = this.coerceBooleanProperty(value); }
+  @Input() clipboardButtonComponent: Type<unknown> | undefined;
+  @Input() clipboardButtonTemplate: TemplateRef<unknown> | undefined;
 
   // Plugin - emoji
   @Input()
@@ -73,6 +94,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Output() ready = new EventEmitter<void>();
 
   private _commandLine = false;
+  private _clipboard = false;
   private _emoji = false;
   private _inline = false;
   private _katex = false;
@@ -85,6 +107,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   constructor(
     public element: ElementRef<HTMLElement>,
     public markdownService: MarkdownService,
+    public viewContainerRef: ViewContainerRef,
   ) { }
 
   ngOnChanges(): void {
@@ -118,23 +141,32 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   }
 
   render(markdown: string, decodeHtml = false): void {
-    const parsed = this.markdownService.parse(markdown, {
+    const parsedOptions: ParseOptions = {
       decodeHtml,
       inline: this.inline,
       emoji: this.emoji,
       mermaid: this.mermaid,
-    });
+    };
+
+    const renderOptions: RenderOptions = {
+      clipboard: this.clipboard,
+      clipboardOptions: {
+        buttonComponent: this.clipboardButtonComponent,
+        buttonTemplate: this.clipboardButtonTemplate,
+      },
+      katex: this.katex,
+      katexOptions: this.katexOptions,
+      mermaid: this.mermaid,
+      mermaidOptions: this.mermaidOptions,
+    };
+
+    const parsed = this.markdownService.parse(markdown, parsedOptions);
 
     this.element.nativeElement.innerHTML = parsed;
 
     this.handlePlugins();
 
-    this.markdownService.render(this.element.nativeElement, {
-      katex: this.katex,
-      katexOptions: this.katexOptions,
-      mermaid: this.mermaid,
-      mermaidOptions: this.mermaidOptions,
-    });
+    this.markdownService.render(this.element.nativeElement, renderOptions, this.viewContainerRef);
 
     this.ready.emit();
   }
@@ -150,13 +182,13 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   private handleSrc(): void {
     this.markdownService
       .getSource(this.src!)
-      .subscribe(
-        markdown => {
+      .subscribe({
+        next: markdown => {
           this.render(markdown);
           this.load.emit(markdown);
         },
-        error => this.error.emit(error),
-      );
+        error: error => this.error.emit(error),
+      });
   }
 
   private handleTransclusion(): void {
