@@ -6,8 +6,9 @@ jobs:
     docker:
       - image: cimg/node:16.15-browsers
     steps:
-      # Install CircleCI browser tools
-      - browser-tools/install-browser-tools
+      # Install chrome via browser tools
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       # Checkout the code from the branch into the working_directory
       - checkout
       # Restore dependencies from cache
