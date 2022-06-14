@@ -1,11 +1,13 @@
-version: 2
+version: 2.1
+orbs:
+  browser-tools: circleci/browser-tools@1.3.0
 jobs:
   build:
     docker:
       - image: cimg/node:16.15-browsers
-        environment:
-          CHROME_BIN: /usr/bin/google-chrome
     steps:
+      # Install CircleCI browser tools
+      - browser-tools/install-browser-tools
       # Checkout the code from the branch into the working_directory
       - checkout
       # Restore dependencies from cache
