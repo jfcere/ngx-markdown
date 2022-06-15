@@ -14,7 +14,9 @@
   <a href="https://opensource.org/licenses/MIT">
     <img alt="License" src="https://img.shields.io/npm/l/ngx-markdown.svg">
   </a>
-    <a href="https://www.npmjs.com/package/ngx-markdown">
+  <br>
+  <img alt="Dependency Status" src="https://img.shields.io/librariesio/release/npm/ngx-markdown">
+  <a href="https://www.npmjs.com/package/ngx-markdown">
     <img alt="Monthly Downloads" src="https://img.shields.io/npm/dm/ngx-markdown.svg">
   </a>
 </p>
