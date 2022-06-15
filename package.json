@@ -22,7 +22,9 @@
     "prism",
     "prism.js",
     "katex",
-    "emoji"
+    "emoji",
+    "clipboard",
+    "clipboard.js"
   ],
   "scripts": {
     "ng": "ng",
