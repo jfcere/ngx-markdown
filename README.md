@@ -14,15 +14,10 @@
   <a href="https://opensource.org/licenses/MIT">
     <img alt="License" src="https://img.shields.io/npm/l/ngx-markdown.svg">
   </a>
-    <a href="https://www.npmjs.com/package/ngx-markdown">
-    <img alt="Monthly Downloads" src="https://img.shields.io/npm/dm/ngx-markdown.svg">
-  </a>
   <br>
-  <a href="https://david-dm.org/jfcere/ngx-markdown?path=lib">
-    <img alt="Dependencies Status" src="https://david-dm.org/jfcere/ngx-markdown/status.svg?path=lib">
-  </a>
-  <a href="https://david-dm.org/jfcere/ngx-markdown?path=lib&type=peer">
-    <img alt="PeerDependencies Status" src="https://david-dm.org/jfcere/ngx-markdown/peer-status.svg?path=lib">
+  <img alt="Dependency Status" src="https://img.shields.io/librariesio/release/npm/ngx-markdown">
+  <a href="https://www.npmjs.com/package/ngx-markdown">
+    <img alt="Monthly Downloads" src="https://img.shields.io/npm/dm/ngx-markdown.svg">
   </a>
 </p>
 
