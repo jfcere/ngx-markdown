@@ -7108,7 +7108,7 @@ ng-packagr@^14.0.0:
     esbuild "^0.14.29"
 
 "ngx-markdown@file:./lib":
-  version "14.0.0-beta.0"
+  version "14.0.0"
   dependencies:
     "@types/marked" "^4.0.3"
     clipboard "^2.0.11"
