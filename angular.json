@@ -9,9 +9,6 @@
       "projectType": "application",
       "prefix": "app",
       "schematics": {
-        "@schematics/angular:application": {
-          "strict": true
-        },
         "@schematics/angular:component": {
           "style": "scss"
         }
@@ -171,5 +168,7 @@
       }
     }
   },
-  "defaultProject": "demo"
+  "cli": {
+    "analytics": false
+  }
 }

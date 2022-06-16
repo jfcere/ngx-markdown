@@ -19,7 +19,7 @@ import {
 } from './markdown.service';
 import { MermaidAPI } from './mermaid-options';
 
-declare let global: any;
+declare let window: any;
 declare let Prism: any;
 declare let joypixels: any;
 declare let mermaid: any;
@@ -214,11 +214,11 @@ describe('MarkdowService', () => {
 
       it('should throw when emoji is true but emoji-toolkit is not loaded', () => {
 
-        global['joypixels'] = undefined;
+        window['joypixels'] = undefined;
 
         expect(() => markdownService.parse('I :heart: ngx-markdown', { decodeHtml: false, emoji: true })).toThrowError(errorJoyPixelsNotLoaded);
 
-        global['joypixels'] = { shortnameToUnicode: undefined };
+        window['joypixels'] = { shortnameToUnicode: undefined };
 
         expect(() => markdownService.parse('I :heart: ngx-markdown', { decodeHtml: false, emoji: true })).toThrowError(errorJoyPixelsNotLoaded);
       });
@@ -228,7 +228,7 @@ describe('MarkdowService', () => {
         const mockRaw = 'I :heart: ngx-markdown';
         const mockEmojified = 'I ❤️ ngx-markdown';
 
-        global['joypixels'] = { shortnameToUnicode: () => {} };
+        window['joypixels'] = { shortnameToUnicode: () => {} };
 
         spyOn(joypixels, 'shortnameToUnicode').and.returnValue(mockEmojified);
 
@@ -240,7 +240,7 @@ describe('MarkdowService', () => {
 
         const mockRaw = '### Markdown-x';
 
-        global['joypixels'] = { shortnameToUnicode: () => {} };
+        window['joypixels'] = { shortnameToUnicode: () => {} };
 
         spyOn(joypixels, 'shortnameToUnicode');
 
@@ -261,7 +261,7 @@ describe('MarkdowService', () => {
 
         const mockRaw = 'I :heart: ngx-markdown';
 
-        global['joypixels'] = { shortnameToUnicode: () => {} };
+        window['joypixels'] = { shortnameToUnicode: () => {} };
 
         spyOn(joypixels, 'shortnameToUnicode');
 
@@ -370,9 +370,9 @@ describe('MarkdowService', () => {
 
         const { componentRef, rootNode } = mockComponentRef();
 
-        global['ClipboardJS'] = class ClipboardJS {};
+        window['ClipboardJS'] = class ClipboardJS {};
 
-        const clipboardSpy = spyOn(global, 'ClipboardJS');
+        const clipboardSpy = spyOn(window, 'ClipboardJS');
 
         viewContainerRefSpy.createComponent.and.returnValue(componentRef);
 
@@ -394,9 +394,9 @@ describe('MarkdowService', () => {
 
         const { componentRef, rootNode } = mockComponentRef();
 
-        global['ClipboardJS'] = class ClipboardJS {};
+        window['ClipboardJS'] = class ClipboardJS {};
 
-        const clipboardSpy = spyOn(global, 'ClipboardJS');
+        const clipboardSpy = spyOn(window, 'ClipboardJS');
 
         viewContainerRefSpy.createComponent.and.returnValue(componentRef);
 
@@ -424,9 +424,9 @@ describe('MarkdowService', () => {
 
         const { embeddedViewRef, rootNode } = mockEmbeddedViewRef();
 
-        global['ClipboardJS'] = class ClipboardJS {};
+        window['ClipboardJS'] = class ClipboardJS {};
 
-        const clipboardSpy = spyOn(global, 'ClipboardJS');
+        const clipboardSpy = spyOn(window, 'ClipboardJS');
 
         viewContainerRefSpy.createEmbeddedView.and.returnValue(embeddedViewRef);
 
@@ -451,9 +451,9 @@ describe('MarkdowService', () => {
         const { componentRef } = mockComponentRef();
         const mockClipboardInstance = { destroy: () => {} };
 
-        global['ClipboardJS'] = () => {};
+        window['ClipboardJS'] = () => {};
 
-        spyOn(global, 'ClipboardJS').and.returnValue(mockClipboardInstance);
+        spyOn(window, 'ClipboardJS').and.returnValue(mockClipboardInstance);
 
         const hostViewDestroySpy = spyOn(componentRef.hostView, 'onDestroy');
         const clipboardDestroySpy = spyOn(mockClipboardInstance, 'destroy');
@@ -476,11 +476,11 @@ describe('MarkdowService', () => {
         const container = document.createElement('div');
         container.append(preElement);
 
-        global['ClipboardJS'] = {
+        window['ClipboardJS'] = {
           new: () => {},
         };
 
-        spyOn(global, 'ClipboardJS');
+        spyOn(window, 'ClipboardJS');
 
         const useCases = [
           () => markdownService.render(container),
@@ -491,7 +491,7 @@ describe('MarkdowService', () => {
 
         useCases.forEach(func => {
           func();
-          expect(global['ClipboardJS']).not.toHaveBeenCalled();
+          expect(window['ClipboardJS']).not.toHaveBeenCalled();
         });
       });
 
@@ -501,21 +501,21 @@ describe('MarkdowService', () => {
         const container = document.createElement('div');
         container.append(preElement);
 
-        global['ClipboardJS'] = {};
+        window['ClipboardJS'] = {};
 
-        spyOn(global, 'ClipboardJS');
+        spyOn(window, 'ClipboardJS');
 
         markdownService['platform'] = 'server';
 
         expect(() => markdownService.render(container, { clipboard: true })).not.toThrowError();
-        expect(global['ClipboardJS']).not.toHaveBeenCalled();
+        expect(window['ClipboardJS']).not.toHaveBeenCalled();
       });
 
       it('should throw when clipboard is called but not loaded', () => {
 
         const container = document.createElement('div');
 
-        global['ClipboardJS'] = undefined;
+        window['ClipboardJS'] = undefined;
 
         expect(() => markdownService.render(container, { clipboard: true })).toThrowError(errorClipboardNotLoaded);
       });
@@ -524,7 +524,7 @@ describe('MarkdowService', () => {
 
         const container = document.createElement('div');
 
-        global['ClipboardJS'] = {};
+        window['ClipboardJS'] = {};
 
         const useCases = [
           () => markdownService.render(container, { clipboard: true }),
@@ -547,14 +547,14 @@ describe('MarkdowService', () => {
 
         const katexOptions = { strict: 'error', ignoredClasses: ['ignore'] };
 
-        global['katex'] = {};
-        global['renderMathInElement'] = (elem: HTMLElement, options?: KatexOptions) => {};
+        window['katex'] = {};
+        window['renderMathInElement'] = (elem: HTMLElement, options?: KatexOptions) => {};
 
-        spyOn(global, 'renderMathInElement');
+        spyOn(window, 'renderMathInElement');
 
         markdownService.render(container, { katex: true, katexOptions });
 
-        expect(global['renderMathInElement']).toHaveBeenCalledWith(container, {
+        expect(window['renderMathInElement']).toHaveBeenCalledWith(container, {
           ...katexOptions,
           ...KATEX_DEFAULT_OPTIONS,
         });
@@ -565,10 +565,10 @@ describe('MarkdowService', () => {
         const element = document.createElement('div');
         element.innerHTML = '$E=mc^2$';
 
-        global['katex'] = {};
-        global['renderMathInElement'] = (elem: HTMLElement, options?: KatexOptions) => {};
+        window['katex'] = {};
+        window['renderMathInElement'] = (elem: HTMLElement, options?: KatexOptions) => {};
 
-        spyOn(global, 'renderMathInElement');
+        spyOn(window, 'renderMathInElement');
 
         const useCases = [
           () => markdownService.render(element),
@@ -579,7 +579,7 @@ describe('MarkdowService', () => {
 
         useCases.forEach(func => {
           func();
-          expect(global['renderMathInElement']).not.toHaveBeenCalled();
+          expect(window['renderMathInElement']).not.toHaveBeenCalled();
         });
       });
 
@@ -588,15 +588,15 @@ describe('MarkdowService', () => {
         const element = document.createElement('div');
         element.innerHTML = '$E=mc^2$';
 
-        global['katex'] = {};
-        global['renderMathInElement'] = (elem: HTMLElement, options?: KatexOptions) => {};
+        window['katex'] = {};
+        window['renderMathInElement'] = (elem: HTMLElement, options?: KatexOptions) => {};
 
-        spyOn(global, 'renderMathInElement');
+        spyOn(window, 'renderMathInElement');
 
         markdownService['platform'] = 'server';
 
         expect(() => markdownService.render(element, { katex: true })).not.toThrowError();
-        expect(global['renderMathInElement']).not.toHaveBeenCalled();
+        expect(window['renderMathInElement']).not.toHaveBeenCalled();
       });
 
       it('should throw when katex is called but not loaded', () => {
@@ -604,12 +604,12 @@ describe('MarkdowService', () => {
         const element = document.createElement('div');
         element.innerHTML = '$E=mc^2$';
 
-        global['katex'] = undefined;
+        window['katex'] = undefined;
 
         expect(() => markdownService.render(element, { katex: true })).toThrowError(errorKatexNotLoaded);
 
-        global['katex'] = {};
-        global['renderMathInElement'] = undefined;
+        window['katex'] = {};
+        window['renderMathInElement'] = undefined;
 
         expect(() => markdownService.render(element, { katex: true })).toThrowError(errorKatexNotLoaded);
       });
@@ -619,10 +619,10 @@ describe('MarkdowService', () => {
         const element = document.createElement('div');
         element.innerHTML = '$E=mc^2$';
 
-        global['katex'] = {};
-        global['renderMathInElement'] = (elem: HTMLElement, options?: KatexOptions) => {};
+        window['katex'] = {};
+        window['renderMathInElement'] = (elem: HTMLElement, options?: KatexOptions) => {};
 
-        spyOn(global, 'renderMathInElement');
+        spyOn(window, 'renderMathInElement');
 
         const createElement = (innerHTML: string): HTMLElement => {
           const element = document.createElement('div');
@@ -637,11 +637,11 @@ describe('MarkdowService', () => {
 
         useCases.forEach(useCase => {
           markdownService.render(useCase.element, { katex: true, katexOptions: useCase.options });
-          expect(global['renderMathInElement']).toHaveBeenCalledWith(useCase.element, {
+          expect(window['renderMathInElement']).toHaveBeenCalledWith(useCase.element, {
             ...useCase.options,
             ...KATEX_DEFAULT_OPTIONS,
           });
-          global['renderMathInElement'].calls.reset();
+          window['renderMathInElement'].calls.reset();
         });
       });
 
@@ -659,7 +659,7 @@ describe('MarkdowService', () => {
 
         const expected = container.querySelectorAll('.mermaid');
 
-        global['mermaid'] = {
+        window['mermaid'] = {
           initialize: (options: MermaidAPI.Config) => {},
           init: (nodes: string | Node | NodeList) => {},
         };
@@ -688,7 +688,7 @@ describe('MarkdowService', () => {
           darkMode: true,
         };
 
-        global['mermaid'] = {
+        window['mermaid'] = {
           initialize: (options: MermaidAPI.Config) => {},
           init: (nodes: string | Node | NodeList) => {},
         };
@@ -706,7 +706,7 @@ describe('MarkdowService', () => {
 
         const container = document.createElement('div');
 
-        global['mermaid'] = {
+        window['mermaid'] = {
           initialize: (options: MermaidAPI.Config) => {},
           init: (nodes: string | Node | NodeList) => {},
         };
@@ -732,7 +732,7 @@ describe('MarkdowService', () => {
 
         const container = document.createElement('div');
 
-        global['mermaid'] = {
+        window['mermaid'] = {
           initialize: (options: MermaidAPI.Config) => {},
           init: (nodes: string | Node | NodeList) => {},
         };
@@ -751,12 +751,12 @@ describe('MarkdowService', () => {
 
         const container = document.createElement('div');
 
-        global['mermaid'] = undefined;
+        window['mermaid'] = undefined;
 
         expect(() => markdownService.render(container, { mermaid: true })).toThrowError(errorMermaidNotLoaded);
 
-        global['mermaid'] = { initialize: undefined };
-        global['mermaid'] = { init: undefined };
+        window['mermaid'] = { initialize: undefined };
+        window['mermaid'] = { init: undefined };
 
         expect(() => markdownService.render(container, { mermaid: true })).toThrowError(errorMermaidNotLoaded);
       });
@@ -769,7 +769,7 @@ describe('MarkdowService', () => {
         const container = document.createElement('div');
         container.append(element);
 
-        global['mermaid'] = {
+        window['mermaid'] = {
           initialize: (options: MermaidAPI.Config) => {},
           init: (nodes: string | Node | NodeList) => {},
         };
@@ -942,7 +942,7 @@ describe('MarkdowService', () => {
 
         const mockHtmlElement = document.createElement('div');
 
-        global['Prism'] = { highlightAllUnder: () => {} };
+        window['Prism'] = { highlightAllUnder: () => {} };
 
         spyOn(Prism, 'highlightAllUnder');
 
@@ -956,7 +956,7 @@ describe('MarkdowService', () => {
 
         const mockHtmlElement = document.createElement('div');
 
-        global['Prism'] = undefined;
+        window['Prism'] = undefined;
 
         expect(() => markdownService.highlight(mockHtmlElement)).not.toThrow();
       });
@@ -967,7 +967,7 @@ describe('MarkdowService', () => {
         const codeElement = document.createElement('code');
         preElement.appendChild(codeElement);
 
-        global['Prism'] = { highlightAllUnder: () => {} };
+        window['Prism'] = { highlightAllUnder: () => {} };
 
         markdownService.highlight(preElement);
 
@@ -981,7 +981,7 @@ describe('MarkdowService', () => {
         codeElement.classList.add('language-mock');
         preElement.appendChild(codeElement);
 
-        global['Prism'] = { highlightAllUnder: () => {} };
+        window['Prism'] = { highlightAllUnder: () => {} };
 
         markdownService.highlight(preElement);
 
@@ -996,7 +996,7 @@ describe('MarkdowService', () => {
         codeElement.classList.add('language-mock');
         divElement.appendChild(codeElement);
 
-        global['Prism'] = { highlightAllUnder: () => {} };
+        window['Prism'] = { highlightAllUnder: () => {} };
 
         markdownService.highlight(divElement);
 
@@ -1008,7 +1008,7 @@ describe('MarkdowService', () => {
 
         const mockHtmlElement = document.createElement('div');
 
-        global['Prism'] = { highlightAllUnder: () => {} };
+        window['Prism'] = { highlightAllUnder: () => {} };
 
         spyOn(Prism, 'highlightAllUnder');
 
@@ -1019,7 +1019,7 @@ describe('MarkdowService', () => {
 
       it('should call Prism when available and element parameter is ommited/null/undefined', () => {
 
-        global['Prism'] = { highlightAllUnder: () => {} };
+        window['Prism'] = { highlightAllUnder: () => {} };
 
         spyOn(Prism, 'highlightAllUnder');
 

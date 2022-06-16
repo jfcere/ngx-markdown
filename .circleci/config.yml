@@ -55,7 +55,7 @@ jobs:
           command: yarn build:lib
   deploy:
     docker:
-      - image: circleci/node:12-browsers
+      - image: cimg/node:16.15
     steps:
       # Checkout the code from the branch into the working_directory
       - checkout
