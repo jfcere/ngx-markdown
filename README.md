@@ -15,7 +15,7 @@
     <img alt="License" src="https://img.shields.io/npm/l/ngx-markdown.svg">
   </a>
   <br>
-  <img alt="Dependency Status" src="https://img.shields.io/librariesio/release/npm/ngx-markdown/14.0.0">
+  <img alt="Dependency Status" src="https://img.shields.io/librariesio/release/npm/ngx-markdown/14.0.1">
   <a href="https://www.npmjs.com/package/ngx-markdown">
     <img alt="Monthly Downloads" src="https://img.shields.io/npm/dm/ngx-markdown.svg">
   </a>
@@ -660,6 +660,12 @@ The same way the component works, you can use `markdown` directive to accomplish
   [data]="markdown"
   (ready)="onReady()">
 </div>
+
+<!-- inline parser, omitting rendering top-level paragraph -->
+<div markdown
+  [data]="markdown"
+  [inline]="true">
+</div>
 ```
 
 ### Pipe
@@ -775,7 +781,7 @@ update() {
 }
 ```
 
-For an exemple, refer to the [re-render](https://jfcere.github.io/ngx-markdown/rerender) demo page.
+> :blue_book: Refer to the ngx-markdown [re-render demo](https://jfcere.github.io/ngx-markdown/rerender) for a live example.
 
 ## Syntax highlight
 
@@ -825,8 +831,8 @@ Building with AoT is part of the CI and is tested every time a commit occurs so 
 
 Here is the list of tasks that will be done on this library in the near future ...
 
-- Add copy-to-clipboard feature
 - Add a FAQ section to the README.md
+- Improve flexibily for some options
 
 ## Contribution
 
