@@ -12,7 +12,8 @@ import {
   Type,
   ViewContainerRef,
 } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { KatexOptions } from './katex-options';
 import { MarkdownService, ParseOptions, RenderOptions } from './markdown.service';
