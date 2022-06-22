@@ -3,7 +3,7 @@ import { ComponentRef, EmbeddedViewRef, SecurityContext, TemplateRef, ViewContai
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { marked } from 'marked';
-import { first } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { KatexOptions } from './katex-options';

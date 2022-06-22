@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { distinctUntilChanged, map, mapTo, merge, of, shareReplay, startWith, Subject, switchMap, timer } from 'rxjs';
+import { merge, of, Subject, timer } from 'rxjs';
+import { distinctUntilChanged, map, mapTo, shareReplay, startWith, switchMap } from 'rxjs/operators';
 
 const BUTTON_TEXT_COPY = 'Copy';
 const BUTTON_TEXT_COPIED = 'Copied';
