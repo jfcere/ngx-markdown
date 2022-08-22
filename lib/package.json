@@ -31,7 +31,6 @@
     "clipboard": "^2.0.11",
     "emoji-toolkit": "^6.6.0",
     "katex": "^0.16.0",
-    "marked": "^4.0.17",
     "mermaid": "^9.1.2",
     "prismjs": "^1.28.0",
     "tslib": "^2.3.0"
@@ -40,6 +39,7 @@
     "@angular/common": "^14.0.0",
     "@angular/core": "^14.0.0",
     "@angular/platform-browser": "^14.0.0",
+    "marked": "^4.0.17",
     "rxjs": "^6.5.3 || ^7.4.0",
     "zone.js": "^0.11.4"
   }
