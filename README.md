@@ -51,10 +51,11 @@ StackBlitz available @ [https://stackblitz.com/edit/ngx-markdown](https://stackb
 
 ### ngx-markdown
 
-To add ngx-markdown library to your `package.json` use the following command.
+To add ngx-markdown library to your `package.json` use the following commands.
 
 ```bash
-npm install ngx-markdown --save
+npm install ngx-markdown marked --save
+npm install @types/marked --save-dev
 ```
 
 As the library is using [Marked](https://github.com/chjj/marked) parser you will need to add `node_modules/marked/marked.min.js` to your application.
@@ -70,6 +71,12 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 ### Syntax highlight
 
 > :bell: Syntax highlight is **optional**, skip this step if you are not planning to use it
+
+To add [Prism.js](http://prismjs.com/) library to your `package.json` use the following command.
+
+```bash
+npm install prismjs --save
+```
 
 To activate [Prism.js](http://prismjs.com/) syntax highlight you will need to include...
 - prism.js core library - `node_modules/prismjs/prism.js` file
@@ -231,6 +238,12 @@ Optionally, to automatically present some lines as output without providing the 
 
 > :bell: Emoji support is **optional**, skip this step if you are not planning to use it
 
+To add [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) library to your `package.json` use the following command.
+
+```bash
+npm install emoji-toolkit --save
+```
+
 To activate [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) for emoji suppport you will need to include...
 - Emoji-Toolkit library - `node_modules/emoji-toolkit/lib/js/joypixels.min.js`
 
@@ -258,6 +271,12 @@ Using `markdown` component and/or directive, you will be able to use the `emoji`
 ### Math rendering
 
 > :bell: Math rendering is **optional**, skip this step if you are not planning to use it
+
+To add [KaTeX](https://katex.org/) library to your `package.json` use the following command.
+
+```bash
+npm install katex --save
+```
 
 To activate [KaTeX](https://katex.org/) math rendering you will need to include...
 - KaTex JavaScript library - `node_modules/katex/dist/katex.min.js` file
@@ -317,6 +336,12 @@ public options: KatexOptions = {
 
 > :bell: Diagram support is **optional**, skip this step if you are not planning to use it
 
+To add [Mermaid](https://mermaid-js.github.io/) library to your `package.json` use the following command.
+
+```bash
+npm install mermaid --save
+```
+
 To activate [Mermaid](https://mermaid-js.github.io/) diagramming and charting tool you will need to include...
 - Mermaid JavaScript library - `node_modules/mermaid/dist/mermaid.min.js` file
 
@@ -366,6 +391,12 @@ public options: MermaidAPI.Config = {
 ### Copy-to-clipboard
 
 > :bell: Copy-to-clipboard support is **optional**, skip this step if you are not planning to use it
+
+To add [Clipboard](https://clipboardjs.com/) library to your `package.json` use the following command.
+
+```bash
+npm install clipboard --save
+```
 
 To activate [Clipboard](https://clipboardjs.com/) allowing copy-to-clipboard you will need to include...
 - Clipboard JavaScript library - `node_modules/clipboard/dist/clipboard.min.js` file
