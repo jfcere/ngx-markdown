@@ -147,14 +147,23 @@ export class MarkdownService {
     this.options = options;
   }
 
-  parse(markdown: string, options: ParseOptions = this.DEFAULT_PARSE_OPTIONS): string {
+  parse(
+    markdown: string,
+    options: ParseOptions = this.DEFAULT_PARSE_OPTIONS,
+    markedOptionsFromComponent?: MarkedOptions,
+  ): string {
     const {
       decodeHtml,
       inline,
       emoji,
       mermaid,
-      markedOptions = this.options,
+      markedOptions: markedOptionsFromService,
     } = options;
+
+    const markedOptions = {
+      ...(markedOptionsFromService ?? {}),
+      ...(markedOptionsFromComponent ?? {}),
+    };
 
     if (mermaid) {
       this.renderer = this.extendRenderer(markedOptions.renderer || new Renderer());

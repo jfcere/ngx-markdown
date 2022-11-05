@@ -37,6 +37,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
 
   @Input() data: string | undefined;
   @Input() src: string | undefined;
+  @Input() enableBasePath: boolean;
 
   @Input()
   get inline(): boolean { return this._inline; }
@@ -109,7 +110,10 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
     public element: ElementRef<HTMLElement>,
     public markdownService: MarkdownService,
     public viewContainerRef: ViewContainerRef,
-  ) { }
+  ) {
+    // default to false...  override by setting [enableBasePath]="true" in HTML element
+    this.enableBasePath = false;
+  }
 
   ngOnChanges(): void {
     this.loadContent();
@@ -161,7 +165,11 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
       mermaidOptions: this.mermaidOptions,
     };
 
-    const parsed = this.markdownService.parse(markdown, parsedOptions);
+    const useBasePath = this.enableBasePath && this.src;
+    const baseUrl = this.src ? new URL(this.src, location.origin).pathname : '';
+    const parsed = useBasePath
+      ? this.markdownService.parse(markdown, parsedOptions)
+      : this.markdownService.parse(markdown, parsedOptions, { baseUrl });
 
     this.element.nativeElement.innerHTML = parsed;
 
