@@ -167,7 +167,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
 
     const useBasePath = this.enableBasePath && this.src;
     const baseUrl = this.src ? new URL(this.src, location.origin).pathname : '';
-    const parsed = useBasePath
+    const parsed = !useBasePath
       ? this.markdownService.parse(markdown, parsedOptions)
       : this.markdownService.parse(markdown, parsedOptions, { baseUrl });
 
