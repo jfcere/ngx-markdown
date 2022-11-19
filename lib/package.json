@@ -27,9 +27,9 @@
     "clipboard.js"
   ],
   "peerDependencies": {
-    "@angular/common": "^14.0.0",
-    "@angular/core": "^14.0.0",
-    "@angular/platform-browser": "^14.0.0",
+    "@angular/common": "^15.0.0",
+    "@angular/core": "^15.0.0",
+    "@angular/platform-browser": "^15.0.0",
     "@types/marked": "^4.0.3",
     "clipboard": "^2.0.11",
     "emoji-toolkit": "^6.6.0",
@@ -38,7 +38,9 @@
     "mermaid": "^9.1.2",
     "prismjs": "^1.28.0",
     "rxjs": "^6.5.3 || ^7.4.0",
-    "tslib": "^2.3.0",
-    "zone.js": "^0.11.4"
+    "zone.js": "~0.12.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
   }
 }
