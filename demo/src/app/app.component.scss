@@ -1,4 +1,4 @@
-@import "~@angular/material/theming";
+@use '@angular/material' as mat;
 
 // variables
 
@@ -24,7 +24,7 @@ $viewport-offset-x: 16px;
 }
 
 .mat-tab-nav-bar--sticky {
-  @include mat-elevation(6);
+  @include mat.elevation(6);
   transition: box-shadow .3s ease-out;
 }
 
@@ -39,6 +39,8 @@ $viewport-offset-x: 16px;
   }
 
   .mat-tab-link {
+    font-size: 14px;
+    font-weight: 500;
     margin: 0 $viewport-offset-x;
     min-width: 0;
     padding: 0;

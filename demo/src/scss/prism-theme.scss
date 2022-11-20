@@ -104,6 +104,7 @@ pre[class*="language-"] {
   color: #C586C0;
 }
 
+.token.variable,
 .token.string,
 .token.char,
 .token.attr-value,
@@ -137,8 +138,13 @@ pre[class*="language-"] {
   cursor: help;
 }
 
-.token.inserted {
-  color: #8fce00;
+/* diff */
+
+.language-diff {
+
+  .token.inserted {
+    color: #8fce00;
+  }
 }
 
 /* Html */
