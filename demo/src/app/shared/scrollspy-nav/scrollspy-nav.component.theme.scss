@@ -1,20 +1,24 @@
-@import '~@angular/material/theming';
+@use 'sass:map';
+@use '@angular/material' as mat;
 
-@mixin scrollspy-nav-component-theme($theme) {
-  $accent: map-get($theme, accent);
-  $foreground: map-get($theme, foreground);
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+
+  $accent-palette: map.get($color-config, 'accent');
+  $accent-color: mat.get-color-from-palette($accent-palette, 'default');
+  $accent-contrast: mat.get-color-from-palette($accent-palette, 'default-contrast');
 
   ul.scrollspy-nav {
 
     li {
-      border-left: 2px solid mat-color($accent);
-      box-shadow: inset 1px 0 0 mat-color($accent);
+      border-left: 2px solid $accent-color;
+      box-shadow: inset 1px 0 0 $accent-color;
 
       &:not(.active) {
-        box-shadow: inset 1px 0 0 mat-color($foreground, text, .21);
+        box-shadow: inset 1px 0 0 rgba($accent-contrast, .21);
 
         a:not(:hover) {
-          color: mat-color($foreground, text);
+          color: $accent-contrast;
         }
       }
     }

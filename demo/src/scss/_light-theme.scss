@@ -1,6 +1,11 @@
-@import "~@angular/material/theming";
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use 'typography' as typography;
 
-$primary: (
+$dark-text: map.get(mat.$light-theme-foreground-palette, text);
+$light-text: map.get(mat.$dark-theme-foreground-palette, text);
+
+$primary-palette: (
   50 : #d6ebff,
   100 : #8ac4ff,
   200 : #52a8ff,
@@ -16,24 +21,33 @@ $primary: (
   A400 : #007fff,
   A700 : #0073e6,
   contrast: (
-    50 : $dark-primary-text,
-    100 : $dark-primary-text,
-    200 : $dark-primary-text,
-    300 : $light-primary-text,
-    400 : $light-primary-text,
-    500 : $light-primary-text,
-    600 : $light-primary-text,
-    700 : $light-primary-text,
-    800 : $light-primary-text,
-    900 : $light-primary-text,
-    A100 : $dark-primary-text,
-    A200 : $dark-primary-text,
-    A400 : $light-primary-text,
-    A700 : $light-primary-text,
+    50 : $dark-text,
+    100 : $dark-text,
+    200 : $dark-text,
+    300 : $light-text,
+    400 : $light-text,
+    500 : $light-text,
+    600 : $light-text,
+    700 : $light-text,
+    800 : $light-text,
+    900 : $light-text,
+    A100 : $dark-text,
+    A200 : $dark-text,
+    A400 : $light-text,
+    A700 : $light-text,
   )
 );
 
-$light-primary: mat-palette($primary);
-$light-accent: mat-palette($primary);
-$light-warn: mat-palette($mat-red);
-$light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
+$light-primary: mat.define-palette($primary-palette);
+$light-accent: mat.define-palette($primary-palette);
+$light-warn: mat.define-palette(mat.$red-palette);
+
+$theme: mat.define-light-theme((
+  color: (
+    primary: $light-primary,
+    accent: $light-accent,
+    warn: $light-warn,
+  ),
+  typography: typography.$mat-typography-config,
+  density: 0,
+));
