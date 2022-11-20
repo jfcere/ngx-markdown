@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ComponentRef, EmbeddedViewRef, SecurityContext, TemplateRef, ViewContainerRef, ViewRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -385,7 +387,7 @@ describe('MarkdowService', () => {
 
       it('should render clipboard with buttonComponent when clipboard is true and buttonComponent is provided', () => {
 
-        class MockButtonComponent { mockButton = true }
+        class MockButtonComponent { mockButton = true; }
 
         const preElement = document.createElement('pre');
         preElement.innerText = 'mock-pre-element-text';

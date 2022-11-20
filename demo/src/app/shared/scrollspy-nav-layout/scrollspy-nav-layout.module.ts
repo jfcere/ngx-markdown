@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MarkdownModule } from 'ngx-markdown';
 
 import { ScrollspyNavModule } from '@shared/scrollspy-nav/scrollspy-nav.module';

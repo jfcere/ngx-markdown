@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 import { ElementRef, NgZone, ViewContainerRef } from '@angular/core';
 import { fakeAsync, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
