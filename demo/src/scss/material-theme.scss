@@ -1,22 +1,27 @@
-@import "~@angular/material/theming";
+@use 'sass:map';
+@use '@angular/material' as mat;
 
-@import "utils";
-@import "light-theme";
-@import "dark-theme";
+@use 'typography' as typography;
+@use 'utils' as utils;
 
-@import "../app/app.component.theme";
-@import "../app/shared/scrollspy-nav/scrollspy-nav.component.theme";
+@use 'light-theme' as light-theme;
+@use 'dark-theme' as dark-theme;
 
-@mixin native-element-theme($theme, $name) {
-  $accent: map-get($theme, accent);
-  $primary: map-get($theme, primary);
-  $foreground: map-get($theme, foreground);
+@use '../app/app.component.theme' as app-component;
+@use '../app/shared/scrollspy-nav/scrollspy-nav.component.theme' as scrollspy-nav-component;
+
+@mixin native-element-theme($theme) {
+  $color-config: mat.get-color-config($theme);
+
+  $primary-palette: map.get($color-config, 'primary');
+  $accent-palette: map.get($color-config, 'accent');
+  $foreground-palette: map.get($color-config, 'foreground');
 
   a,
   a:active,
   a:focus,
   a:visited {
-    color: mat-color($accent, A400);
+    color: mat.get-color-from-palette($accent-palette, A400);
     text-decoration: none;
   }
 
@@ -25,55 +30,66 @@
   }
 
   blockquote {
-    background: mat-color($primary, 300, 0.14);
-    border-left: 4px solid mat-color($accent);
+    background: mat.get-color-from-palette($primary-palette, 300, 0.14);
+    border-left: 4px solid mat.get-color-from-palette($accent-palette, 'default');
     border-radius: 4px;
-    color: soften-color(mat-color($foreground, base), 40%);
+    color: utils.soften-color(mat.get-color-from-palette($foreground-palette, 'base'), 40%);
     margin: 20px 0;
     padding: 1px 20px;
   }
 
   code:not([class*="language-"]) {
-    background: mat-color($foreground, secondary-text, 0.07);
+    background: mat.get-color-from-palette($foreground-palette, 'secondary-text', 0.07);
     border-radius: 3px;
     font-size: 0.94em;
     padding: 0px 6px 2px;
   }
 
   hr {
-    border-color: mat-color($foreground, divider);
+    border-color: mat.get-color-from-palette($foreground-palette, 'divider');
     border-style: solid;
     border-width: 1px 0 0 0;
   }
 
   table {
     th {
-      color: mat-color($foreground, secondary-text);
+      color: mat.get-color-from-palette($foreground-palette, 'secondary-text');
     }
 
     td,
     th {
-      border-bottom-color: mat-color($foreground, divider);
+      border-bottom-color: mat.get-color-from-palette($foreground-palette, 'divider');
     }
   }
 }
 
 @mixin theme($theme, $name) {
   .#{$name}-theme {
-    @include angular-material-theme($theme);
-    @include native-element-theme($theme, $name);
-    @include app-component-theme($theme);
-    @include scrollspy-nav-component-theme($theme);
+    // native elements
+    @include native-element-theme($theme);
+
+    // all components
+    @include mat.all-component-themes($theme);
+
+    // legacy components
+    @include mat.legacy-button-theme($theme);
+    @include mat.legacy-input-theme($theme);
+    @include mat.legacy-form-field-theme($theme);
+
+    // app components
+    @include app-component.theme($theme);
+    @include scrollspy-nav-component.theme($theme);
   }
 }
 
-@mixin material-core() {
-  $font-family: "Google Sans", "Helvetica Neue", sans-serif;
-  $mat-typography: mat-typography-config($font-family);
-  body { font-family: $font-family; }
-  @include mat-core($mat-typography);
+// common theme styling
+body {
+  font-family: typography.$font-family;
 }
 
-@include material-core();
-@include theme($light-theme, 'light');
-@include theme($dark-theme, 'dark');
+// material core
+@include mat.core();
+
+// themes
+@include theme(light-theme.$theme, 'light');
+@include theme(dark-theme.$theme, 'dark');

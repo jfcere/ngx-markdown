@@ -90,7 +90,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input() user: string | undefined;
 
   // Event emitters
-  @Output() error = new EventEmitter<string>();
+  @Output() error = new EventEmitter<string | Error>();
   @Output() load = new EventEmitter<string>();
   @Output() ready = new EventEmitter<void>();
 
@@ -188,7 +188,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
           this.render(markdown);
           this.load.emit(markdown);
         },
-        error: error => this.error.emit(error),
+        error: (error: string | Error) => this.error.emit(error),
       });
   }
 

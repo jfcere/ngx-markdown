@@ -7,9 +7,6 @@
       "marked"
     ]
   },
-  "files": [
-    "test.ts"
-  ],
   "include": [
     "**/*.spec.ts",
     "**/*.d.ts"
