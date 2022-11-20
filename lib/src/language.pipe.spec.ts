@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 import { LanguagePipe } from './language.pipe';
 
 describe('LanguagePipe', () => {
