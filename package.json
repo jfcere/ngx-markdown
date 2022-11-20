@@ -58,7 +58,7 @@
     "@angular/platform-browser-dynamic": "^15.0.0",
     "@angular/router": "^15.0.0",
     "clipboard": "^2.0.11",
-    "emoji-toolkit": "^6.6.0",
+    "emoji-toolkit": "^7.0.0",
     "gumshoejs": "^5.1.2",
     "hammerjs": "~2.0.8",
     "katex": "^0.16.2",
