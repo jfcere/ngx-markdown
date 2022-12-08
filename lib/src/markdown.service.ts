@@ -69,6 +69,7 @@ export interface RenderOptions {
   katexOptions?: KatexOptions;
   mermaid?: boolean;
   mermaidOptions?: MermaidAPI.Config;
+  disableSanitizer?: boolean;
 }
 
 export class ExtendedRenderer extends Renderer {
