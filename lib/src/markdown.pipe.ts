@@ -35,8 +35,6 @@ export class MarkdownPipe implements PipeTransform {
       .pipe(first())
       .subscribe(() => this.markdownService.render(this.elementRef.nativeElement, options, this.viewContainerRef));
 
-    return options?.disableSanitizer
-      ? markdown
-      : this.domSanitizer.bypassSecurityTrustHtml(markdown);
+    return this.domSanitizer.bypassSecurityTrustHtml(markdown);
   }
 }
