@@ -30,6 +30,7 @@ describe('MarkdowService', () => {
   let domSanitizer: DomSanitizer;
   let http: HttpTestingController;
   let markdownService: MarkdownService;
+  let securityContext: SecurityContext;
   let viewContainerRef: ViewContainerRef;
 
   const viewContainerRefSpy = jasmine.createSpyObj<ViewContainerRef>(['createComponent', 'createEmbeddedView']);
@@ -47,18 +48,36 @@ describe('MarkdowService', () => {
 
         domSanitizer = TestBed.inject(DomSanitizer);
         markdownService = TestBed.inject(MarkdownService);
+        securityContext = TestBed.inject(SECURITY_CONTEXT);
       });
 
-      it('should sanitize parsed markdown', () => {
-
-        const securityContext = TestBed.inject(SECURITY_CONTEXT);
+      it('should sanitize parsed markdown when disableSanitizer is ommited/false/null/undefined', () => {
 
         const mockRaw = '### Markdown-x';
-        const sanitized = domSanitizer.sanitize(securityContext, marked.parse(mockRaw));
+        const sanitized = domSanitizer.sanitize(securityContext, marked.parse(mockRaw))!;
         const unsanitized = marked.parse(mockRaw);
 
-        expect(markdownService.parse(mockRaw, { decodeHtml: false })).toBe(sanitized!);
-        expect(markdownService.parse(mockRaw, { decodeHtml: false })).not.toBe(unsanitized);
+        expect(markdownService.parse(mockRaw)).toBe(sanitized);
+        expect(markdownService.parse(mockRaw)).not.toBe(unsanitized);
+
+        expect(markdownService.parse(mockRaw, { disableSanitizer: false })).toBe(sanitized);
+        expect(markdownService.parse(mockRaw, { disableSanitizer: false })).not.toBe(unsanitized);
+
+        expect(markdownService.parse(mockRaw, { disableSanitizer: null! })).toBe(sanitized);
+        expect(markdownService.parse(mockRaw, { disableSanitizer: null! })).not.toBe(unsanitized);
+
+        expect(markdownService.parse(mockRaw, { disableSanitizer: undefined })).toBe(sanitized);
+        expect(markdownService.parse(mockRaw, { disableSanitizer: undefined })).not.toBe(unsanitized);
+      });
+
+      it('should not sanitize parsed markdown when disableSanitizer is true', () => {
+
+        const mockRaw = '### Markdown-x';
+        const sanitized = domSanitizer.sanitize(securityContext, marked.parse(mockRaw))!;
+        const unsanitized = marked.parse(mockRaw);
+
+        expect(markdownService.parse(mockRaw, { disableSanitizer: true })).not.toBe(sanitized);
+        expect(markdownService.parse(mockRaw, { disableSanitizer: true })).toBe(unsanitized);
       });
     });
   });
@@ -77,8 +96,10 @@ describe('MarkdowService', () => {
         ],
       });
 
+      domSanitizer = TestBed.inject(DomSanitizer);
       http = TestBed.inject(HttpTestingController);
       markdownService = TestBed.inject(MarkdownService);
+      securityContext = TestBed.inject(SECURITY_CONTEXT);
       viewContainerRef = TestBed.inject(ViewContainerRef);
     });
 
@@ -185,7 +206,7 @@ describe('MarkdowService', () => {
         expect(markdownService.parse(mockRaw)).toBe(marked.parse(expected));
       });
 
-      it('should decode HTML correctly when decodeHtml is true ', () => {
+      it('should decode HTML correctly when decodeHtml is true', () => {
 
         const mockRaw = '&lt;html&gt;';
         const expected = '<html>';
@@ -317,9 +338,9 @@ describe('MarkdowService', () => {
       it('should not sanitize parsed markdown', () => {
 
         const mockRaw = '### Markdown-x';
-        const expected = marked.parse(mockRaw);
+        const unsanitized = marked.parse(mockRaw);
 
-        expect(markdownService.parse(mockRaw, { decodeHtml: false })).toBe(expected);
+        expect(markdownService.parse(mockRaw, { decodeHtml: false })).toBe(unsanitized);
       });
     });
 

@@ -191,6 +191,7 @@ describe('MarkdownComponent', () => {
       component.inline = true;
       component.emoji = false;
       component.mermaid = false;
+      component.disableSanitizer = true;
       component.render(raw, true);
 
       expect(markdownService.parse).toHaveBeenCalledWith(raw, {
@@ -198,6 +199,7 @@ describe('MarkdownComponent', () => {
         inline: true,
         emoji: false,
         mermaid: false,
+        disableSanitizer: true,
       });
     });
 
@@ -312,6 +314,7 @@ describe('MarkdownComponent', () => {
         inline: false,
         emoji: false,
         mermaid: true,
+        disableSanitizer: false,
       });
 
       expect(markdownService.render).toHaveBeenCalledWith(
