@@ -543,6 +543,25 @@ MarkdownModule.forRoot({
 
 > :blue_book: Follow [Angular DomSanitizer](https://angular.io/api/platform-browser/DomSanitizer#sanitize) documentation for more information on sanitization and security contexts.
 
+You can bypass sanitization using the markdown component, directive or pipe using the `disableSanitizer` option as follow:
+
+```html
+<!-- disable sanitizer using markdown component -->
+<markdown
+  [data]="markdown"
+  [disableSanitizer]="true">
+</markdown>
+
+<!-- disable sanitizer using markdown directive -->
+<div markdown
+  [data]="markdown"
+  [disableSanitizer]="true">
+</div>
+
+<!-- disable sanitizer using markdown pipe -->
+<div [innerHTML]="markdown | markdown : { disableSanitizer: true }"></div>
+```
+
 #### MarkedOptions
 
 Optionally, markdown parsing can be configured by passing [MarkedOptions](https://marked.js.org/#/USING_ADVANCED.md#options) to the `forRoot` method of `MarkdownModule`.
@@ -727,6 +746,7 @@ export interface MarkdownPipeOptions {
   mermaid?: boolean;
   mermaidOptions?: MermaidAPI.Config;
   markedOptions?: MarkedOptions;
+  disableSanitizer?: boolean;
 }
 ```
 
