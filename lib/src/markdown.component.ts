@@ -17,6 +17,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { KatexOptions } from './katex-options';
 import { MarkdownService, ParseOptions, RenderOptions } from './markdown.service';
+import { MarkedOptions } from './marked-options';
 import { MermaidAPI } from './mermaid-options';
 import { PrismPlugin } from './prism-plugin';
 
@@ -37,11 +38,14 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
 
   @Input() data: string | undefined;
   @Input() src: string | undefined;
-  @Input() enableBasePath: boolean;
 
   @Input()
   get inline(): boolean { return this._inline; }
   set inline(value: boolean) { this._inline = this.coerceBooleanProperty(value); }
+
+  @Input()
+  get useBaseUrl(): boolean { return this._useBaseUrl; }
+  set useBaseUrl(value: boolean) { this._useBaseUrl = this.coerceBooleanProperty(value); }
 
   // Plugin - clipboard
   @Input()
@@ -95,14 +99,15 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Output() load = new EventEmitter<string>();
   @Output() ready = new EventEmitter<void>();
 
-  private _commandLine = false;
   private _clipboard = false;
+  private _commandLine = false;
   private _emoji = false;
   private _inline = false;
   private _katex = false;
   private _lineHighlight = false;
   private _lineNumbers = false;
   private _mermaid = false;
+  private _useBaseUrl = false;
 
   private readonly destroyed$ = new Subject<void>();
 
@@ -110,10 +115,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
     public element: ElementRef<HTMLElement>,
     public markdownService: MarkdownService,
     public viewContainerRef: ViewContainerRef,
-  ) {
-    // default to false...  override by setting [enableBasePath]="true" in HTML element
-    this.enableBasePath = false;
-  }
+  ) { }
 
   ngOnChanges(): void {
     this.loadContent();
@@ -146,11 +148,18 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   }
 
   render(markdown: string, decodeHtml = false): void {
+    let markedOptions: MarkedOptions | undefined;
+    if (this.useBaseUrl && this.src) {
+      const baseUrl = new URL(this.src, location.origin).pathname;
+      markedOptions = { baseUrl };
+    }
+
     const parsedOptions: ParseOptions = {
       decodeHtml,
       inline: this.inline,
       emoji: this.emoji,
       mermaid: this.mermaid,
+      markedOptions,
     };
 
     const renderOptions: RenderOptions = {
@@ -165,11 +174,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
       mermaidOptions: this.mermaidOptions,
     };
 
-    const useBasePath = this.enableBasePath && this.src;
-    const baseUrl = this.src ? new URL(this.src, location.origin).pathname : '';
-    const parsed = !useBasePath
-      ? this.markdownService.parse(markdown, parsedOptions)
-      : this.markdownService.parse(markdown, parsedOptions, { baseUrl });
+    const parsed = this.markdownService.parse(markdown, parsedOptions);
 
     this.element.nativeElement.innerHTML = parsed;
 
