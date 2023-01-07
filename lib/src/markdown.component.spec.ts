@@ -198,6 +198,49 @@ describe('MarkdownComponent', () => {
         inline: true,
         emoji: false,
         mermaid: false,
+        markedOptions: undefined,
+      });
+    });
+
+    it('should parse markdown with markedOptions.baseUrl when src is provided and srcRelativeLink is true', () => {
+      const raw = '### Raw';
+
+      spyOn(markdownService, 'parse');
+
+      component.src = './src-example/file.md';
+      component.srcRelativeLink = true;
+      component.inline = true;
+      component.emoji = false;
+      component.mermaid = false;
+      component.render(raw, true);
+
+      expect(markdownService.parse).toHaveBeenCalledWith(raw, {
+        decodeHtml: true,
+        inline: true,
+        emoji: false,
+        mermaid: false,
+        markedOptions: { baseUrl: '/src-example/file.md' },
+      });
+    });
+
+    it('should parse markdown without markedOptions.baseUrl when src is provided and srcRelativeLink is false', () => {
+      const raw = '### Raw';
+
+      spyOn(markdownService, 'parse');
+
+      component.src = './src-example/file.md';
+      component.srcRelativeLink = false;
+      component.inline = true;
+      component.emoji = false;
+      component.mermaid = false;
+      component.render(raw, true);
+
+      expect(markdownService.parse).toHaveBeenCalledWith(raw, {
+        decodeHtml: true,
+        inline: true,
+        emoji: false,
+        mermaid: false,
+        markedOptions: undefined,
       });
     });
 
@@ -312,6 +355,7 @@ describe('MarkdownComponent', () => {
         inline: false,
         emoji: false,
         mermaid: true,
+        markedOptions: undefined,
       });
 
       expect(markdownService.render).toHaveBeenCalledWith(
