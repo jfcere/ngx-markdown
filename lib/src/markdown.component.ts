@@ -44,8 +44,8 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   set inline(value: boolean) { this._inline = this.coerceBooleanProperty(value); }
 
   @Input()
-  get useBaseUrl(): boolean { return this._useBaseUrl; }
-  set useBaseUrl(value: boolean) { this._useBaseUrl = this.coerceBooleanProperty(value); }
+  get srcRelativeLink(): boolean { return this._srcRelativeLink; }
+  set srcRelativeLink(value: boolean) { this._srcRelativeLink = this.coerceBooleanProperty(value); }
 
   // Plugin - clipboard
   @Input()
@@ -107,7 +107,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   private _lineHighlight = false;
   private _lineNumbers = false;
   private _mermaid = false;
-  private _useBaseUrl = false;
+  private _srcRelativeLink = false;
 
   private readonly destroyed$ = new Subject<void>();
 
@@ -149,7 +149,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
 
   render(markdown: string, decodeHtml = false): void {
     let markedOptions: MarkedOptions | undefined;
-    if (this.useBaseUrl && this.src) {
+    if (this.src && this.srcRelativeLink) {
       const baseUrl = new URL(this.src, location.origin).pathname;
       markedOptions = { baseUrl };
     }
