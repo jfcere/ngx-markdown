@@ -9,11 +9,14 @@ jobs:
       # Install chrome via browser tools
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
-      # TEMPORARY TO DEBUG ERROR ON CHECKOUT STEP !!!
+      # Fix CI by removing file added in root directory when installing chromedriver
       - run:
           name: Remove LICENSE.chromedriver file
           command: |
+            echo "Before removing..."
+            ls -ahl
             rm -f LICENSE.chromedriver
+            echo "After removing..."
             ls -ahl
       # Checkout the code from the branch into the working_directory
       - checkout
