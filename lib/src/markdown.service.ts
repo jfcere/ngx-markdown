@@ -60,6 +60,7 @@ export interface ParseOptions {
   emoji?: boolean;
   mermaid?: boolean;
   markedOptions?: MarkedOptions;
+  disableSanitizer?: boolean;
 }
 
 export interface RenderOptions {
@@ -110,6 +111,7 @@ export class MarkdownService {
     emoji: false,
     mermaid: false,
     markedOptions: this.DEFAULT_MARKED_OPTIONS,
+    disableSanitizer: false,
   };
 
   private readonly DEFAULT_RENDER_OPTIONS: RenderOptions = {
@@ -153,6 +155,7 @@ export class MarkdownService {
       inline,
       emoji,
       mermaid,
+      disableSanitizer,
     } = parseOptions;
 
     const markedOptions = {
@@ -168,8 +171,9 @@ export class MarkdownService {
     const decoded = decodeHtml ? this.decodeHtml(trimmed) : trimmed;
     const emojified = emoji ? this.parseEmoji(decoded) : decoded;
     const marked = this.parseMarked(emojified, markedOptions, inline);
+    const sanitized = disableSanitizer ? marked : this.sanitizer.sanitize(this.securityContext, marked);
 
-    return this.sanitizer.sanitize(this.securityContext, marked) || '';
+    return sanitized || '';
   }
 
   render(element: HTMLElement, options: RenderOptions = this.DEFAULT_RENDER_OPTIONS, viewContainerRef?: ViewContainerRef): void {

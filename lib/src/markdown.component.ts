@@ -40,6 +40,10 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input() src: string | undefined;
 
   @Input()
+  get disableSanitizer(): boolean { return this._disableSanitizer; }
+  set disableSanitizer(value: boolean) { this._disableSanitizer = this.coerceBooleanProperty(value); }
+
+  @Input()
   get inline(): boolean { return this._inline; }
   set inline(value: boolean) { this._inline = this.coerceBooleanProperty(value); }
 
@@ -101,6 +105,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
 
   private _clipboard = false;
   private _commandLine = false;
+  private _disableSanitizer = false;
   private _emoji = false;
   private _inline = false;
   private _katex = false;
@@ -160,6 +165,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
       emoji: this.emoji,
       mermaid: this.mermaid,
       markedOptions,
+      disableSanitizer: this.disableSanitizer,
     };
 
     const renderOptions: RenderOptions = {

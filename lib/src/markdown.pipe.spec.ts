@@ -84,7 +84,7 @@ describe('MarkdownPipe', () => {
     const markdown = '# Markdown';
     const mockParsed = 'compiled-x';
     const mockBypassSecurity = 'bypass-x';
-    const mockPipeOptions: MarkdownPipeOptions = { inline: true, emoji: true };
+    const mockPipeOptions: MarkdownPipeOptions = { inline: true, emoji: true, disableSanitizer: true };
 
     spyOn(markdownService, 'parse').and.returnValue(mockParsed);
     spyOn(domSanitizer, 'bypassSecurityTrustHtml').and.returnValue(mockBypassSecurity);

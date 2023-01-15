@@ -191,6 +191,7 @@ describe('MarkdownComponent', () => {
       component.inline = true;
       component.emoji = false;
       component.mermaid = false;
+      component.disableSanitizer = true;
       component.render(raw, true);
 
       expect(markdownService.parse).toHaveBeenCalledWith(raw, {
@@ -199,6 +200,7 @@ describe('MarkdownComponent', () => {
         emoji: false,
         mermaid: false,
         markedOptions: undefined,
+        disableSanitizer: true,
       });
     });
 
@@ -220,6 +222,7 @@ describe('MarkdownComponent', () => {
         emoji: false,
         mermaid: false,
         markedOptions: { baseUrl: '/src-example/file.md' },
+        disableSanitizer: false,
       });
     });
 
@@ -241,6 +244,7 @@ describe('MarkdownComponent', () => {
         emoji: false,
         mermaid: false,
         markedOptions: undefined,
+        disableSanitizer: false,
       });
     });
 
@@ -356,6 +360,7 @@ describe('MarkdownComponent', () => {
         emoji: false,
         mermaid: true,
         markedOptions: undefined,
+        disableSanitizer: false,
       });
 
       expect(markdownService.render).toHaveBeenCalledWith(
