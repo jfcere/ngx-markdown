@@ -9,6 +9,10 @@ jobs:
       # Install chrome via browser tools
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
+      # TEMPORARY TO DEBUG ERROR ON CHECKOUT STEP !!!
+      - run:
+          name: List directory content
+          command: ls home/circleci/project/
       # Checkout the code from the branch into the working_directory
       - checkout
       # Restore dependencies from cache
