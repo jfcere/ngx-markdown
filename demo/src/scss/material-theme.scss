@@ -74,8 +74,10 @@
 
     // legacy components
     @include mat.legacy-button-theme($theme);
-    @include mat.legacy-input-theme($theme);
     @include mat.legacy-form-field-theme($theme);
+    @include mat.legacy-input-theme($theme);
+    @include mat.legacy-snack-bar-theme($theme);
+    @include mat.legacy-tabs-theme($theme);
 
     // app components
     @include app-component.theme($theme);

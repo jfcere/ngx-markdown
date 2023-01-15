@@ -6,18 +6,6 @@
 
   $primary-palette: map.get($color-config, 'primary');
   $primary-color: mat.get-color-from-palette($primary-palette, 'default');
-  $primary-contrast: mat.get-color-from-palette($primary-palette, 'default-contrast');
-
-  a.mat-tab-link,
-  a.mat-tab-link:active,
-  a.mat-tab-link:focus,
-  a.mat-tab-link:visited {
-    color: $primary-contrast;
-  }
-
-  .mat-ink-bar {
-    background-color: $primary-contrast;
-  }
 
   .mat-toolbar.mat-primary {
     background: linear-gradient(90deg, $primary-color 15%, darken($primary-color, 4%) 100%);
