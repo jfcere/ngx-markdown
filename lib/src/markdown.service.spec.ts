@@ -17,8 +17,10 @@ import {
   errorKatexNotLoaded,
   errorMermaidNotLoaded,
   MarkdownService,
+  ParseOptions,
   SECURITY_CONTEXT,
 } from './markdown.service';
+import { MarkedOptions } from './marked-options';
 import { MermaidAPI } from './mermaid-options';
 
 declare let window: any;
@@ -325,6 +327,32 @@ describe('MarkdowService', () => {
 
         useCases.forEach(func => {
           expect(func()).toBe(marked.parse(mockRaw));
+        });
+      });
+
+      it('should provide markedOptions correctly when parsing', () => {
+
+        const mockRaw = '### Markdown-x';
+        const mockMarkedOptions: MarkedOptions = {
+          baseUrl: 'mock-base-url',
+          breaks: true,
+          gfm: false,
+          headerIds: true,
+          smartypants: true,
+        };
+        const parseOptions: ParseOptions = {
+          markedOptions: mockMarkedOptions,
+        };
+
+        const markedParseSpy = spyOn(marked, 'parse');
+
+        markdownService.parse(mockRaw, parseOptions);
+
+        expect(markedParseSpy).toHaveBeenCalled();
+        expect(markedParseSpy.calls.argsFor(0)[0]).toBe(mockRaw);
+        expect(markedParseSpy.calls.argsFor(0)[1]).toEqual({
+          ...markdownService.options,
+          ...mockMarkedOptions,
         });
       });
 

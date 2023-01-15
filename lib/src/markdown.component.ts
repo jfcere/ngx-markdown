@@ -17,6 +17,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { KatexOptions } from './katex-options';
 import { MarkdownService, ParseOptions, RenderOptions } from './markdown.service';
+import { MarkedOptions } from './marked-options';
 import { MermaidAPI } from './mermaid-options';
 import { PrismPlugin } from './prism-plugin';
 
@@ -39,12 +40,16 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input() src: string | undefined;
 
   @Input()
-  get disableSanitizer(): boolean { return this._inline; }
-  set disableSanitizer(value: boolean) { this._inline = this.coerceBooleanProperty(value); }
+  get disableSanitizer(): boolean { return this._disableSanitizer; }
+  set disableSanitizer(value: boolean) { this._disableSanitizer = this.coerceBooleanProperty(value); }
 
   @Input()
   get inline(): boolean { return this._inline; }
   set inline(value: boolean) { this._inline = this.coerceBooleanProperty(value); }
+
+  @Input()
+  get srcRelativeLink(): boolean { return this._srcRelativeLink; }
+  set srcRelativeLink(value: boolean) { this._srcRelativeLink = this.coerceBooleanProperty(value); }
 
   // Plugin - clipboard
   @Input()
@@ -98,14 +103,16 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Output() load = new EventEmitter<string>();
   @Output() ready = new EventEmitter<void>();
 
-  private _commandLine = false;
   private _clipboard = false;
+  private _commandLine = false;
+  private _disableSanitizer = false;
   private _emoji = false;
   private _inline = false;
   private _katex = false;
   private _lineHighlight = false;
   private _lineNumbers = false;
   private _mermaid = false;
+  private _srcRelativeLink = false;
 
   private readonly destroyed$ = new Subject<void>();
 
@@ -146,11 +153,18 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   }
 
   render(markdown: string, decodeHtml = false): void {
+    let markedOptions: MarkedOptions | undefined;
+    if (this.src && this.srcRelativeLink) {
+      const baseUrl = new URL(this.src, location.origin).pathname;
+      markedOptions = { baseUrl };
+    }
+
     const parsedOptions: ParseOptions = {
       decodeHtml,
       inline: this.inline,
       emoji: this.emoji,
       mermaid: this.mermaid,
+      markedOptions,
       disableSanitizer: this.disableSanitizer,
     };
 

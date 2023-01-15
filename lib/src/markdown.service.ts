@@ -79,24 +79,6 @@ export class ExtendedRenderer extends Renderer {
 @Injectable()
 export class MarkdownService {
 
-  private readonly DEFAULT_PARSE_OPTIONS: ParseOptions = {
-    decodeHtml: false,
-    inline: false,
-    emoji: false,
-    mermaid: false,
-    markedOptions: undefined,
-    disableSanitizer: false,
-  };
-
-  private readonly DEFAULT_RENDER_OPTIONS: RenderOptions = {
-    clipboard: false,
-    clipboardOptions: undefined,
-    katex: false,
-    katexOptions: undefined,
-    mermaid: false,
-    mermaidOptions: undefined,
-  };
-
   private readonly DEFAULT_MARKED_OPTIONS: MarkedOptions = {
     renderer: new MarkedRenderer(),
   };
@@ -121,6 +103,24 @@ export class MarkdownService {
 
   private readonly DEFAULT_CLIPBOARD_OPTIONS: ClipboardOptions = {
     buttonComponent: undefined,
+  };
+
+  private readonly DEFAULT_PARSE_OPTIONS: ParseOptions = {
+    decodeHtml: false,
+    inline: false,
+    emoji: false,
+    mermaid: false,
+    markedOptions: this.DEFAULT_MARKED_OPTIONS,
+    disableSanitizer: false,
+  };
+
+  private readonly DEFAULT_RENDER_OPTIONS: RenderOptions = {
+    clipboard: false,
+    clipboardOptions: undefined,
+    katex: false,
+    katexOptions: undefined,
+    mermaid: false,
+    mermaidOptions: undefined,
   };
 
   private _options: MarkedOptions | undefined;
@@ -149,15 +149,19 @@ export class MarkdownService {
     this.options = options;
   }
 
-  parse(markdown: string, options: ParseOptions = this.DEFAULT_PARSE_OPTIONS): string {
+  parse(markdown: string, parseOptions: ParseOptions = this.DEFAULT_PARSE_OPTIONS): string {
     const {
       decodeHtml,
       inline,
       emoji,
       mermaid,
-      markedOptions = this.options,
       disableSanitizer,
-    } = options;
+    } = parseOptions;
+
+    const markedOptions = {
+      ...this.options,
+      ...parseOptions.markedOptions,
+    };
 
     if (mermaid) {
       this.renderer = this.extendRenderer(markedOptions.renderer || new Renderer());
