@@ -11,8 +11,10 @@ jobs:
       - browser-tools/install-chromedriver
       # TEMPORARY TO DEBUG ERROR ON CHECKOUT STEP !!!
       - run:
-          name: List directory content
-          command: pwd && ls -ahl
+          name: Remove LICENSE.chromedriver file
+          command: |
+            rm -f LICENSE.chromedriver
+            ls -ahl
       # Checkout the code from the branch into the working_directory
       - checkout
       # Restore dependencies from cache
