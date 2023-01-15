@@ -12,7 +12,7 @@ jobs:
       # TEMPORARY TO DEBUG ERROR ON CHECKOUT STEP !!!
       - run:
           name: List directory content
-          command: pwd -W && ls -ahl
+          command: pwd && ls -ahl
       # Checkout the code from the branch into the working_directory
       - checkout
       # Restore dependencies from cache
