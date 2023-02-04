@@ -287,13 +287,9 @@ export class MarkdownService {
   }
 
   private parseMarked(html: string, markedOptions: MarkedOptions, inline = false): string {
-    if (!isPlatformBrowser(this.platform)) {
-      return html;
-    }
-    if (inline) {
-      return marked.parseInline(html, markedOptions);
-    }
-    return marked.parse(html, markedOptions);
+    return inline
+      ? marked.parseInline(html, markedOptions)
+      : marked.parse(html, markedOptions);
   }
 
   private parseEmoji(html: string): string {

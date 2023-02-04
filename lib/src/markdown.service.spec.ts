@@ -230,7 +230,7 @@ describe('MarkdowService', () => {
       it('should not decode HTML when platform is not browser as it uses `document`', () => {
 
         const mockRaw = '&lt;html&gt;';
-        const expected = '&lt;html&gt;';
+        const expected = '<p>&lt;html&gt;</p>\n';
 
         markdownService['platform'] = 'server';
 
@@ -296,15 +296,21 @@ describe('MarkdowService', () => {
         expect(joypixels.shortnameToUnicode).not.toHaveBeenCalled();
       });
 
-      it('should not parse markdown when platform is not browser', () => {
+      it('should parse markdown when platform is either browser/server to allow server-side rendering', () => {
 
         const mockRaw = '### Markdown-x';
-        const expected = mockRaw;
 
-        markdownService['platform'] = 'server';
+        const useCases = [
+          'browser',
+          'server',
+        ];
 
-        expect(() => markdownService.parse(mockRaw)).not.toThrowError();
-        expect(markdownService.parse(mockRaw)).toBe(expected);
+        useCases.forEach(platform => {
+          markdownService['platform'] = platform;
+
+          expect(() => markdownService.parse(mockRaw)).not.toThrowError();
+          expect(markdownService.parse(mockRaw)).toBe(marked.parse(mockRaw));
+        });
       });
 
       it('should return inline parsed markdown when inline is true', () => {
