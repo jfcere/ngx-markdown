@@ -4,6 +4,8 @@ import { Route, Router, RouterOutlet } from '@angular/router';
 
 import { AnchorService } from '@shared/anchor/anchor.service';
 import { ROUTE_ANIMATION } from './app.animation';
+import { DEFAULT_THEME, LOCAL_STORAGE_THEME_KEY } from './app.constant';
+import { isTheme, Theme } from './app.models';
 
 @Component({
   animations: [ROUTE_ANIMATION],
@@ -17,7 +19,7 @@ export class AppComponent implements OnInit {
   private readonly stickyClassName = 'mat-tab-nav-bar--sticky';
 
   routes: Route[];
-  theme = 'light';
+  theme = DEFAULT_THEME;
 
   @ViewChild('tabHeader', { read: ElementRef, static: true })
   tabHeader: ElementRef | undefined;
@@ -53,14 +55,19 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.setTheme(localStorage.getItem('theme') || 'light');
+    const storedTheme = localStorage.getItem(LOCAL_STORAGE_THEME_KEY);
+    this.setTheme(
+      isTheme(storedTheme)
+        ? storedTheme
+        : DEFAULT_THEME,
+    );
   }
 
   handleFragment(): void {
     this.anchorService.scrollToAnchor();
   }
 
-  setTheme(theme: string): void {
+  setTheme(theme: Theme): void {
     this.theme = theme;
     const bodyClassList = this.document.querySelector('body')!.classList;
     const removeClassList = /\w*-theme\b/.exec(bodyClassList.value);
@@ -68,7 +75,7 @@ export class AppComponent implements OnInit {
       bodyClassList.remove(...removeClassList);
     }
     bodyClassList.add(`${this.theme}-theme`);
-    localStorage.setItem('theme', this.theme);
+    localStorage.setItem(LOCAL_STORAGE_THEME_KEY, this.theme);
   }
 
   getRouteAnimation(outlet: RouterOutlet): string {
@@ -78,6 +85,10 @@ export class AppComponent implements OnInit {
   }
 
   toggleTheme(): void {
-    this.setTheme(this.theme === 'light' ? 'dark' : 'light');
+    this.setTheme(
+      this.theme === Theme.Light
+        ? Theme.Dark
+        : Theme.Light,
+    );
   }
 }
