@@ -36,8 +36,8 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   protected static ngAcceptInputType_lineNumbers: boolean | '';
   protected static ngAcceptInputType_commandLine: boolean | '';
 
-  @Input() data: string | undefined;
-  @Input() src: string | undefined;
+  @Input() data: string | null | undefined;
+  @Input() src: string | null | undefined;
 
   @Input()
   get disableSanitizer(): boolean { return this._disableSanitizer; }
