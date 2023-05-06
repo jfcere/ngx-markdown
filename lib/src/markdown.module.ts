@@ -25,15 +25,10 @@ const sharedDeclarations = [
   MarkdownPipe,
 ];
 
-const sharedEntryComponents = [
-  ClipboardButtonComponent,
-];
-
 @NgModule({
   imports: [CommonModule],
   exports: sharedDeclarations,
   declarations: sharedDeclarations,
-  entryComponents: sharedEntryComponents,
 })
 export class MarkdownModule {
   static forRoot(markdownModuleConfig?: MarkdownModuleConfig): ModuleWithProviders<MarkdownModule> {

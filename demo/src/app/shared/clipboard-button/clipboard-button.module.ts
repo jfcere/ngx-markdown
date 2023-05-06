@@ -10,6 +10,5 @@ import { ClipboardButtonComponent } from './clipboard-button.component';
     MatSnackBarModule,
   ],
   declarations: [ClipboardButtonComponent],
-  entryComponents: [ClipboardButtonComponent],
 })
 export class ClipboardButtonModule { }
