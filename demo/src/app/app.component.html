@@ -14,16 +14,18 @@
   </mat-toolbar-row>
 </mat-toolbar>
 
-<nav mat-tab-nav-bar backgroundColor="primary" disableRipple #tabHeader>
-  <a mat-tab-link fxLayout="row" fxLayoutGap="8px" *ngFor="let route of routes" #tabLink="routerLinkActive"
+<nav mat-tab-nav-bar [tabPanel]="tabPanel" mat-stretch-tabs="false" backgroundColor="primary" disableRipple fitInkBarToContent #tabHeader>
+  <a mat-tab-link *ngFor="let route of routes" #tabLink="routerLinkActive"
     [active]="tabLink.isActive"
     [routerLink]="route.path"
     routerLinkActive>
-    <img src="assets/icon-{{route.path}}.svg">
-    <span>{{ route.data?.['label'] }}</span>
+    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+      <img src="assets/icon-{{route.path}}.svg">
+      <span>{{ route.data?.['label'] }}</span>
+    </div>
   </a>
 </nav>
 
-<div class="outlet-wrapper" [@routeAnimation]="getRouteAnimation(outlet)" (@routeAnimation.Done)="handleFragment()">
+<mat-tab-nav-panel class="outlet-wrapper" [@routeAnimation]="getRouteAnimation(outlet)" (@routeAnimation.Done)="handleFragment()" #tabPanel>
   <router-outlet #outlet="outlet"></router-outlet>
-</div>
+</mat-tab-nav-panel>

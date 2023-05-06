@@ -8,13 +8,6 @@
   }
 }
 
-.mat-fab,
-.mat-mini-fab {
-  img {
-    margin-bottom: 2px;
-  }
-}
-
 .sticky {
   position: sticky;
   top: 80px;
@@ -27,5 +20,9 @@
     position: fixed;
     bottom: 16px;
     right: 16px;
+  }
+
+  img {
+    display: flex;
   }
 }

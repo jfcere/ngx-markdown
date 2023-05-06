@@ -23,54 +23,58 @@ $viewport-offset-x: 16px;
   display: block;
 }
 
-.mat-tab-nav-bar--sticky {
+.mat-mdc-tab-nav-bar--sticky {
   @include mat.elevation(6);
   transition: box-shadow .3s ease-out;
 }
 
-.mat-tab-nav-bar ::ng-deep {
+.mat-mdc-tab-nav-bar ::ng-deep {
   position: sticky;
   top: 0;
   z-index: 24;
 
-  .mat-ink-bar {
+  .mdc-tab-indicator__content--underline {
     border-radius: 3px 3px 0 0;
-    height: 3px;
+    border-top-width: 3px;
+    transition-duration: 500ms;
   }
 
-  .mat-tab-link {
+  .mat-mdc-tab-link {
     font-size: 14px;
     font-weight: 500;
+    letter-spacing: normal;
     margin: 0 $viewport-offset-x;
     min-width: 0;
+    opacity: 0.6;
     padding: 0;
     text-decoration: none;
     transition: all 0.2s ease-out;
   }
 
-  .mat-tab-link:not(.mat-tab-label-active):hover {
+  .mat-mdc-tab-link:not(.mdc-tab--active):hover {
     transform: translateY(-1px);
   }
 
-  .mat-tab-link:hover,
-  .mat-tab-label-active {
+  .mat-mdc-tab-link:hover,
+  .mdc-tab--active {
     opacity: 1;
   }
 
-  .mat-tab-link-container {
+  .mat-mdc-tab-link-container {
     @include viewport-width($padding: false);
-  }
-
-  // start - workaround for responsive tabs
-  .mat-tab-header-pagination {
-    display: none !important;
-  }
-
-  .mat-tab-link-container {
     overflow: auto;
   }
 
-  .mat-tab-list {
+  .mdc-tab__ripple {
+    opacity: 0;
+  }
+
+  // start - workaround for responsive tabs
+  .mat-mdc-tab-header-pagination {
+    display: none !important;
+  }
+
+  .mat-mdc-tab-list {
     transform: unset !important;
   }
   // end - workaround
@@ -93,6 +97,7 @@ $viewport-offset-x: 16px;
 
 .outlet-wrapper {
   @include viewport-width();
+  display: block;
   margin-top: $viewport-offset-x;
   margin-bottom: $viewport-offset-x;
   position: relative;
