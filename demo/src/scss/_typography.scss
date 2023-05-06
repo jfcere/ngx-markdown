@@ -1,5 +1,9 @@
 @use '@angular/material' as mat;
 
 $font-family: "Google Sans", "Helvetica Neue", sans-serif;
+$body-1: mat.define-typography-level($font-size: 15px);
 
-$mat-typography-config: mat.define-typography-config($font-family);
+$mat-typography-config: mat.define-typography-config(
+  $font-family,
+  $body-1,
+);

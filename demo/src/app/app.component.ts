@@ -16,13 +16,13 @@ import { isTheme, Theme } from './app.models';
 })
 export class AppComponent implements OnInit {
 
-  private readonly stickyClassName = 'mat-tab-nav-bar--sticky';
+  private readonly stickyClassName = 'mat-mdc-tab-nav-bar--sticky';
 
   routes: Route[];
   theme = DEFAULT_THEME;
 
   @ViewChild('tabHeader', { read: ElementRef, static: true })
-  tabHeader: ElementRef | undefined;
+  tabHeader: ElementRef<HTMLElement> | undefined;
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event): void {
@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
     if (this.tabHeader == null) {
       return;
     }
-    const tabHeader = this.tabHeader.nativeElement as HTMLElement;
+    const tabHeader = this.tabHeader.nativeElement;
     const tabHeaderOffset = Math.ceil(tabHeader.offsetTop);
     const windowOffset = Math.ceil(window.pageYOffset);
     const hasStickyClass = tabHeader.classList.contains(this.stickyClassName);
