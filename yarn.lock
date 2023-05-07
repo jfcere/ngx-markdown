@@ -7879,7 +7879,7 @@ ng-packagr@^16.0.0:
     esbuild "^0.17.0"
 
 "ngx-markdown@file:lib":
-  version "16.0.0-beta.0"
+  version "16.0.0"
   dependencies:
     tslib "^2.3.0"
   optionalDependencies:
