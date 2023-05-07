@@ -1,6 +1,6 @@
 {
   "name": "ngx-markdown",
-  "version": "15.1.2",
+  "version": "16.0.0-beta.0",
   "description": "Angular library that uses marked to parse markdown to html combined with Prism.js for synthax highlights",
   "homepage": "https://github.com/jfcere/ngx-markdown",
   "license": "MIT",
@@ -30,13 +30,13 @@
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/common": "^15.0.0",
-    "@angular/core": "^15.0.0",
-    "@angular/platform-browser": "^15.0.0",
-    "@types/marked": "^4.0.3",
-    "marked": "^4.0.17",
+    "@angular/common": "^16.0.0",
+    "@angular/core": "^16.0.0",
+    "@angular/platform-browser": "^16.0.0",
+    "@types/marked": "^4.3.0",
+    "marked": "^4.3.0",
     "rxjs": "^6.5.3 || ^7.4.0",
-    "zone.js": "~0.11.4 || ~0.12.0 || ~0.13.0"
+    "zone.js": "~0.13.0"
   },
   "optionalDependencies": {
     "clipboard": "^2.0.11",
@@ -44,5 +44,6 @@
     "katex": "^0.16.0",
     "mermaid": "^9.1.2",
     "prismjs": "^1.28.0"
-  }
+  },
+  "sideEffects": false
 }

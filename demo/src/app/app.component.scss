@@ -23,6 +23,13 @@ $viewport-offset-x: 16px;
   display: block;
 }
 
+.github-icon {
+  --mdc-icon-button-icon-size: 28px;
+  position: relative;
+  top: -2px;
+  left: -2px;
+}
+
 .mat-mdc-tab-nav-bar--sticky {
   @include mat.elevation(6);
   transition: box-shadow .3s ease-out;

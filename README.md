@@ -54,8 +54,8 @@ StackBlitz available @ [https://stackblitz.com/edit/ngx-markdown](https://stackb
 To add ngx-markdown library to your `package.json` use the following commands.
 
 ```bash
-npm install ngx-markdown marked --save
-npm install @types/marked --save-dev
+npm install ngx-markdown marked@^4.3.0 --save
+npm install @types/marked@^4.3.0 --save-dev
 ```
 
 As the library is using [Marked](https://github.com/chjj/marked) parser you will need to add `node_modules/marked/marked.min.js` to your application.
@@ -75,7 +75,7 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 To add [Prism.js](http://prismjs.com/) library to your `package.json` use the following command.
 
 ```bash
-npm install prismjs --save
+npm install prismjs@^1.28.0 --save
 ```
 
 To activate [Prism.js](http://prismjs.com/) syntax highlight you will need to include...
@@ -241,7 +241,7 @@ Optionally, to automatically present some lines as output without providing the 
 To add [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) library to your `package.json` use the following command.
 
 ```bash
-npm install emoji-toolkit --save
+npm install emoji-toolkit@^7.0.0 --save
 ```
 
 To activate [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) for emoji suppport you will need to include...
@@ -275,7 +275,7 @@ Using `markdown` component and/or directive, you will be able to use the `emoji`
 To add [KaTeX](https://katex.org/) library to your `package.json` use the following command.
 
 ```bash
-npm install katex --save
+npm install katex@^0.16.0 --save
 ```
 
 To activate [KaTeX](https://katex.org/) math rendering you will need to include...
@@ -339,7 +339,7 @@ public options: KatexOptions = {
 To add [Mermaid](https://mermaid-js.github.io/) library to your `package.json` use the following command.
 
 ```bash
-npm install mermaid --save
+npm install mermaid@^9.1.2 --save
 ```
 
 To activate [Mermaid](https://mermaid-js.github.io/) diagramming and charting tool you will need to include...
@@ -395,7 +395,7 @@ public options: MermaidAPI.Config = {
 To add [Clipboard](https://clipboardjs.com/) library to your `package.json` use the following command.
 
 ```bash
-npm install clipboard --save
+npm install clipboard@^2.0.11 --save
 ```
 
 To activate [Clipboard](https://clipboardjs.com/) allowing copy-to-clipboard you will need to include...
