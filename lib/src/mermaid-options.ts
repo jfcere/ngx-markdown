@@ -312,6 +312,10 @@ export namespace MermaidAPI {
      */
     gantt?: GanttConfig | undefined;
 
+    /** To supress mermaid warning**/
+
+    suppressErrors?:false;
+
     journey?: any; // [todo]
 
     class?: any; // [todo]
