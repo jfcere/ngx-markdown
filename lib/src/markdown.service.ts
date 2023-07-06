@@ -35,6 +35,7 @@ declare function renderMathInElement(elem: HTMLElement, options?: KatexOptions):
 declare let mermaid: {
   initialize: (options: MermaidAPI.Config) => void;
   init: (nodes: string | Node | NodeList) => void;
+  run:(runOption:MermaidAPI.Config["runOptions"]) =>void;
   parse: (text: string) => string;
 };
 
@@ -97,10 +98,15 @@ export class MarkdownService {
     ],
   };
 
-  private readonly DEFAULT_MERMAID_OPTIONS: MermaidAPI.Config = {
-    startOnLoad: false,
+
+ private readonly DEFAULT_RUNOPTIONS_OPTIONS: MermaidAPI.RunOptions = {
+    suppressErrors:true
   };
 
+  private readonly DEFAULT_MERMAID_OPTIONS: MermaidAPI.Config = {
+    startOnLoad: false,
+    runOptions:this.DEFAULT_RUNOPTIONS_OPTIONS
+  };
   private readonly DEFAULT_CLIPBOARD_OPTIONS: ClipboardOptions = {
     buttonComponent: undefined,
   };
@@ -398,7 +404,8 @@ export class MarkdownService {
       return;
     }
     mermaid.initialize(options);
-    mermaid.init(mermaidElements);
+
+    mermaid.run(options.runOptions);
   }
 
   private trimIndentation(markdown: string): string {

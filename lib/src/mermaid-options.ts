@@ -1,5 +1,6 @@
 /* eslint-disable */
 export namespace MermaidAPI {
+
   export enum SecurityLevel {
     /**
      * (default) tags in text are encoded, click functionality is disabled
@@ -247,6 +248,25 @@ export namespace MermaidAPI {
     axisFormat?: string | undefined;
   }
 
+  export interface RunOptions {
+    /**
+     * The query selector to use when finding elements to render. Default: `".mermaid"`.
+     */
+    querySelector?: string;
+    /**
+     * The nodes to render. If this is set, `querySelector` will be ignored.
+     */
+    nodes?: ArrayLike<HTMLElement>;
+    /**
+     * A callback to call after each diagram is rendered.
+     */
+    postRenderCallback?: (id: string) => unknown;
+    /**
+     * If `true`, errors will be logged to the console, but not thrown. Default: `false`
+     */
+    suppressErrors?: boolean;
+  }
+
   export interface Config {
     /**
      * ### securityLevel
@@ -314,7 +334,6 @@ export namespace MermaidAPI {
 
     /** To supress mermaid warning**/
 
-    suppressErrors?:false;
 
     journey?: any; // [todo]
 
@@ -327,5 +346,6 @@ export namespace MermaidAPI {
     pie?: any; // [todo]
 
     requirement?: any; // [todo]
+    runOptions?:RunOptions | undefined;
   }
 }
