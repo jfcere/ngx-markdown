@@ -5,18 +5,18 @@ import { MarkdownModule } from 'ngx-markdown';
 
 import { ScrollspyNavLayoutModule } from '@shared/scrollspy-nav-layout/scrollspy-nav-layout.module';
 import { SharedModule } from '@shared/shared.module';
-import { BindingsRoutingModule } from './bindings-routing.module';
-import { BindingsComponent } from './bindings.component';
+import { AuthenticationRoutingModule } from './authentication-routing.module';
+import { AuthenticationComponent } from './authentication.component';
 
 @NgModule({
   imports: [
-    BindingsRoutingModule,
+    AuthenticationRoutingModule,
     FormsModule,
     MarkdownModule.forChild(),
     MatInputModule,
     ScrollspyNavLayoutModule,
     SharedModule,
   ],
-  declarations: [BindingsComponent],
+  declarations: [AuthenticationComponent],
 })
-export class BindingsModule { }
+export class AuthenticationModule { }

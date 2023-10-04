@@ -2,11 +2,11 @@ import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular
 
 @Component({
   selector: 'app-bindings',
-  templateUrl: './bindings.component.html',
-  styleUrls: ['./bindings.component.scss'],
+  templateUrl: './authentication.component.html',
+  styleUrls: ['./authentication.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BindingsComponent implements OnInit {
+export class AuthenticationComponent implements OnInit {
 
   // remote url
   demoPython = require('raw-loader!./remote/demo.py').default;
