@@ -29,6 +29,7 @@
   "scripts": {
     "ng": "ng",
     "start": "yarn link:lib && ng serve",
+    "build": "ng build --configuration production",
     "build:demo": "ng build demo --configuration production",
     "build:lib": "ng build lib --configuration production",
     "postbuild:lib": "cpy ./README.md ./dist/lib && cpy ./LICENSE ./dist/lib",
