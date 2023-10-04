@@ -5,18 +5,18 @@ import { MarkdownModule } from 'ngx-markdown';
 
 import { ScrollspyNavLayoutModule } from '@shared/scrollspy-nav-layout/scrollspy-nav-layout.module';
 import { SharedModule } from '@shared/shared.module';
-import { RerenderRoutingModule } from './rerender-routing.module';
-import { RerenderComponent } from './rerender.component';
+import { IdentificationRoutingModule } from './identification-routing.module';
+import { IdentificationComponent } from './identification.component';
 
 @NgModule({
   imports: [
     FormsModule,
     MarkdownModule.forChild(),
     MatInputModule,
-    RerenderRoutingModule,
+    IdentificationRoutingModule,
     ScrollspyNavLayoutModule,
     SharedModule,
   ],
-  declarations: [RerenderComponent],
+  declarations: [IdentificationComponent],
 })
-export class RerenderModule { }
+export class IdentificationModule { }

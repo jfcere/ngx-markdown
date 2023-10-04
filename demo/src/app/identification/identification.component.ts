@@ -3,11 +3,11 @@ import { MarkdownService, MarkedRenderer } from 'ngx-markdown';
 
 @Component({
   selector: 'app-rerender',
-  templateUrl: './rerender.component.html',
-  styleUrls: ['./rerender.component.scss'],
+  templateUrl: './identification.component.html',
+  styleUrls: ['./identification.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RerenderComponent implements OnInit, OnDestroy {
+export class IdentificationComponent implements OnInit, OnDestroy {
 
   private _accentColor = '';
 

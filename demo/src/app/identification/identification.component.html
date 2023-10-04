@@ -1,7 +1,12 @@
 <app-scrollspy-nav-layout [headings]="headings">
-  <h1>Re-render</h1>
+  <h1>Identification</h1>
 
-  <markdown ngPreserveWhitespaces>
+  <section>
+    <h2 id="identification"></h2>
+    <markdown emoji src="https://raw.githubusercontent.com/khushi-1305/docus-docs-starter/main/markdown/0.identification.md"></markdown>
+  </section>
+
+  <!-- <markdown ngPreserveWhitespaces>
     In some situations, you might need to re-render markdown after making changes. If you've updated the text this would be done automatically, however if the changes are internal to the library such as rendering options, you will need to inform the `MarkdownService` that it needs to update.
 
     To do so, inject the `MarkdownService` and call the `reload()` function as shown below.
@@ -44,5 +49,5 @@
         <markdown [data]="markdown" fxFlex.gt-sm="calc(50% - 8px)"></markdown>
       </div>
     </section>
-  </section>
+  </section> -->
 </app-scrollspy-nav-layout>

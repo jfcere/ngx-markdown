@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { RerenderComponent } from './rerender.component';
+import { IdentificationComponent } from './identification.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: RerenderComponent,
+    component: IdentificationComponent,
   },
 ];
 
@@ -14,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class RerenderRoutingModule { }
+export class IdentificationRoutingModule { }
