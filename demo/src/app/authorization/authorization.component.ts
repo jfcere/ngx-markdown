@@ -6,14 +6,14 @@ import { ClipboardButtonComponent } from '@shared/clipboard-button';
 
 @Component({
   selector: 'app-plugins',
-  templateUrl: './plugins.component.html',
-  styleUrls: ['./plugins.component.scss'],
+  templateUrl: './authorization.component.html',
+  styleUrls: ['./authorization.component.scss'],
   providers: [
     { provide: ClipboardOptions, useValue: {} },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PluginsComponent implements OnInit {
+export class AuthorizationComponent implements OnInit {
 
   readonly clipboardButton = ClipboardButtonComponent;
 

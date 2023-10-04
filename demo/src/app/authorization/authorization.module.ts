@@ -7,8 +7,8 @@ import { MarkdownModule } from 'ngx-markdown';
 import { ClipboardButtonModule } from '@shared/clipboard-button';
 import { ScrollspyNavLayoutModule } from '@shared/scrollspy-nav-layout/scrollspy-nav-layout.module';
 import { SharedModule } from '@shared/shared.module';
-import { PluginsRoutingModule } from './plugins-routing.module';
-import { PluginsComponent } from './plugins.component';
+import { AuthorizationRoutingModule } from './authorization-routing.module';
+import { AuthorizationComponent } from './authorization.component';
 
 @NgModule({
   imports: [
@@ -17,10 +17,10 @@ import { PluginsComponent } from './plugins.component';
     MarkdownModule.forChild(),
     MatInputModule,
     MatSnackBarModule,
-    PluginsRoutingModule,
+    AuthorizationRoutingModule,
     ScrollspyNavLayoutModule,
     SharedModule,
   ],
-  declarations: [PluginsComponent],
+  declarations: [AuthorizationComponent],
 })
-export class PluginsModule { }
+export class AuthorizationModule { }
