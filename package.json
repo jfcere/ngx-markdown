@@ -1,7 +1,7 @@
 {
-  "name": "ngx-markdown",
+  "name": "simpledocs",
   "version": "16.0.0",
-  "description": "Angular library that uses marked to parse markdown to html combined with Prism.js for synthax highlights",
+  "description": "Angular library that uses marked to parse markdown to html combined with Prism.js for syntax highlights",
   "homepage": "https://github.com/simptel/docs.simptel.com",
   "license": "MIT",
   "author": {
