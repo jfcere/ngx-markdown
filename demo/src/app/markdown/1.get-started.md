@@ -1,3 +1,0 @@
-# Pre-requisits
-
-The beginning of an awesome article...

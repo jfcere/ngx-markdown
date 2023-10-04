@@ -26,10 +26,7 @@
             "tsConfig": "demo/tsconfig.app.json",
             "assets": [
               "demo/src/favicon.ico",
-              "demo/src/assets",
-              "demo/src/app/bindings/remote",
-              "demo/src/app/syntax-highlight/remote",
-              "demo/src/app/plugins/remote"
+              "demo/src/assets"
             ],
             "styles": [
               "demo/src/styles.scss",
