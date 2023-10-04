@@ -68,6 +68,7 @@
     "prismjs": "^1.29.0",
     "rxjs": "~6.5.3",
     "tslib": "^2.3.0",
+    "yarn": "^1.22.19",
     "zone.js": "~0.13.0"
   },
   "devDependencies": {
