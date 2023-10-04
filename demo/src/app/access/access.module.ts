@@ -3,16 +3,16 @@ import { MarkdownModule } from 'ngx-markdown';
 
 import { ScrollspyNavLayoutModule } from '@shared/scrollspy-nav-layout/scrollspy-nav-layout.module';
 import { SharedModule } from '@shared/shared.module';
-import { SyntaxHighlightRoutingModule } from './syntax-highlight-routing.module';
-import { SyntaxHighlightComponent } from './syntax-highlight.component';
+import { AccessRoutingModule } from './access-routing.module';
+import { AccessComponent } from './access.component';
 
 @NgModule({
   imports: [
     MarkdownModule.forChild(),
     ScrollspyNavLayoutModule,
     SharedModule,
-    SyntaxHighlightRoutingModule,
+    AccessRoutingModule,
   ],
-  declarations: [SyntaxHighlightComponent],
+  declarations: [AccessComponent],
 })
-export class SyntaxHighlightModule { }
+export class AccessModule { }

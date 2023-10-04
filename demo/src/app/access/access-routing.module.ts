@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { SyntaxHighlightComponent } from './syntax-highlight.component';
+import { AccessComponent } from './access.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: SyntaxHighlightComponent,
+    component: AccessComponent,
   },
 ];
 
@@ -14,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class SyntaxHighlightRoutingModule { }
+export class AccessRoutingModule { }

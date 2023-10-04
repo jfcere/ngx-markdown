@@ -2,11 +2,11 @@ import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular
 
 @Component({
   selector: 'app-syntax-highlight',
-  templateUrl: './syntax-highlight.component.html',
-  styleUrls: ['./syntax-highlight.component.scss'],
+  templateUrl: './access.component.html',
+  styleUrls: ['./access.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SyntaxHighlightComponent implements OnInit {
+export class AccessComponent implements OnInit {
 
   headings: Element[] | undefined;
 
