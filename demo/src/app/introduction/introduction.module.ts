@@ -3,16 +3,16 @@ import { MarkdownModule } from 'ngx-markdown';
 
 import { ScrollspyNavLayoutModule } from '@shared/scrollspy-nav-layout/scrollspy-nav-layout.module';
 import { SharedModule } from '@shared/shared.module';
-import { CheatSheetRoutingModule } from './cheat-sheet-routing.module';
-import { CheatSheetComponent } from './cheat-sheet.component';
+import { IntroductionRoutingModule } from './introduction-routing.module';
+import { IntroductionComponent } from './introduction.component';
 
 @NgModule({
   imports: [
-    CheatSheetRoutingModule,
+    IntroductionRoutingModule,
     MarkdownModule.forChild(),
     ScrollspyNavLayoutModule,
     SharedModule,
   ],
-  declarations: [CheatSheetComponent],
+  declarations: [IntroductionComponent],
 })
-export class CheatSheetModule { }
+export class IntroductionModule { }

@@ -2,11 +2,11 @@ import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular
 
 @Component({
   selector: 'app-cheat-sheet',
-  templateUrl: './cheat-sheet.component.html',
-  styleUrls: ['./cheat-sheet.component.scss'],
+  templateUrl: './introduction.component.html',
+  styleUrls: ['./introduction.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CheatSheetComponent implements OnInit {
+export class IntroductionComponent implements OnInit {
 
   blockquotes = require('raw-loader!./markdown/blockquotes.md').default;
   codeAndSynthaxHighlighting = require('raw-loader!./markdown/code-and-synthax-highlighting.md').default;
