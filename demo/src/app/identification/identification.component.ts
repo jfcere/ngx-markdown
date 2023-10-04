@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit } fro
 import { MarkdownService, MarkedRenderer } from 'ngx-markdown';
 
 @Component({
-  selector: 'app-rerender',
+  selector: 'app-identification',
   templateUrl: './identification.component.html',
   styleUrls: ['./identification.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

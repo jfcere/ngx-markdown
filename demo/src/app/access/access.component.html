@@ -1,76 +1,9 @@
 <app-scrollspy-nav-layout [headings]="headings">
   <h1 id="getting-started">Access</h1>
+
   <section>
-    <h2 id="auto-detect"></h2>
-    <markdown emoji src="https://raw.githubusercontent.com/khushi-1305/docus-docs-starter/main/markdown/0.access.md"></markdown>
+    <h2 id="access"></h2>
+    <markdown emoji src="https://raw.githubusercontent.com/khushi-1305/ngx-markdown/master/demo/src/app/markdown/4.access.md"></markdown>
   </section>
-  
-  <!-- <section>
-    <h2 id="auto-detect">Auto-Detect</h2>
 
-    <markdown ngPreserveWhitespaces>
-      When using the `src` input property to load file remotely, language for syntax highlight will be auto-detected based on the loaded file extension.
-
-      The following example...
-
-      ```html
-      &lt;markdown [src]="'app/syntax-highlight/remote/for-loop.js'">&lt;/markdown>
-      ```
-
-      Would render with Javascript syntax highlight based on the `js` file extension.
-    </markdown>
-
-    <markdown [src]="'app/syntax-highlight/remote/for-loop.js'"></markdown>
-  </section> -->
-
-  <!-- <section>
-    <h2 id="interpolation">Interpolation</h2>
-
-    <markdown emoji ngPreserveWhitespaces>
-      > :bulb: Using interpolation requires the uses of `ngPreserveWhitespaces` to keep indentation and spaces untouched during compilation.
-
-      When using [interpolation](https://angular.io/guide/template-syntax#interpolation-), the language for code block must be specified after the first three backticks.
-
-      ````html
-      &lt;markdown ngPreserveWhitespaces>
-        ```typescript
-        export function greetings(name: string): string &amp;#123;
-          return 'Hello ' + name;
-        }
-        ```
-      &lt;/markdown>
-      ````
-      ##### _* Characters such as `&lt;, >, &#123;, }` directly written in the HTML template file must be escaped so that the compiler doesn't try to bind it as regular Angular code_.
-
-      Would render with TypeScript syntax highlight based on the specified `typescript` language.
-    </markdown>
-
-    <markdown ngPreserveWhitespaces>
-      ```typescript
-      export function greetings(name: string): string &#123;
-        return 'Hello ' + name;
-      }
-      ```
-    </markdown>
-  </section> -->
-
-  <!-- <section>
-    <h2 id="language-pipe">Language Pipe</h2>
-
-    <markdown ngPreserveWhitespaces>
-      When using the `markdown` pipe, you can specify the syntax highlight language by chaining the `language` pipe.
-
-      For example, having the python code `print('hello world')` into the `myValue` variable could be parsed specifying the language as follow...
-
-      ````
-      ```html
-      &lt;div [innerHTML]="myValue | language : 'python' | markdown">&lt;div>
-      ```
-      ````
-
-      Would render with Python syntax highlight as specified with the `language` pipe in front of the `markdown` pipe.
-    </markdown>
-
-    <div [innerHTML]="myValue | language : 'python' | markdown"></div>
-  </section> -->
 </app-scrollspy-nav-layout>

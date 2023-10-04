@@ -3,51 +3,7 @@
 
   <section>
     <h2 id="identification"></h2>
-    <markdown emoji src="https://raw.githubusercontent.com/khushi-1305/docus-docs-starter/main/markdown/0.identification.md"></markdown>
+    <markdown emoji src="https://raw.githubusercontent.com/khushi-1305/ngx-markdown/master/demo/src/app/markdown/8.identification.md"></markdown>
   </section>
 
-  <!-- <markdown ngPreserveWhitespaces>
-    In some situations, you might need to re-render markdown after making changes. If you've updated the text this would be done automatically, however if the changes are internal to the library such as rendering options, you will need to inform the `MarkdownService` that it needs to update.
-
-    To do so, inject the `MarkdownService` and call the `reload()` function as shown below.
-
-    ```typescript
-    import &#123; MarkdownService } from 'ngx-markdown';
-
-    constructor(
-      private markdownService: MarkdownService,
-    ) &#123; }
-
-    update() &#123;
-      this.markdownService.reload();
-    }
-    ```
-  </markdown>
-
-  <section>
-    <h2 id="example">Example</h2>
-
-    <markdown ngPreserveWhitespaces>
-      The example below will apply the `style` attribute on heading elements to customize their colors. This requires markdown to be reloaded because it updates the renderer programmatically to override the `heading` token.
-
-      Although this could be done simply with CSS variables, this is only for demo purposes.
-    </markdown>
-
-    <section>
-      <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="16px">
-        <div fxLayout="column" fxFlex.gt-sm="calc(50% - 8px)">
-          <mat-form-field appearance="fill" color="accent" floatLabel="always" fxFlex>
-            <mat-label>CSS Color</mat-label>
-            <input matInput [(ngModel)]="accentColor" placeholder="Ex: red, blue, #00a, etc." >
-          </mat-form-field>
-
-          <mat-form-field appearance="fill" color="accent" fxFlex>
-            <textarea matInput [(ngModel)]="markdown"></textarea>
-          </mat-form-field>
-        </div>
-
-        <markdown [data]="markdown" fxFlex.gt-sm="calc(50% - 8px)"></markdown>
-      </div>
-    </section>
-  </section> -->
 </app-scrollspy-nav-layout>

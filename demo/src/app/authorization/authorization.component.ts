@@ -5,7 +5,7 @@ import { ClipboardOptions, MermaidAPI } from 'ngx-markdown';
 import { ClipboardButtonComponent } from '@shared/clipboard-button';
 
 @Component({
-  selector: 'app-plugins',
+  selector: 'app-authorization',
   templateUrl: './authorization.component.html',
   styleUrls: ['./authorization.component.scss'],
   providers: [

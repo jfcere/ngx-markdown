@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-syntax-highlight',
+  selector: 'app-access',
   templateUrl: './access.component.html',
   styleUrls: ['./access.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
