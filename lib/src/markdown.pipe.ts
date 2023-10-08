@@ -8,6 +8,7 @@ export type MarkdownPipeOptions = ParseOptions & RenderOptions;
 
 @Pipe({
   name: 'markdown',
+  standalone: true,
 })
 export class MarkdownPipe implements PipeTransform {
 
@@ -31,9 +32,20 @@ export class MarkdownPipe implements PipeTransform {
 
     const markdown = this.markdownService.parse(value, options);
 
-    this.zone.onStable
-      .pipe(first())
-      .subscribe(() => this.markdownService.render(this.elementRef.nativeElement, options, this.viewContainerRef));
+    const render = () =>
+      this.markdownService.render(
+        this.elementRef.nativeElement,
+        options,
+        this.viewContainerRef
+      );
+
+    // This check is required for zoneless apps because `onStable` would never emit any value
+    // when the `NoopNgZone` is used over the `NgZone`.
+    if (NgZone.isInAngularZone()) {
+      this.zone.onStable.pipe(first()).subscribe(render);
+    } else {
+      Promise.resolve().then(render);
+    }
 
     return this.domSanitizer.bypassSecurityTrustHtml(markdown);
   }
