@@ -18,16 +18,19 @@ export interface MarkdownModuleConfig {
   sanitize?: SecurityContext;
 }
 
+const sharedImports = [
+  MarkdownPipe,
+];
+
 const sharedDeclarations = [
   ClipboardButtonComponent,
   LanguagePipe,
   MarkdownComponent,
-  MarkdownPipe,
 ];
 
 @NgModule({
-  imports: [CommonModule],
-  exports: sharedDeclarations,
+  imports: [CommonModule, sharedImports],
+  exports: [sharedDeclarations, sharedImports],
   declarations: sharedDeclarations,
 })
 export class MarkdownModule {

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 
 import { ElementRef, NgZone, ViewContainerRef } from '@angular/core';
-import { fakeAsync, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { MarkdownModule } from './markdown.module';
@@ -63,21 +63,19 @@ describe('MarkdownPipe', () => {
     });
   });
 
-  it('should render element through MarkdownService when zone is stable', fakeAsync(() => {
+  it('should render element through MarkdownService when zone is stable', () => {
 
     const markdown = '# Markdown';
     const mockPipeOptions: MarkdownPipeOptions = { mermaid: true, mermaidOptions: { darkMode: true } };
 
     spyOn(markdownService, 'render');
 
-    pipe.transform(markdown, mockPipeOptions);
-
     expect(markdownService.render).not.toHaveBeenCalled();
 
-    zone.onStable.emit(null);
+    zone.run(() => pipe.transform(markdown, mockPipeOptions));
 
     expect(markdownService.render).toHaveBeenCalledWith(elementRef.nativeElement, mockPipeOptions, viewContainerRef);
-  }));
+  });
 
   it('should return parsed markdown', () => {
 
