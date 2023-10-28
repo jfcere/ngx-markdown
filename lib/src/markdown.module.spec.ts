@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, SecurityContext } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { ClipboardOptions } from './clipboard-options';
 import { MarkdownModule } from './markdown.module';
@@ -110,7 +110,7 @@ describe('MarkdownModule', () => {
 
     it('should provide MarkedOptions when MarkdownModuleConfig is provided with markedOptions', () => {
 
-      const mockMarkedOptions: MarkedOptions = { baseUrl: 'mock' };
+      const mockMarkedOptions: MarkedOptions = { };
 
       TestBed.configureTestingModule({
         imports: [
@@ -210,7 +210,7 @@ describe('MarkdownModule', () => {
 
     it('should inherit from forRoot providers', () => {
 
-      const mockMarkedOptions: MarkedOptions = { baseUrl: 'mock' };
+      const mockMarkedOptions: MarkedOptions = { };
       const mockClipboardOptions: ClipboardOptions = { buttonComponent: class mockClipboardButtonComponent {} };
 
       TestBed.configureTestingModule({
@@ -250,16 +250,17 @@ describe('MarkdownModule', () => {
       }).compileComponents();
     });
 
-    it('should render the markdown if not passing src attribute', () => {
+    it('should render the markdown if not passing src attribute', fakeAsync(() => {
 
       const fixture = TestBed.createComponent(HostComponent);
 
       fixture.detectChanges();
+      tick();
 
       const title = (fixture.nativeElement as HTMLElement).textContent!.trim();
 
       expect(title).toEqual('Markdown Title');
-    });
+    }));
 
     it('should throw an error when using src attribute', () => {
 

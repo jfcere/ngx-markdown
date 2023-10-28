@@ -112,16 +112,6 @@ describe('MarkdowService', () => {
         expect(markdownService.options).toBeDefined();
         expect(markdownService.options.renderer).toBeDefined();
       });
-
-      it('should update correctly', () => {
-
-        const mockBaseUrl = 'mock-url';
-
-        markdownService.options = { baseUrl: mockBaseUrl };
-
-        expect(markdownService.options.baseUrl).toBe(mockBaseUrl);
-        expect(markdownService.options.renderer).toBeDefined();
-      });
     });
 
     describe('renderer', () => {
@@ -340,11 +330,8 @@ describe('MarkdowService', () => {
 
         const mockRaw = '### Markdown-x';
         const mockMarkedOptions: MarkedOptions = {
-          baseUrl: 'mock-base-url',
           breaks: true,
           gfm: false,
-          headerIds: true,
-          smartypants: true,
         };
         const parseOptions: ParseOptions = {
           markedOptions: mockMarkedOptions,
@@ -356,10 +343,12 @@ describe('MarkdowService', () => {
 
         expect(markedParseSpy).toHaveBeenCalled();
         expect(markedParseSpy.calls.argsFor(0)[0]).toBe(mockRaw);
-        expect(markedParseSpy.calls.argsFor(0)[1]).toEqual({
+        const expectedOptions = {
           ...markdownService.options,
           ...mockMarkedOptions,
-        });
+        };
+        delete expectedOptions.renderer;
+        expect(markedParseSpy.calls.argsFor(0)[1]).toEqual(expectedOptions);
       });
 
       it('should return empty string when raw is null/undefined/empty', () => {

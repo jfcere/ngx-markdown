@@ -5,7 +5,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ClipboardOptions, MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
+import { gfmHeadingId } from 'marked-gfm-heading-id';
+import { ClipboardOptions, MARKDOWN_EXTENSIONS, MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
 
 import { AnchorModule } from '@shared/anchor/anchor.module';
 import { AnchorService } from '@shared/anchor/anchor.service';
@@ -20,7 +21,7 @@ export function markedOptionsFactory(anchorService: AnchorService): MarkedOption
 
   // fix `href` for absolute link with fragments so that _copy-paste_ urls are correct
   renderer.link = (href: string, title: string, text: string) => {
-    return MarkedRenderer.prototype.link.call(renderer, anchorService.normalizeExternalUrl(href), title, text) as string;
+    return MarkedRenderer.prototype.link.call(renderer, anchorService.normalizeExternalUrl(href), title, text) ;
   };
 
   return { renderer };
@@ -53,6 +54,12 @@ export function markedOptionsFactory(anchorService: AnchorService): MarkedOption
     MatTabsModule,
     MatToolbarModule,
     SharedModule,
+  ],
+  providers: [
+    {
+      provide: MARKDOWN_EXTENSIONS,
+      useValue: [gfmHeadingId()],
+    },
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

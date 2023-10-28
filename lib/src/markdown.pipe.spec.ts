@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 
 import { ElementRef, NgZone, ViewContainerRef } from '@angular/core';
-import { fakeAsync, TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { MarkdownModule } from './markdown.module';
@@ -39,28 +39,28 @@ describe('MarkdownPipe', () => {
     pipe = new MarkdownPipe(domSanitizer, elementRef, markdownService, viewContainerRef, zone);
   });
 
-  it('should return empty string when value is null/undefined', () => {
+  it('should return empty string when value is null/undefined', async () => {
 
     const markdowns: any[] = [undefined, null];
 
-    markdowns.forEach(markdown => {
-      const result = pipe.transform(markdown);
+    for(const markdown of markdowns) {
+      const result = await pipe.transform(markdown);
       expect(result).toBe('');
-    });
+    }
   });
 
-  it('should log error and return value when parameter is not a string', () => {
+  it('should log error and return value when parameter is not a string', async () => {
 
     const markdowns: any[] = [0, {}, [], /regex/];
 
     spyOn(console, 'error');
 
-    markdowns.forEach(markdown => {
-      const result = pipe.transform(markdown);
+    for (const markdown of markdowns) {
+      const result = await pipe.transform(markdown);
 
       expect(result).toBe(markdown);
       expect(console.error).toHaveBeenCalledWith(`MarkdownPipe has been invoked with an invalid value type [${typeof markdown}]`);
-    });
+    }
   });
 
   it('should render element through MarkdownService when zone is stable', fakeAsync(() => {
@@ -71,6 +71,7 @@ describe('MarkdownPipe', () => {
     spyOn(markdownService, 'render');
 
     pipe.transform(markdown, mockPipeOptions);
+    tick();
 
     expect(markdownService.render).not.toHaveBeenCalled();
 
@@ -79,7 +80,7 @@ describe('MarkdownPipe', () => {
     expect(markdownService.render).toHaveBeenCalledWith(elementRef.nativeElement, mockPipeOptions, viewContainerRef);
   }));
 
-  it('should return parsed markdown', () => {
+  it('should return parsed markdown', async () => {
 
     const markdown = '# Markdown';
     const mockParsed = 'compiled-x';
@@ -89,7 +90,7 @@ describe('MarkdownPipe', () => {
     spyOn(markdownService, 'parse').and.returnValue(mockParsed);
     spyOn(domSanitizer, 'bypassSecurityTrustHtml').and.returnValue(mockBypassSecurity);
 
-    const result = pipe.transform(markdown, mockPipeOptions);
+    const result = await pipe.transform(markdown, mockPipeOptions);
 
     expect(markdownService.parse).toHaveBeenCalledWith(markdown, mockPipeOptions);
     expect(domSanitizer.bypassSecurityTrustHtml).toHaveBeenCalledWith(mockParsed);

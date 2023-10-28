@@ -1,14 +1,25 @@
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { EmbeddedViewRef, Inject, Injectable, InjectionToken, Optional, PLATFORM_ID, SecurityContext, ViewContainerRef } from '@angular/core';
+import {
+  EmbeddedViewRef,
+  inject,
+  Inject,
+  Injectable,
+  InjectionToken,
+  Optional,
+  PLATFORM_ID,
+  SecurityContext,
+  ViewContainerRef,
+} from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { marked, Renderer } from 'marked';
+import { Marked, Renderer } from 'marked';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { ClipboardOptions, ClipboardRenderOptions } from './clipboard-options';
 import { KatexOptions } from './katex-options';
+import { MARKDOWN_EXTENSIONS } from './markdown-extensions';
 import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
 import { MermaidAPI } from './mermaid-options';
@@ -77,6 +88,7 @@ export class ExtendedRenderer extends Renderer {
 
 @Injectable()
 export class MarkdownService {
+  private readonly extensions = inject(MARKDOWN_EXTENSIONS, {optional: true});
 
   private readonly DEFAULT_MARKED_OPTIONS: MarkedOptions = {
     renderer: new MarkedRenderer(),
@@ -153,7 +165,7 @@ export class MarkdownService {
     this.options = options;
   }
 
-  parse(markdown: string, parseOptions: ParseOptions = this.DEFAULT_PARSE_OPTIONS): string {
+  parse(markdown: string, parseOptions: ParseOptions = this.DEFAULT_PARSE_OPTIONS): string | Promise<string> {
     const {
       decodeHtml,
       inline,
@@ -290,7 +302,16 @@ export class MarkdownService {
       : markdown;
   }
 
-  private parseMarked(html: string, markedOptions: MarkedOptions, inline = false): string {
+  private parseMarked(html: string, markedOptions: MarkedOptions, inline = false): string | Promise<string> {
+    const marked = new Marked();
+    if (markedOptions.renderer) {
+      // because if renderer is passed to parse method, it will ignore all extensions
+      marked.use({renderer: markedOptions.renderer});
+      delete markedOptions.renderer;
+    }
+
+    marked.use(...(this.extensions ?? []));
+
     return inline
       ? marked.parseInline(html, markedOptions)
       : marked.parse(html, markedOptions);

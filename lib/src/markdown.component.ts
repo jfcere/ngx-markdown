@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   AfterViewInit,
   Component,
@@ -17,7 +16,6 @@ import { takeUntil } from 'rxjs/operators';
 
 import { KatexOptions } from './katex-options';
 import { MarkdownService, ParseOptions, RenderOptions } from './markdown.service';
-import { MarkedOptions } from './marked-options';
 import { MermaidAPI } from './mermaid-options';
 import { PrismPlugin } from './prism-plugin';
 
@@ -46,10 +44,6 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input()
   get inline(): boolean { return this._inline; }
   set inline(value: boolean) { this._inline = this.coerceBooleanProperty(value); }
-
-  @Input()
-  get srcRelativeLink(): boolean { return this._srcRelativeLink; }
-  set srcRelativeLink(value: boolean) { this._srcRelativeLink = this.coerceBooleanProperty(value); }
 
   // Plugin - clipboard
   @Input()
@@ -112,7 +106,6 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   private _lineHighlight = false;
   private _lineNumbers = false;
   private _mermaid = false;
-  private _srcRelativeLink = false;
 
   private readonly destroyed$ = new Subject<void>();
 
@@ -152,19 +145,12 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
     this.destroyed$.complete();
   }
 
-  render(markdown: string, decodeHtml = false): void {
-    let markedOptions: MarkedOptions | undefined;
-    if (this.src && this.srcRelativeLink) {
-      const baseUrl = new URL(this.src, location.origin).pathname;
-      markedOptions = { baseUrl };
-    }
-
+  async render(markdown: string, decodeHtml = false): Promise<void> {
     const parsedOptions: ParseOptions = {
       decodeHtml,
       inline: this.inline,
       emoji: this.emoji,
       mermaid: this.mermaid,
-      markedOptions,
       disableSanitizer: this.disableSanitizer,
     };
 
@@ -180,7 +166,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
       mermaidOptions: this.mermaidOptions,
     };
 
-    const parsed = this.markdownService.parse(markdown, parsedOptions);
+    const parsed = await this.markdownService.parse(markdown, parsedOptions);
 
     this.element.nativeElement.innerHTML = parsed;
 
@@ -204,8 +190,9 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
       .getSource(this.src!)
       .subscribe({
         next: markdown => {
-          this.render(markdown);
-          this.load.emit(markdown);
+          this.render(markdown).then(() => {
+            this.load.emit(markdown);
+          });
         },
         error: (error: string | Error) => this.error.emit(error),
       });
