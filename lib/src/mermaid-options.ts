@@ -253,14 +253,17 @@ export namespace MermaidAPI {
      * The query selector to use when finding elements to render. Default: `".mermaid"`.
      */
     querySelector?: string;
+
     /**
      * The nodes to render. If this is set, `querySelector` will be ignored.
      */
     nodes?: ArrayLike<HTMLElement>;
+
     /**
      * A callback to call after each diagram is rendered.
      */
     postRenderCallback?: (id: string) => unknown;
+
     /**
      * If `true`, errors will be logged to the console, but not thrown. Default: `false`
      */
@@ -345,7 +348,5 @@ export namespace MermaidAPI {
     pie?: any; // [todo]
 
     requirement?: any; // [todo]
-
-    runOptions?: RunOptions | undefined;
   }
 }

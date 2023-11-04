@@ -34,9 +34,7 @@ declare function renderMathInElement(elem: HTMLElement, options?: KatexOptions):
 // mermaid
 declare let mermaid: {
   initialize: (options: MermaidAPI.Config) => void;
-  init: (nodes: string | Node | NodeList) => void;
-  run: (runOption: MermaidAPI.Config['runOptions']) => void;
-  parse: (text: string) => string;
+  run: (runOptions: MermaidAPI.RunOptions) => void;
 };
 
 // prism
@@ -98,15 +96,15 @@ export class MarkdownService {
     ],
   };
 
-  private readonly DEFAULT_RUNOPTIONS_OPTIONS: MermaidAPI.RunOptions = {
+  private readonly DEFAULT_MERMAID_RUNOPTIONS: MermaidAPI.RunOptions = {
     suppressErrors: false,
     querySelector: '.mermaid',
   };
 
   private readonly DEFAULT_MERMAID_OPTIONS: MermaidAPI.Config = {
     startOnLoad: false,
-    runOptions: this.DEFAULT_RUNOPTIONS_OPTIONS,
   };
+
   private readonly DEFAULT_CLIPBOARD_OPTIONS: ClipboardOptions = {
     buttonComponent: undefined,
   };
@@ -396,15 +394,11 @@ export class MarkdownService {
     if (!isPlatformBrowser(this.platform)) {
       return;
     }
-    if (typeof mermaid === 'undefined' || typeof mermaid.init === 'undefined') {
+    if (typeof mermaid === 'undefined' || typeof mermaid.initialize === 'undefined') {
       throw new Error(errorMermaidNotLoaded);
     }
-    const mermaidElements = element.querySelectorAll('.mermaid');
-    if (mermaidElements.length === 0) {
-      return;
-    }
     mermaid.initialize(options);
-    mermaid.run(options.runOptions);
+    mermaid.run(this.DEFAULT_MERMAID_RUNOPTIONS);
   }
 
   private trimIndentation(markdown: string): string {
