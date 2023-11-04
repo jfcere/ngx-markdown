@@ -27,7 +27,7 @@ import { ClipboardButtonComponent } from '@shared/clipboard-button';
     FormsModule,
   ],
 })
-export class PluginsComponent implements OnInit {
+export default class PluginsComponent implements OnInit {
 
   readonly clipboardButton = ClipboardButtonComponent;
 

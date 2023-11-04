@@ -11,7 +11,6 @@ import { MarkdownService, SECURITY_CONTEXT } from './markdown.service';
 // here, we explicitely ask the user to pass a provider with
 // their own instance of `HttpClientModule`
 export interface MarkdownModuleConfig {
-  loader?: Provider;
   clipboardOptions?: Provider;
   markedOptions?: Provider;
   sanitize?: SecurityContext;
@@ -24,6 +23,9 @@ const sharedDeclarations = [
   MarkdownPipe,
 ];
 
+/**
+ * @deprecated use provideMarkdown instead
+ * */
 @NgModule({
   imports: [CommonModule, ...sharedDeclarations],
   exports: sharedDeclarations,
@@ -34,7 +36,6 @@ export class MarkdownModule {
       ngModule: MarkdownModule,
       providers: [
         MarkdownService,
-        markdownModuleConfig && markdownModuleConfig.loader || [],
         markdownModuleConfig && markdownModuleConfig.clipboardOptions || [],
         markdownModuleConfig && markdownModuleConfig.markedOptions || [],
         {

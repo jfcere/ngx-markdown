@@ -10,7 +10,7 @@ import { ScrollspyNavLayoutComponent } from '../shared/scrollspy-nav-layout/scro
   standalone: true,
   imports: [ScrollspyNavLayoutComponent, MarkdownComponent],
 })
-export class CheatSheetComponent implements OnInit {
+export default class CheatSheetComponent implements OnInit {
 
   blockquotes = require('raw-loader!./markdown/blockquotes.md').default;
   codeAndSynthaxHighlighting = require('raw-loader!./markdown/code-and-synthax-highlighting.md').default;

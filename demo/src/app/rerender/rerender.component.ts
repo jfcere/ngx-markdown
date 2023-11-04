@@ -22,7 +22,7 @@ import { ScrollspyNavLayoutComponent } from '../shared/scrollspy-nav-layout/scro
     FormsModule,
   ],
 })
-export class RerenderComponent implements OnInit, OnDestroy {
+export default class RerenderComponent implements OnInit, OnDestroy {
 
   private _accentColor = '';
 

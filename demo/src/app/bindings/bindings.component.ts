@@ -25,7 +25,7 @@ import { ScrollspyNavLayoutComponent } from '../shared/scrollspy-nav-layout/scro
         MarkdownPipe,
     ],
 })
-export class BindingsComponent implements OnInit {
+export default class BindingsComponent implements OnInit {
 
   // remote url
   demoPython = require('raw-loader!./remote/demo.py').default;

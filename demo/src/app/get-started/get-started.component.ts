@@ -10,7 +10,7 @@ import { ScrollspyNavLayoutComponent } from '../shared/scrollspy-nav-layout/scro
   standalone: true,
   imports: [ScrollspyNavLayoutComponent, MarkdownComponent],
 })
-export class GetStartedComponent {
+export default class GetStartedComponent {
 
   headings: Element[] | undefined;
 

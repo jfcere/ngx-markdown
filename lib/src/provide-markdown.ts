@@ -5,7 +5,6 @@ import { MarkdownService, SECURITY_CONTEXT } from './markdown.service';
 export function provideMarkdown(markdownModuleConfig?: MarkdownModuleConfig) {
   return makeEnvironmentProviders([
     MarkdownService,
-    markdownModuleConfig && markdownModuleConfig.loader || [],
     markdownModuleConfig && markdownModuleConfig.clipboardOptions || [],
     markdownModuleConfig && markdownModuleConfig.markedOptions || [],
     {
