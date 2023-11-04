@@ -16,7 +16,7 @@ import { HttpRawLoaderService } from '@shared/http-raw-loader';
     AsyncPipe,
   ],
 })
-export class CheatSheetComponent implements OnInit {
+export default class CheatSheetComponent implements OnInit {
 
   blockquotes$ = this.rawLoaderService.get('app/cheat-sheet/remote/blockquotes.md');
   codeAndSynthaxHighlighting$ = this.rawLoaderService.get('app/cheat-sheet/remote/code-and-synthax-highlighting.md');

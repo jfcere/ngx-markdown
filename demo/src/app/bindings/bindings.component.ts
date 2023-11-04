@@ -26,7 +26,7 @@ import { HttpRawLoaderService } from '@shared/http-raw-loader';
     AsyncPipe,
   ],
 })
-export class BindingsComponent implements OnInit {
+export default class BindingsComponent implements OnInit {
 
   // remote url
   demoPython$ = this.rawLoaderService.get('app/bindings/remote/demo.py');

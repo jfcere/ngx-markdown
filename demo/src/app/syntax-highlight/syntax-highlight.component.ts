@@ -17,7 +17,7 @@ import { ScrollspyNavLayoutComponent } from '../shared/scrollspy-nav-layout/scro
     AsyncPipe,
   ],
 })
-export class SyntaxHighlightComponent implements OnInit {
+export default class SyntaxHighlightComponent implements OnInit {
 
   headings: Element[] | undefined;
 

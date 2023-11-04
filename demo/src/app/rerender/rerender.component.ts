@@ -21,7 +21,7 @@ import { ScrollspyNavLayoutComponent } from '../shared/scrollspy-nav-layout/scro
     FormsModule,
   ],
 })
-export class RerenderComponent implements OnInit, OnDestroy {
+export default class RerenderComponent implements OnInit, OnDestroy {
 
   // property to handle override as per marked documentation, if a renderer
   // function returns `false` it will fallback to previous implementation

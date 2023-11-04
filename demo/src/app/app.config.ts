@@ -1,21 +1,22 @@
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ApplicationConfig, importProvidersFrom, SecurityContext } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideRouter } from '@angular/router';
 import { gfmHeadingId } from 'marked-gfm-heading-id';
 import {
   CLIPBOARD_OPTIONS,
   MarkdownModule,
   MARKED_OPTIONS,
 } from 'ngx-markdown';
-import { AppRoutingModule } from '@app/app-routing.module';
+import { appRoutes } from '@app/app-routes';
 import { markedOptionsFactory } from '@app/marked-options-factory';
 import { AnchorService } from '@shared/anchor/anchor.service';
 import { ClipboardButtonComponent } from '@shared/clipboard-button';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideRouter(appRoutes),
     importProvidersFrom(
-      AppRoutingModule,
       MarkdownModule.forRoot({
         loader: HttpClient,
         markedOptions: {
