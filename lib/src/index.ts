@@ -11,3 +11,4 @@ export * from './marked-options';
 export * from './marked-renderer';
 export * from './mermaid-options';
 export * from './prism-plugin';
+export * from './provide-markdown';
