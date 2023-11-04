@@ -332,8 +332,7 @@ export namespace MermaidAPI {
      */
     gantt?: GanttConfig | undefined;
 
-    /** To supress mermaid warning**/
-
+    /** To supress mermaid warning **/
 
     journey?: any; // [todo]
 
@@ -346,6 +345,7 @@ export namespace MermaidAPI {
     pie?: any; // [todo]
 
     requirement?: any; // [todo]
-    runOptions?:RunOptions | undefined;
+
+    runOptions?: RunOptions | undefined;
   }
 }
