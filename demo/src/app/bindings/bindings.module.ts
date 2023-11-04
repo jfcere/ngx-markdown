@@ -2,9 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MarkdownModule } from 'ngx-markdown';
-
 import { ScrollspyNavLayoutModule } from '@shared/scrollspy-nav-layout/scrollspy-nav-layout.module';
-import { SharedModule } from '@shared/shared.module';
 import { BindingsRoutingModule } from './bindings-routing.module';
 import { BindingsComponent } from './bindings.component';
 
@@ -15,8 +13,7 @@ import { BindingsComponent } from './bindings.component';
     MarkdownModule.forChild(),
     MatInputModule,
     ScrollspyNavLayoutModule,
-    SharedModule,
+    BindingsComponent,
   ],
-  declarations: [BindingsComponent],
 })
 export class BindingsModule { }

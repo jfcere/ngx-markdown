@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, SecurityContext } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-
 import { ClipboardOptions } from './clipboard-options';
 import { MarkdownModule } from './markdown.module';
 import { errorSrcWithoutHttpClient, SECURITY_CONTEXT } from './markdown.service';
@@ -20,6 +19,8 @@ import { MarkedOptions } from './marked-options';
       <markdown [data]="markdown"></markdown>
     </ng-template>
   `,
+  standalone: true,
+  imports: [CommonModule],
 })
 class HostComponent {
   markdown = '# Markdown Title';
@@ -245,8 +246,8 @@ describe('MarkdownModule', () => {
         imports: [
           CommonModule,
           MarkdownModule.forRoot(),
+          HostComponent,
         ],
-        declarations: [HostComponent],
       }).compileComponents();
     });
 

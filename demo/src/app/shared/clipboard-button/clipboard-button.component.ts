@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -6,6 +7,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './clipboard-button.component.html',
   styleUrls: ['./clipboard-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [MatButtonModule],
 })
 export class ClipboardButtonComponent {
 

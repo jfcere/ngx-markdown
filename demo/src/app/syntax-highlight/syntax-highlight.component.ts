@@ -1,10 +1,21 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular/core';
+import { LanguagePipe } from '../../../../lib/src/language.pipe';
+import { MarkdownComponent } from '../../../../lib/src/markdown.component';
+import { MarkdownPipe } from '../../../../lib/src/markdown.pipe';
+import { ScrollspyNavLayoutComponent } from '../shared/scrollspy-nav-layout/scrollspy-nav-layout.component';
 
 @Component({
   selector: 'app-syntax-highlight',
   templateUrl: './syntax-highlight.component.html',
   styleUrls: ['./syntax-highlight.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    ScrollspyNavLayoutComponent,
+    MarkdownComponent,
+    LanguagePipe,
+    MarkdownPipe,
+  ],
 })
 export class SyntaxHighlightComponent implements OnInit {
 

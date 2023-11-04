@@ -15,7 +15,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Marked, Renderer } from 'marked';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { ClipboardOptions, ClipboardRenderOptions } from './clipboard-options';
 import { KatexOptions } from './katex-options';

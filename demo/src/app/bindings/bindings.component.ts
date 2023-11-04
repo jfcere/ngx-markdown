@@ -1,10 +1,29 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular/core';
+import { FlexModule } from '@angular/flex-layout/flex';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { LanguagePipe } from '../../../../lib/src/language.pipe';
+import { MarkdownComponent } from '../../../../lib/src/markdown.component';
+import { MarkdownPipe } from '../../../../lib/src/markdown.pipe';
+import { ScrollspyNavLayoutComponent } from '../shared/scrollspy-nav-layout/scrollspy-nav-layout.component';
 
 @Component({
-  selector: 'app-bindings',
-  templateUrl: './bindings.component.html',
-  styleUrls: ['./bindings.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-bindings',
+    templateUrl: './bindings.component.html',
+    styleUrls: ['./bindings.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        ScrollspyNavLayoutComponent,
+        MarkdownComponent,
+        FlexModule,
+        MatFormFieldModule,
+        MatInputModule,
+        FormsModule,
+        LanguagePipe,
+        MarkdownPipe,
+    ],
 })
 export class BindingsComponent implements OnInit {
 

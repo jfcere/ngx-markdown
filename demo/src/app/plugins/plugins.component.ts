@@ -1,7 +1,12 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular/core';
+import { FlexModule } from '@angular/flex-layout/flex';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ClipboardOptions, MermaidAPI } from 'ngx-markdown';
-
+import { MarkdownComponent } from '../../../../lib/src/markdown.component';
+import { ScrollspyNavLayoutComponent } from '../shared/scrollspy-nav-layout/scrollspy-nav-layout.component';
 import { ClipboardButtonComponent } from '@shared/clipboard-button';
 
 @Component({
@@ -12,6 +17,15 @@ import { ClipboardButtonComponent } from '@shared/clipboard-button';
     { provide: ClipboardOptions, useValue: {} },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    ScrollspyNavLayoutComponent,
+    MarkdownComponent,
+    FlexModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+  ],
 })
 export class PluginsComponent implements OnInit {
 

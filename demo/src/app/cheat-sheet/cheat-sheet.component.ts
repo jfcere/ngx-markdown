@@ -1,10 +1,14 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular/core';
+import { MarkdownComponent } from '../../../../lib/src/markdown.component';
+import { ScrollspyNavLayoutComponent } from '../shared/scrollspy-nav-layout/scrollspy-nav-layout.component';
 
 @Component({
   selector: 'app-cheat-sheet',
   templateUrl: './cheat-sheet.component.html',
   styleUrls: ['./cheat-sheet.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [ScrollspyNavLayoutComponent, MarkdownComponent],
 })
 export class CheatSheetComponent implements OnInit {
 
