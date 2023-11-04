@@ -17,7 +17,7 @@ import { MermaidAPI } from './mermaid-options';
 declare let ClipboardJS: {
   new (
     selector: string | Element | NodeListOf<Element>,
-    options?: { text?: (elem: Element) => string; },
+    options?: { text?: (elem: Element) => string },
   ): typeof ClipboardJS;
   destroy(): void;
 };
@@ -34,8 +34,7 @@ declare function renderMathInElement(elem: HTMLElement, options?: KatexOptions):
 // mermaid
 declare let mermaid: {
   initialize: (options: MermaidAPI.Config) => void;
-  init: (nodes: string | Node | NodeList) => void;
-  parse: (text: string) => string;
+  run: (runOptions: MermaidAPI.RunOptions) => void;
 };
 
 // prism
@@ -85,16 +84,21 @@ export class MarkdownService {
 
   private readonly DEFAULT_KATEX_OPTIONS: KatexOptions = {
     delimiters: [
-      { left: "$$", right: "$$", display: true },
-      { left: "$", right: "$", display: false },
-      { left: "\\(", right: "\\)", display: false },
-      { left: "\\begin{equation}", right: "\\end{equation}", display: true },
-      { left: "\\begin{align}", right: "\\end{align}", display: true },
-      { left: "\\begin{alignat}", right: "\\end{alignat}", display: true },
-      { left: "\\begin{gather}", right: "\\end{gather}", display: true },
-      { left: "\\begin{CD}", right: "\\end{CD}", display: true },
-      { left: "\\[", right: "\\]", display: true },
+      { left: '$$', right: '$$', display: true },
+      { left: '$', right: '$', display: false },
+      { left: '\\(', right: '\\)', display: false },
+      { left: '\\begin{equation}', right: '\\end{equation}', display: true },
+      { left: '\\begin{align}', right: '\\end{align}', display: true },
+      { left: '\\begin{alignat}', right: '\\end{alignat}', display: true },
+      { left: '\\begin{gather}', right: '\\end{gather}', display: true },
+      { left: '\\begin{CD}', right: '\\end{CD}', display: true },
+      { left: '\\[', right: '\\]', display: true },
     ],
+  };
+
+  private readonly DEFAULT_MERMAID_RUNOPTIONS: MermaidAPI.RunOptions = {
+    suppressErrors: false,
+    querySelector: '.mermaid',
   };
 
   private readonly DEFAULT_MERMAID_OPTIONS: MermaidAPI.Config = {
@@ -390,15 +394,11 @@ export class MarkdownService {
     if (!isPlatformBrowser(this.platform)) {
       return;
     }
-    if (typeof mermaid === 'undefined' || typeof mermaid.init === 'undefined') {
+    if (typeof mermaid === 'undefined' || typeof mermaid.initialize === 'undefined') {
       throw new Error(errorMermaidNotLoaded);
     }
-    const mermaidElements = element.querySelectorAll('.mermaid');
-    if (mermaidElements.length === 0) {
-      return;
-    }
     mermaid.initialize(options);
-    mermaid.init(mermaidElements);
+    mermaid.run(this.DEFAULT_MERMAID_RUNOPTIONS);
   }
 
   private trimIndentation(markdown: string): string {

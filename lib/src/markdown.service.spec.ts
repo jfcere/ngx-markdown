@@ -382,15 +382,15 @@ describe('MarkdowService', () => {
 
       const KATEX_DEFAULT_OPTIONS: KatexOptions = {
         delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "$", right: "$", display: false },
-          { left: "\\(", right: "\\)", display: false },
-          { left: "\\begin{equation}", right: "\\end{equation}", display: true },
-          { left: "\\begin{align}", right: "\\end{align}", display: true },
-          { left: "\\begin{alignat}", right: "\\end{alignat}", display: true },
-          { left: "\\begin{gather}", right: "\\end{gather}", display: true },
-          { left: "\\begin{CD}", right: "\\end{CD}", display: true },
-          { left: "\\[", right: "\\]", display: true },
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+          { left: '\\(', right: '\\)', display: false },
+          { left: '\\begin{equation}', right: '\\end{equation}', display: true },
+          { left: '\\begin{align}', right: '\\end{align}', display: true },
+          { left: '\\begin{alignat}', right: '\\end{alignat}', display: true },
+          { left: '\\begin{gather}', right: '\\end{gather}', display: true },
+          { left: '\\begin{CD}', right: '\\end{CD}', display: true },
+          { left: '\\[', right: '\\]', display: true },
         ],
       };
 
@@ -714,23 +714,28 @@ describe('MarkdowService', () => {
         container.append(elementOne);
         container.append(elementTwo);
 
-        const expected = container.querySelectorAll('.mermaid');
+        const defaultOptions: MermaidAPI.Config = { startOnLoad: false };
+
+        const defaultRunOptions: MermaidAPI.RunOptions = {
+          suppressErrors: false,
+          querySelector: '.mermaid',
+        };
 
         window['mermaid'] = {
           initialize: (options: MermaidAPI.Config) => {},
-          init: (nodes: string | Node | NodeList) => {},
+          run: (runOptions: MermaidAPI.RunOptions) => {},
         };
 
         spyOn(mermaid, 'initialize');
-        spyOn(mermaid, 'init');
+        spyOn(mermaid, 'run');
 
         markdownService.render(container, { mermaid: true });
 
-        expect(mermaid.initialize).toHaveBeenCalledWith({ startOnLoad: false });
-        expect(mermaid.init).toHaveBeenCalledWith(expected);
+        expect(mermaid.initialize).toHaveBeenCalledWith(defaultOptions);
+        expect(mermaid.run).toHaveBeenCalledWith(defaultRunOptions);
       });
 
-      it('should render mermaid with provided options when at least one element is found', () => {
+      it('should render mermaid with provided options when mermaid is true and options are provided', () => {
 
         const element = document.createElement('div');
         element.classList.add('mermaid');
@@ -739,24 +744,28 @@ describe('MarkdowService', () => {
         const container = document.createElement('div');
         container.append(element);
 
-        const expected = container.querySelectorAll('.mermaid');
-        const mermaidOptions: MermaidAPI.Config = {
+        const providedOptions: MermaidAPI.Config = {
           startOnLoad: false,
           darkMode: true,
         };
 
+        const defaultRunOptions: MermaidAPI.RunOptions = {
+          suppressErrors: false,
+          querySelector: '.mermaid',
+        };
+
         window['mermaid'] = {
           initialize: (options: MermaidAPI.Config) => {},
-          init: (nodes: string | Node | NodeList) => {},
+          run: (runOptions: MermaidAPI.RunOptions) => {},
         };
 
         spyOn(mermaid, 'initialize');
-        spyOn(mermaid, 'init');
+        spyOn(mermaid, 'run');
 
-        markdownService.render(container, { mermaid: true, mermaidOptions });
+        markdownService.render(container, { mermaid: true, mermaidOptions: providedOptions });
 
-        expect(mermaid.initialize).toHaveBeenCalledWith(mermaidOptions);
-        expect(mermaid.init).toHaveBeenCalledWith(expected);
+        expect(mermaid.initialize).toHaveBeenCalledWith(providedOptions);
+        expect(mermaid.run).toHaveBeenCalledWith(defaultRunOptions);
       });
 
       it('should not render mermaid when mermaid is omitted/false/null/undefined', () => {
@@ -765,11 +774,11 @@ describe('MarkdowService', () => {
 
         window['mermaid'] = {
           initialize: (options: MermaidAPI.Config) => {},
-          init: (nodes: string | Node | NodeList) => {},
+          run: (runOptions: MermaidAPI.RunOptions) => {},
         };
 
         spyOn(mermaid, 'initialize');
-        spyOn(mermaid, 'init');
+        spyOn(mermaid, 'run');
 
         const useCases = [
           () => markdownService.render(container),
@@ -781,7 +790,7 @@ describe('MarkdowService', () => {
         useCases.forEach(func => {
           func();
           expect(mermaid.initialize).not.toHaveBeenCalled();
-          expect(mermaid.init).not.toHaveBeenCalled();
+          expect(mermaid.run).not.toHaveBeenCalled();
         });
       });
 
@@ -791,17 +800,17 @@ describe('MarkdowService', () => {
 
         window['mermaid'] = {
           initialize: (options: MermaidAPI.Config) => {},
-          init: (nodes: string | Node | NodeList) => {},
+          run: (runOptions: MermaidAPI.RunOptions) => {},
         };
 
         spyOn(mermaid, 'initialize');
-        spyOn(mermaid, 'init');
+        spyOn(mermaid, 'run');
 
         markdownService['platform'] = 'server';
 
         expect(() => markdownService.render(container, { mermaid: true })).not.toThrowError();
         expect(mermaid.initialize).not.toHaveBeenCalled();
-        expect(mermaid.init).not.toHaveBeenCalled();
+        expect(mermaid.run).not.toHaveBeenCalled();
       });
 
       it('should throw when mermaid is called but not loaded', () => {
@@ -813,30 +822,9 @@ describe('MarkdowService', () => {
         expect(() => markdownService.render(container, { mermaid: true })).toThrowError(errorMermaidNotLoaded);
 
         window['mermaid'] = { initialize: undefined };
-        window['mermaid'] = { init: undefined };
+        window['mermaid'] = { run: undefined };
 
         expect(() => markdownService.render(container, { mermaid: true })).toThrowError(errorMermaidNotLoaded);
-      });
-
-      it('should not render mermaid when no elements are found', () => {
-
-        const element = document.createElement('div');
-        element.classList.add('not-mermaid');
-
-        const container = document.createElement('div');
-        container.append(element);
-
-        window['mermaid'] = {
-          initialize: (options: MermaidAPI.Config) => {},
-          init: (nodes: string | Node | NodeList) => {},
-        };
-
-        spyOn(mermaid, 'initialize');
-        spyOn(mermaid, 'init');
-
-        expect(() => markdownService.render(container, { mermaid: true })).not.toThrowError();
-        expect(mermaid.initialize).not.toHaveBeenCalled();
-        expect(mermaid.init).not.toHaveBeenCalled();
       });
 
       it('should highlight element', () => {

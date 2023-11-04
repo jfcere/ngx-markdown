@@ -10,7 +10,7 @@ export class SyntaxHighlightComponent implements OnInit {
 
   headings: Element[] | undefined;
 
-  myValue = `print('hello-world')`;
+  myValue = 'print(\'hello-world\')';
 
   constructor(
     private elementRef: ElementRef<HTMLElement>,
