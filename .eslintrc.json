@@ -59,6 +59,10 @@
           "error",
           "always-multiline"
         ],
+        "comma-spacing": ["error", {
+          "before": false,
+          "after": true
+        }],
         "import/order": ["error", {
           "alphabetize": {
             "order": "asc",
@@ -75,6 +79,7 @@
             }
           ]
         }],
+        "quotes": ["error", "single"],
         "semi": ["error", "always"],
         "sort-imports": ["error", {
           "ignoreCase": true,

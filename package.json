@@ -63,7 +63,7 @@
     "hammerjs": "~2.0.8",
     "katex": "^0.16.2",
     "marked": "^4.1.1",
-    "mermaid": "^9.1.7",
+    "mermaid": "^10.6.0",
     "ngx-markdown": "file:lib",
     "prismjs": "^1.29.0",
     "rxjs": "~6.5.3",
