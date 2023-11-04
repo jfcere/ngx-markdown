@@ -17,7 +17,7 @@ import { MermaidAPI } from './mermaid-options';
 declare let ClipboardJS: {
   new (
     selector: string | Element | NodeListOf<Element>,
-    options?: { text?: (elem: Element) => string }
+    options?: { text?: (elem: Element) => string },
   ): typeof ClipboardJS;
   destroy(): void;
 };
@@ -355,8 +355,8 @@ export class MarkdownService {
       preWrapperElement.insertAdjacentElement('beforeend', toolbarWrapperElement);
 
       // register listener to show/hide toolbar
-      preElement.onmouseover = () => (toolbarWrapperElement.style.opacity = '1');
-      preElement.onmouseout = () => (toolbarWrapperElement.style.opacity = '0');
+      preElement.onmouseover = () => toolbarWrapperElement.style.opacity = '1';
+      preElement.onmouseout = () => toolbarWrapperElement.style.opacity = '0';
 
       // declare embeddedViewRef holding variable
       let embeddedViewRef: EmbeddedViewRef<unknown>;
@@ -427,7 +427,6 @@ export class MarkdownService {
         return lineIdentStart
           ? line.substring(lineIdentStart)
           : line;
-      })
-      .join('\n');
+      }).join('\n');
   }
 }
