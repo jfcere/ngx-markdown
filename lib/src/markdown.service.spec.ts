@@ -20,6 +20,7 @@ import {
   ParseOptions,
   SECURITY_CONTEXT,
 } from './markdown.service';
+import { ɵMARKED } from './marked';
 import { MarkedOptions } from './marked-options';
 import { MermaidAPI } from './mermaid-options';
 
@@ -28,7 +29,7 @@ declare let Prism: any;
 declare let joypixels: any;
 declare let mermaid: any;
 
-describe('MarkdowService', () => {
+describe('MarkdownService', () => {
   let domSanitizer: DomSanitizer;
   let http: HttpTestingController;
   let markdownService: MarkdownService;
@@ -324,31 +325,6 @@ describe('MarkdowService', () => {
         useCases.forEach(func => {
           expect(func()).toBe(marked.parse(mockRaw));
         });
-      });
-
-      it('should provide markedOptions correctly when parsing', () => {
-
-        const mockRaw = '### Markdown-x';
-        const mockMarkedOptions: MarkedOptions = {
-          breaks: true,
-          gfm: false,
-        };
-        const parseOptions: ParseOptions = {
-          markedOptions: mockMarkedOptions,
-        };
-
-        const markedParseSpy = spyOn(marked, 'parse');
-
-        markdownService.parse(mockRaw, parseOptions);
-
-        expect(markedParseSpy).toHaveBeenCalled();
-        expect(markedParseSpy.calls.argsFor(0)[0]).toBe(mockRaw);
-        const expectedOptions = {
-          ...markdownService.options,
-          ...mockMarkedOptions,
-        };
-        delete expectedOptions.renderer;
-        expect(markedParseSpy.calls.argsFor(0)[1]).toEqual(expectedOptions);
       });
 
       it('should return empty string when raw is null/undefined/empty', () => {
@@ -1070,5 +1046,52 @@ describe('MarkdowService', () => {
         });
       });
     });
+  });
+});
+
+describe('MarkdownService with mocked Marked', () => {
+  let MarkedMock: any;
+  let markdownService: MarkdownService;
+  let markedParseSpy: jasmine.Spy;
+
+  beforeEach(() => {
+    markedParseSpy = jasmine.createSpy('Marked#parse');
+    MarkedMock = jasmine.createSpy('Marked.constructor').and.returnValue({use: () => undefined, parse: markedParseSpy});
+    TestBed.configureTestingModule({
+      imports: [
+        MarkdownModule.forRoot({sanitize: SecurityContext.HTML}),
+      ],
+      providers: [
+        {
+          provide: ɵMARKED,
+          useValue: MarkedMock,
+        },
+      ],
+    });
+
+    markdownService = TestBed.inject(MarkdownService);
+  });
+
+  it('should provide markedOptions correctly when parsing', () => {
+
+    const mockRaw = '### Markdown-x';
+    const mockMarkedOptions: MarkedOptions = {
+      breaks: true,
+      gfm: false,
+    };
+    const parseOptions: ParseOptions = {
+      markedOptions: mockMarkedOptions,
+    };
+
+    markdownService.parse(mockRaw, parseOptions);
+
+    expect(markedParseSpy).toHaveBeenCalled();
+    expect(markedParseSpy.calls.argsFor(0)[0]).toBe(mockRaw);
+    const expectedOptions = {
+      ...markdownService.options,
+      ...mockMarkedOptions,
+    };
+    delete expectedOptions.renderer;
+    expect(markedParseSpy.calls.argsFor(0)[1]).toEqual(expectedOptions);
   });
 });

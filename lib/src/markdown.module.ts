@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Provider, SecurityContext } from '@angular/core';
 
+import { Marked } from 'marked';
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { LanguagePipe } from './language.pipe';
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownPipe } from './markdown.pipe';
 import { MarkdownService, SECURITY_CONTEXT } from './markdown.service';
+import { ɵMARKED } from './marked';
 
 // having a dependency on `HttpClientModule` within a library
 // breaks all the interceptors from the app consuming the library
@@ -44,6 +46,10 @@ export class MarkdownModule {
           useValue: markdownModuleConfig && markdownModuleConfig.sanitize != null
             ? markdownModuleConfig.sanitize
             : SecurityContext.HTML,
+        },
+        {
+          provide: ɵMARKED,
+          useValue: Marked,
         },
       ],
     };

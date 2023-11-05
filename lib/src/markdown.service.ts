@@ -12,7 +12,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Marked, Renderer } from 'marked';
+import { Renderer } from 'marked';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -20,6 +20,7 @@ import { ClipboardButtonComponent } from './clipboard-button.component';
 import { ClipboardOptions, ClipboardRenderOptions } from './clipboard-options';
 import { KatexOptions } from './katex-options';
 import { MARKDOWN_EXTENSIONS } from './markdown-extensions';
+import { ɵMARKED } from './marked';
 import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
 import { MermaidAPI } from './mermaid-options';
@@ -89,6 +90,7 @@ export class ExtendedRenderer extends Renderer {
 @Injectable()
 export class MarkdownService {
   private readonly extensions = inject(MARKDOWN_EXTENSIONS, {optional: true});
+  private readonly Marked = inject(ɵMARKED);
 
   private readonly DEFAULT_MARKED_OPTIONS: MarkedOptions = {
     renderer: new MarkedRenderer(),
@@ -303,7 +305,7 @@ export class MarkdownService {
   }
 
   private parseMarked(html: string, markedOptions: MarkedOptions, inline = false): string | Promise<string> {
-    const marked = new Marked();
+    const marked = new this.Marked();
     if (markedOptions.renderer) {
       // because if renderer is passed to parse method, it will ignore all extensions
       marked.use({renderer: markedOptions.renderer});
