@@ -620,9 +620,9 @@ MarkdownModule.forRoot({
 
 ### provide marked extensions
 
-there is an Angular token `MARKDOWN_EXTENSIONS` that you can provide with array of extensions to be used
+There is an Angular token `MARKDOWN_EXTENSIONS` that you can provide with array of extensions to be used.
 
-usage example for `app.config.ts` (but it's the same for `NgModule` or `Component` providers)
+Usage example for `app.config.ts` (but it's the same for `NgModule` or `Component` providers)
 ```ts
 import { ApplicationConfig } from '@angular/core';
 import { gfmHeadingId } from 'marked-gfm-heading-id';
