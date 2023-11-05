@@ -96,11 +96,6 @@ export class MarkdownService {
     ],
   };
 
-  private readonly DEFAULT_MERMAID_RUNOPTIONS: MermaidAPI.RunOptions = {
-    suppressErrors: false,
-    querySelector: '.mermaid',
-  };
-
   private readonly DEFAULT_MERMAID_OPTIONS: MermaidAPI.Config = {
     startOnLoad: false,
   };
@@ -397,8 +392,12 @@ export class MarkdownService {
     if (typeof mermaid === 'undefined' || typeof mermaid.initialize === 'undefined') {
       throw new Error(errorMermaidNotLoaded);
     }
+    const mermaidElements = element.querySelectorAll<HTMLElement>('.mermaid');
+    if (mermaidElements.length === 0) {
+      return;
+    }
     mermaid.initialize(options);
-    mermaid.run(this.DEFAULT_MERMAID_RUNOPTIONS);
+    mermaid.run({ nodes: mermaidElements });
   }
 
   private trimIndentation(markdown: string): string {
