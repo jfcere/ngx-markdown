@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Provider, SecurityContext } from '@angular/core';
-
-import { Marked } from 'marked';
+// eslint-disable-next-line import/named
+import { Marked, MarkedExtension } from 'marked';
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { LanguagePipe } from './language.pipe';
+import { MARKDOWN_EXTENSIONS } from './markdown-extensions';
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownPipe } from './markdown.pipe';
 import { MarkdownService, SECURITY_CONTEXT } from './markdown.service';
@@ -14,10 +15,10 @@ import { ɵMARKED } from './marked';
 // here, we explicitely ask the user to pass a provider with
 // their own instance of `HttpClientModule`
 export interface MarkdownModuleConfig {
-  loader?: Provider;
   clipboardOptions?: Provider;
   markedOptions?: Provider;
   sanitize?: SecurityContext;
+  extensions?: MarkedExtension[];
 }
 
 const sharedDeclarations = [
@@ -38,7 +39,6 @@ export class MarkdownModule {
       ngModule: MarkdownModule,
       providers: [
         MarkdownService,
-        markdownModuleConfig && markdownModuleConfig.loader || [],
         markdownModuleConfig && markdownModuleConfig.clipboardOptions || [],
         markdownModuleConfig && markdownModuleConfig.markedOptions || [],
         {
@@ -46,6 +46,10 @@ export class MarkdownModule {
           useValue: markdownModuleConfig && markdownModuleConfig.sanitize != null
             ? markdownModuleConfig.sanitize
             : SecurityContext.HTML,
+        },
+        {
+          provide: MARKDOWN_EXTENSIONS,
+          useValue: markdownModuleConfig?.extensions ?? [],
         },
         {
           provide: ɵMARKED,
