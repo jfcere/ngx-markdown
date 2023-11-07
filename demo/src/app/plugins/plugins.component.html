@@ -76,7 +76,7 @@
 
       function square(number) &#123;
         return number * number;
-      }
+      &#125;
       ```
     </markdown>
 
@@ -101,8 +101,8 @@
           n = Math.pow(possible, n);
           if (Math.abs(x - n) < 1 && (x > 0 == n > 0))
             return negate ? -possible : possible;
-        } catch (e) &#123; }
-      }
+        &#125; catch (e) &#123; &#125;
+      &#125;
       ```
     </markdown>
   </section>
@@ -150,8 +150,8 @@
           n = Math.pow(possible, n);
           if (Math.abs(x - n) < 1 && (x > 0 == n > 0))
             return negate ? -possible : possible;
-        } catch (e) &#123; }
-      }
+        &#125; catch (e) &#123; &#125;
+      &#125;
       ```
     </markdown>
   </section>
@@ -305,7 +305,7 @@
 
       **example.component.ts**
       ```typescript
-      import &#123; KatexOptions } from 'ngx-markdown';
+      import &#123; KatexOptions &#125; from 'ngx-markdown';
 
       public options: KatexOptions = &#123;
         displayMode: true,
@@ -313,7 +313,7 @@
         errorColor: '#cc0000',
         delimiters: [...],
         ...
-      };
+      &#125;;
       ```
 
       **example.component.html**
@@ -361,14 +361,14 @@
 
       **example.component.ts**
       ```typescript
-      import &#123; MermaidAPI } from 'ngx-markdown';
+      import &#123; MermaidAPI &#125; from 'ngx-markdown';
 
       public options: MermaidAPI.Config = &#123;
         fontFamily: '"trebuchet ms", verdana, arial, sans-serif',
         logLevel: MermaidAPI.LogLevel.Info,
         theme: MermaidAPI.Theme.Dark,
         ...
-      };
+      &#125;;
       ```
 
       **example.component.html**
@@ -424,20 +424,20 @@
         padding: 4px 0;
         width: 50px;
         transition: all 250ms ease-out;
-      }
+      &#125;
 
       .markdown-clipboard-button:hover &#123;
         background-color: rgba(255, 255, 255, 0.14);
-      }
+      &#125;
 
       .markdown-clipboard-button:active &#123;
         transform: scale(0.95);
-      }
+      &#125;
 
       .markdown-clipboard-button.copied &#123;
         background-color: rgba(0, 255, 0, 0.1);
         color: #00ff00;
-      }
+      &#125;
       ```
     </markdown>
 
@@ -453,9 +453,9 @@
           provide: ClipboardOptions,
           useValue: &#123;
             buttonComponent: ClipboardButtonComponent,
-          },
-        },
-      }),
+          &#125;,
+        &#125;,
+      &#125;),
       ```
     </markdown>
 
@@ -465,26 +465,26 @@
       You can also provide your custom component using the `clipboardButtonComponent` input property when using the `clipboard` directive.
 
       ```typescript
-      import &#123; Component } from '@angular/core';
+      import &#123; Component &#125; from '&#64;angular/core';
 
-      @Component(&#123;
+      &#64;Component(&#123;
         selector: 'app-clipboard-button',
         template: `&lt;button (click)="onClick()">Copy&lt;/button>`,
-      })
+      &#125;)
       export class ClipboardButtonComponent &#123;
         onClick() &#123;
           alert('Copied to clipboard!');
-        }
-      }
+        &#125;
+      &#125;
       ```
 
       ```typescript
-      import &#123; ClipboardButtonComponent } from './clipboard-button-component';
+      import &#123; ClipboardButtonComponent &#125; from './clipboard-button-component';
 
-      @Component(&#123; ... })
+      &#64;Component(&#123; ... &#125;)
       export class ExampleComponent &#123;
         readonly clipboardButton = ClipboardButtonComponent;
-      }
+      &#125;
       ```
 
       ```html
