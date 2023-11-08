@@ -80,6 +80,7 @@
             }
           ]
         }],
+        "import/no-duplicates": "error",
         "quotes": ["error", "single"],
         "semi": ["error", "always"],
         "sort-imports": ["error", {

@@ -19,7 +19,7 @@ import { map } from 'rxjs/operators';
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { ClipboardOptions, ClipboardRenderOptions } from './clipboard-options';
 import { KatexOptions } from './katex-options';
-import { MARKDOWN_EXTENSIONS } from './markdown-extensions';
+import { MARKED_EXTENSIONS } from './markdown-extensions';
 import { ɵMARKED } from './marked';
 import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
@@ -89,7 +89,7 @@ export class ExtendedRenderer extends Renderer {
 
 @Injectable()
 export class MarkdownService {
-  private readonly extensions = inject(MARKDOWN_EXTENSIONS, {optional: true});
+  private readonly extensions = inject(MARKED_EXTENSIONS, {optional: true});
   private readonly Marked = inject(ɵMARKED);
 
   private readonly DEFAULT_MARKED_OPTIONS: MarkedOptions = {

@@ -54,7 +54,7 @@ StackBlitz available @ [https://stackblitz.com/edit/ngx-markdown](https://stackb
 To add ngx-markdown library to your `package.json` use the following commands.
 
 ```bash
-npm install ngx-markdown marked@^9
+npm install ngx-markdown marked@^9.0.0
 ```
 
 ### Syntax highlight
@@ -618,27 +618,15 @@ MarkdownModule.forRoot({
 ```
 
 
-### provide marked extensions
+### Marked extensions
 
-There is an Angular token `MARKDOWN_EXTENSIONS` that you can provide with array of extensions to be used.
+You can provide [marked extensions](https://marked.js.org/using_advanced#extensions) using the `markedExtensions` property that accepts an array of extensions when configuring `MarkdownModule`.
 
-Usage example for `app.config.ts` (but it's the same for `NgModule` or `Component` providers)
 ```ts
-import { ApplicationConfig } from '@angular/core';
-import { gfmHeadingId } from 'marked-gfm-heading-id';
-import { MARKDOWN_EXTENSIONS } from 'ngx-markdown';
-
-export const appConfig: ApplicationConfig = {
-  providers: [
-    // other providers
-    {
-      provide: MARKDOWN_EXTENSIONS,
-      useValue: [gfmHeadingId()],
-    },
-  ],
-};
+MarkdownModule.forRoot({
+  markedExtensions: [gfmHeadingId()],
+}),
 ```
-
 
 ### Other application modules
 

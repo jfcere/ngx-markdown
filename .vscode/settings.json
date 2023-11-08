@@ -1,8 +1,4 @@
 {
-  "auto-close-tag.activationOnLanguage": [
-    "html"
-  ],
-
   "editor.codeActionsOnSave": {
     "source.fixAll": true
   },
