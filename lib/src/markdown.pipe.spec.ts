@@ -43,7 +43,7 @@ describe('MarkdownPipe', () => {
 
     const markdowns: any[] = [undefined, null];
 
-    for(const markdown of markdowns) {
+    for (const markdown of markdowns) {
       const result = await pipe.transform(markdown);
       expect(result).toBe('');
     }

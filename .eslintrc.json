@@ -83,6 +83,7 @@
         "import/no-duplicates": "error",
         "quotes": ["error", "single"],
         "semi": ["error", "always"],
+        "semi-spacing": "error",
         "sort-imports": ["error", {
           "ignoreCase": true,
           "ignoreDeclarationSort": true

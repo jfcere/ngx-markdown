@@ -2,7 +2,6 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import {
   EmbeddedViewRef,
-  inject,
   Inject,
   Injectable,
   InjectionToken,
@@ -12,7 +11,8 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Renderer } from 'marked';
+// eslint-disable-next-line import/named
+import { Marked, MarkedExtension, Renderer } from 'marked';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -89,8 +89,6 @@ export class ExtendedRenderer extends Renderer {
 
 @Injectable()
 export class MarkdownService {
-  private readonly extensions = inject(MARKED_EXTENSIONS, {optional: true});
-  private readonly Marked = inject(ɵMARKED);
 
   private readonly DEFAULT_MARKED_OPTIONS: MarkedOptions = {
     renderer: new MarkedRenderer(),
@@ -157,11 +155,13 @@ export class MarkdownService {
   readonly reload$ = this._reload$.asObservable();
 
   constructor(
+    @Inject(MARKED_EXTENSIONS) @Optional() private extensions: MarkedExtension[],
     @Inject(PLATFORM_ID) private platform: Object,
     @Inject(SECURITY_CONTEXT) private securityContext: SecurityContext,
-    @Optional() private http: HttpClient,
-    @Optional() private clipboardOptions: ClipboardOptions,
+    @Inject(ɵMARKED) private MarkedInstance: typeof Marked,
     @Optional() options: MarkedOptions,
+    @Optional() private clipboardOptions: ClipboardOptions,
+    @Optional() private http: HttpClient,
     private sanitizer: DomSanitizer,
   ) {
     this.options = options;
@@ -305,7 +305,7 @@ export class MarkdownService {
   }
 
   private parseMarked(html: string, markedOptions: MarkedOptions, inline = false): string | Promise<string> {
-    const marked = new this.Marked();
+    const marked = new this.MarkedInstance();
     if (markedOptions.renderer) {
       // because if renderer is passed to parse method, it will ignore all extensions
       marked.use({renderer: markedOptions.renderer});

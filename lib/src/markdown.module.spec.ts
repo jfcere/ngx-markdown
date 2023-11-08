@@ -2,8 +2,11 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, SecurityContext } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+// eslint-disable-next-line import/named
+import { MarkedExtension } from 'marked';
 
 import { ClipboardOptions } from './clipboard-options';
+import { MARKED_EXTENSIONS } from './markdown-extensions';
 import { MarkdownModule } from './markdown.module';
 import { errorSrcWithoutHttpClient, SECURITY_CONTEXT } from './markdown.service';
 import { MarkedOptions } from './marked-options';
@@ -110,7 +113,7 @@ describe('MarkdownModule', () => {
 
     it('should provide MarkedOptions when MarkdownModuleConfig is provided with markedOptions', () => {
 
-      const mockMarkedOptions: MarkedOptions = { };
+      const mockMarkedOptions: MarkedOptions = { breaks: true, gfm: false };
 
       TestBed.configureTestingModule({
         imports: [
@@ -152,6 +155,52 @@ describe('MarkdownModule', () => {
       const markedOptions = TestBed.inject(MarkedOptions, null);
 
       expect(markedOptions).toBeNull();
+    });
+
+    it('should provide MarkedExtensions when MarkdownModuleConfig is provided with markedExtensions', () => {
+
+      const mockExtensions = [{ name: 'mock-extension' } as MarkedExtension];
+
+      TestBed.configureTestingModule({
+        imports: [
+          MarkdownModule.forRoot({ markedExtensions: mockExtensions }),
+        ],
+      });
+
+      const markedExtensions = TestBed.inject(MARKED_EXTENSIONS);
+
+      expect(markedExtensions).toBe(mockExtensions);
+    });
+
+    it('should provide an empty array when MarkdownModuleConfig is provided without markedExtensions', () => {
+
+      TestBed.configureTestingModule({
+        imports: [
+          MarkdownModule.forRoot({
+            markedOptions: {
+              provide: MarkedOptions,
+              useValue: 'mockMarkedOptions',
+            },
+          }),
+        ],
+      });
+
+      const markedExtensions = TestBed.inject(MARKED_EXTENSIONS);
+
+      expect(markedExtensions).toEqual([]);
+    });
+
+    it('should provide an empty array when MarkdownModuleConfig is not provided', () => {
+
+      TestBed.configureTestingModule({
+        imports: [
+          MarkdownModule.forRoot(),
+        ],
+      });
+
+      const markedExtensions = TestBed.inject(MARKED_EXTENSIONS);
+
+      expect(markedExtensions).toEqual([]);
     });
 
     it('should provide SecurityContext when MarkdownModuleConfig is provided with sanitize', () => {
@@ -210,7 +259,7 @@ describe('MarkdownModule', () => {
 
     it('should inherit from forRoot providers', () => {
 
-      const mockMarkedOptions: MarkedOptions = { };
+      const mockMarkedOptions: MarkedOptions = { breaks: true, gfm: false };
       const mockClipboardOptions: ClipboardOptions = { buttonComponent: class mockClipboardButtonComponent {} };
 
       TestBed.configureTestingModule({

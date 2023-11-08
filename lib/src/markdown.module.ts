@@ -41,18 +41,16 @@ export class MarkdownModule {
       ngModule: MarkdownModule,
       providers: [
         MarkdownService,
-        markdownModuleConfig && markdownModuleConfig.loader || [],
-        markdownModuleConfig && markdownModuleConfig.clipboardOptions || [],
-        markdownModuleConfig && markdownModuleConfig.markedOptions || [],
+        markdownModuleConfig?.loader ?? [],
+        markdownModuleConfig?.clipboardOptions ?? [],
+        markdownModuleConfig?.markedOptions ?? [],
         {
           provide: MARKED_EXTENSIONS,
           useValue: markdownModuleConfig?.markedExtensions ?? [],
         },
         {
           provide: SECURITY_CONTEXT,
-          useValue: markdownModuleConfig && markdownModuleConfig.sanitize != null
-            ? markdownModuleConfig.sanitize
-            : SecurityContext.HTML,
+          useValue: markdownModuleConfig?.sanitize ?? SecurityContext.HTML,
         },
         {
           provide: ɵMARKED,
