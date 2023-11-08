@@ -30,12 +30,12 @@ describe('MarkdownModule', () => {
 
   describe('forRoot', () => {
 
-    it('should still provide HttpClient after removing MarkdownModuleConfig.loader', () => {
+    it('should provide HttpClient when MarkdownModuleConfig.loader is provided', () => {
 
       TestBed.configureTestingModule({
         imports: [
           HttpClientModule,
-          MarkdownModule.forRoot(),
+          MarkdownModule.forRoot({ loader: HttpClient }),
         ],
       });
 
@@ -99,7 +99,7 @@ describe('MarkdownModule', () => {
 
       TestBed.configureTestingModule({
         imports: [
-          MarkdownModule.forRoot(),
+          MarkdownModule.forRoot({ loader: HttpClient }),
         ],
       });
 
@@ -132,7 +132,7 @@ describe('MarkdownModule', () => {
 
       TestBed.configureTestingModule({
         imports: [
-          MarkdownModule.forRoot(),
+          MarkdownModule.forRoot({ loader: HttpClient }),
         ],
       });
 
@@ -217,6 +217,7 @@ describe('MarkdownModule', () => {
         imports: [
           HttpClientModule,
           MarkdownModule.forRoot({
+            loader: HttpClient,
             clipboardOptions: { provide: ClipboardOptions, useValue: mockClipboardOptions },
             markedOptions: { provide: MarkedOptions, useValue: mockMarkedOptions },
             sanitize: SecurityContext.NONE,

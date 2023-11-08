@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule, SecurityContext } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,7 +6,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { gfmHeadingId } from 'marked-gfm-heading-id';
-import { ClipboardOptions, MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
+import { ClipboardOptions, MARKDOWN_EXTENSIONS, MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
 
 import { AnchorModule } from '@shared/anchor/anchor.module';
 import { AnchorService } from '@shared/anchor/anchor.service';
@@ -35,6 +35,7 @@ export function markedOptionsFactory(anchorService: AnchorService): MarkedOption
     ClipboardButtonModule,
     HttpClientModule,
     MarkdownModule.forRoot({
+      loader: HttpClient,
       markedOptions: {
         provide: MarkedOptions,
         useFactory: markedOptionsFactory,
@@ -47,13 +48,18 @@ export function markedOptionsFactory(anchorService: AnchorService): MarkedOption
         },
       },
       sanitize: SecurityContext.NONE,
-      extensions: [gfmHeadingId()],
     }),
     MatButtonModule,
     MatIconModule,
     MatTabsModule,
     MatToolbarModule,
     SharedModule,
+  ],
+  providers: [
+    {
+      provide: MARKDOWN_EXTENSIONS,
+      useValue: [gfmHeadingId()],
+    },
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
