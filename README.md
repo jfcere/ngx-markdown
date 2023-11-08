@@ -241,7 +241,7 @@ Optionally, to automatically present some lines as output without providing the 
 To add [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) library to your `package.json` use the following command.
 
 ```bash
-npm install emoji-toolkit@^7.0.0 --save
+npm install emoji-toolkit@^8.0.0 --save
 ```
 
 To activate [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) for emoji suppport you will need to include...
@@ -339,7 +339,7 @@ public options: KatexOptions = {
 To add [Mermaid](https://mermaid-js.github.io/) library to your `package.json` use the following command.
 
 ```bash
-npm install mermaid@^9.1.2 --save
+npm install mermaid@^10.6.0 --save
 ```
 
 To activate [Mermaid](https://mermaid-js.github.io/) diagramming and charting tool you will need to include...
@@ -365,7 +365,7 @@ Using `markdown` component and/or directive, you will be able to use the `mermai
 </markdown>
 ```
 
-Optionally, you can specify mermaid [configuration options](https://mermaid-js.github.io/mermaid/#/Setup?id=configuration) using `mermaidOptions` property.
+Optionally, you can specify mermaid [configuration options](https://mermaid.js.org/config/schema-docs/config.html#mermaid-config-properties) using `mermaidOptions` property.
 
 ```typescript
 import { MermaidAPI } from 'ngx-markdown';
