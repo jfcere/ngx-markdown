@@ -81,14 +81,15 @@
           ]
         }],
         "import/no-duplicates": "error",
+        "object-curly-spacing": ["error", "always"],
+        "object-shorthand": "off",
         "quotes": ["error", "single"],
         "semi": ["error", "always"],
         "semi-spacing": "error",
         "sort-imports": ["error", {
           "ignoreCase": true,
           "ignoreDeclarationSort": true
-        }],
-        "object-shorthand": "off"
+        }]
       }
     },
     {

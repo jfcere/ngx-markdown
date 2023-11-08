@@ -623,6 +623,8 @@ MarkdownModule.forRoot({
 You can provide [marked extensions](https://marked.js.org/using_advanced#extensions) using the `markedExtensions` property that accepts an array of extensions when configuring `MarkdownModule`.
 
 ```ts
+import { gfmHeadingId } from 'marked-gfm-heading-id';
+
 MarkdownModule.forRoot({
   markedExtensions: [gfmHeadingId()],
 }),

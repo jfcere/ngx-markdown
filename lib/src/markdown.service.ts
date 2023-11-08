@@ -303,7 +303,7 @@ export class MarkdownService {
     const marked = new this.MarkedInstance();
     if (markedOptions.renderer) {
       // because if renderer is passed to parse method, it will ignore all extensions
-      marked.use({renderer: markedOptions.renderer});
+      marked.use({ renderer: markedOptions.renderer });
       delete markedOptions.renderer;
     }
 

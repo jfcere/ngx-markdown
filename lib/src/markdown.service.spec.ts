@@ -113,6 +113,17 @@ describe('MarkdownService', () => {
         expect(markdownService.options).toBeDefined();
         expect(markdownService.options.renderer).toBeDefined();
       });
+
+      it('should update correctly', () => {
+
+        markdownService.options = { breaks: true, gfm: false, pedantic: true, silent: false };
+
+        expect(markdownService.options.breaks).toBeTrue();
+        expect(markdownService.options.gfm).toBeFalse();
+        expect(markdownService.options.pedantic).toBeTrue();
+        expect(markdownService.options.silent).toBeFalse();
+        expect(markdownService.options.renderer).toBeDefined();
+      });
     });
 
     describe('renderer', () => {
@@ -1070,10 +1081,10 @@ describe('MarkdownService with mocked Marked', () => {
 
   beforeEach(() => {
     markedParseSpy = jasmine.createSpy('Marked#parse');
-    MarkedMock = jasmine.createSpy('Marked.constructor').and.returnValue({use: () => undefined, parse: markedParseSpy});
+    MarkedMock = jasmine.createSpy('Marked.constructor').and.returnValue({ use: () => undefined, parse: markedParseSpy });
     TestBed.configureTestingModule({
       imports: [
-        MarkdownModule.forRoot({sanitize: SecurityContext.HTML}),
+        MarkdownModule.forRoot({ sanitize: SecurityContext.HTML }),
       ],
       providers: [
         {

@@ -297,8 +297,8 @@ describe('MarkdownComponent', () => {
         buttonTemplate: new class mockTemplateRef {
         } as TemplateRef<unknown>,
       };
-      const katexOptions: KatexOptions = {displayMode: true};
-      const mermaidOptions: MermaidAPI.Config = {darkMode: true};
+      const katexOptions: KatexOptions = { displayMode: true };
+      const mermaidOptions: MermaidAPI.Config = { darkMode: true };
 
       spyOn(markdownService, 'parse').and.returnValue(parsed);
       spyOn(markdownService, 'render');
