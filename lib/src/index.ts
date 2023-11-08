@@ -2,6 +2,7 @@ export * from './clipboard-button.component';
 export * from './clipboard-options';
 export * from './katex-options';
 export * from './language.pipe';
+export * from './markdown-extensions';
 export * from './markdown.component';
 export * from './markdown.module';
 export * from './markdown.pipe';

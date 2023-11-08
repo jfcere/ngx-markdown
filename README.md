@@ -54,18 +54,7 @@ StackBlitz available @ [https://stackblitz.com/edit/ngx-markdown](https://stackb
 To add ngx-markdown library to your `package.json` use the following commands.
 
 ```bash
-npm install ngx-markdown marked@^4.3.0 --save
-npm install @types/marked@^4.3.0 --save-dev
-```
-
-As the library is using [Marked](https://github.com/chjj/marked) parser you will need to add `node_modules/marked/marked.min.js` to your application.
-
-If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
-
-```diff
-"scripts": [
-+ "node_modules/marked/marked.min.js"
-]
+npm install ngx-markdown marked@^9.0.0
 ```
 
 ### Syntax highlight
@@ -588,8 +577,6 @@ MarkdownModule.forRoot({
       gfm: true,
       breaks: false,
       pedantic: false,
-      smartLists: true,
-      smartypants: false,
     },
   },
 }),
@@ -617,8 +604,6 @@ export function markedOptionsFactory(): MarkedOptions {
     gfm: true,
     breaks: false,
     pedantic: false,
-    smartLists: true,
-    smartypants: false,
   };
 }
 
@@ -629,6 +614,17 @@ MarkdownModule.forRoot({
     provide: MarkedOptions,
     useFactory: markedOptionsFactory,
   },
+}),
+```
+
+
+### Marked extensions
+
+You can provide [marked extensions](https://marked.js.org/using_advanced#extensions) using the `markedExtensions` property that accepts an array of extensions when configuring `MarkdownModule`.
+
+```ts
+MarkdownModule.forRoot({
+  markedExtensions: [gfmHeadingId()],
 }),
 ```
 
@@ -660,7 +656,7 @@ https://angular.io/api/core/Component#preserveWhitespaces
 
 ### Component
 
-You can use `markdown` component to either parse static markdown directly from your HTML markup, load the content from a remote URL using `src` property or bind a variable to your component using `data` property. To enable relative oath for links/images when using `src` input property to load content remotely, set the `srcRelativeLink` input property to `true`. You can get a hook on load complete using `load` output event property, on loading error using `error` output event property or when parsing is completed using `ready` output event property.
+You can use `markdown` component to either parse static markdown directly from your HTML markup, load the content from a remote URL using `src` property or bind a variable to your component using `data` property. You can get a hook on load complete using `load` output event property, on loading error using `error` output event property or when parsing is completed using `ready` output event property.
 
 ```html
 <!-- static markdown -->
@@ -671,7 +667,6 @@ You can use `markdown` component to either parse static markdown directly from y
 <!-- loaded from remote url -->
 <markdown
   [src]="'path/to/file.md'"
-  [srcRelativeLink]="true"
   (load)="onLoad($event)"
   (error)="onError($event)">
 </markdown>
@@ -702,7 +697,6 @@ The same way the component works, you can use `markdown` directive to accomplish
 <!-- loaded from remote url -->
 <div markdown
   [src]="'path/to/file.md'"
-  [srcRelativeLink]="true"
   (load)="onLoad($event)"
   (error)="onError($event)">
 </div>

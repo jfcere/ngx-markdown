@@ -19,7 +19,7 @@ export class MarkdownPipe implements PipeTransform {
     private zone: NgZone,
   ) { }
 
-  transform(value: string, options?: MarkdownPipeOptions): SafeHtml {
+  async transform(value: string, options?: MarkdownPipeOptions): Promise<SafeHtml> {
     if (value == null) {
       return '';
     }
@@ -29,7 +29,7 @@ export class MarkdownPipe implements PipeTransform {
       return value;
     }
 
-    const markdown = this.markdownService.parse(value, options);
+    const markdown = await this.markdownService.parse(value, options);
 
     this.zone.onStable
       .pipe(first())

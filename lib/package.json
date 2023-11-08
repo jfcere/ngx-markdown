@@ -33,8 +33,7 @@
     "@angular/common": "^16.0.0",
     "@angular/core": "^16.0.0",
     "@angular/platform-browser": "^16.0.0",
-    "@types/marked": "^4.3.0",
-    "marked": "^4.3.0",
+    "marked": "^9.0.0",
     "rxjs": "^6.5.3 || ^7.4.0",
     "zone.js": "~0.13.0"
   },

@@ -1,14 +1,26 @@
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { EmbeddedViewRef, Inject, Injectable, InjectionToken, Optional, PLATFORM_ID, SecurityContext, ViewContainerRef } from '@angular/core';
+import {
+  EmbeddedViewRef,
+  Inject,
+  Injectable,
+  InjectionToken,
+  Optional,
+  PLATFORM_ID,
+  SecurityContext,
+  ViewContainerRef,
+} from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { marked, Renderer } from 'marked';
+// eslint-disable-next-line import/named
+import { Marked, MarkedExtension, Renderer } from 'marked';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { ClipboardOptions, ClipboardRenderOptions } from './clipboard-options';
 import { KatexOptions } from './katex-options';
+import { MARKED_EXTENSIONS } from './markdown-extensions';
+import { ɵMARKED } from './marked';
 import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
 import { MermaidAPI } from './mermaid-options';
@@ -138,17 +150,19 @@ export class MarkdownService {
   readonly reload$ = this._reload$.asObservable();
 
   constructor(
+    @Inject(MARKED_EXTENSIONS) @Optional() private extensions: MarkedExtension[],
     @Inject(PLATFORM_ID) private platform: Object,
     @Inject(SECURITY_CONTEXT) private securityContext: SecurityContext,
-    @Optional() private http: HttpClient,
-    @Optional() private clipboardOptions: ClipboardOptions,
+    @Inject(ɵMARKED) private MarkedInstance: typeof Marked,
     @Optional() options: MarkedOptions,
+    @Optional() private clipboardOptions: ClipboardOptions,
+    @Optional() private http: HttpClient,
     private sanitizer: DomSanitizer,
   ) {
     this.options = options;
   }
 
-  parse(markdown: string, parseOptions: ParseOptions = this.DEFAULT_PARSE_OPTIONS): string {
+  parse(markdown: string, parseOptions: ParseOptions = this.DEFAULT_PARSE_OPTIONS): string | Promise<string> {
     const {
       decodeHtml,
       inline,
@@ -285,7 +299,16 @@ export class MarkdownService {
       : markdown;
   }
 
-  private parseMarked(html: string, markedOptions: MarkedOptions, inline = false): string {
+  private parseMarked(html: string, markedOptions: MarkedOptions, inline = false): string | Promise<string> {
+    const marked = new this.MarkedInstance();
+    if (markedOptions.renderer) {
+      // because if renderer is passed to parse method, it will ignore all extensions
+      marked.use({renderer: markedOptions.renderer});
+      delete markedOptions.renderer;
+    }
+
+    marked.use(...(this.extensions ?? []));
+
     return inline
       ? marked.parseInline(html, markedOptions)
       : marked.parse(html, markedOptions);
