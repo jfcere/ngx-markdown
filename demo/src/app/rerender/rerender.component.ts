@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { MarkdownService, MarkedRenderer } from 'ngx-markdown';
+import { MarkdownService } from 'ngx-markdown';
 
 @Component({
   selector: 'app-rerender',
@@ -9,10 +9,12 @@ import { MarkdownService, MarkedRenderer } from 'ngx-markdown';
 })
 export class RerenderComponent implements OnInit, OnDestroy {
 
-  private _accentColor = '';
+  // property to handle override as per marked documentation, if a renderer
+  // function returns `false` it will fallback to previous implementation
+  // https://marked.js.org/using_pro#renderer
+  private overrideEnabled = false;
 
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  private _defaultMarkedRendererHeading = MarkedRenderer.prototype.heading;
+  private _accentColor = '';
 
   get accentColor(): string {
     return this._accentColor;
@@ -68,13 +70,17 @@ const language = 'typescript';
   }
 
   private overrideRenderer(styleAttribute: string): void {
+    this.overrideEnabled = true;
+
     this.markdownService.renderer.heading = (text: string, level: number): string => {
-      return `<h${level}${styleAttribute}>${text}</h${level}>`;
+      return this.overrideEnabled
+        ? `<h${level}${styleAttribute}>${text}</h${level}>`
+        : false as unknown as string;
     };
   }
 
   private resetRenderer(): void {
-    this.markdownService.renderer.heading = this._defaultMarkedRendererHeading;
+    this.overrideEnabled = false;
   }
 
   private setHeadings(): void {

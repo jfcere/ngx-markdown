@@ -12,14 +12,13 @@ import {
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 // eslint-disable-next-line import/named
-import { Marked, MarkedExtension, Renderer } from 'marked';
+import { marked, MarkedExtension, Renderer } from 'marked';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { CLIPBOARD_OPTIONS, ClipboardOptions, ClipboardRenderOptions } from './clipboard-options';
 import { KatexOptions } from './katex-options';
-import { ɵMARKED } from './marked';
 import { MARKED_EXTENSIONS } from './marked-extensions';
 import { MARKED_OPTIONS, MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
@@ -84,7 +83,8 @@ export interface RenderOptions {
 }
 
 export class ExtendedRenderer extends Renderer {
-  ɵNgxMarkdownRendererExtended = false;
+  ɵNgxMarkdownRendererExtendedForExtensions = false;
+  ɵNgxMarkdownRendererExtendedForMermaid = false;
 }
 
 @Injectable()
@@ -155,7 +155,6 @@ export class MarkdownService {
     @Inject(MARKED_OPTIONS) @Optional() options: MarkedOptions,
     @Inject(PLATFORM_ID) private platform: Object,
     @Inject(SECURITY_CONTEXT) private securityContext: SecurityContext,
-    @Inject(ɵMARKED) private MarkedInstance: typeof Marked,
     @Optional() private http: HttpClient,
     private sanitizer: DomSanitizer,
   ) {
@@ -176,8 +175,14 @@ export class MarkdownService {
       ...parseOptions.markedOptions,
     };
 
+    const renderer = markedOptions.renderer || this.renderer || new Renderer();
+
+    if (this.extensions) {
+      this.renderer = this.extendsRendererForExtensions(renderer);
+    }
+
     if (mermaid) {
-      this.renderer = this.extendRenderer(markedOptions.renderer || new Renderer());
+      this.renderer = this.extendsRendererForMermaid(renderer);
     }
 
     const trimmed = this.trimIndentation(markdown);
@@ -259,9 +264,24 @@ export class MarkdownService {
     return textarea.value;
   }
 
-  private extendRenderer(renderer: Renderer): Renderer {
+  private extendsRendererForExtensions(renderer: Renderer): Renderer {
     const extendedRenderer = renderer as ExtendedRenderer;
-    if (extendedRenderer.ɵNgxMarkdownRendererExtended === true) {
+    if (extendedRenderer.ɵNgxMarkdownRendererExtendedForExtensions === true) {
+      return renderer;
+    }
+
+    if (this.extensions?.length > 0) {
+      marked.use(...this.extensions);
+    }
+
+    extendedRenderer.ɵNgxMarkdownRendererExtendedForExtensions = true;
+
+    return renderer;
+  }
+
+  private extendsRendererForMermaid(renderer: Renderer): Renderer {
+    const extendedRenderer = renderer as ExtendedRenderer;
+    if (extendedRenderer.ɵNgxMarkdownRendererExtendedForMermaid === true) {
       return renderer;
     }
 
@@ -273,7 +293,7 @@ export class MarkdownService {
         : defaultCode.call(this, code, language, isEscaped);
     };
 
-    extendedRenderer.ɵNgxMarkdownRendererExtended = true;
+    extendedRenderer.ɵNgxMarkdownRendererExtendedForMermaid = true;
 
     return renderer;
   }
@@ -300,14 +320,12 @@ export class MarkdownService {
   }
 
   private parseMarked(html: string, markedOptions: MarkedOptions, inline = false): string | Promise<string> {
-    const marked = new this.MarkedInstance();
+    // remove renderer from markedOptions because if renderer
+    // is passed to parse method, it will ignore all extensions
     if (markedOptions.renderer) {
-      // because if renderer is passed to parse method, it will ignore all extensions
       marked.use({ renderer: markedOptions.renderer });
       delete markedOptions.renderer;
     }
-
-    marked.use(...(this.extensions ?? []));
 
     return inline
       ? marked.parseInline(html, markedOptions)

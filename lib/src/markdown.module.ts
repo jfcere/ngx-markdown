@@ -2,13 +2,12 @@ import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Provider, SecurityContext } from '@angular/core';
 
 // eslint-disable-next-line import/named
-import { Marked, MarkedExtension } from 'marked';
+import { MarkedExtension } from 'marked';
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { LanguagePipe } from './language.pipe';
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownPipe } from './markdown.pipe';
 import { MarkdownService, SECURITY_CONTEXT } from './markdown.service';
-import { ɵMARKED } from './marked';
 import { MARKED_EXTENSIONS } from './marked-extensions';
 
 // having a dependency on `HttpClientModule` within a library
@@ -51,10 +50,6 @@ export class MarkdownModule {
         {
           provide: SECURITY_CONTEXT,
           useValue: markdownModuleConfig?.sanitize ?? SecurityContext.HTML,
-        },
-        {
-          provide: ɵMARKED,
-          useValue: Marked,
         },
       ],
     };
