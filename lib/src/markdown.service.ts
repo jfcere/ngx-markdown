@@ -17,11 +17,11 @@ import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ClipboardButtonComponent } from './clipboard-button.component';
-import { ClipboardOptions, ClipboardRenderOptions } from './clipboard-options';
+import { CLIPBOARD_OPTIONS, ClipboardOptions, ClipboardRenderOptions } from './clipboard-options';
 import { KatexOptions } from './katex-options';
 import { ɵMARKED } from './marked';
 import { MARKED_EXTENSIONS } from './marked-extensions';
-import { MarkedOptions } from './marked-options';
+import { MARKED_OPTIONS, MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
 import { MermaidAPI } from './mermaid-options';
 
@@ -150,12 +150,12 @@ export class MarkdownService {
   readonly reload$ = this._reload$.asObservable();
 
   constructor(
+    @Inject(CLIPBOARD_OPTIONS) @Optional() private clipboardOptions: ClipboardOptions,
     @Inject(MARKED_EXTENSIONS) @Optional() private extensions: MarkedExtension[],
+    @Inject(MARKED_OPTIONS) @Optional() options: MarkedOptions,
     @Inject(PLATFORM_ID) private platform: Object,
     @Inject(SECURITY_CONTEXT) private securityContext: SecurityContext,
     @Inject(ɵMARKED) private MarkedInstance: typeof Marked,
-    @Optional() options: MarkedOptions,
-    @Optional() private clipboardOptions: ClipboardOptions,
     @Optional() private http: HttpClient,
     private sanitizer: DomSanitizer,
   ) {

@@ -424,7 +424,7 @@ You can provide a custom component to use globaly across your application with t
 MarkdownModule.forRoot({
   ...
   clipboardOptions: {
-    provide: ClipboardOptions,
+    provide: CLIPBOARD_OPTIONS,
     useValue: {
       buttonComponent: ClipboardButtonComponent,
     },
@@ -553,11 +553,11 @@ You can bypass sanitization using the markdown component, directive or pipe usin
 
 #### MarkedOptions
 
-Optionally, markdown parsing can be configured by passing [MarkedOptions](https://marked.js.org/#/USING_ADVANCED.md#options) to the `forRoot` method of `MarkdownModule`.
+Optionally, markdown parsing can be configured using [MarkedOptions](https://marked.js.org/#/USING_ADVANCED.md#options) that can be provided with the `MARKED_OPTIONS` injection token via the `markedOptions` property of the `forRoot` method of `MarkdownModule`.
 
 Imports:
 ```typescript
-import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
+import { MarkdownModule, MARKED_OPTIONS } from 'ngx-markdown';
 ```
 
 Default options:
@@ -572,7 +572,7 @@ Custom options and passing `HttpClient` to use `[src]` attribute:
 MarkdownModule.forRoot({
   loader: HttpClient, // optional, only if you use [src] attribute
   markedOptions: {
-    provide: MarkedOptions,
+    provide: MARKED_OPTIONS,
     useValue: {
       gfm: true,
       breaks: false,
@@ -589,7 +589,7 @@ MarkdownModule.forRoot({
 The example below overrides the default blockquote token rendering by adding a CSS class for custom styling when using Bootstrap CSS:
 
 ```typescript
-import { MarkedOptions, MarkedRenderer } from 'ngx-markdown';
+import { MARKED_OPTIONS, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
 
 // function that returns `MarkedOptions` with renderer override
 export function markedOptionsFactory(): MarkedOptions {
@@ -611,7 +611,7 @@ export function markedOptionsFactory(): MarkedOptions {
 MarkdownModule.forRoot({
   loader: HttpClient,
   markedOptions: {
-    provide: MarkedOptions,
+    provide: MARKED_OPTIONS,
     useFactory: markedOptionsFactory,
   },
 }),

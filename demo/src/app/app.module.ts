@@ -6,7 +6,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { gfmHeadingId } from 'marked-gfm-heading-id';
-import { ClipboardOptions, MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
+import { CLIPBOARD_OPTIONS, MarkdownModule, MARKED_OPTIONS, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
 
 import { AnchorModule } from '@shared/anchor/anchor.module';
 import { AnchorService } from '@shared/anchor/anchor.service';
@@ -36,16 +36,14 @@ export function markedOptionsFactory(anchorService: AnchorService): MarkedOption
     MarkdownModule.forRoot({
       loader: HttpClient,
       markedOptions: {
-        provide: MarkedOptions,
+        provide: MARKED_OPTIONS,
         useFactory: markedOptionsFactory,
         deps: [AnchorService],
       },
       markedExtensions: [gfmHeadingId()],
       clipboardOptions: {
-        provide: ClipboardOptions,
-        useValue: {
-          buttonComponent: ClipboardButtonComponent,
-        },
+        provide: CLIPBOARD_OPTIONS,
+        useValue: { buttonComponent: ClipboardButtonComponent },
       },
       sanitize: SecurityContext.NONE,
     }),

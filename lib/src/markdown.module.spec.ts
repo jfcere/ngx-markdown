@@ -5,11 +5,11 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 // eslint-disable-next-line import/named
 import { MarkedExtension } from 'marked';
 
-import { ClipboardOptions } from './clipboard-options';
+import { CLIPBOARD_OPTIONS, ClipboardOptions } from './clipboard-options';
 import { MarkdownModule } from './markdown.module';
 import { errorSrcWithoutHttpClient, SECURITY_CONTEXT } from './markdown.service';
 import { MARKED_EXTENSIONS } from './marked-extensions';
-import { MarkedOptions } from './marked-options';
+import { MARKED_OPTIONS, MarkedOptions } from './marked-options';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -53,7 +53,7 @@ describe('MarkdownModule', () => {
         imports: [
           MarkdownModule.forRoot({
             markedOptions: {
-              provide: MarkedOptions,
+              provide: MARKED_OPTIONS,
               useValue: 'mockMarkedOptions',
             },
           }),
@@ -86,14 +86,14 @@ describe('MarkdownModule', () => {
         imports: [
           MarkdownModule.forRoot({
             clipboardOptions: {
-              provide: ClipboardOptions,
+              provide: CLIPBOARD_OPTIONS,
               useValue: mockClipboardOptions,
             },
           }),
         ],
       });
 
-      const clipboardOptions = TestBed.inject(ClipboardOptions);
+      const clipboardOptions = TestBed.inject(CLIPBOARD_OPTIONS);
 
       expect(clipboardOptions).toBe(mockClipboardOptions);
     });
@@ -106,7 +106,7 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const clipboardOptions = TestBed.inject(ClipboardOptions, null);
+      const clipboardOptions = TestBed.inject(CLIPBOARD_OPTIONS, null);
 
       expect(clipboardOptions).toBeNull();
     });
@@ -119,14 +119,14 @@ describe('MarkdownModule', () => {
         imports: [
           MarkdownModule.forRoot({
             markedOptions: {
-              provide: MarkedOptions,
+              provide: MARKED_OPTIONS,
               useValue: mockMarkedOptions,
             },
           }),
         ],
       });
 
-      const markedOptions = TestBed.inject(MarkedOptions);
+      const markedOptions = TestBed.inject(MARKED_OPTIONS);
 
       expect(markedOptions).toBe(mockMarkedOptions);
     });
@@ -139,7 +139,7 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const markedOptions = TestBed.inject(MarkedOptions, null);
+      const markedOptions = TestBed.inject(MARKED_OPTIONS, null);
 
       expect(markedOptions).toBeNull();
     });
@@ -152,7 +152,7 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const markedOptions = TestBed.inject(MarkedOptions, null);
+      const markedOptions = TestBed.inject(MARKED_OPTIONS, null);
 
       expect(markedOptions).toBeNull();
     });
@@ -178,7 +178,7 @@ describe('MarkdownModule', () => {
         imports: [
           MarkdownModule.forRoot({
             markedOptions: {
-              provide: MarkedOptions,
+              provide: MARKED_OPTIONS,
               useValue: 'mockMarkedOptions',
             },
           }),
@@ -222,7 +222,7 @@ describe('MarkdownModule', () => {
         imports: [
           MarkdownModule.forRoot({
             markedOptions: {
-              provide: MarkedOptions,
+              provide: MARKED_OPTIONS,
               useValue: 'mockMarkedOptions',
             },
           }),
@@ -267,8 +267,8 @@ describe('MarkdownModule', () => {
           HttpClientModule,
           MarkdownModule.forRoot({
             loader: HttpClient,
-            clipboardOptions: { provide: ClipboardOptions, useValue: mockClipboardOptions },
-            markedOptions: { provide: MarkedOptions, useValue: mockMarkedOptions },
+            clipboardOptions: { provide: CLIPBOARD_OPTIONS, useValue: mockClipboardOptions },
+            markedOptions: { provide: MARKED_OPTIONS, useValue: mockMarkedOptions },
             sanitize: SecurityContext.NONE,
           }),
           MarkdownModule.forChild(),
@@ -276,8 +276,8 @@ describe('MarkdownModule', () => {
       });
 
       const httpClient = TestBed.inject(HttpClient);
-      const clipboardOptions = TestBed.inject(ClipboardOptions);
-      const markedOptions = TestBed.inject(MarkedOptions);
+      const clipboardOptions = TestBed.inject(CLIPBOARD_OPTIONS);
+      const markedOptions = TestBed.inject(MARKED_OPTIONS);
       const securityContext = TestBed.inject(SECURITY_CONTEXT);
 
       expect(httpClient instanceof HttpClient).toBeTruthy();
