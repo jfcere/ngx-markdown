@@ -5,11 +5,11 @@ import { ModuleWithProviders, NgModule, Provider, SecurityContext } from '@angul
 import { Marked, MarkedExtension } from 'marked';
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { LanguagePipe } from './language.pipe';
-import { MARKED_EXTENSIONS } from './markdown-extensions';
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownPipe } from './markdown.pipe';
 import { MarkdownService, SECURITY_CONTEXT } from './markdown.service';
 import { ɵMARKED } from './marked';
+import { MARKED_EXTENSIONS } from './marked-extensions';
 
 // having a dependency on `HttpClientModule` within a library
 // breaks all the interceptors from the app consuming the library

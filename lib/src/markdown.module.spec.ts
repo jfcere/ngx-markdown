@@ -6,9 +6,9 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MarkedExtension } from 'marked';
 
 import { ClipboardOptions } from './clipboard-options';
-import { MARKED_EXTENSIONS } from './markdown-extensions';
 import { MarkdownModule } from './markdown.module';
 import { errorSrcWithoutHttpClient, SECURITY_CONTEXT } from './markdown.service';
+import { MARKED_EXTENSIONS } from './marked-extensions';
 import { MarkedOptions } from './marked-options';
 
 @Component({
