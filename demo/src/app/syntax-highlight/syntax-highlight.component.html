@@ -60,13 +60,13 @@
 
       ````
       ```html
-      &lt;div [innerHTML]="myValue | language : 'python' | markdown">&lt;div>
+      &lt;div [innerHTML]="myValue | language : 'python' | markdown | async">&lt;div>
       ```
       ````
 
       Would render with Python syntax highlight as specified with the `language` pipe in front of the `markdown` pipe.
     </markdown>
 
-    <div [innerHTML]="myValue | language : 'python' | markdown"></div>
+    <div [innerHTML]="myValue | language : 'python' | markdown | async"></div>
   </section>
 </app-scrollspy-nav-layout>

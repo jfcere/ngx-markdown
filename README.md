@@ -548,7 +548,7 @@ You can bypass sanitization using the markdown component, directive or pipe usin
 </div>
 
 <!-- disable sanitizer using markdown pipe -->
-<div [innerHTML]="markdown | markdown : { disableSanitizer: true }"></div>
+<div [innerHTML]="markdown | markdown : { disableSanitizer: true } | async"></div>
 ```
 
 #### MarkedOptions
@@ -718,18 +718,18 @@ The same way the component works, you can use `markdown` directive to accomplish
 
 ### Pipe
 
-Using `markdown` pipe to transform markdown to HTML allow you to chain pipe transformations and will update the DOM when value changes.
+Using `markdown` pipe to transform markdown to HTML allow you to chain pipe transformations and will update the DOM when value changes. It is important to note that, because the `marked` parsing method returns a `Promise`, it requires the use of the `async` pipe.
 
 ```html
 <!-- chain `language` pipe with `markdown` pipe to convert typescriptMarkdown variable content -->
-<div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown"></div>
+<div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown | async"></div>
 ```
 
 The `markdown` pipe allow you to use all the same plugins as the component by providing the options parameters.
 
 ```html
 <!-- provide options parameters to activate plugins or for configuration -->
-<div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown : { emoji: true, inline: true }"></div>
+<div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown : { emoji: true, inline: true } | async"></div>
 ```
 
 This is the `MarkdownPipeOptions` parameters interface, those options are the same as the ones available for the `markdown` component:
