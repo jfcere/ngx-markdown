@@ -14,7 +14,7 @@
       Using component with static `python` code block
     </markdown>
 
-    <markdown>{{ demoPython | language: 'python' }}</markdown>
+    <markdown [data]="demoPython$ | async | language: 'python'"></markdown>
 
     <markdown>
       Using directive with `src` property to fetch remote html file `app/bindings/remote/demo.html`

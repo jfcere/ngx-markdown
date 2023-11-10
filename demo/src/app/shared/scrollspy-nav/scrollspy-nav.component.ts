@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import * as Gumshoe from 'gumshoejs';
+import Gumshoe from 'gumshoejs';
 import { first } from 'rxjs/operators';
 
 @Component({

@@ -15,11 +15,11 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/demo",
             "index": "demo/src/index.html",
-            "main": "demo/src/main.ts",
+            "browser": "demo/src/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -28,6 +28,7 @@
               "demo/src/favicon.ico",
               "demo/src/assets",
               "demo/src/app/bindings/remote",
+              "demo/src/app/cheat-sheet/remote",
               "demo/src/app/syntax-highlight/remote",
               "demo/src/app/plugins/remote"
             ],
@@ -88,12 +89,9 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
