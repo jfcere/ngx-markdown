@@ -32,11 +32,11 @@
         ```typescript
         export function greetings(name: string): string &amp;#123;
           return 'Hello ' + name;
-        }
+        &#125;
         ```
       &lt;/markdown>
       ````
-      ##### _* Characters such as `&lt;, >, &#123;, }` directly written in the HTML template file must be escaped so that the compiler doesn't try to bind it as regular Angular code_.
+      ##### _* Characters such as `&lt;, >, &#123;, &#125;` directly written in the HTML template file must be escaped so that the compiler doesn't try to bind it as regular Angular code_.
 
       Would render with TypeScript syntax highlight based on the specified `typescript` language.
     </markdown>
@@ -45,7 +45,7 @@
       ```typescript
       export function greetings(name: string): string &#123;
         return 'Hello ' + name;
-      }
+      &#125;
       ```
     </markdown>
   </section>

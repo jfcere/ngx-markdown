@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular/core';
+import { HttpRawLoaderService } from '@shared/http-raw-loader';
 
 @Component({
   selector: 'app-bindings',
@@ -9,8 +10,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular
 export class BindingsComponent implements OnInit {
 
   // remote url
-  demoPython = require('raw-loader!./remote/demo.py').default;
-  languagePipe = require('raw-loader!./remote/language-pipe.html').default;
+  demoPython$ = this.rawLoaderService.get('app/bindings/remote/demo.py');
 
   // variable-binding
   markdown =
@@ -46,6 +46,7 @@ export class MarkdownDemoComponent {
 
   constructor(
     private elementRef: ElementRef<HTMLElement>,
+    private rawLoaderService: HttpRawLoaderService,
   ) { }
 
   ngOnInit(): void {

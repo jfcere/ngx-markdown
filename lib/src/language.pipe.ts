@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class LanguagePipe implements PipeTransform {
 
-  transform(value: string, language: string): string {
+  transform(value: string | null, language: string): string {
     if (value == null) {
       value = '';
     }
