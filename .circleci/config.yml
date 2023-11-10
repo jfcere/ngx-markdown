@@ -4,7 +4,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: cimg/node:16.15-browsers
+      - image: cimg/node:18.18-browsers
     steps:
       # Install chrome via browser tools
       - browser-tools/install-chrome
@@ -55,7 +55,7 @@ jobs:
           command: yarn build:lib
   deploy:
     docker:
-      - image: cimg/node:16.15
+      - image: cimg/node:18.18
     steps:
       # Checkout the code from the branch into the working_directory
       - checkout

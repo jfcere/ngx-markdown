@@ -7,14 +7,14 @@
 
   <section>
     <h2 id="headers">Headers</h2>
-    <pre class="language-none">{{ headers }}</pre>
-    <markdown>{{ headers }}</markdown>
+    <pre class="language-none">{{ headers$ | async }}</pre>
+    <markdown [data]="headers$ | async"></markdown>
   </section>
 
   <section>
     <h2 id="emphasis">Emphasis</h2>
-    <pre class="language-none">{{ emphasis }}</pre>
-    <markdown>{{ emphasis }}</markdown>
+    <pre class="language-none">{{ emphasis$ | async }}</pre>
+    <markdown [data]="emphasis$ | async"></markdown>
   </section>
 
   <section>
@@ -22,43 +22,43 @@
     <p>
       In this example, leading and trailing spaces are shown with with dots (⋅)
     </p>
-    <pre class="language-none">{{ listsDot }}</pre>
-    <markdown>{{ lists }}</markdown>
+    <pre class="language-none">{{ listsDot$ | async }}</pre>
+    <markdown [data]="lists$ | async"></markdown>
   </section>
 
   <section>
     <h2 id="links">Links</h2>
-    <pre class="language-none">{{ links }}</pre>
-    <markdown>{{ links }}</markdown>
+    <pre class="language-none">{{ links$ | async }}</pre>
+    <markdown [data]="links$ | async"></markdown>
   </section>
 
   <section>
     <h2 id="images">Images</h2>
-    <pre class="language-none">{{ images }}</pre>
-    <markdown>{{ images }}</markdown>
+    <pre class="language-none">{{ images$ | async }}</pre>
+    <markdown [data]="images$ | async"></markdown>
   </section>
 
   <section>
     <h2 id="code-and-synthax">Code and Syntax Highlighting</h2>
-    <pre class="language-none">{{ codeAndSynthaxHighlighting }}</pre>
-    <markdown>{{ codeAndSynthaxHighlighting }}</markdown>
+    <pre class="language-none">{{ codeAndSynthaxHighlighting$ | async }}</pre>
+    <markdown [data]="codeAndSynthaxHighlighting$ | async"></markdown>
   </section>
 
   <section>
     <h2 id="tables">Tables</h2>
-    <pre class="language-none">{{ tables }}</pre>
-    <markdown>{{ tables }}</markdown>
+    <pre class="language-none">{{ tables$ | async }}</pre>
+    <markdown [data]="tables$ | async"></markdown>
   </section>
 
   <section>
     <h2 id="blockquotes">Blockquotes</h2>
-    <pre class="language-none">{{ blockquotes }}</pre>
-    <markdown>{{ blockquotes }}</markdown>
+    <pre class="language-none">{{ blockquotes$ | async }}</pre>
+    <markdown [data]="blockquotes$ | async"></markdown>
   </section>
 
   <section>
     <h2 id="horizontal-rule">Horizontal Rule</h2>
-    <pre class="language-none">{{ horizontalRule }}</pre>
-    <markdown>{{ horizontalRule }}</markdown>
+    <pre class="language-none">{{ horizontalRule$ | async }}</pre>
+    <markdown [data]="horizontalRule$ | async"></markdown>
   </section>
 </app-scrollspy-nav-layout>

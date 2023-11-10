@@ -10,6 +10,7 @@
     "src/main.ts"
   ],
   "include": [
+    "src/**/*.ts",
     "src/**/*.d.ts"
   ]
 }
