@@ -51,10 +51,10 @@ StackBlitz available @ [https://stackblitz.com/edit/ngx-markdown](https://stackb
 
 ### ngx-markdown
 
-To add ngx-markdown library to your `package.json` use the following commands.
+To add ngx-markdown along with the required marked library to your `package.json` use the following commands.
 
 ```bash
-npm install ngx-markdown marked@^9.0.0
+npm install ngx-markdown marked@^9.0.0 --save
 ```
 
 ### Syntax highlight
