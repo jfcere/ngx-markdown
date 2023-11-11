@@ -5,6 +5,7 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 // eslint-disable-next-line import/named
 import { MarkedExtension } from 'marked';
 import { CLIPBOARD_OPTIONS, ClipboardOptions } from './clipboard-options';
+import { MarkdownComponent } from './markdown.component';
 import { MarkdownModule } from './markdown.module';
 import { errorSrcWithoutHttpClient, SECURITY_CONTEXT } from './markdown.service';
 import { MARKED_EXTENSIONS } from './marked-extensions';
@@ -23,7 +24,7 @@ import { MARKED_OPTIONS, MarkedOptions } from './marked-options';
     </ng-template>
   `,
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MarkdownComponent],
 })
 class HostComponent {
   markdown = '# Markdown Title';

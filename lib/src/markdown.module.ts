@@ -6,8 +6,6 @@ import { ClipboardButtonComponent } from './clipboard-button.component';
 import { LanguagePipe } from './language.pipe';
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownPipe } from './markdown.pipe';
-import { MarkdownService, SECURITY_CONTEXT } from './markdown.service';
-import { MARKED_EXTENSIONS } from './marked-extensions';
 import { provideMarkdown } from './provide-markdown';
 
 // having a dependency on `HttpClientModule` within a library

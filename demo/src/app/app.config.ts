@@ -26,7 +26,7 @@ export const appConfig: ApplicationConfig = {
       markedExtensions: [gfmHeadingId()],
       clipboardOptions: {
         provide: CLIPBOARD_OPTIONS,
-        useValue: {buttonComponent: ClipboardButtonComponent},
+        useValue: { buttonComponent: ClipboardButtonComponent },
       },
       sanitize: SecurityContext.NONE,
     }),
