@@ -59,7 +59,7 @@ export class ScrollspyNavComponent implements OnChanges, OnDestroy {
       .subscribe(() => {
         const hostElement = this.elementRef.nativeElement;
         const linkSelector = `${hostElement.tagName}.${hostElement.className} a`;
-        this.scrollSpy = new Gumshoe(linkSelector, { offset: 64, reflow: true});
+        this.scrollSpy = new Gumshoe(linkSelector, { offset: 64, reflow: true });
       });
   }
 }

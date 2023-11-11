@@ -4,7 +4,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MarkdownModule } from 'ngx-markdown';
 import { HttpRawLoaderModule } from '@shared/http-raw-loader';
 import { ScrollspyNavLayoutModule } from '@shared/scrollspy-nav-layout/scrollspy-nav-layout.module';
-import { SharedModule } from '@shared/shared.module';
 import { BindingsRoutingModule } from './bindings-routing.module';
 import { BindingsComponent } from './bindings.component';
 
@@ -16,8 +15,7 @@ import { BindingsComponent } from './bindings.component';
     MarkdownModule.forChild(),
     MatInputModule,
     ScrollspyNavLayoutModule,
-    SharedModule,
     BindingsComponent,
-  ],
+],
 })
 export class BindingsModule {}

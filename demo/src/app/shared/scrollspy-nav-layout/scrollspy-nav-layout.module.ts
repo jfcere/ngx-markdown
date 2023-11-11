@@ -4,7 +4,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MarkdownModule } from 'ngx-markdown';
-import { ScrollspyNavModule } from '@shared/scrollspy-nav/scrollspy-nav.module';
 import { ScrollspyNavLayoutComponent } from './scrollspy-nav-layout.component';
 
 @NgModule({
@@ -14,7 +13,6 @@ import { ScrollspyNavLayoutComponent } from './scrollspy-nav-layout.component';
     MarkdownModule,
     MatButtonModule,
     MatDividerModule,
-    ScrollspyNavModule,
     ScrollspyNavLayoutComponent,
   ],
   exports: [ScrollspyNavLayoutComponent],

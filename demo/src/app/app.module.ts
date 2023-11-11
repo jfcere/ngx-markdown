@@ -9,10 +9,10 @@ import { gfmHeadingId } from 'marked-gfm-heading-id';
 import { CLIPBOARD_OPTIONS, MarkdownModule, MARKED_OPTIONS, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
 import { AnchorModule } from '@shared/anchor/anchor.module';
 import { AnchorService } from '@shared/anchor/anchor.service';
-import { ClipboardButtonComponent, ClipboardButtonModule } from '@shared/clipboard-button';
-import { SharedModule } from '@shared/shared.module';
+import { ClipboardButtonComponent } from '@shared/clipboard-button';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 export function markedOptionsFactory(anchorService: AnchorService): MarkedOptions {
   const renderer = new MarkedRenderer();
@@ -30,7 +30,6 @@ export function markedOptionsFactory(anchorService: AnchorService): MarkedOption
     AnchorModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    ClipboardButtonModule,
     HttpClientModule,
     MarkdownModule.forRoot({
       loader: HttpClient,
@@ -50,9 +49,9 @@ export function markedOptionsFactory(anchorService: AnchorService): MarkedOption
     MatIconModule,
     MatTabsModule,
     MatToolbarModule,
-    SharedModule,
+    FlexLayoutModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
