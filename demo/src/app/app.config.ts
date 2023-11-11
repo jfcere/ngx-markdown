@@ -1,12 +1,12 @@
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { ApplicationConfig, importProvidersFrom, SecurityContext } from '@angular/core';
+import { ApplicationConfig, SecurityContext } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { gfmHeadingId } from 'marked-gfm-heading-id';
 import {
   CLIPBOARD_OPTIONS,
-  MarkdownModule,
   MARKED_OPTIONS,
+  provideMarkdown,
 } from 'ngx-markdown';
 import { appRoutes } from '@app/app-routes';
 import { markedOptionsFactory } from '@app/marked-options-factory';
@@ -16,21 +16,20 @@ import { ClipboardButtonComponent } from '@shared/clipboard-button';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(appRoutes),
-    importProvidersFrom(
-      MarkdownModule.forRoot({
-        loader: HttpClient,
-        markedOptions: {
-          provide: MARKED_OPTIONS,
-          useFactory: markedOptionsFactory,
-          deps: [AnchorService],
-        },
-        markedExtensions: [gfmHeadingId()],
-        clipboardOptions: {
-          provide: CLIPBOARD_OPTIONS,
-          useValue: { buttonComponent: ClipboardButtonComponent },
-        },
-        sanitize: SecurityContext.NONE,
-      })),
+    provideMarkdown({
+      loader: HttpClient,
+      markedOptions: {
+        provide: MARKED_OPTIONS,
+        useFactory: markedOptionsFactory,
+        deps: [AnchorService],
+      },
+      markedExtensions: [gfmHeadingId()],
+      clipboardOptions: {
+        provide: CLIPBOARD_OPTIONS,
+        useValue: {buttonComponent: ClipboardButtonComponent},
+      },
+      sanitize: SecurityContext.NONE,
+    }),
     provideAnimations(),
     provideHttpClient(withInterceptorsFromDi()),
   ],

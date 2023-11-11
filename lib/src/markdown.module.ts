@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ModuleWithProviders, NgModule, Provider, SecurityContext } from '@angular/core';
+import { isDevMode, ModuleWithProviders, NgModule, Provider, SecurityContext } from '@angular/core';
 // eslint-disable-next-line import/named
 import { MarkedExtension } from 'marked';
 import { ClipboardButtonComponent } from './clipboard-button.component';
@@ -8,6 +8,7 @@ import { MarkdownComponent } from './markdown.component';
 import { MarkdownPipe } from './markdown.pipe';
 import { MarkdownService, SECURITY_CONTEXT } from './markdown.service';
 import { MARKED_EXTENSIONS } from './marked-extensions';
+import { provideMarkdown } from './provide-markdown';
 
 // having a dependency on `HttpClientModule` within a library
 // breaks all the interceptors from the app consuming the library
@@ -28,6 +29,9 @@ const sharedDeclarations = [
   MarkdownPipe,
 ];
 
+/**
+ * @deprecated use provideMarkdown instead
+ * */
 @NgModule({
   imports: [CommonModule, ...sharedDeclarations],
   exports: sharedDeclarations,
@@ -37,18 +41,7 @@ export class MarkdownModule {
     return {
       ngModule: MarkdownModule,
       providers: [
-        MarkdownService,
-        markdownModuleConfig?.loader ?? [],
-        markdownModuleConfig?.clipboardOptions ?? [],
-        markdownModuleConfig?.markedOptions ?? [],
-        {
-          provide: MARKED_EXTENSIONS,
-          useValue: markdownModuleConfig?.markedExtensions ?? [],
-        },
-        {
-          provide: SECURITY_CONTEXT,
-          useValue: markdownModuleConfig?.sanitize ?? SecurityContext.HTML,
-        },
+        provideMarkdown(markdownModuleConfig),
       ],
     };
   }
@@ -57,5 +50,11 @@ export class MarkdownModule {
     return {
       ngModule: MarkdownModule,
     };
+  }
+
+  constructor() {
+    if (isDevMode()) {
+      console.warn('you should use provideMarkdown instead of MarkdownModule');
+    }
   }
 }
