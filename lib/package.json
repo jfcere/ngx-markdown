@@ -1,6 +1,6 @@
 {
   "name": "ngx-markdown",
-  "version": "16.0.0",
+  "version": "17.0.0",
   "description": "Angular library that uses marked to parse markdown to html combined with Prism.js for synthax highlights",
   "homepage": "https://github.com/jfcere/ngx-markdown",
   "license": "MIT",
