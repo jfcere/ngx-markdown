@@ -1,10 +1,14 @@
 import { ChangeDetectionStrategy, Component, ElementRef } from '@angular/core';
+import { MarkdownComponent } from 'ngx-markdown';
+import { ScrollspyNavLayoutComponent } from '../shared/scrollspy-nav-layout/scrollspy-nav-layout.component';
 
 @Component({
   selector: 'app-get-started',
   templateUrl: './get-started.component.html',
   styleUrls: ['./get-started.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [ScrollspyNavLayoutComponent, MarkdownComponent],
 })
 export class GetStartedComponent {
 
@@ -12,7 +16,7 @@ export class GetStartedComponent {
 
   constructor(
     private elementRef: ElementRef<HTMLElement>,
-  ) { }
+  ) {}
 
   onLoad(): void {
     this.stripContent();

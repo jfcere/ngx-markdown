@@ -1,4 +1,7 @@
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular/core';
+import { MarkdownComponent } from 'ngx-markdown';
+import { ScrollspyNavLayoutComponent } from '../shared/scrollspy-nav-layout/scrollspy-nav-layout.component';
 import { HttpRawLoaderService } from '@shared/http-raw-loader';
 
 @Component({
@@ -6,6 +9,12 @@ import { HttpRawLoaderService } from '@shared/http-raw-loader';
   templateUrl: './cheat-sheet.component.html',
   styleUrls: ['./cheat-sheet.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    ScrollspyNavLayoutComponent,
+    MarkdownComponent,
+    AsyncPipe,
+  ],
 })
 export class CheatSheetComponent implements OnInit {
 

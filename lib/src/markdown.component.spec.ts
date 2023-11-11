@@ -2,7 +2,6 @@ import { ElementRef, TemplateRef } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { first } from 'rxjs/operators';
-
 import { ClipboardRenderOptions } from './clipboard-options';
 import { KatexOptions } from './katex-options';
 import { MarkdownComponent } from './markdown.component';

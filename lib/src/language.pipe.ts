@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'language',
+  standalone: true,
 })
 export class LanguagePipe implements PipeTransform {
 
@@ -20,6 +21,6 @@ export class LanguagePipe implements PipeTransform {
       console.error(`LanguagePipe has been invoked with an invalid parameter [${typeof language}]`);
       return value;
     }
-    return '```' + language + '\n' +  value + '\n```';
+    return '```' + language + '\n' + value + '\n```';
   }
 }

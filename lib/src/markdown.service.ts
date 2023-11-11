@@ -15,7 +15,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { marked, MarkedExtension, Renderer } from 'marked';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { CLIPBOARD_OPTIONS, ClipboardOptions, ClipboardRenderOptions } from './clipboard-options';
 import { KatexOptions } from './katex-options';
@@ -26,7 +25,7 @@ import { MermaidAPI } from './mermaid-options';
 
 // clipboard
 declare let ClipboardJS: {
-  new (
+  new(
     selector: string | Element | NodeListOf<Element>,
     options?: { text?: (elem: Element) => string },
   ): typeof ClipboardJS;
@@ -40,6 +39,7 @@ declare let joypixels: {
 
 // katex
 declare let katex: unknown;
+
 declare function renderMathInElement(elem: HTMLElement, options?: KatexOptions): void;
 
 // mermaid
@@ -137,11 +137,13 @@ export class MarkdownService {
   private _options: MarkedOptions | undefined;
 
   get options(): MarkedOptions { return this._options!; }
+
   set options(value: MarkedOptions | undefined) {
     this._options = { ...this.DEFAULT_MARKED_OPTIONS, ...value };
   }
 
   get renderer(): MarkedRenderer { return this.options.renderer!; }
+
   set renderer(value: MarkedRenderer) {
     this.options.renderer = value;
   }

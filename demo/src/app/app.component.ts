@@ -1,7 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, HostListener, Inject, OnInit, ViewChild } from '@angular/core';
 import { Route, Router, RouterOutlet } from '@angular/router';
-
 import { AnchorService } from '@shared/anchor/anchor.service';
 import { ROUTE_ANIMATION } from './app.animation';
 import { DEFAULT_THEME, LOCAL_STORAGE_THEME_KEY } from './app.constant';

@@ -1,4 +1,11 @@
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular/core';
+import { FlexModule } from '@angular/flex-layout/flex';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { LanguagePipe, MarkdownComponent, MarkdownPipe } from 'ngx-markdown';
+import { ScrollspyNavLayoutComponent } from '../shared/scrollspy-nav-layout/scrollspy-nav-layout.component';
 import { HttpRawLoaderService } from '@shared/http-raw-loader';
 
 @Component({
@@ -6,6 +13,18 @@ import { HttpRawLoaderService } from '@shared/http-raw-loader';
   templateUrl: './bindings.component.html',
   styleUrls: ['./bindings.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    ScrollspyNavLayoutComponent,
+    MarkdownComponent,
+    FlexModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    LanguagePipe,
+    MarkdownPipe,
+    AsyncPipe,
+  ],
 })
 export class BindingsComponent implements OnInit {
 

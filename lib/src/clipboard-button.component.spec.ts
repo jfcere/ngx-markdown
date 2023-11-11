@@ -1,5 +1,4 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-
 import { ClipboardButtonComponent } from './clipboard-button.component';
 
 describe('ClipboardButtonComponent', () => {
@@ -8,10 +7,8 @@ describe('ClipboardButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        ClipboardButtonComponent,
-      ],
-    }).compileComponents();
+    imports: [ClipboardButtonComponent],
+}).compileComponents();
 
     fixture = TestBed.createComponent(ClipboardButtonComponent);
     nativeElement = fixture.nativeElement;

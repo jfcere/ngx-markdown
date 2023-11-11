@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 import { GetStartedComponent } from './get-started.component';
 
 const routes: Routes = [

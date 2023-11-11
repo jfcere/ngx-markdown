@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { MarkdownModule } from 'ngx-markdown';
-
 import { HttpRawLoaderModule } from '@shared/http-raw-loader';
 import { ScrollspyNavLayoutModule } from '@shared/scrollspy-nav-layout/scrollspy-nav-layout.module';
 import { SharedModule } from '@shared/shared.module';
@@ -14,7 +13,7 @@ import { CheatSheetComponent } from './cheat-sheet.component';
     MarkdownModule.forChild(),
     ScrollspyNavLayoutModule,
     SharedModule,
+    CheatSheetComponent,
   ],
-  declarations: [CheatSheetComponent],
 })
-export class CheatSheetModule { }
+export class CheatSheetModule {}
