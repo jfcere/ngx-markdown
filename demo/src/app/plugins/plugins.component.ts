@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ClipboardOptions, MermaidAPI } from 'ngx-markdown';
+import { CLIPBOARD_OPTIONS, MermaidAPI } from 'ngx-markdown';
 
 import { ClipboardButtonComponent } from '@shared/clipboard-button';
 
@@ -9,7 +9,7 @@ import { ClipboardButtonComponent } from '@shared/clipboard-button';
   templateUrl: './plugins.component.html',
   styleUrls: ['./plugins.component.scss'],
   providers: [
-    { provide: ClipboardOptions, useValue: {} },
+    { provide: CLIPBOARD_OPTIONS, useValue: {} },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

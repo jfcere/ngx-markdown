@@ -5,12 +5,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ClipboardOptions, MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
+import { gfmHeadingId } from 'marked-gfm-heading-id';
+import { CLIPBOARD_OPTIONS, MarkdownModule, MARKED_OPTIONS, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
 
 import { AnchorModule } from '@shared/anchor/anchor.module';
 import { AnchorService } from '@shared/anchor/anchor.service';
-import { ClipboardButtonModule } from '@shared/clipboard-button';
-import { ClipboardButtonComponent } from '@shared/clipboard-button/clipboard-button.component';
+import { ClipboardButtonComponent, ClipboardButtonModule } from '@shared/clipboard-button';
 import { SharedModule } from '@shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,7 +20,7 @@ export function markedOptionsFactory(anchorService: AnchorService): MarkedOption
 
   // fix `href` for absolute link with fragments so that _copy-paste_ urls are correct
   renderer.link = (href: string, title: string, text: string) => {
-    return MarkedRenderer.prototype.link.call(renderer, anchorService.normalizeExternalUrl(href), title, text) as string;
+    return MarkedRenderer.prototype.link.call(renderer, anchorService.normalizeExternalUrl(href), title, text);
   };
 
   return { renderer };
@@ -36,15 +36,14 @@ export function markedOptionsFactory(anchorService: AnchorService): MarkedOption
     MarkdownModule.forRoot({
       loader: HttpClient,
       markedOptions: {
-        provide: MarkedOptions,
+        provide: MARKED_OPTIONS,
         useFactory: markedOptionsFactory,
         deps: [AnchorService],
       },
+      markedExtensions: [gfmHeadingId()],
       clipboardOptions: {
-        provide: ClipboardOptions,
-        useValue: {
-          buttonComponent: ClipboardButtonComponent,
-        },
+        provide: CLIPBOARD_OPTIONS,
+        useValue: { buttonComponent: ClipboardButtonComponent },
       },
       sanitize: SecurityContext.NONE,
     }),

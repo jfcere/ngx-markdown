@@ -16,7 +16,7 @@ export class BindingsComponent implements OnInit {
   markdown =
 `### Markdown example
 ---
-This is an **example** where we bind a variable to the \`markdown\` component that is also bind to a textarea.
+This is an **example** where we bind a variable to the \`markdown\` component that is also bound to a textarea.
 
 #### example.component.ts
 \`\`\`typescript

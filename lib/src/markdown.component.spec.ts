@@ -1,5 +1,5 @@
 import { ElementRef, TemplateRef } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { first } from 'rxjs/operators';
 
@@ -65,7 +65,7 @@ describe('MarkdownComponent', () => {
       const mockSrc = './src-example/file.md';
       const mockContent = 'source-content';
 
-      spyOn(component, 'render');
+      spyOn(component, 'render').and.returnValue(Promise.resolve());
       spyOn(markdownService, 'getSource').and.returnValue(of(mockContent));
 
       component.src = mockSrc;
@@ -87,7 +87,7 @@ describe('MarkdownComponent', () => {
       expect(component.src).toBe(mockSrc);
     });
 
-    it('should emit load when get', () => {
+    it('should emit load when get', fakeAsync(() => {
 
       const mockSrc = './src-example/file.md';
       const mockSrcReturn = 'src-return-value';
@@ -98,9 +98,10 @@ describe('MarkdownComponent', () => {
       component.src = mockSrc;
 
       component.ngOnChanges();
+      tick();
 
       expect(component.load.emit).toHaveBeenCalledWith(mockSrcReturn);
-    });
+    }));
 
     it('should emit error when and error occurs', () => {
 
@@ -182,7 +183,7 @@ describe('MarkdownComponent', () => {
 
   describe('render', () => {
 
-    it('should parse markdown through MarkdownService', () => {
+    it('should parse markdown through MarkdownService', async () => {
 
       const raw = '### Raw';
 
@@ -192,152 +193,109 @@ describe('MarkdownComponent', () => {
       component.emoji = false;
       component.mermaid = false;
       component.disableSanitizer = true;
-      component.render(raw, true);
+      await component.render(raw, true);
 
       expect(markdownService.parse).toHaveBeenCalledWith(raw, {
         decodeHtml: true,
         inline: true,
         emoji: false,
         mermaid: false,
-        markedOptions: undefined,
         disableSanitizer: true,
       });
     });
 
-    it('should parse markdown with markedOptions.baseUrl when src is provided and srcRelativeLink is true', () => {
-      const raw = '### Raw';
-
-      spyOn(markdownService, 'parse');
-
-      component.src = './src-example/file.md';
-      component.srcRelativeLink = true;
-      component.inline = true;
-      component.emoji = false;
-      component.mermaid = false;
-      component.render(raw, true);
-
-      expect(markdownService.parse).toHaveBeenCalledWith(raw, {
-        decodeHtml: true,
-        inline: true,
-        emoji: false,
-        mermaid: false,
-        markedOptions: { baseUrl: '/src-example/file.md' },
-        disableSanitizer: false,
-      });
-    });
-
-    it('should parse markdown without markedOptions.baseUrl when src is provided and srcRelativeLink is false', () => {
-      const raw = '### Raw';
-
-      spyOn(markdownService, 'parse');
-
-      component.src = './src-example/file.md';
-      component.srcRelativeLink = false;
-      component.inline = true;
-      component.emoji = false;
-      component.mermaid = false;
-      component.render(raw, true);
-
-      expect(markdownService.parse).toHaveBeenCalledWith(raw, {
-        decodeHtml: true,
-        inline: true,
-        emoji: false,
-        mermaid: false,
-        markedOptions: undefined,
-        disableSanitizer: false,
-      });
-    });
-
-    it('should set innerHTML with parsed markdown', () => {
+    it('should set innerHTML with parsed markdown', async () => {
 
       const raw = '### Raw';
       const parsed = '<h3>Compiled</h3>';
 
       spyOn(markdownService, 'parse').and.returnValue(parsed);
 
-      component.render(raw, true);
+      await component.render(raw, true);
 
       expect(component.element.nativeElement.innerHTML).toBe(parsed);
     });
 
-    it('should handle commandline plugin correctly', () => {
+    it('should handle commandline plugin correctly', async () => {
 
       const markdown = '```powershell\nGet-Date\n\nSunday, November 7, 2021 8:19:21 PM\n\n```';
       const getHTMLPreElement = () => (fixture.nativeElement as HTMLElement).querySelector('pre');
 
       component.commandLine = true;
-      component.render(markdown);
+      await component.render(markdown);
 
       expect(getHTMLPreElement()?.classList).toContain('command-line');
       expect(getHTMLPreElement()?.attributes.getNamedItem('data-start')).toBeNull();
 
       component.filterOutput = '(out)';
-      component.render(markdown);
+      await component.render(markdown);
 
       expect(getHTMLPreElement()?.attributes.getNamedItem('data-filter-output')?.value).toBe('(out)');
 
       component.host = 'localhost';
-      component.render(markdown);
+      await component.render(markdown);
 
       expect(getHTMLPreElement()?.attributes.getNamedItem('data-host')?.value).toBe('localhost');
 
       component.prompt = 'PS C:\\Users\\Chris>';
-      component.render(markdown);
+      await component.render(markdown);
 
       expect(getHTMLPreElement()?.attributes.getNamedItem('data-prompt')?.value).toBe('PS C:\\Users\\Chris>');
 
       component.output = '2-4';
-      component.render(markdown);
+      await component.render(markdown);
 
       expect(getHTMLPreElement()?.attributes.getNamedItem('data-output')?.value).toBe('2-4');
 
       component.user = 'root';
-      component.render(markdown);
+      await component.render(markdown);
 
       expect(getHTMLPreElement()?.attributes.getNamedItem('data-user')?.value).toBe('root');
     });
 
-    it('should handle lineNumbers plugin correctly', () => {
+    it('should handle lineNumbers plugin correctly', async () => {
 
       const markdown = '```javascript\nconst random = \'Math.random();\n```';
       const getHTMLPreElement = () => (fixture.nativeElement as HTMLElement).querySelector('pre');
 
       component.lineNumbers = true;
-      component.render(markdown);
+      await component.render(markdown);
 
       expect(getHTMLPreElement()?.classList).toContain('line-numbers');
       expect(getHTMLPreElement()?.attributes.getNamedItem('data-start')).toBeNull();
 
       component.start = 5;
-      component.render(markdown);
+      await component.render(markdown);
 
       expect(getHTMLPreElement()?.attributes.getNamedItem('data-start')?.value).toBe('5');
     });
 
-    it('should handle lineHighlight plugin correctly', () => {
+    it('should handle lineHighlight plugin correctly', async () => {
 
       const markdown = '```javascript\nconst random = \'Math.random();\n```';
       const getHTMLPreElement = () => (fixture.nativeElement as HTMLElement).querySelector('pre');
 
       component.lineHighlight = true;
       component.line = '6, 10-16';
-      component.render(markdown);
+      await component.render(markdown);
 
       expect(getHTMLPreElement()?.attributes.getNamedItem('data-line')?.value).toBe('6, 10-16');
       expect(getHTMLPreElement()?.attributes.getNamedItem('data-line-offset')).toBeNull();
 
       component.lineOffset = 5;
-      component.render(markdown);
+      await component.render(markdown);
 
       expect(getHTMLPreElement()?.attributes.getNamedItem('data-line-offset')?.value).toBe('5');
     });
 
-    it('should render html element through MarkdownService', () => {
+    it('should render html element through MarkdownService', async () => {
       const raw = '### Raw';
       const parsed = '<h3>Compiled</h3>';
       const clipboardOptions: ClipboardRenderOptions = {
-        buttonComponent: class mockButtonComponent {},
-        buttonTemplate: new class mockTemplateRef {} as TemplateRef<unknown>,
+        buttonComponent: class mockButtonComponent {
+        },
+        buttonTemplate: new class mockTemplateRef {
+        } as TemplateRef<unknown>,
       };
       const katexOptions: KatexOptions = { displayMode: true };
       const mermaidOptions: MermaidAPI.Config = { darkMode: true };
@@ -352,14 +310,13 @@ describe('MarkdownComponent', () => {
       component.katexOptions = katexOptions;
       component.mermaid = true;
       component.mermaidOptions = mermaidOptions;
-      component.render(raw);
+      await component.render(raw);
 
       expect(markdownService.parse).toHaveBeenCalledWith(raw, {
         decodeHtml: false,
         inline: false,
         emoji: false,
         mermaid: true,
-        markedOptions: undefined,
         disableSanitizer: false,
       });
 
@@ -376,7 +333,7 @@ describe('MarkdownComponent', () => {
         component.viewContainerRef);
     });
 
-    it('should emit `ready` when parsing and rendering is done', () => {
+    it('should emit `ready` when parsing and rendering is done', async () => {
 
       const markdown = '# Markdown';
       const parsed = '<h1 id="markdown">Markdown</h1>';
@@ -392,7 +349,7 @@ describe('MarkdownComponent', () => {
           expect(markdownService.render).toHaveBeenCalled();
         });
 
-      component.render(markdown);
+      await component.render(markdown);
     });
   });
 });

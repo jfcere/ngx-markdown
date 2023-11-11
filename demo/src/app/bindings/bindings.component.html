@@ -55,7 +55,7 @@
     <h2 id="pipe-usage">Pipe Usage</h2>
 
     <markdown>
-      Using `markdown` pipe to transform markdown to HTML allow you to chain pipe transformations and will update the DOM when value changes
+      Using `markdown` pipe to transform markdown to HTML allow you to chain pipe transformations and will update the DOM when value changes. It is important to note that, because the `marked` parsing method returns a `Promise`, it requires the use of the `async` pipe.
     </markdown>
 
     <markdown [src]="'app/bindings/remote/markdown-pipe.html'"></markdown>
@@ -69,7 +69,7 @@
         <textarea matInput [(ngModel)]="typescriptMarkdown"></textarea>
       </mat-form-field>
 
-      <div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown" fxFlex.gt-sm="calc(50% - 8px)"></div>
+      <div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown | async" fxFlex.gt-sm="calc(50% - 8px)"></div>
     </div>
   </section>
 </app-scrollspy-nav-layout>

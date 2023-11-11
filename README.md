@@ -54,18 +54,7 @@ StackBlitz available @ [https://stackblitz.com/edit/ngx-markdown](https://stackb
 To add ngx-markdown library to your `package.json` use the following commands.
 
 ```bash
-npm install ngx-markdown marked@^4.3.0 --save
-npm install @types/marked@^4.3.0 --save-dev
-```
-
-As the library is using [Marked](https://github.com/chjj/marked) parser you will need to add `node_modules/marked/marked.min.js` to your application.
-
-If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
-
-```diff
-"scripts": [
-+ "node_modules/marked/marked.min.js"
-]
+npm install ngx-markdown marked@^9.0.0
 ```
 
 ### Syntax highlight
@@ -93,7 +82,6 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 + "node_modules/prismjs/themes/prism-okaidia.css"
 ],
 "scripts": [
-  "node_modules/marked/marked.min.js",
 + "node_modules/prismjs/prism.js",
 + "node_modules/prismjs/components/prism-csharp.min.js", # c-sharp language syntax
 + "node_modules/prismjs/components/prism-css.min.js" # css language syntax
@@ -116,7 +104,6 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 + "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css"
 ],
 "scripts": [
-  "node_modules/marked/marked.min.js",
   "node_modules/prismjs/prism.js",
   "node_modules/prismjs/components/prism-csharp.min.js",
   "node_modules/prismjs/components/prism-css.min.js",
@@ -152,7 +139,6 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 + "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css"
 ],
 "scripts": [
-  "node_modules/marked/marked.min.js",
   "node_modules/prismjs/prism.js",
   "node_modules/prismjs/components/prism-csharp.min.js",
   "node_modules/prismjs/components/prism-css.min.js",
@@ -189,7 +175,6 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 + "node_modules/prismjs/plugins/command-line/prism-command-line.css"
 ],
 "scripts": [
-  "node_modules/marked/marked.min.js",
   "node_modules/prismjs/prism.js",
   "node_modules/prismjs/components/prism-csharp.min.js",
   "node_modules/prismjs/components/prism-css.min.js",
@@ -251,7 +236,6 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 
 ```diff
 "scripts": [
-  "node_modules/marked/marked.min.js",
 + "node_modules/emoji-toolkit/lib/js/joypixels.min.js",
 ]
 ```
@@ -291,7 +275,6 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 + "node_modules/katex/dist/katex.min.css"
 ],
 "scripts": [
-  "node_modules/marked/marked.min.js",
 + "node_modules/katex/dist/katex.min.js",
 + "node_modules/katex/dist/contrib/auto-render.min.js",
 ]
@@ -349,7 +332,6 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 
 ```diff
 "scripts": [
-  "node_modules/marked/marked.min.js",
 + "node_modules/mermaid/dist/mermaid.min.js",
 ]
 ```
@@ -405,7 +387,6 @@ If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angu
 
 ```diff
 "scripts": [
-  "node_modules/marked/marked.min.js",
 + "node_modules/clipboard/dist/clipboard.min.js",
 ]
 ```
@@ -435,7 +416,7 @@ You can provide a custom component to use globaly across your application with t
 MarkdownModule.forRoot({
   ...
   clipboardOptions: {
-    provide: ClipboardOptions,
+    provide: CLIPBOARD_OPTIONS,
     useValue: {
       buttonComponent: ClipboardButtonComponent,
     },
@@ -559,16 +540,16 @@ You can bypass sanitization using the markdown component, directive or pipe usin
 </div>
 
 <!-- disable sanitizer using markdown pipe -->
-<div [innerHTML]="markdown | markdown : { disableSanitizer: true }"></div>
+<div [innerHTML]="markdown | markdown : { disableSanitizer: true } | async"></div>
 ```
 
 #### MarkedOptions
 
-Optionally, markdown parsing can be configured by passing [MarkedOptions](https://marked.js.org/#/USING_ADVANCED.md#options) to the `forRoot` method of `MarkdownModule`.
+Optionally, markdown parsing can be configured using [MarkedOptions](https://marked.js.org/#/USING_ADVANCED.md#options) that can be provided with the `MARKED_OPTIONS` injection token via the `markedOptions` property of the `forRoot` method of `MarkdownModule`.
 
 Imports:
 ```typescript
-import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
+import { MarkdownModule, MARKED_OPTIONS } from 'ngx-markdown';
 ```
 
 Default options:
@@ -583,13 +564,11 @@ Custom options and passing `HttpClient` to use `[src]` attribute:
 MarkdownModule.forRoot({
   loader: HttpClient, // optional, only if you use [src] attribute
   markedOptions: {
-    provide: MarkedOptions,
+    provide: MARKED_OPTIONS,
     useValue: {
       gfm: true,
       breaks: false,
       pedantic: false,
-      smartLists: true,
-      smartypants: false,
     },
   },
 }),
@@ -602,7 +581,7 @@ MarkdownModule.forRoot({
 The example below overrides the default blockquote token rendering by adding a CSS class for custom styling when using Bootstrap CSS:
 
 ```typescript
-import { MarkedOptions, MarkedRenderer } from 'ngx-markdown';
+import { MARKED_OPTIONS, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
 
 // function that returns `MarkedOptions` with renderer override
 export function markedOptionsFactory(): MarkedOptions {
@@ -617,8 +596,6 @@ export function markedOptionsFactory(): MarkedOptions {
     gfm: true,
     breaks: false,
     pedantic: false,
-    smartLists: true,
-    smartypants: false,
   };
 }
 
@@ -626,9 +603,22 @@ export function markedOptionsFactory(): MarkedOptions {
 MarkdownModule.forRoot({
   loader: HttpClient,
   markedOptions: {
-    provide: MarkedOptions,
+    provide: MARKED_OPTIONS,
     useFactory: markedOptionsFactory,
   },
+}),
+```
+
+
+### Marked extensions
+
+You can provide [marked extensions](https://marked.js.org/using_advanced#extensions) using the `markedExtensions` property that accepts an array of extensions when configuring `MarkdownModule`.
+
+```ts
+import { gfmHeadingId } from 'marked-gfm-heading-id';
+
+MarkdownModule.forRoot({
+  markedExtensions: [gfmHeadingId()],
 }),
 ```
 
@@ -660,7 +650,7 @@ https://angular.io/api/core/Component#preserveWhitespaces
 
 ### Component
 
-You can use `markdown` component to either parse static markdown directly from your HTML markup, load the content from a remote URL using `src` property or bind a variable to your component using `data` property. To enable relative oath for links/images when using `src` input property to load content remotely, set the `srcRelativeLink` input property to `true`. You can get a hook on load complete using `load` output event property, on loading error using `error` output event property or when parsing is completed using `ready` output event property.
+You can use `markdown` component to either parse static markdown directly from your HTML markup, load the content from a remote URL using `src` property or bind a variable to your component using `data` property. You can get a hook on load complete using `load` output event property, on loading error using `error` output event property or when parsing is completed using `ready` output event property.
 
 ```html
 <!-- static markdown -->
@@ -671,7 +661,6 @@ You can use `markdown` component to either parse static markdown directly from y
 <!-- loaded from remote url -->
 <markdown
   [src]="'path/to/file.md'"
-  [srcRelativeLink]="true"
   (load)="onLoad($event)"
   (error)="onError($event)">
 </markdown>
@@ -702,7 +691,6 @@ The same way the component works, you can use `markdown` directive to accomplish
 <!-- loaded from remote url -->
 <div markdown
   [src]="'path/to/file.md'"
-  [srcRelativeLink]="true"
   (load)="onLoad($event)"
   (error)="onError($event)">
 </div>
@@ -722,18 +710,18 @@ The same way the component works, you can use `markdown` directive to accomplish
 
 ### Pipe
 
-Using `markdown` pipe to transform markdown to HTML allow you to chain pipe transformations and will update the DOM when value changes.
+Using `markdown` pipe to transform markdown to HTML allow you to chain pipe transformations and will update the DOM when value changes. It is important to note that, because the `marked` parsing method returns a `Promise`, it requires the use of the `async` pipe.
 
 ```html
 <!-- chain `language` pipe with `markdown` pipe to convert typescriptMarkdown variable content -->
-<div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown"></div>
+<div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown | async"></div>
 ```
 
 The `markdown` pipe allow you to use all the same plugins as the component by providing the options parameters.
 
 ```html
 <!-- provide options parameters to activate plugins or for configuration -->
-<div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown : { emoji: true, inline: true }"></div>
+<div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown : { emoji: true, inline: true } | async"></div>
 ```
 
 This is the `MarkdownPipeOptions` parameters interface, those options are the same as the ones available for the `markdown` component:

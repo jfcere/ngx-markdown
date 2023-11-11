@@ -1,15 +1,26 @@
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { EmbeddedViewRef, Inject, Injectable, InjectionToken, Optional, PLATFORM_ID, SecurityContext, ViewContainerRef } from '@angular/core';
+import {
+  EmbeddedViewRef,
+  Inject,
+  Injectable,
+  InjectionToken,
+  Optional,
+  PLATFORM_ID,
+  SecurityContext,
+  ViewContainerRef,
+} from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { marked, Renderer } from 'marked';
+// eslint-disable-next-line import/named
+import { marked, MarkedExtension, Renderer } from 'marked';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ClipboardButtonComponent } from './clipboard-button.component';
-import { ClipboardOptions, ClipboardRenderOptions } from './clipboard-options';
+import { CLIPBOARD_OPTIONS, ClipboardOptions, ClipboardRenderOptions } from './clipboard-options';
 import { KatexOptions } from './katex-options';
-import { MarkedOptions } from './marked-options';
+import { MARKED_EXTENSIONS } from './marked-extensions';
+import { MARKED_OPTIONS, MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
 import { MermaidAPI } from './mermaid-options';
 
@@ -72,7 +83,8 @@ export interface RenderOptions {
 }
 
 export class ExtendedRenderer extends Renderer {
-  ɵNgxMarkdownRendererExtended = false;
+  ɵNgxMarkdownRendererExtendedForExtensions = false;
+  ɵNgxMarkdownRendererExtendedForMermaid = false;
 }
 
 @Injectable()
@@ -138,17 +150,18 @@ export class MarkdownService {
   readonly reload$ = this._reload$.asObservable();
 
   constructor(
+    @Inject(CLIPBOARD_OPTIONS) @Optional() private clipboardOptions: ClipboardOptions,
+    @Inject(MARKED_EXTENSIONS) @Optional() private extensions: MarkedExtension[],
+    @Inject(MARKED_OPTIONS) @Optional() options: MarkedOptions,
     @Inject(PLATFORM_ID) private platform: Object,
     @Inject(SECURITY_CONTEXT) private securityContext: SecurityContext,
     @Optional() private http: HttpClient,
-    @Optional() private clipboardOptions: ClipboardOptions,
-    @Optional() options: MarkedOptions,
     private sanitizer: DomSanitizer,
   ) {
     this.options = options;
   }
 
-  parse(markdown: string, parseOptions: ParseOptions = this.DEFAULT_PARSE_OPTIONS): string {
+  parse(markdown: string, parseOptions: ParseOptions = this.DEFAULT_PARSE_OPTIONS): string | Promise<string> {
     const {
       decodeHtml,
       inline,
@@ -162,8 +175,14 @@ export class MarkdownService {
       ...parseOptions.markedOptions,
     };
 
+    const renderer = markedOptions.renderer || this.renderer || new Renderer();
+
+    if (this.extensions) {
+      this.renderer = this.extendsRendererForExtensions(renderer);
+    }
+
     if (mermaid) {
-      this.renderer = this.extendRenderer(markedOptions.renderer || new Renderer());
+      this.renderer = this.extendsRendererForMermaid(renderer);
     }
 
     const trimmed = this.trimIndentation(markdown);
@@ -245,9 +264,24 @@ export class MarkdownService {
     return textarea.value;
   }
 
-  private extendRenderer(renderer: Renderer): Renderer {
+  private extendsRendererForExtensions(renderer: Renderer): Renderer {
     const extendedRenderer = renderer as ExtendedRenderer;
-    if (extendedRenderer.ɵNgxMarkdownRendererExtended === true) {
+    if (extendedRenderer.ɵNgxMarkdownRendererExtendedForExtensions === true) {
+      return renderer;
+    }
+
+    if (this.extensions?.length > 0) {
+      marked.use(...this.extensions);
+    }
+
+    extendedRenderer.ɵNgxMarkdownRendererExtendedForExtensions = true;
+
+    return renderer;
+  }
+
+  private extendsRendererForMermaid(renderer: Renderer): Renderer {
+    const extendedRenderer = renderer as ExtendedRenderer;
+    if (extendedRenderer.ɵNgxMarkdownRendererExtendedForMermaid === true) {
       return renderer;
     }
 
@@ -259,7 +293,7 @@ export class MarkdownService {
         : defaultCode.call(this, code, language, isEscaped);
     };
 
-    extendedRenderer.ɵNgxMarkdownRendererExtended = true;
+    extendedRenderer.ɵNgxMarkdownRendererExtendedForMermaid = true;
 
     return renderer;
   }
@@ -285,7 +319,14 @@ export class MarkdownService {
       : markdown;
   }
 
-  private parseMarked(html: string, markedOptions: MarkedOptions, inline = false): string {
+  private parseMarked(html: string, markedOptions: MarkedOptions, inline = false): string | Promise<string> {
+    // remove renderer from markedOptions because if renderer
+    // is passed to parse method, it will ignore all extensions
+    if (markedOptions.renderer) {
+      marked.use({ renderer: markedOptions.renderer });
+      delete markedOptions.renderer;
+    }
+
     return inline
       ? marked.parseInline(html, markedOptions)
       : marked.parse(html, markedOptions);

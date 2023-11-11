@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
-import { MatButtonModule} from '@angular/material/button';
-import { MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ClipboardButtonComponent } from './clipboard-button.component';
 
