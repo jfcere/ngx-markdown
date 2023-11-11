@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef } from '@angular/core';
 import { MarkdownComponent } from 'ngx-markdown';
-import { ScrollspyNavLayoutComponent } from '../shared/scrollspy-nav-layout/scrollspy-nav-layout.component';
+import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout/scrollspy-nav-layout.component';
 
 @Component({
   selector: 'app-get-started',

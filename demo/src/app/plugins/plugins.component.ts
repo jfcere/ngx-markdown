@@ -5,8 +5,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CLIPBOARD_OPTIONS, MarkdownComponent, MermaidAPI } from 'ngx-markdown';
-import { ScrollspyNavLayoutComponent } from '../shared/scrollspy-nav-layout/scrollspy-nav-layout.component';
 import { ClipboardButtonComponent } from '@shared/clipboard-button';
+import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout/scrollspy-nav-layout.component';
 
 @Component({
   selector: 'app-plugins',

@@ -7,8 +7,8 @@ describe('ClipboardButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [ClipboardButtonComponent],
-}).compileComponents();
+      imports: [ClipboardButtonComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ClipboardButtonComponent);
     nativeElement = fixture.nativeElement;

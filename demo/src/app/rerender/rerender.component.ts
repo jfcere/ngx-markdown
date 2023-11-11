@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MarkdownComponent, MarkdownService } from 'ngx-markdown';
-import { ScrollspyNavLayoutComponent } from '../shared/scrollspy-nav-layout/scrollspy-nav-layout.component';
+import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout/scrollspy-nav-layout.component';
 
 @Component({
   selector: 'app-rerender',
@@ -33,7 +33,6 @@ export default class RerenderComponent implements OnInit, OnDestroy {
   get accentColor(): string {
     return this._accentColor;
   }
-
   set accentColor(value: string) {
     if (this._accentColor === value) {
       return;
