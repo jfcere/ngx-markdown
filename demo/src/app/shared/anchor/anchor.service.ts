@@ -15,7 +15,9 @@ import { ActivatedRoute, Router, UrlTree } from '@angular/router';
  * ```
  * _Refer to [Angular Router documentation](https://angular.io/api/router/ExtraOptions#anchorScrolling) for more details._
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class AnchorService {
 
   constructor(
