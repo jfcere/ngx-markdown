@@ -1,7 +1,7 @@
 import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { ApplicationConfig, SecurityContext } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { gfmHeadingId } from 'marked-gfm-heading-id';
 import { CLIPBOARD_OPTIONS, MARKED_OPTIONS, provideMarkdown } from 'ngx-markdown';
 import { appRoutes } from '@app/app-routes';
@@ -13,7 +13,13 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),
     provideHttpClient(),
-    provideRouter(appRoutes),
+    provideRouter(
+      appRoutes,
+      withInMemoryScrolling({
+        anchorScrolling: 'enabled',
+        scrollPositionRestoration: 'enabled',
+      }),
+    ),
     provideMarkdown({
       loader: HttpClient,
       markedOptions: {

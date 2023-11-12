@@ -1,19 +1,35 @@
-import { LocationStrategy } from '@angular/common';
+import { LocationStrategy, ViewportScroller } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 
 /**
  * Service to handle links generated through markdown parsing.
+ * #### Using `RouterModule`
  * The following `RouterModule` configuration is required to enabled anchors
  * to be scrolled to when URL has a fragment via the Angular router:
  * ```
  * RouterModule.forRoot(routes, {
- *  anchorScrolling: 'enabled',           // scrolls to the anchor element when the URL has a fragment
- *  scrollOffset: [0, 64],                // scroll offset when scrolling to an element (optional)
- *  scrollPositionRestoration: 'enabled', // restores the previous scroll position on backward navigation
+ *  anchorScrolling: 'enabled',
+ *  scrollOffset: [0, 64], // (optional)
+ *  scrollPositionRestoration: 'enabled',
  * })
  * ```
- * _Refer to [Angular Router documentation](https://angular.io/api/router/ExtraOptions#anchorScrolling) for more details._
+ * #### Using `provideRouter`
+ * The following `provideRouter` configuration is required to enabled anchors
+ * to be scrolled to when URL has a fragment via the Angular router:
+ * ```
+ * provideRouter(appRoutes, withInMemoryScrolling({
+ *   anchorScrolling: 'enabled',
+ *   scrollPositionRestoration: 'enabled',
+ * }))
+ * ```
+ * To set the `scrollOffset` when scrolling to an element use the
+ * `AnchorService.setOffset()` in your `AppComponent` (optional):
+ * ```
+ * constructor(private anchorService: AnchorService) {
+ *   this.anchorService.setOffset([0, 64]);
+ * }
+ * ```
  */
 @Injectable({ providedIn: 'root' })
 export class AnchorService {
@@ -22,6 +38,7 @@ export class AnchorService {
     private locationStrategy: LocationStrategy,
     private route: ActivatedRoute,
     private router: Router,
+    private viewportScroller: ViewportScroller,
   ) { }
 
   /**
@@ -75,6 +92,15 @@ export class AnchorService {
     if (url.fragment) {
       this.navigate(this.router.url, true);
     }
+  }
+
+  /**
+   * Configures the top offset used when scrolling to an anchor.
+   * @param offset A position in screen coordinates (a tuple with x and y values)
+   * or a function that returns the top offset position.
+   */
+  setOffset(...params: Parameters<ViewportScroller['setOffset']>): void {
+    this.viewportScroller.setOffset(...params);
   }
 
   private getUrlTree(url: string): UrlTree {

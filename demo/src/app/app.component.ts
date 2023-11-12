@@ -71,6 +71,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.anchorService.setOffset([0, 64]);
+
     const storedTheme = localStorage.getItem(LOCAL_STORAGE_THEME_KEY);
     this.setTheme(
       isTheme(storedTheme)
