@@ -1,9 +1,9 @@
-import { makeEnvironmentProviders, SecurityContext } from '@angular/core';
+import { EnvironmentProviders, makeEnvironmentProviders, SecurityContext } from '@angular/core';
 import { MarkdownModuleConfig } from './markdown.module';
 import { MarkdownService, SECURITY_CONTEXT } from './markdown.service';
 import { MARKED_EXTENSIONS } from './marked-extensions';
 
-export function provideMarkdown(markdownModuleConfig?: MarkdownModuleConfig) {
+export function provideMarkdown(markdownModuleConfig?: MarkdownModuleConfig): EnvironmentProviders {
   return makeEnvironmentProviders([
     MarkdownService,
     markdownModuleConfig?.loader ?? [],

@@ -24,7 +24,10 @@ import { MARKED_OPTIONS, MarkedOptions } from './marked-options';
     </ng-template>
   `,
   standalone: true,
-  imports: [CommonModule, MarkdownComponent],
+  imports: [
+    CommonModule,
+    MarkdownComponent,
+  ],
 })
 class HostComponent {
   markdown = '# Markdown Title';

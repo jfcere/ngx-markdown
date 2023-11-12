@@ -3,10 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class HttpRawLoaderService {
+
   constructor(
     private httpClient: HttpClient,
   ) { }

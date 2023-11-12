@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MarkdownComponent, MarkdownService } from 'ngx-markdown';
-import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout/scrollspy-nav-layout.component';
+import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
 
 @Component({
   selector: 'app-rerender',
@@ -13,12 +13,12 @@ import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout/scroll
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    ScrollspyNavLayoutComponent,
-    MarkdownComponent,
     FlexModule,
+    FormsModule,
+    MarkdownComponent,
     MatFormFieldModule,
     MatInputModule,
-    FormsModule,
+    ScrollspyNavLayoutComponent,
   ],
 })
 export default class RerenderComponent implements OnInit, OnDestroy {

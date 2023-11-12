@@ -19,7 +19,10 @@ import { first } from 'rxjs/operators';
   styleUrls: ['./scrollspy-nav.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [NgFor, RouterLink],
+  imports: [
+    NgFor,
+    RouterLink,
+  ],
 })
 export class ScrollspyNavComponent implements OnChanges, OnDestroy {
 

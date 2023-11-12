@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { isDevMode, ModuleWithProviders, NgModule, Provider, SecurityContext } from '@angular/core';
+import { ModuleWithProviders, NgModule, Provider, SecurityContext } from '@angular/core';
 // eslint-disable-next-line import/named
 import { MarkedExtension } from 'marked';
 import { ClipboardButtonComponent } from './clipboard-button.component';
@@ -27,9 +27,6 @@ const sharedDeclarations = [
   MarkdownPipe,
 ];
 
-/**
- * @deprecated use provideMarkdown instead
- * */
 @NgModule({
   imports: [CommonModule, ...sharedDeclarations],
   exports: sharedDeclarations,
@@ -48,11 +45,5 @@ export class MarkdownModule {
     return {
       ngModule: MarkdownModule,
     };
-  }
-
-  constructor() {
-    if (isDevMode()) {
-      console.warn('you should use provideMarkdown instead of MarkdownModule');
-    }
   }
 }

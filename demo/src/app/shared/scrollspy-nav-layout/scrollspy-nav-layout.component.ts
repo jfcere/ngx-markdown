@@ -5,7 +5,7 @@ import { FlexModule } from '@angular/flex-layout/flex';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MarkdownComponent } from 'ngx-markdown';
-import { ScrollspyNavComponent } from '../scrollspy-nav/scrollspy-nav.component';
+import { ScrollspyNavComponent } from '@shared/scrollspy-nav';
 import { ZOOM_ANIMATION } from './scrollspy-nav-layout.animation';
 
 @Component({
@@ -16,12 +16,12 @@ import { ZOOM_ANIMATION } from './scrollspy-nav-layout.animation';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    FlexModule,
-    MatDividerModule,
-    MarkdownComponent,
-    NgIf,
-    MatButtonModule,
     ExtendedModule,
+    FlexModule,
+    MarkdownComponent,
+    MatButtonModule,
+    MatDividerModule,
+    NgIf,
     ScrollspyNavComponent,
   ],
 })

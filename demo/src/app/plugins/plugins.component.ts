@@ -6,24 +6,24 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CLIPBOARD_OPTIONS, MarkdownComponent, MermaidAPI } from 'ngx-markdown';
 import { ClipboardButtonComponent } from '@shared/clipboard-button';
-import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout/scrollspy-nav-layout.component';
+import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
 
 @Component({
   selector: 'app-plugins',
   templateUrl: './plugins.component.html',
   styleUrls: ['./plugins.component.scss'],
-  providers: [
-    { provide: CLIPBOARD_OPTIONS, useValue: {} },
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    ScrollspyNavLayoutComponent,
-    MarkdownComponent,
     FlexModule,
+    FormsModule,
+    MarkdownComponent,
     MatFormFieldModule,
     MatInputModule,
-    FormsModule,
+    ScrollspyNavLayoutComponent,
+  ],
+  providers: [
+    { provide: CLIPBOARD_OPTIONS, useValue: {} },
   ],
 })
 export default class PluginsComponent implements OnInit {

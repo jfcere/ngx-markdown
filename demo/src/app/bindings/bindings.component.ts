@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { LanguagePipe, MarkdownComponent, MarkdownPipe } from 'ngx-markdown';
 import { HttpRawLoaderService } from '@shared/http-raw-loader';
-import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout/scrollspy-nav-layout.component';
+import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
 
 @Component({
   selector: 'app-bindings',
@@ -15,15 +15,15 @@ import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout/scroll
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    ScrollspyNavLayoutComponent,
-    MarkdownComponent,
+    AsyncPipe,
     FlexModule,
-    MatFormFieldModule,
-    MatInputModule,
     FormsModule,
     LanguagePipe,
+    MarkdownComponent,
     MarkdownPipe,
-    AsyncPipe,
+    MatFormFieldModule,
+    MatInputModule,
+    ScrollspyNavLayoutComponent,
   ],
 })
 export default class BindingsComponent implements OnInit {
