@@ -39,7 +39,6 @@ declare let joypixels: {
 
 // katex
 declare let katex: unknown;
-
 declare function renderMathInElement(elem: HTMLElement, options?: KatexOptions): void;
 
 // mermaid
@@ -137,13 +136,11 @@ export class MarkdownService {
   private _options: MarkedOptions | undefined;
 
   get options(): MarkedOptions { return this._options!; }
-
   set options(value: MarkedOptions | undefined) {
     this._options = { ...this.DEFAULT_MARKED_OPTIONS, ...value };
   }
 
   get renderer(): MarkedRenderer { return this.options.renderer!; }
-
   set renderer(value: MarkedRenderer) {
     this.options.renderer = value;
   }

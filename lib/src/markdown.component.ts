@@ -39,18 +39,15 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
 
   @Input()
   get disableSanitizer(): boolean { return this._disableSanitizer; }
-
   set disableSanitizer(value: boolean) { this._disableSanitizer = this.coerceBooleanProperty(value); }
 
   @Input()
   get inline(): boolean { return this._inline; }
-
   set inline(value: boolean) { this._inline = this.coerceBooleanProperty(value); }
 
   // Plugin - clipboard
   @Input()
   get clipboard(): boolean { return this._clipboard; }
-
   set clipboard(value: boolean) { this._clipboard = this.coerceBooleanProperty(value); }
 
   @Input() clipboardButtonComponent: Type<unknown> | undefined;
@@ -59,13 +56,11 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   // Plugin - emoji
   @Input()
   get emoji(): boolean { return this._emoji; }
-
   set emoji(value: boolean) { this._emoji = this.coerceBooleanProperty(value); }
 
   // Plugin - katex
   @Input()
   get katex(): boolean { return this._katex; }
-
   set katex(value: boolean) { this._katex = this.coerceBooleanProperty(value); }
 
   @Input() katexOptions: KatexOptions | undefined;
@@ -73,7 +68,6 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   // Plugin - mermaid
   @Input()
   get mermaid(): boolean { return this._mermaid; }
-
   set mermaid(value: boolean) { this._mermaid = this.coerceBooleanProperty(value); }
 
   @Input() mermaidOptions: MermaidAPI.Config | undefined;
@@ -81,7 +75,6 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   // Plugin - lineHighlight
   @Input()
   get lineHighlight(): boolean { return this._lineHighlight; }
-
   set lineHighlight(value: boolean) { this._lineHighlight = this.coerceBooleanProperty(value); }
 
   @Input() line: string | string[] | undefined;
@@ -90,7 +83,6 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   // Plugin - lineNumbers
   @Input()
   get lineNumbers(): boolean { return this._lineNumbers; }
-
   set lineNumbers(value: boolean) { this._lineNumbers = this.coerceBooleanProperty(value); }
 
   @Input() start: number | undefined;
@@ -98,7 +90,6 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   // Plugin - commandLine
   @Input()
   get commandLine(): boolean { return this._commandLine; }
-
   set commandLine(value: boolean) { this._commandLine = this.coerceBooleanProperty(value); }
 
   @Input() filterOutput: string | undefined;
@@ -245,9 +236,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
     }
   }
 
-  private setPluginOptions(element: HTMLElement, options: {
-    [key: string]: number | string | string[] | undefined
-  }): void {
+  private setPluginOptions(element: HTMLElement, options: { [key: string]: number | string | string[] | undefined }): void {
     const preElements = element.querySelectorAll('pre');
     for (let i = 0; i < preElements.length; i++) {
       Object.keys(options).forEach(option => {
