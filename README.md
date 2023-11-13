@@ -15,7 +15,7 @@
     <img alt="License" src="https://img.shields.io/npm/l/ngx-markdown.svg">
   </a>
   <br>
-  <img alt="Dependency Status" src="https://img.shields.io/librariesio/release/npm/ngx-markdown/17.0.0">
+  <img alt="Dependency Status" src="https://img.shields.io/librariesio/release/npm/ngx-markdown/17.1.0">
   <a href="https://www.npmjs.com/package/ngx-markdown">
     <img alt="Monthly Downloads" src="https://img.shields.io/npm/dm/ngx-markdown.svg">
   </a>
