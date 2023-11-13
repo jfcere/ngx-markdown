@@ -120,7 +120,7 @@ export class MarkdownService {
     inline: false,
     emoji: false,
     mermaid: false,
-    markedOptions: this.DEFAULT_MARKED_OPTIONS,
+    markedOptions: undefined,
     disableSanitizer: false,
   };
 
