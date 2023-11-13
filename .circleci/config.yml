@@ -75,7 +75,9 @@ jobs:
       # Build demo
       - run:
           name: Build
-          command: yarn gh-pages:build
+          command: |
+            yarn gh-pages:build
+            yarn gh-pages:postbuild
       # Deploy demo to Github Pages
       - run:
           name: Deploy to gh-pages
