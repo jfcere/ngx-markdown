@@ -42,7 +42,8 @@
     "test": "ng test",
     "coveralls": "cat \"./coverage/lcov.info\" | \"./node_modules/coveralls/bin/coveralls.js\"",
     "gh-pages:build": "yarn build:demo --aot --base-href /ngx-markdown/",
-    "gh-pages:deploy": "angular-cli-ghpages --dir=\"dist/demo\" --name=\"CircleCI\" --email=\"circleci@email.com\" --no-silent",
+    "gh-pages:postbuild": "cpy ./dist/demo/3rdpartylicenses.txt ./dist/demo/browser",
+    "gh-pages:deploy": "angular-cli-ghpages --dir=\"dist/demo/browser\" --name=\"CircleCI\" --email=\"circleci@email.com\" --no-silent",
     "publish:lib": "npm publish ./dist/lib",
     "publish:beta": "npm publish ./dist/lib --tag beta"
   },
