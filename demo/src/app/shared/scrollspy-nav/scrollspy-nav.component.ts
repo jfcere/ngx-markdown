@@ -1,4 +1,15 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { NgFor } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Input,
+  NgZone,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+} from '@angular/core';
+import { RouterLink } from '@angular/router';
 import Gumshoe from 'gumshoejs';
 import { first } from 'rxjs/operators';
 
@@ -7,6 +18,11 @@ import { first } from 'rxjs/operators';
   templateUrl: './scrollspy-nav.component.html',
   styleUrls: ['./scrollspy-nav.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgFor,
+    RouterLink,
+  ],
 })
 export class ScrollspyNavComponent implements OnChanges, OnDestroy {
 
@@ -47,6 +63,6 @@ export class ScrollspyNavComponent implements OnChanges, OnDestroy {
         const hostElement = this.elementRef.nativeElement;
         const linkSelector = `${hostElement.tagName}.${hostElement.className} a`;
         this.scrollSpy = new Gumshoe(linkSelector, { offset: 64, reflow: true });
-    });
+      });
   }
 }

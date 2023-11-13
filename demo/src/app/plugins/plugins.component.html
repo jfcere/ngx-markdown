@@ -444,11 +444,21 @@
     <markdown clipboard [clipboardButtonComponent]="clipboardButton" ngPreserveWhitespaces>
       #### Using global configuration
 
-      You can provide a custom component to use globaly across your application with the `clipboardOptions` via `MarkdownModule.forRoot()` import configuration.
+      You can provide a custom component to use globaly across your application with the `clipboardOptions` in the `MarkdownModuleConfig` either with `provideMarkdown` provide-function for standalone components or `MarkdownModule.forRoot()` for module configuration.
 
       ```typescript
+      // using the `provideMarkdown` function
+      provideMarkdown(&#123;
+        clipboardOptions: &#123;
+          provide: CLIPBOARD_OPTIONS,
+          useValue: &#123;
+            buttonComponent: ClipboardButtonComponent,
+          &#125;,
+        &#125;,
+      &#125;)
+
+      // using `MarkdownModule` import
       MarkdownModule.forRoot(&#123;
-        ...
         clipboardOptions: &#123;
           provide: CLIPBOARD_OPTIONS,
           useValue: &#123;

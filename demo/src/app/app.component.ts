@@ -1,8 +1,12 @@
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, NgFor } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, HostListener, Inject, OnInit, ViewChild } from '@angular/core';
-import { Route, Router, RouterOutlet } from '@angular/router';
-
-import { AnchorService } from '@shared/anchor/anchor.service';
+import { FlexModule } from '@angular/flex-layout/flex';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { Route, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AnchorService } from '@shared/anchor';
 import { ROUTE_ANIMATION } from './app.animation';
 import { DEFAULT_THEME, LOCAL_STORAGE_THEME_KEY } from './app.constant';
 import { isTheme, Theme } from './app.models';
@@ -13,6 +17,18 @@ import { isTheme, Theme } from './app.models';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    FlexModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTabsModule,
+    MatToolbarModule,
+    NgFor,
+    RouterLink,
+    RouterLinkActive,
+    RouterOutlet,
+  ],
 })
 export class AppComponent implements OnInit {
 
@@ -55,6 +71,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.anchorService.setOffset([0, 64]);
+
     const storedTheme = localStorage.getItem(LOCAL_STORAGE_THEME_KEY);
     this.setTheme(
       isTheme(storedTheme)

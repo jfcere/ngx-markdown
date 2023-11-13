@@ -15,7 +15,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { marked, MarkedExtension, Renderer } from 'marked';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { CLIPBOARD_OPTIONS, ClipboardOptions, ClipboardRenderOptions } from './clipboard-options';
 import { KatexOptions } from './katex-options';
@@ -26,7 +25,7 @@ import { MermaidAPI } from './mermaid-options';
 
 // clipboard
 declare let ClipboardJS: {
-  new (
+  new(
     selector: string | Element | NodeListOf<Element>,
     options?: { text?: (elem: Element) => string },
   ): typeof ClipboardJS;

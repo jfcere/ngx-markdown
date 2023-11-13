@@ -1,12 +1,19 @@
 import { ChangeDetectionStrategy, Component, ElementRef } from '@angular/core';
+import { MarkdownComponent } from 'ngx-markdown';
+import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
 
 @Component({
   selector: 'app-get-started',
   templateUrl: './get-started.component.html',
   styleUrls: ['./get-started.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MarkdownComponent,
+    ScrollspyNavLayoutComponent,
+  ],
 })
-export class GetStartedComponent {
+export default class GetStartedComponent {
 
   headings: Element[] | undefined;
 

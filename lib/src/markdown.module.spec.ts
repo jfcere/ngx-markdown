@@ -4,8 +4,8 @@ import { Component, SecurityContext } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 // eslint-disable-next-line import/named
 import { MarkedExtension } from 'marked';
-
 import { CLIPBOARD_OPTIONS, ClipboardOptions } from './clipboard-options';
+import { MarkdownComponent } from './markdown.component';
 import { MarkdownModule } from './markdown.module';
 import { errorSrcWithoutHttpClient, SECURITY_CONTEXT } from './markdown.service';
 import { MARKED_EXTENSIONS } from './marked-extensions';
@@ -23,6 +23,11 @@ import { MARKED_OPTIONS, MarkedOptions } from './marked-options';
       <markdown [data]="markdown"></markdown>
     </ng-template>
   `,
+  standalone: true,
+  imports: [
+    CommonModule,
+    MarkdownComponent,
+  ],
 })
 class HostComponent {
   markdown = '# Markdown Title';
@@ -294,8 +299,8 @@ describe('MarkdownModule', () => {
         imports: [
           CommonModule,
           MarkdownModule.forRoot(),
+          HostComponent,
         ],
-        declarations: [HostComponent],
       }).compileComponents();
     });
 

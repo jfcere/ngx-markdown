@@ -1,19 +1,32 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular/core';
+import { FlexModule } from '@angular/flex-layout/flex';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CLIPBOARD_OPTIONS, MermaidAPI } from 'ngx-markdown';
-
+import { CLIPBOARD_OPTIONS, MarkdownComponent, MermaidAPI } from 'ngx-markdown';
 import { ClipboardButtonComponent } from '@shared/clipboard-button';
+import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
 
 @Component({
   selector: 'app-plugins',
   templateUrl: './plugins.component.html',
   styleUrls: ['./plugins.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    FlexModule,
+    FormsModule,
+    MarkdownComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    ScrollspyNavLayoutComponent,
+  ],
   providers: [
     { provide: CLIPBOARD_OPTIONS, useValue: {} },
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PluginsComponent implements OnInit {
+export default class PluginsComponent implements OnInit {
 
   readonly clipboardButton = ClipboardButtonComponent;
 

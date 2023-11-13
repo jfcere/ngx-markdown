@@ -1,3 +1,4 @@
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { merge, of, Subject, timer } from 'rxjs';
 import { distinctUntilChanged, map, mapTo, shareReplay, startWith, switchMap } from 'rxjs/operators';
@@ -15,6 +16,8 @@ const BUTTON_TEXT_COPIED = 'Copied';
     >{{ copiedText$ | async }}</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [AsyncPipe],
 })
 export class ClipboardButtonComponent {
 

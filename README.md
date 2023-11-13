@@ -410,11 +410,25 @@ To customize the default button styling, use the `.markdown-clipboard-button` CS
 
 #### Using global configuration
 
-You can provide a custom component to use globaly across your application with the `clipboardOptions` via `MarkdownModule.forRoot()` import configuration.
+You can provide a custom component to use globaly across your application with the `clipboardOptions` in the `MarkdownModuleConfig` either with `provideMarkdown` provide-function for standalone components or `MarkdownModule.forRoot()` for module configuration.
+
+##### Using the `provideMarkdown` function
+
+```typescript
+provideMarkdown({
+  clipboardOptions: {
+    provide: CLIPBOARD_OPTIONS,
+    useValue: {
+      buttonComponent: ClipboardButtonComponent,
+    },
+  },
+})
+```
+
+##### Using the `MarkdownModule` import
 
 ```typescript
 MarkdownModule.forRoot({
-  ...
   clipboardOptions: {
     provide: CLIPBOARD_OPTIONS,
     useValue: {
@@ -477,14 +491,30 @@ Alternatively, the `clipboard` directive can be used in conjonction with `ng-tem
 
 ## Configuration
 
-### Main application module
+The ngx-markdown library can be used either with the standalone components or with modules configuration. Please follow the configuration section that matches your application.
 
-You must import `MarkdownModule` inside your main application module (usually named AppModule) with `forRoot` to be able to use `markdown` component and/or directive.
+### Standalone components
+
+Use the `provideMarkdown` provide-function in your application configuration `ApplicationConfig` to be able to provide the `MarkdownComponent` and `MarkdownPipe` to your standalone components and/or inject the `MarkdownService`.
+
+```diff
+import { NgModule } from '@angular/core';
++ import { provideMarkdown } from 'ngx-markdown';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
++   provideMarkdown(),
+  ],
+};
+```
+
+### Modules configuration
+
+You must import `MarkdownModule` inside your main application module (usually named AppModule) with `forRoot` to be able to use the `markdown` component, directive, pipe and/or `MarkdownService`.
 
 ```diff
 import { NgModule } from '@angular/core';
 + import { MarkdownModule } from 'ngx-markdown';
-
 import { AppComponent } from './app.component';
 
 @NgModule({
@@ -497,7 +527,36 @@ import { AppComponent } from './app.component';
 export class AppModule { }
 ```
 
+Use `forChild` when importing `MarkdownModule` into other application modules to allow you to use the same parser configuration across your application.
+
+```diff
+import { NgModule } from '@angular/core';
++ import { MarkdownModule } from 'ngx-markdown';
+import { HomeComponent } from './home.component';
+
+@NgModule({
+  imports: [
++   MarkdownModule.forChild(),
+  ],
+  declarations: [HomeComponent],
+})
+export class HomeModule { }
+```
+
+### Remote file configuration
+
 If you want to use the `[src]` attribute to directly load a remote file, in order to keep only one instance of `HttpClient` and avoid issues with interceptors, you also have to provide `HttpClient`:
+
+##### Using the `provideMarkdown` function
+
+```diff
+providers: [
++  provideHttpClient(),
++  provideMarkdown({ loader: HttpClient }),
+],
+```
+
+##### Using the `MarkdownModule` import
 
 ```diff
 imports: [
@@ -509,6 +568,22 @@ imports: [
 #### Sanitization
 
 As of ngx-markdown v9.0.0 **sanitization is enabled by default** and uses Angular `DomSanitizer` with `SecurityContext.HTML` to avoid XSS vulnerabilities. The `SecurityContext` level can be changed using the `sanitize` property when configuring `MarkdownModule`.
+
+##### Using the `provideMarkdown` function
+
+```typescript
+import { SecurityContext } from '@angular/core';
+
+// enable default sanitization
+provideMarkdown()
+
+// turn off sanitization
+provideMarkdown({
+  sanitize: SecurityContext.NONE
+})
+```
+
+##### Using the `MarkdownModule` import
 
 ```typescript
 import { SecurityContext } from '@angular/core';
@@ -547,19 +622,37 @@ You can bypass sanitization using the markdown component, directive or pipe usin
 
 Optionally, markdown parsing can be configured using [MarkedOptions](https://marked.js.org/#/USING_ADVANCED.md#options) that can be provided with the `MARKED_OPTIONS` injection token via the `markedOptions` property of the `forRoot` method of `MarkdownModule`.
 
-Imports:
+##### Using the `provideMarkdown` function
+
 ```typescript
-import { MarkdownModule, MARKED_OPTIONS } from 'ngx-markdown';
+// imports
+import { MARKED_OPTIONS, provideMarkdown } from 'ngx-markdown';
+
+// using default options
+provideMarkdown(),
+
+// using specific options with ValueProvider and passing HttpClient
+provideMarkdown({
+  markedOptions: {
+    provide: MARKED_OPTIONS,
+    useValue: {
+      gfm: true,
+      breaks: false,
+      pedantic: false,
+    },
+  },
+}),
 ```
 
-Default options:
+##### Using the `MarkdownModule` import
+
 ```typescript
+// imports
+import { MarkdownModule, MARKED_OPTIONS } from 'ngx-markdown';
+
 // using default options
 MarkdownModule.forRoot(),
-```
 
-Custom options and passing `HttpClient` to use `[src]` attribute:
-```typescript
 // using specific options with ValueProvider and passing HttpClient
 MarkdownModule.forRoot({
   loader: HttpClient, // optional, only if you use [src] attribute
@@ -578,7 +671,7 @@ MarkdownModule.forRoot({
 
 `MarkedOptions` also exposes the `renderer` property which allows you to override token rendering for your whole application.
 
-The example below overrides the default blockquote token rendering by adding a CSS class for custom styling when using Bootstrap CSS:
+The example uses a factory function and override the default blockquote token rendering by adding a CSS class for custom styling when using Bootstrap CSS:
 
 ```typescript
 import { MARKED_OPTIONS, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
@@ -598,10 +691,13 @@ export function markedOptionsFactory(): MarkedOptions {
     pedantic: false,
   };
 }
+```
 
+##### Using the `provideMarkdown` function
+
+```typescript
 // using specific option with FactoryProvider
-MarkdownModule.forRoot({
-  loader: HttpClient,
+provideMarkdown({
   markedOptions: {
     provide: MARKED_OPTIONS,
     useFactory: markedOptionsFactory,
@@ -609,36 +705,40 @@ MarkdownModule.forRoot({
 }),
 ```
 
+##### Using the `MarkdownModule` import
+
+```typescript
+// using specific option with FactoryProvider
+MarkdownModule.forRoot({
+  markedOptions: {
+    provide: MARKED_OPTIONS,
+    useFactory: markedOptionsFactory,
+  },
+}),
+```
 
 ### Marked extensions
 
 You can provide [marked extensions](https://marked.js.org/using_advanced#extensions) using the `markedExtensions` property that accepts an array of extensions when configuring `MarkdownModule`.
 
-```ts
+##### Using the `provideMarkdown` function
+
+```typescript
+import { gfmHeadingId } from 'marked-gfm-heading-id';
+
+providemarkdown({
+  markedExtensions: [gfmHeadingId()],
+}),
+```
+
+##### Using the `MarkdownModule` import
+
+```typescript
 import { gfmHeadingId } from 'marked-gfm-heading-id';
 
 MarkdownModule.forRoot({
   markedExtensions: [gfmHeadingId()],
 }),
-```
-
-### Other application modules
-
-Use `forChild` when importing `MarkdownModule` into other application modules to allow you to use the same parser configuration across your application.
-
-```diff
-import { NgModule } from '@angular/core';
-+ import { MarkdownModule } from 'ngx-markdown';
-
-import { HomeComponent } from './home.component';
-
-@NgModule({
-  imports: [
-+   MarkdownModule.forChild(),
-  ],
-  declarations: [HomeComponent],
-})
-export class HomeModule { }
 ```
 
 ## Usage

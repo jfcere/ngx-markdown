@@ -1,12 +1,23 @@
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular/core';
+import { LanguagePipe, MarkdownComponent, MarkdownPipe } from 'ngx-markdown';
+import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
 
 @Component({
   selector: 'app-syntax-highlight',
   templateUrl: './syntax-highlight.component.html',
   styleUrls: ['./syntax-highlight.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    LanguagePipe,
+    MarkdownComponent,
+    MarkdownPipe,
+    ScrollspyNavLayoutComponent,
+  ],
 })
-export class SyntaxHighlightComponent implements OnInit {
+export default class SyntaxHighlightComponent implements OnInit {
 
   headings: Element[] | undefined;
 

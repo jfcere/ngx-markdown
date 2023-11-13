@@ -13,7 +13,6 @@ import {
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { KatexOptions } from './katex-options';
 import { MarkdownService, ParseOptions, RenderOptions } from './markdown.service';
 import { MermaidAPI } from './mermaid-options';
@@ -23,6 +22,7 @@ import { PrismPlugin } from './prism-plugin';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'markdown, [markdown]',
   template: '<ng-content></ng-content>',
+  standalone: true,
 })
 export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
 
@@ -49,6 +49,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input()
   get clipboard(): boolean { return this._clipboard; }
   set clipboard(value: boolean) { this._clipboard = this.coerceBooleanProperty(value); }
+
   @Input() clipboardButtonComponent: Type<unknown> | undefined;
   @Input() clipboardButtonTemplate: TemplateRef<unknown> | undefined;
 
@@ -61,18 +62,21 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input()
   get katex(): boolean { return this._katex; }
   set katex(value: boolean) { this._katex = this.coerceBooleanProperty(value); }
+
   @Input() katexOptions: KatexOptions | undefined;
 
   // Plugin - mermaid
   @Input()
   get mermaid(): boolean { return this._mermaid; }
   set mermaid(value: boolean) { this._mermaid = this.coerceBooleanProperty(value); }
+
   @Input() mermaidOptions: MermaidAPI.Config | undefined;
 
   // Plugin - lineHighlight
   @Input()
   get lineHighlight(): boolean { return this._lineHighlight; }
   set lineHighlight(value: boolean) { this._lineHighlight = this.coerceBooleanProperty(value); }
+
   @Input() line: string | string[] | undefined;
   @Input() lineOffset: number | undefined;
 
@@ -80,12 +84,14 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input()
   get lineNumbers(): boolean { return this._lineNumbers; }
   set lineNumbers(value: boolean) { this._lineNumbers = this.coerceBooleanProperty(value); }
+
   @Input() start: number | undefined;
 
   // Plugin - commandLine
   @Input()
   get commandLine(): boolean { return this._commandLine; }
   set commandLine(value: boolean) { this._commandLine = this.coerceBooleanProperty(value); }
+
   @Input() filterOutput: string | undefined;
   @Input() host: string | undefined;
   @Input() prompt: string | undefined;

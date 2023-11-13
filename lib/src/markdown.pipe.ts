@@ -1,13 +1,13 @@
 import { ElementRef, NgZone, Pipe, PipeTransform, ViewContainerRef } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { first } from 'rxjs/operators';
-
 import { MarkdownService, ParseOptions, RenderOptions } from './markdown.service';
 
 export type MarkdownPipeOptions = ParseOptions & RenderOptions;
 
 @Pipe({
   name: 'markdown',
+  standalone: true,
 })
 export class MarkdownPipe implements PipeTransform {
 

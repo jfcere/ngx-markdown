@@ -1,13 +1,27 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { MarkdownService } from 'ngx-markdown';
+import { FlexModule } from '@angular/flex-layout/flex';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MarkdownComponent, MarkdownService } from 'ngx-markdown';
+import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
 
 @Component({
   selector: 'app-rerender',
   templateUrl: './rerender.component.html',
   styleUrls: ['./rerender.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    FlexModule,
+    FormsModule,
+    MarkdownComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    ScrollspyNavLayoutComponent,
+  ],
 })
-export class RerenderComponent implements OnInit, OnDestroy {
+export default class RerenderComponent implements OnInit, OnDestroy {
 
   // property to handle override as per marked documentation, if a renderer
   // function returns `false` it will fallback to previous implementation

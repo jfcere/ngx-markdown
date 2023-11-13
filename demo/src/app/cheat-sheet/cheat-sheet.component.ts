@@ -1,13 +1,22 @@
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular/core';
+import { MarkdownComponent } from 'ngx-markdown';
 import { HttpRawLoaderService } from '@shared/http-raw-loader';
+import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
 
 @Component({
   selector: 'app-cheat-sheet',
   templateUrl: './cheat-sheet.component.html',
   styleUrls: ['./cheat-sheet.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    MarkdownComponent,
+    ScrollspyNavLayoutComponent,
+  ],
 })
-export class CheatSheetComponent implements OnInit {
+export default class CheatSheetComponent implements OnInit {
 
   blockquotes$ = this.rawLoaderService.get('app/cheat-sheet/remote/blockquotes.md');
   codeAndSynthaxHighlighting$ = this.rawLoaderService.get('app/cheat-sheet/remote/code-and-synthax-highlighting.md');
