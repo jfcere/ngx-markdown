@@ -22,6 +22,7 @@ import {
   SECURITY_CONTEXT,
 } from './markdown.service';
 import { MarkedOptions } from './marked-options';
+import { MarkedRenderer } from './marked-renderer';
 import { MermaidAPI } from './mermaid-options';
 
 declare let window: any;
@@ -389,6 +390,22 @@ describe('MarkdownService', () => {
         expect(markedParseSpy).toHaveBeenCalled();
         expect(markedParseSpy.calls.argsFor(0)[0]).toBe(mockRaw);
         expect(markedParseSpy.calls.argsFor(0)[1]).toEqual(expectedOptions);
+      });
+
+      it('should not override markedOptions.renderer when parsing and parseOptions.renderer is not provided', () => {
+
+        const mockRaw = '### Markdown-x';
+        const mockRenderer = new MarkedRenderer();
+        mockRenderer.blockquote = () => 'mock-blocquote';
+        const mockMarkedOptions: MarkedOptions = { breaks: true, gfm: false, pedantic: true, silent: false, renderer: mockRenderer };
+
+        const markedUseSpy = spyOn(marked, 'use');
+
+        markdownService.options = mockMarkedOptions;
+        markdownService.parse(mockRaw);
+
+        expect(markedUseSpy).toHaveBeenCalled();
+        expect(markedUseSpy).toHaveBeenCalledWith({ renderer: mockRenderer });
       });
 
       it('should return empty string when raw is null/undefined/empty', () => {
