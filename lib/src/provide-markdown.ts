@@ -3,7 +3,7 @@ import { MarkdownModuleConfig } from './markdown.module';
 import { MarkdownService, SECURITY_CONTEXT } from './markdown.service';
 import { MARKED_EXTENSIONS } from './marked-extensions';
 
-export function provideMarkdown(markdownModuleConfig?: MarkdownModuleConfig): Provider {
+export function provideMarkdown(markdownModuleConfig?: MarkdownModuleConfig): Provider[] {
   return [
     MarkdownService,
     markdownModuleConfig?.loader ?? [],
