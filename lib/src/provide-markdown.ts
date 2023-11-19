@@ -1,10 +1,10 @@
-import { EnvironmentProviders, makeEnvironmentProviders, SecurityContext } from '@angular/core';
+import { Provider, SecurityContext } from '@angular/core';
 import { MarkdownModuleConfig } from './markdown.module';
 import { MarkdownService, SECURITY_CONTEXT } from './markdown.service';
 import { MARKED_EXTENSIONS } from './marked-extensions';
 
-export function provideMarkdown(markdownModuleConfig?: MarkdownModuleConfig): EnvironmentProviders {
-  return makeEnvironmentProviders([
+export function provideMarkdown(markdownModuleConfig?: MarkdownModuleConfig): Provider[] {
+  return [
     MarkdownService,
     markdownModuleConfig?.loader ?? [],
     markdownModuleConfig?.clipboardOptions ?? [],
@@ -17,5 +17,5 @@ export function provideMarkdown(markdownModuleConfig?: MarkdownModuleConfig): En
       provide: SECURITY_CONTEXT,
       useValue: markdownModuleConfig?.sanitize ?? SecurityContext.HTML,
     },
-  ]);
+  ];
 }
