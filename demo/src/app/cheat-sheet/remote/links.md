@@ -10,6 +10,25 @@ There are two ways to create links.
 
 [You can use numbers for reference-style link definitions][1]
 
+[I'm a router link](routerLink:/get-started)
+
+```md
+[I'm a router link](routerLink:/path/to/page)
+```
+
+```html
+<markdown src="/path/to/markdown.md" [routerLinkOptions]="{
+  global: {
+    queryParams: { key: 'value' },
+  },
+  paths: {
+    '/path/to/page': {
+      queryParams: { key: 'value' },
+    }
+  }
+}"></markdown>
+```
+
 Or leave it empty and use the [link text itself].
 
 URLs and URLs in angle brackets will automatically get turned into links.

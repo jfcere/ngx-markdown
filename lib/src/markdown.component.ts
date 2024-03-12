@@ -1,27 +1,40 @@
+import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
+  HostListener,
   Input,
   OnChanges,
   OnDestroy,
+  Optional,
   Output,
   TemplateRef,
   Type,
   ViewContainerRef,
 } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { NavigationExtras, Router } from '@angular/router';
+import { from, merge, Subject } from 'rxjs';
+import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { KatexOptions } from './katex-options';
 import { MarkdownService, ParseOptions, RenderOptions } from './markdown.service';
 import { MermaidAPI } from './mermaid-options';
 import { PrismPlugin } from './prism-plugin';
 
+export interface MarkdownRouterLinkOptions {
+  global?: NavigationExtras;
+  paths?: { [path: string]: NavigationExtras | undefined };
+}
+
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'markdown, [markdown]',
-  template: '<ng-content></ng-content>',
+  template: `
+  <ng-container *ngIf="changed$ | async">
+  <ng-content></ng-content>
+  `,
+  imports: [CommonModule],
   standalone: true,
 })
 export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
@@ -97,11 +110,56 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input() prompt: string | undefined;
   @Input() output: string | undefined;
   @Input() user: string | undefined;
+  @Input() routerLinkOptions: MarkdownRouterLinkOptions | undefined;
 
   // Event emitters
   @Output() error = new EventEmitter<string | Error>();
   @Output() load = new EventEmitter<string>();
   @Output() ready = new EventEmitter<void>();
+
+  private changed = new Subject<void>();
+  /**
+   * When the markdown content is ready, or when the markdown content changes, this observable emits.
+   * - Get all the anchor tags in the markdown content.
+   * - Filter the anchor tags that have a `href` attribute that starts with `/routerLink:`.
+   * - Set the `data-routerLink` attribute to the `href` attribute without the `/routerLink:` prefix.
+   * - Remove the `/routerLink:` prefix from the `href` attribute.
+   */
+  protected changed$ = merge(this.ready, this.changed).pipe(
+    map(() => this.element.nativeElement.querySelectorAll('a')),
+    switchMap(links => from(links)),
+    filter(link => link.getAttribute('href')?.startsWith('/routerLink:') === true),
+    tap(link => link.setAttribute('data-routerLink', link.getAttribute('href')!.replace('/routerLink:', ''))),
+    tap(link => link.setAttribute('href', link.getAttribute('href')!.replace('/routerLink:', ''))),
+  );
+
+  @HostListener('click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    const anchor = target.nodeName.toLowerCase() === 'a' ? target : target.closest('a');
+    const path = anchor?.getAttribute('href');
+    if (path && anchor) {
+      // Stop the browser from navigating
+      event.preventDefault();
+      event.stopPropagation();
+
+      // Get the routerLink commands to navigate to
+      const commands = anchor.getAttribute('data-routerLink')!.split('/').filter(String);
+
+      let extras: NavigationExtras | undefined;
+      // Find the path in the routerLinkOptions
+      if (this.routerLinkOptions?.paths) {
+        extras = this.routerLinkOptions.paths[path];
+      }
+      // Get the global options if no path was found
+      if (!extras && this.routerLinkOptions?.global) {
+        extras = this.routerLinkOptions.global;
+      }
+
+      // Navigate to the path using the router service
+      this.router?.navigate(commands, extras);
+    }
+  }
 
   private _clipboard = false;
   private _commandLine = false;
@@ -119,10 +177,12 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
     public element: ElementRef<HTMLElement>,
     public markdownService: MarkdownService,
     public viewContainerRef: ViewContainerRef,
+    @Optional() public router?: Router,
   ) { }
 
   ngOnChanges(): void {
     this.loadContent();
+    this.changed.next();
   }
 
   loadContent(): void {

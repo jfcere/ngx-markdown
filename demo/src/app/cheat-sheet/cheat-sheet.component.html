@@ -2,7 +2,9 @@
   <h1>Cheat Sheet</h1>
 
   <markdown>
-    The following examples are intended as a quick markdown reference and showcase. It is based on Adam Pritchard work of [Markdown Cheat Sheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
+    The following examples are intended as a quick markdown reference and
+    showcase. It is based on Adam Pritchard work of [Markdown Cheat
+    Sheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
   </markdown>
 
   <section>
@@ -29,7 +31,20 @@
   <section>
     <h2 id="links">Links</h2>
     <pre class="language-none">{{ links$ | async }}</pre>
-    <markdown [data]="links$ | async"></markdown>
+    <markdown
+      [data]="links$ | async"
+      [routerLinkOptions]="{
+        paths: {
+          '/syntax-highlight': {
+            queryParams: {
+              utm_source: 'markdown-cheat-sheet',
+              utm_medium: 'link',
+              utm_campaign: 'markdown-cheat-sheet'
+            }
+          }
+        }
+      }"
+    ></markdown>
   </section>
 
   <section>
