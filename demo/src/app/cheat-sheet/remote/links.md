@@ -12,10 +12,6 @@ There are two ways to create links.
 
 [I'm a router link](routerLink:/get-started)
 
-```md
-[I'm a router link](routerLink:/path/to/page)
-```
-
 ```html
 <markdown src="/path/to/markdown.md" [routerLinkOptions]="{
   global: {
