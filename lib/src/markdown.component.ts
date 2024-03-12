@@ -31,7 +31,7 @@ export interface MarkdownRouterLinkOptions {
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'markdown, [markdown]',
   template: `
-  <ng-container *ngIf="changed$ | async">
+  <ng-container *ngIf="changed$ | async" />
   <ng-content></ng-content>
   `,
   imports: [CommonModule],
