@@ -16,6 +16,7 @@ import {
   errorJoyPixelsNotLoaded,
   errorKatexNotLoaded,
   errorMermaidNotLoaded,
+  ExtendedRenderer,
   MarkdownService,
   ParseOptions,
   SECURITY_CONTEXT,
@@ -403,8 +404,12 @@ describe('MarkdownService', () => {
         markdownService.options = mockMarkedOptions;
         markdownService.parse(mockRaw);
 
+        const expectedMockRenderer = { ...mockRenderer } as Partial<ExtendedRenderer>;
+        delete expectedMockRenderer.ɵNgxMarkdownRendererExtendedForExtensions;
+        delete expectedMockRenderer.ɵNgxMarkdownRendererExtendedForMermaid;
+
         expect(markedUseSpy).toHaveBeenCalled();
-        expect(markedUseSpy).toHaveBeenCalledWith({ renderer: mockRenderer });
+        expect(markedUseSpy).toHaveBeenCalledWith({ renderer: expectedMockRenderer });
       });
 
       it('should return empty string when raw is null/undefined/empty', () => {

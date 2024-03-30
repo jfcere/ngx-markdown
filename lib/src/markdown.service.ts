@@ -319,11 +319,18 @@ export class MarkdownService {
   }
 
   private parseMarked(html: string, markedOptions: MarkedOptions, inline = false): string | Promise<string> {
-    // remove renderer from markedOptions because if renderer
-    // is passed to parse method, it will ignore all extensions
     if (markedOptions.renderer) {
-      marked.use({ renderer: markedOptions.renderer });
+      // clone renderer and remove extended flags otherwise
+      // marked throws an error thinking it is a renderer prop
+      const renderer = { ...markedOptions.renderer } as Partial<ExtendedRenderer>;
+      delete renderer.ɵNgxMarkdownRendererExtendedForExtensions;
+      delete renderer.ɵNgxMarkdownRendererExtendedForMermaid;
+
+      // remove renderer from markedOptions because if renderer is
+      // passed to marked.parse method, it will ignore all extensions
       delete markedOptions.renderer;
+
+      marked.use({ renderer });
     }
 
     return inline
