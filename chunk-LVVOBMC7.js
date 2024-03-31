@@ -1,0 +1,1 @@
+import{H as o,K as n,ib as p,y as i}from"./chunk-HF7OAFM7.js";var m=(()=>{let t=class t{constructor(e){this.httpClient=e}get(e){return this.httpClient.get(e,{responseType:"text"}).pipe(i())}};t.\u0275fac=function(s){return new(s||t)(n(p))},t.\u0275prov=o({token:t,factory:t.\u0275fac,providedIn:"root"});let r=t;return r})();export{m as a};
