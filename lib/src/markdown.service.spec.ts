@@ -204,6 +204,25 @@ describe('MarkdownService', () => {
         expect(parsed).toBe(marked.parse(mockRaw));
       });
 
+      it('should not pass extended flags to `marked.use` when parsing', () => {
+
+        const mockRaw = '### Markdown-x';
+        const mockRenderer = new MarkedRenderer();
+        const mockMarkedOptions: MarkedOptions = { renderer: mockRenderer };
+
+        const markedUseSpy = spyOn(marked, 'use');
+
+        markdownService.options = mockMarkedOptions;
+        markdownService.parse(mockRaw, { mermaid: true });
+
+        const expectedMockRenderer = { ...mockRenderer } as Partial<ExtendedRenderer>;
+        delete expectedMockRenderer.ɵNgxMarkdownRendererExtendedForExtensions;
+        delete expectedMockRenderer.ɵNgxMarkdownRendererExtendedForMermaid;
+
+        expect(markedUseSpy).toHaveBeenCalledWith(...mockExtensions);
+        expect(markedUseSpy).toHaveBeenCalledWith({ renderer: expectedMockRenderer });
+      });
+
       it('should remove leading whitespaces offset while keeping indent', () => {
 
         const mockRaw =  [
@@ -406,9 +425,8 @@ describe('MarkdownService', () => {
 
         const expectedMockRenderer = { ...mockRenderer } as Partial<ExtendedRenderer>;
         delete expectedMockRenderer.ɵNgxMarkdownRendererExtendedForExtensions;
-        delete expectedMockRenderer.ɵNgxMarkdownRendererExtendedForMermaid;
 
-        expect(markedUseSpy).toHaveBeenCalled();
+        expect(markedUseSpy).toHaveBeenCalledWith(...mockExtensions);
         expect(markedUseSpy).toHaveBeenCalledWith({ renderer: expectedMockRenderer });
       });
 
