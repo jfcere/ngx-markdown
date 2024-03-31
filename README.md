@@ -15,7 +15,7 @@
     <img alt="License" src="https://img.shields.io/npm/l/ngx-markdown.svg">
   </a>
   <br>
-  <img alt="Dependency Status" src="https://img.shields.io/librariesio/release/npm/ngx-markdown/17.1.0">
+  <img alt="Dependency Status" src="https://img.shields.io/librariesio/release/npm/ngx-markdown/17.2.0">
   <a href="https://www.npmjs.com/package/ngx-markdown">
     <img alt="Monthly Downloads" src="https://img.shields.io/npm/dm/ngx-markdown.svg">
   </a>
@@ -54,7 +54,7 @@ StackBlitz available @ [https://stackblitz.com/edit/ngx-markdown](https://stackb
 To add ngx-markdown along with the required marked library to your `package.json` use the following commands.
 
 ```bash
-npm install ngx-markdown marked@^9.0.0 --save
+npm install ngx-markdown marked@^12.0.0 --save
 ```
 
 ### Syntax highlight
