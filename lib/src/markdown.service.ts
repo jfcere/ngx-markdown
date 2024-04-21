@@ -203,13 +203,6 @@ export class MarkdownService {
       mermaidOptions,
     } = options;
 
-    if (clipboard) {
-      this.renderClipboard(element, viewContainerRef, {
-        ...this.DEFAULT_CLIPBOARD_OPTIONS,
-        ...this.clipboardOptions,
-        ...clipboardOptions,
-      });
-    }
     if (katex) {
       this.renderKatex(element, {
         ...this.DEFAULT_KATEX_OPTIONS,
@@ -220,6 +213,13 @@ export class MarkdownService {
       this.renderMermaid(element, {
         ...this.DEFAULT_MERMAID_OPTIONS,
         ...mermaidOptions,
+      });
+    }
+    if (clipboard) {
+      this.renderClipboard(element, viewContainerRef, {
+        ...this.DEFAULT_CLIPBOARD_OPTIONS,
+        ...this.clipboardOptions,
+        ...clipboardOptions,
       });
     }
 
@@ -406,6 +406,7 @@ export class MarkdownService {
       if (buttonComponent) {
         const componentRef = viewContainerRef.createComponent(buttonComponent);
         embeddedViewRef = componentRef.hostView as EmbeddedViewRef<unknown>;
+        componentRef.changeDetectorRef.markForCheck();
       }
       // use provided template via input property
       else if (buttonTemplate) {
@@ -415,6 +416,7 @@ export class MarkdownService {
       else {
         const componentRef = viewContainerRef.createComponent(ClipboardButtonComponent);
         embeddedViewRef = componentRef.hostView as EmbeddedViewRef<unknown>;
+        componentRef.changeDetectorRef.markForCheck();
       }
 
       // declare clipboard instance variable
