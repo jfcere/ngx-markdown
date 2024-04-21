@@ -466,6 +466,9 @@ describe('MarkdownService', () => {
         const rootNode = document.createElement('button');
 
         const componentRef = {
+          changeDetectorRef: {
+            markForCheck: () => {},
+          },
           hostView: {
             rootNodes: [rootNode],
             onDestroy: (callback) => {},
@@ -485,182 +488,6 @@ describe('MarkdownService', () => {
 
         return { embeddedViewRef, rootNode };
       }
-
-      it('should render clipboard with default button when clipboard is true and buttonComponent/buttonTemplate is not provided', () => {
-
-        const preElement = document.createElement('pre');
-        preElement.innerText = 'mock-pre-element-text';
-        const container = document.createElement('div');
-        container.append(preElement);
-
-        const { componentRef, rootNode } = mockComponentRef();
-
-        window['ClipboardJS'] = class ClipboardJS {};
-
-        const clipboardSpy = spyOn(window, 'ClipboardJS');
-
-        viewContainerRefSpy.createComponent.and.returnValue(componentRef);
-
-        markdownService.render(container, { clipboard: true }, viewContainerRef);
-
-        expect(viewContainerRefSpy.createComponent).toHaveBeenCalledWith(ClipboardButtonComponent as any);
-        expect(clipboardSpy).toHaveBeenCalledWith(rootNode, { text: jasmine.any(Function) });
-        expect((clipboardSpy.calls.argsFor(0)[1] as any).text()).toBe(preElement.innerText);
-      });
-
-      it('should render clipboard with buttonComponent when clipboard is true and buttonComponent is provided', () => {
-
-        class MockButtonComponent { mockButton = true; }
-
-        const preElement = document.createElement('pre');
-        preElement.innerText = 'mock-pre-element-text';
-        const container = document.createElement('div');
-        container.append(preElement);
-
-        const { componentRef, rootNode } = mockComponentRef();
-
-        window['ClipboardJS'] = class ClipboardJS {};
-
-        const clipboardSpy = spyOn(window, 'ClipboardJS');
-
-        viewContainerRefSpy.createComponent.and.returnValue(componentRef);
-
-        markdownService.render(
-          container,
-          { clipboard: true, clipboardOptions: { buttonComponent: MockButtonComponent } },
-          viewContainerRef,
-        );
-
-        expect(viewContainerRefSpy.createComponent).toHaveBeenCalledWith(MockButtonComponent as any);
-        expect(clipboardSpy).toHaveBeenCalledWith(rootNode, { text: jasmine.any(Function) });
-        expect((clipboardSpy.calls.argsFor(0)[1] as any).text()).toBe(preElement.innerText);
-      });
-
-      it('should render clipboard with buttonTemplate when clipboard is true and buttonTemplate is provided', () => {
-
-        const mockTemplateRef = {
-          elementRef: { nativeElement: 'mock-template-ref' },
-        } as TemplateRef<unknown>;
-
-        const preElement = document.createElement('pre');
-        preElement.innerText = 'mock-pre-element-text';
-        const container = document.createElement('div');
-        container.append(preElement);
-
-        const { embeddedViewRef, rootNode } = mockEmbeddedViewRef();
-
-        window['ClipboardJS'] = class ClipboardJS {};
-
-        const clipboardSpy = spyOn(window, 'ClipboardJS');
-
-        viewContainerRefSpy.createEmbeddedView.and.returnValue(embeddedViewRef);
-
-        markdownService.render(
-          container,
-          { clipboard: true, clipboardOptions: { buttonTemplate: mockTemplateRef } },
-          viewContainerRef,
-        );
-
-        expect(viewContainerRefSpy.createEmbeddedView).toHaveBeenCalledWith(mockTemplateRef);
-        expect(clipboardSpy).toHaveBeenCalledWith(rootNode, { text: jasmine.any(Function) });
-        expect((clipboardSpy.calls.argsFor(0)[1] as any).text()).toBe(preElement.innerText);
-      });
-
-      it('should destroy clipboard instances when host view is destroyed', () => {
-
-        const preElement = document.createElement('pre');
-        preElement.innerText = 'mock-pre-element-text';
-        const container = document.createElement('div');
-        container.append(preElement);
-
-        const { componentRef } = mockComponentRef();
-        const mockClipboardInstance = { destroy: () => {} };
-
-        window['ClipboardJS'] = () => {};
-
-        spyOn(window, 'ClipboardJS').and.returnValue(mockClipboardInstance);
-
-        const hostViewDestroySpy = spyOn(componentRef.hostView, 'onDestroy');
-        const clipboardDestroySpy = spyOn(mockClipboardInstance, 'destroy');
-
-        viewContainerRefSpy.createComponent.and.returnValue(componentRef);
-
-        markdownService.render(container, { clipboard: true }, viewContainerRef);
-
-        expect(hostViewDestroySpy).toHaveBeenCalled();
-
-        const hostViewDestroyCallback = hostViewDestroySpy.calls.argsFor(0)[0];
-        hostViewDestroyCallback();
-
-        expect(clipboardDestroySpy).toHaveBeenCalled();
-      });
-
-      it('should not render clipboard when clipboard is omitted/false/null/undefined', () => {
-
-        const preElement = document.createElement('pre');
-        const container = document.createElement('div');
-        container.append(preElement);
-
-        window['ClipboardJS'] = {
-          new: () => {},
-        };
-
-        spyOn(window, 'ClipboardJS');
-
-        const useCases = [
-          () => markdownService.render(container),
-          () => markdownService.render(container, { clipboard: false }, viewContainerRef),
-          () => markdownService.render(container, { clipboard: null! }, viewContainerRef),
-          () => markdownService.render(container, { clipboard: undefined }, viewContainerRef),
-        ];
-
-        useCases.forEach(func => {
-          func();
-          expect(window['ClipboardJS']).not.toHaveBeenCalled();
-        });
-      });
-
-      it('should not render clipboard or throw when platform is not browser', () => {
-
-        const preElement = document.createElement('pre');
-        const container = document.createElement('div');
-        container.append(preElement);
-
-        window['ClipboardJS'] = {};
-
-        spyOn(window, 'ClipboardJS');
-
-        markdownService['platform'] = 'server';
-
-        expect(() => markdownService.render(container, { clipboard: true })).not.toThrowError();
-        expect(window['ClipboardJS']).not.toHaveBeenCalled();
-      });
-
-      it('should throw when clipboard is called but not loaded', () => {
-
-        const container = document.createElement('div');
-
-        window['ClipboardJS'] = undefined;
-
-        expect(() => markdownService.render(container, { clipboard: true })).toThrowError(errorClipboardNotLoaded);
-      });
-
-      it('should throw when clipboard is called and viewContainerRef is omitted/null/undefined', () => {
-
-        const container = document.createElement('div');
-
-        window['ClipboardJS'] = {};
-
-        const useCases = [
-          () => markdownService.render(container, { clipboard: true }),
-          () => markdownService.render(container, { clipboard: true }, null!),
-          () => markdownService.render(container, { clipboard: true }, undefined),
-        ];
-
-        useCases.forEach(func => {
-          expect(func).toThrowError(errorClipboardViewContainerRequired);
-        });
-      });
 
       it('should render katex when katex is true', () => {
 
@@ -907,6 +734,237 @@ describe('MarkdownService', () => {
         expect(() => markdownService.render(container, { mermaid: true })).not.toThrowError();
         expect(mermaid.initialize).not.toHaveBeenCalled();
         expect(mermaid.run).not.toHaveBeenCalled();
+      });
+
+      it('should render clipboard after katex and mermaid', () => {
+
+        const container = document.createElement('div');
+        const pluginRenderingOrder: string[] = [];
+
+        // clipboard
+        const clipboardPreElement = document.createElement('pre');
+        clipboardPreElement.innerText = 'mock-pre-element-text';
+        container.append(clipboardPreElement);
+
+        const { componentRef } = mockComponentRef();
+        viewContainerRefSpy.createComponent.and.returnValue(componentRef);
+
+        window['ClipboardJS'] = class ClipboardJS {
+          constructor() {
+            pluginRenderingOrder.push('clipboard');
+          }
+        };
+
+        // katex
+        const katexElement = document.createElement('div');
+        katexElement.innerHTML = '$E=mc^2$';
+        container.append(katexElement);
+
+        window['katex'] = {};
+        window['renderMathInElement'] = (elem: HTMLElement, options?: KatexOptions) => {};
+
+        spyOn(window, 'renderMathInElement').and.callFake(() => {
+          pluginRenderingOrder.push('katex');
+        });
+
+        // mermaid
+        const mermaidElement = document.createElement('div');
+        mermaidElement.classList.add('mermaid');
+        mermaidElement.innerHTML = 'graph TD; A-->B;';
+
+        container.append(mermaidElement);
+
+        window['mermaid'] = {
+          initialize: (options: MermaidAPI.Config) => {},
+          run: (runOptions: MermaidAPI.RunOptions) => {},
+        };
+
+        spyOn(mermaid, 'run').and.callFake(() => {
+          pluginRenderingOrder.push('mermaid');
+        });
+
+        markdownService.render(container, { clipboard: true, katex: true, mermaid: true }, viewContainerRef);
+        expect(pluginRenderingOrder).toEqual(['katex', 'mermaid', 'clipboard']);
+      });
+
+      it('should render clipboard with default button when clipboard is true and buttonComponent/buttonTemplate is not provided', () => {
+
+        const preElement = document.createElement('pre');
+        preElement.innerText = 'mock-pre-element-text';
+        const container = document.createElement('div');
+        container.append(preElement);
+
+        const { componentRef, rootNode } = mockComponentRef();
+
+        window['ClipboardJS'] = class ClipboardJS {};
+
+        const clipboardSpy = spyOn(window, 'ClipboardJS');
+        const markForCheckSpy = spyOn(componentRef.changeDetectorRef, 'markForCheck');
+
+        viewContainerRefSpy.createComponent.and.returnValue(componentRef);
+
+        markdownService.render(container, { clipboard: true }, viewContainerRef);
+
+        expect(viewContainerRefSpy.createComponent).toHaveBeenCalledWith(ClipboardButtonComponent as any);
+        expect(markForCheckSpy).toHaveBeenCalled();
+        expect(clipboardSpy).toHaveBeenCalledWith(rootNode, { text: jasmine.any(Function) });
+        expect((clipboardSpy.calls.argsFor(0)[1] as any).text()).toBe(preElement.innerText);
+      });
+
+      it('should render clipboard with buttonComponent when clipboard is true and buttonComponent is provided', () => {
+
+        class MockButtonComponent { mockButton = true; }
+
+        const preElement = document.createElement('pre');
+        preElement.innerText = 'mock-pre-element-text';
+        const container = document.createElement('div');
+        container.append(preElement);
+
+        const { componentRef, rootNode } = mockComponentRef();
+
+        window['ClipboardJS'] = class ClipboardJS {};
+
+        const clipboardSpy = spyOn(window, 'ClipboardJS');
+        const markForCheckSpy = spyOn(componentRef.changeDetectorRef, 'markForCheck');
+
+        viewContainerRefSpy.createComponent.and.returnValue(componentRef);
+
+        markdownService.render(
+          container,
+          { clipboard: true, clipboardOptions: { buttonComponent: MockButtonComponent } },
+          viewContainerRef,
+        );
+
+        expect(viewContainerRefSpy.createComponent).toHaveBeenCalledWith(MockButtonComponent as any);
+        expect(markForCheckSpy).toHaveBeenCalled();
+        expect(clipboardSpy).toHaveBeenCalledWith(rootNode, { text: jasmine.any(Function) });
+        expect((clipboardSpy.calls.argsFor(0)[1] as any).text()).toBe(preElement.innerText);
+      });
+
+      it('should render clipboard with buttonTemplate when clipboard is true and buttonTemplate is provided', () => {
+
+        const mockTemplateRef = {
+          elementRef: { nativeElement: 'mock-template-ref' },
+        } as TemplateRef<unknown>;
+
+        const preElement = document.createElement('pre');
+        preElement.innerText = 'mock-pre-element-text';
+        const container = document.createElement('div');
+        container.append(preElement);
+
+        const { embeddedViewRef, rootNode } = mockEmbeddedViewRef();
+
+        window['ClipboardJS'] = class ClipboardJS {};
+
+        const clipboardSpy = spyOn(window, 'ClipboardJS');
+
+        viewContainerRefSpy.createEmbeddedView.and.returnValue(embeddedViewRef);
+
+        markdownService.render(
+          container,
+          { clipboard: true, clipboardOptions: { buttonTemplate: mockTemplateRef } },
+          viewContainerRef,
+        );
+
+        expect(viewContainerRefSpy.createEmbeddedView).toHaveBeenCalledWith(mockTemplateRef);
+        expect(clipboardSpy).toHaveBeenCalledWith(rootNode, { text: jasmine.any(Function) });
+        expect((clipboardSpy.calls.argsFor(0)[1] as any).text()).toBe(preElement.innerText);
+      });
+
+      it('should destroy clipboard instances when host view is destroyed', () => {
+
+        const preElement = document.createElement('pre');
+        preElement.innerText = 'mock-pre-element-text';
+        const container = document.createElement('div');
+        container.append(preElement);
+
+        const { componentRef } = mockComponentRef();
+        const mockClipboardInstance = { destroy: () => {} };
+
+        window['ClipboardJS'] = () => {};
+
+        spyOn(window, 'ClipboardJS').and.returnValue(mockClipboardInstance);
+
+        const hostViewDestroySpy = spyOn(componentRef.hostView, 'onDestroy');
+        const clipboardDestroySpy = spyOn(mockClipboardInstance, 'destroy');
+
+        viewContainerRefSpy.createComponent.and.returnValue(componentRef);
+
+        markdownService.render(container, { clipboard: true }, viewContainerRef);
+
+        expect(hostViewDestroySpy).toHaveBeenCalled();
+
+        const hostViewDestroyCallback = hostViewDestroySpy.calls.argsFor(0)[0];
+        hostViewDestroyCallback();
+
+        expect(clipboardDestroySpy).toHaveBeenCalled();
+      });
+
+      it('should not render clipboard when clipboard is omitted/false/null/undefined', () => {
+
+        const preElement = document.createElement('pre');
+        const container = document.createElement('div');
+        container.append(preElement);
+
+        window['ClipboardJS'] = {
+          new: () => {},
+        };
+
+        spyOn(window, 'ClipboardJS');
+
+        const useCases = [
+          () => markdownService.render(container),
+          () => markdownService.render(container, { clipboard: false }, viewContainerRef),
+          () => markdownService.render(container, { clipboard: null! }, viewContainerRef),
+          () => markdownService.render(container, { clipboard: undefined }, viewContainerRef),
+        ];
+
+        useCases.forEach(func => {
+          func();
+          expect(window['ClipboardJS']).not.toHaveBeenCalled();
+        });
+      });
+
+      it('should not render clipboard or throw when platform is not browser', () => {
+
+        const preElement = document.createElement('pre');
+        const container = document.createElement('div');
+        container.append(preElement);
+
+        window['ClipboardJS'] = {};
+
+        spyOn(window, 'ClipboardJS');
+
+        markdownService['platform'] = 'server';
+
+        expect(() => markdownService.render(container, { clipboard: true })).not.toThrowError();
+        expect(window['ClipboardJS']).not.toHaveBeenCalled();
+      });
+
+      it('should throw when clipboard is called but not loaded', () => {
+
+        const container = document.createElement('div');
+
+        window['ClipboardJS'] = undefined;
+
+        expect(() => markdownService.render(container, { clipboard: true })).toThrowError(errorClipboardNotLoaded);
+      });
+
+      it('should throw when clipboard is called and viewContainerRef is omitted/null/undefined', () => {
+
+        const container = document.createElement('div');
+
+        window['ClipboardJS'] = {};
+
+        const useCases = [
+          () => markdownService.render(container, { clipboard: true }),
+          () => markdownService.render(container, { clipboard: true }, null!),
+          () => markdownService.render(container, { clipboard: true }, undefined),
+        ];
+
+        useCases.forEach(func => {
+          expect(func).toThrowError(errorClipboardViewContainerRequired);
+        });
       });
 
       it('should highlight element', () => {
