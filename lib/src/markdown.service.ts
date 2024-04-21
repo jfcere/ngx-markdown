@@ -392,6 +392,7 @@ export class MarkdownService {
       toolbarWrapperElement.style.right = '.5em';
       toolbarWrapperElement.style.opacity = '0';
       toolbarWrapperElement.style.transition = 'opacity 250ms ease-out';
+      toolbarWrapperElement.style.zIndex = '1';
       preWrapperElement.insertAdjacentElement('beforeend', toolbarWrapperElement);
 
       // register listener to show/hide toolbar
