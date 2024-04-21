@@ -8772,7 +8772,7 @@ ng-packagr@^17.0.0:
     esbuild "^0.19.0"
 
 "ngx-markdown@file:lib":
-  version "17.2.0"
+  version "17.2.1"
   dependencies:
     tslib "^2.3.0"
   optionalDependencies:
