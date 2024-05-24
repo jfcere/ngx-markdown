@@ -2,8 +2,8 @@
 @use '@angular/material' as mat;
 @use 'typography' as typography;
 
-$dark-text: map.get(mat.$light-theme-foreground-palette, text);
-$light-text: map.get(mat.$dark-theme-foreground-palette, text);
+$dark-text: map.get(mat.$m2-light-theme-foreground-palette, text);
+$light-text: map.get(mat.$m2-dark-theme-foreground-palette, text);
 
 $primary-palette: (
   50 : #d6ebff,
@@ -38,11 +38,11 @@ $primary-palette: (
   )
 );
 
-$light-primary: mat.define-palette($primary-palette);
-$light-accent: mat.define-palette($primary-palette);
-$light-warn: mat.define-palette(mat.$red-palette);
+$light-primary: mat.m2-define-palette($primary-palette);
+$light-accent: mat.m2-define-palette($primary-palette);
+$light-warn: mat.m2-define-palette(mat.$m2-red-palette);
 
-$theme: mat.define-light-theme((
+$theme: mat.m2-define-light-theme((
   color: (
     primary: $light-primary,
     accent: $light-accent,

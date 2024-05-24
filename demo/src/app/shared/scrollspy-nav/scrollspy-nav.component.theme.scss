@@ -2,10 +2,10 @@
 @use '@angular/material' as mat;
 
 @mixin theme($theme) {
-  $color-config: mat.get-color-config($theme);
+  $color-config: mat.m2-get-color-config($theme);
 
   $accent-palette: map.get($color-config, 'accent');
-  $accent-color: mat.get-color-from-palette($accent-palette, 'default');
+  $accent-color: mat.m2-get-color-from-palette($accent-palette, 'default');
   $foreground-palette: map.get($color-config, 'foreground');
   $foreground-text: map.get($foreground-palette, 'text');
 
