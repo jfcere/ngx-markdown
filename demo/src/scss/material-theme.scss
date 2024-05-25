@@ -11,7 +11,7 @@
 @use '../app/shared/scrollspy-nav/scrollspy-nav.component.theme' as scrollspy-nav-component;
 
 @mixin native-element-theme($theme) {
-  $color-config: mat.get-color-config($theme);
+  $color-config: mat.m2-get-color-config($theme);
 
   $primary-palette: map.get($color-config, 'primary');
   $accent-palette: map.get($color-config, 'accent');
@@ -21,7 +21,7 @@
   a:active,
   a:focus,
   a:visited {
-    color: mat.get-color-from-palette($accent-palette, A400);
+    color: mat.m2-get-color-from-palette($accent-palette, A400);
     text-decoration: none;
   }
 
@@ -30,16 +30,16 @@
   }
 
   blockquote {
-    background: mat.get-color-from-palette($primary-palette, 300, 0.14);
-    border-left: 4px solid mat.get-color-from-palette($accent-palette, 'default');
+    background: mat.m2-get-color-from-palette($primary-palette, 300, 0.14);
+    border-left: 4px solid mat.m2-get-color-from-palette($accent-palette, 'default');
     border-radius: 4px;
-    color: utils.soften-color(mat.get-color-from-palette($foreground-palette, 'base'), 40%);
+    color: utils.soften-color(mat.m2-get-color-from-palette($foreground-palette, 'base'), 40%);
     margin: 20px 0;
     padding: 1px 20px;
   }
 
   code:not([class*="language-"]) {
-    background: mat.get-color-from-palette($foreground-palette, 'secondary-text', 0.07);
+    background: mat.m2-get-color-from-palette($foreground-palette, 'secondary-text', 0.07);
     border-radius: 3px;
     font-size: 0.94em;
     padding: 0px 6px 2px;
@@ -47,19 +47,19 @@
   }
 
   hr {
-    border-color: mat.get-color-from-palette($foreground-palette, 'divider');
+    border-color: mat.m2-get-color-from-palette($foreground-palette, 'divider');
     border-style: solid;
     border-width: 1px 0 0 0;
   }
 
   table {
     th {
-      color: mat.get-color-from-palette($foreground-palette, 'secondary-text');
+      color: mat.m2-get-color-from-palette($foreground-palette, 'secondary-text');
     }
 
     td,
     th {
-      border-bottom-color: mat.get-color-from-palette($foreground-palette, 'divider');
+      border-bottom-color: mat.m2-get-color-from-palette($foreground-palette, 'divider');
     }
   }
 }
