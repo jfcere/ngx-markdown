@@ -8,13 +8,13 @@
       </markdown>
     </div>
     <button class="scrollup-button--fixed" mat-fab color="accent" fxHide.gt-sm (click)="onScrollUp()" *ngIf="showScrollUpButton" [@zoomAnimation]>
-      <img src="assets/icon-chevron-up.svg">
+      <img src="icon-chevron-up.svg">
     </button>
   </div>
   <div class="sticky" fxLayout="column" fxFlex="1 0 180px" fxFlexAlign="flex-start" fxHide.lt-md>
     <app-scrollspy-nav [headings]="headings"></app-scrollspy-nav>
     <button class="scrollup-button" mat-mini-fab color="accent" (click)="onScrollUp()" *ngIf="showScrollUpButton" [@zoomAnimation]>
-      <img src="assets/icon-chevron-up.svg">
+      <img src="icon-chevron-up.svg">
     </button>
   </div>
 </div>
