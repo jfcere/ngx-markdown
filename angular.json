@@ -25,8 +25,10 @@
             ],
             "tsConfig": "demo/tsconfig.app.json",
             "assets": [
-              "demo/src/favicon.ico",
-              "demo/src/assets",
+              {
+                "glob": "**/*",
+                "input": "demo/public"
+              },
               "demo/src/app/bindings/remote",
               "demo/src/app/cheat-sheet/remote",
               "demo/src/app/syntax-highlight/remote",
@@ -76,13 +78,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "2MB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumWarning": "6kB",
+                  "maximumError": "10kB"
                 }
               ],
               "outputHashing": "all"

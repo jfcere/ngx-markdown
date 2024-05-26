@@ -4,12 +4,12 @@
     <span fxFlex></span>
     <button mat-icon-button (click)="toggleTheme()">
       <mat-icon>
-        <img [hidden]="theme === 'light'" src="assets/icon-light-on.svg">
-        <img [hidden]="theme === 'dark'" src="assets/icon-light-off.svg">
+        <img [hidden]="theme === 'light'" src="icon-light-on.svg">
+        <img [hidden]="theme === 'dark'" src="icon-light-off.svg">
       </mat-icon>
     </button>
     <a mat-icon-button href="https://github.com/jfcere/ngx-markdown">
-      <img class="github-icon" src="assets/icon-github.svg">
+      <img class="github-icon" src="icon-github.svg">
     </a>
   </mat-toolbar-row>
 </mat-toolbar>
@@ -20,7 +20,7 @@
     [routerLink]="route.path"
     routerLinkActive>
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
-      <img src="assets/icon-{{route.path}}.svg">
+      <img src="icon-{{route.path}}.svg">
       <span>{{ route.data?.['label'] }}</span>
     </div>
   </a>

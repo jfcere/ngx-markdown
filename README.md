@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Ngx-Markdown Logo" src="https://github.com/jfcere/ngx-markdown/raw/master/demo/src/assets/ngx-markdown.png">
+  <img alt="Ngx-Markdown Logo" src="https://github.com/jfcere/ngx-markdown/raw/master/demo/public/ngx-markdown.png">
 </p>
 <p align="center">
   <a href="https://circleci.com/gh/jfcere/ngx-markdown">
