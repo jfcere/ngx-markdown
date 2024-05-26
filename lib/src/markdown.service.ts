@@ -387,17 +387,16 @@ export class MarkdownService {
 
       // create toolbar element
       const toolbarWrapperElement = document.createElement('div');
+      toolbarWrapperElement.classList.add('markdown-clipboard-toolbar');
       toolbarWrapperElement.style.position = 'absolute';
       toolbarWrapperElement.style.top = '.5em';
       toolbarWrapperElement.style.right = '.5em';
-      toolbarWrapperElement.style.opacity = '0';
-      toolbarWrapperElement.style.transition = 'opacity 250ms ease-out';
       toolbarWrapperElement.style.zIndex = '1';
       preWrapperElement.insertAdjacentElement('beforeend', toolbarWrapperElement);
 
       // register listener to show/hide toolbar
-      preElement.onmouseover = () => toolbarWrapperElement.style.opacity = '1';
-      preElement.onmouseout = () => toolbarWrapperElement.style.opacity = '0';
+      preWrapperElement.onmouseenter = () => toolbarWrapperElement.classList.add('hover');
+      preWrapperElement.onmouseleave = () => toolbarWrapperElement.classList.remove('hover');
 
       // declare embeddedViewRef holding variable
       let embeddedViewRef: EmbeddedViewRef<unknown>;
@@ -425,7 +424,6 @@ export class MarkdownService {
 
       // attach clipboard.js to root node
       embeddedViewRef.rootNodes.forEach((node: HTMLElement) => {
-        node.onmouseover = () => toolbarWrapperElement.style.opacity = '1';
         toolbarWrapperElement.appendChild(node);
         clipboardInstance = new ClipboardJS(node, { text: () => preElement.innerText });
       });
