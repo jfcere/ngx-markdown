@@ -15,8 +15,10 @@
       ```javascript
       node_modules/emoji-toolkit/lib/js/joypixels.min.js
       ```
+
       #### Directive
       `emoji` - activate emoji plugin
+
       ### Example
     </markdown>
 
@@ -53,10 +55,13 @@
       node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css
       node_modules/prismjs/plugins/line-numbers/prism-line-numbers.js
       ```
+
       #### Directive
       `lineNumbers` - activate line numbers plugin
+
       #### Attributes
       `start` - offset number for the first display line
+
       ### Example
     </markdown>
 
@@ -117,11 +122,14 @@
       node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css
       node_modules/prismjs/plugins/line-highlight/prism-line-highlight.js
       ```
+
       #### Directive
       `lineHighlight` - activate line highlight plugin
+
       #### Attributes
       `line` - lines to highlight (i.e.: 6, 11-15)<br>
-      `lineOffset` - starting offset for line numbers
+      `lineOffset` - starting offset for line numbers<br>
+
       ### Example
     </markdown>
 
@@ -166,14 +174,17 @@
       node_modules/prismjs/plugins/command-line/prism-command-line.css
       node_modules/prismjs/plugins/command-line/prism-command-line.min.js
       ```
+
       #### Directive
       `commandLine` - activate command-line display
+
       #### Attributes
       `host` - host name<br>
       `output` - lines to be presented as output (optional)<br>
       `filterOutput` - prefix to automatically present lines as output (optional)<br>
       `prompt` - data prompt<br>
       `user` - user name<br>
+
       ### Example
     </markdown>
 
@@ -275,10 +286,13 @@
       node_modules/katex/dist/katex.min.js
       node_modules/katex/dist/contrib/auto-render.min.js
       ```
+
       #### Directive
       `katex` - activate KaTeX plugin
+
       #### Attributes
       `katexOptions` - combine [KaTeX options](https://katex.org/docs/options.html) and [Auto-Renderer options](https://katex.org/docs/autorender.html#api)<br>
+
       ### Example
     </markdown>
 
@@ -331,10 +345,13 @@
       ```javascript
       node_modules/mermaid/dist/mermaid.min.js
       ```
+
       #### Directive
       `mermaid` - activate mermaid plugin
+
       #### Attributes
       `mermaidOptions` - mermaid [configuration options](https://mermaid.js.org/config/schema-docs/config.html#mermaid-config-properties)<br>
+
       ### Example
     </markdown>
 
@@ -387,14 +404,24 @@
 
     <markdown ngPreserveWhitespaces>
       #### Clipboard file(s) to include
+
       ```javascript
       node_modules/clipboard/dist/clipboard.min.js
       ```
+
       #### Directive
       `clipboard` - activate copy-to-clipboard plugin
+
       #### Attributes
-      `clipboardButtonComponent` - component `Type&lt;any>` to use as copy-to-clipboard button
-      `clipboardButtonTemplate` - template reference `TemplateRef&lt;T>` to use as copy-to-clipboard button
+      `clipboardButtonComponent` - component `Type&lt;any>` to use as copy-to-clipboard button<br>
+      `clipboardButtonTemplate` - template reference `TemplateRef&lt;T>` to use as copy-to-clipboard button<br>
+
+      #### CSS Selectors
+      `markdown-clipboard-toolbar` - toolbar wrapper<br>
+      `markdown-clipboard-toolbar.hover` - toolbar wrapper during mouse hover<br>
+      `markdown-clipboard-button` - default button<br>
+      `markdown-clipboard-button.copied` - default button during "copied" state<br>
+
       ### Example
     </markdown>
 
@@ -404,14 +431,35 @@
       The `clipboard` plugin provide an unstyled default button with a default behavior out of the box if no alternative is used.
 
       ```javascript
-      const example = 'rollover me to see the default clipboard button appears!';
+      const example = 'the default clipboard button with default behavior';
       ```
     </markdown>
 
-    <markdown class="btn-clipboard-default" emoji clipboard ngPreserveWhitespaces>
+    <markdown class="btn-clipboard-toolbar" clipboard ngPreserveWhitespaces>
+      #### Customize toolbar
+
+      The clipboard button is placed inside a wrapper element that can be customize using the `.markdown-clipboard-toolbar` CSS selector in your global `styles.css/scss` file.
+
+      This allows to override the default positionning of the clipboard button and play with the visibility of the button using the `.hover` CSS selector that is applied on the toolbar when the mouse cursor enters and leaves the code block element.
+
+      ```css
+      .markdown-clipboard-toolbar &#123;
+        top: 16px;
+        right: 16px;
+        opacity: 0;
+        transition: opacity 250ms ease-out;
+      &#125;
+
+      .markdown-clipboard-toolbar.hover &#123;
+        opacity: 1;
+      &#125;
+      ```
+    </markdown>
+
+    <markdown class="btn-clipboard-default" clipboard ngPreserveWhitespaces>
       #### Customize default button
 
-      To customize the default button styling, use the `.markdown-clipboard-button` CSS selector in your global `styles.css/scss` file. You can also customized the "copied" state happening after the button is clicked using the `.copied` CSS selector.
+      The default button can be customized using the `.markdown-clipboard-button` CSS selector in your global `styles.css/scss` file. You can also customized the "copied" state happening after the button is clicked using the `.copied` CSS selector.
 
       ```css
       .markdown-clipboard-button &#123;

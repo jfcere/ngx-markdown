@@ -6,7 +6,20 @@ textarea {
   min-height: 180px;
 }
 
-// Clipboard default button
+// Clipboard toolbar styling
+
+.btn-clipboard-toolbar ::ng-deep .markdown-clipboard-toolbar {
+  top: 16px;
+  right: 16px;
+  opacity: 0;
+  transition: opacity 250ms ease-out;
+
+  &.hover {
+    opacity: 1;
+  }
+}
+
+// Clipboard default button styling
 
 .btn-clipboard-default ::ng-deep .markdown-clipboard-button {
   background-color: rgba(255, 255, 255, 0.07);
