@@ -163,8 +163,8 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
     const renderOptions: RenderOptions = {
       clipboard: this.clipboard,
       clipboardOptions: {
-        buttonComponent: this.clipboardButtonComponent,
-        buttonTemplate: this.clipboardButtonTemplate,
+        ...(this.clipboardButtonComponent && { buttonComponent: this.clipboardButtonComponent }),
+        ...(this.clipboardButtonTemplate && { buttonTemplate: this.clipboardButtonTemplate }),
       },
       katex: this.katex,
       katexOptions: this.katexOptions,
