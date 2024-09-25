@@ -41,7 +41,7 @@
     "clipboard": "^2.0.11",
     "emoji-toolkit": "^8.0.0",
     "katex": "^0.16.0",
-    "mermaid": "^10.6.0",
+    "mermaid": "^11.2.1",
     "prismjs": "^1.28.0"
   },
   "sideEffects": false
