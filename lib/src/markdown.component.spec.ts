@@ -332,6 +332,38 @@ describe('MarkdownComponent', () => {
         component.viewContainerRef);
     });
 
+    it('should not overwrite `clipboardButtonComponent` and `clipboardButtonTemplate` when not provided', async () => {
+
+      const raw = '### Raw';
+      const parsed = '<h3>Compiled</h3>';
+
+      spyOn(markdownService, 'parse').and.returnValue(parsed);
+      spyOn(markdownService, 'render');
+
+      component.clipboard = true;
+      await component.render(raw);
+
+      expect(markdownService.parse).toHaveBeenCalledWith(raw, {
+        decodeHtml: false,
+        inline: false,
+        emoji: false,
+        mermaid: false,
+        disableSanitizer: false,
+      });
+
+      expect(markdownService.render).toHaveBeenCalledWith(
+        component.element.nativeElement,
+        {
+          clipboard: true,
+          clipboardOptions: undefined,
+          katex: false,
+          katexOptions: undefined,
+          mermaid: false,
+          mermaidOptions: undefined,
+        },
+        component.viewContainerRef);
+    });
+
     it('should emit `ready` when parsing and rendering is done', async () => {
 
       const markdown = '# Markdown';
