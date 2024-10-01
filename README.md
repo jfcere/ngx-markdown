@@ -226,7 +226,7 @@ Optionally, to automatically present some lines as output without providing the 
 To add [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) library to your `package.json` use the following command.
 
 ```bash
-npm install emoji-toolkit@^8.0.0 --save
+npm install emoji-toolkit@^9.0.0 --save
 ```
 
 To activate [Emoji-Toolkit](https://github.com/joypixels/emoji-toolkit) for emoji suppport you will need to include...
