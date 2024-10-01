@@ -1,6 +1,6 @@
 {
   "name": "ngx-markdown",
-  "version": "18.0.0",
+  "version": "18.1.0",
   "description": "Angular library that uses marked to parse markdown to html combined with Prism.js for synthax highlights",
   "homepage": "https://github.com/jfcere/ngx-markdown",
   "license": "MIT",
@@ -66,7 +66,7 @@
     "katex": "^0.16.2",
     "marked": "^12.0.0",
     "marked-gfm-heading-id": "^3.1.3",
-    "mermaid": "^10.6.0",
+    "mermaid": "^11.2.1",
     "ngx-markdown": "file:lib",
     "prismjs": "^1.29.0",
     "rxjs": "~6.5.3",
