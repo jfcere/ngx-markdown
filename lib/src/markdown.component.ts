@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ClipboardRenderOptions } from './clipboard-options';
 import { KatexOptions } from './katex-options';
 import { MarkdownService, ParseOptions, RenderOptions } from './markdown.service';
 import { MermaidAPI } from './mermaid-options';
@@ -162,10 +163,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
 
     const renderOptions: RenderOptions = {
       clipboard: this.clipboard,
-      clipboardOptions: {
-        buttonComponent: this.clipboardButtonComponent,
-        buttonTemplate: this.clipboardButtonTemplate,
-      },
+      clipboardOptions: this.getClipboardOptions(),
       katex: this.katex,
       katexOptions: this.katexOptions,
       mermaid: this.mermaid,
@@ -185,6 +183,16 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
 
   private coerceBooleanProperty(value: boolean | ''): boolean {
     return value != null && `${String(value)}` !== 'false';
+  }
+
+  private getClipboardOptions(): ClipboardRenderOptions | undefined {
+    if (this.clipboardButtonComponent || this.clipboardButtonTemplate) {
+      return {
+        buttonComponent: this.clipboardButtonComponent,
+        buttonTemplate: this.clipboardButtonTemplate,
+      };
+    }
+    return undefined;
   }
 
   private handleData(): void {
