@@ -84,6 +84,7 @@
     "coveralls": "^3.1.1",
     "cpy-cli": "^3.1.1",
     "eslint": "^9.11.1",
+    "eslint-formatter-checkstyle": "^8.40.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-import": "^2.31.0",
     "jasmine-core": "~5.1.0",
