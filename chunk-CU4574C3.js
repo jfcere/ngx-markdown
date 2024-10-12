@@ -1,1 +1,0 @@
-import{A as i,J as o,M as n,wb as p}from"./chunk-ZF4RPUDH.js";var m=(()=>{let t=class t{constructor(e){this.httpClient=e}get(e){return this.httpClient.get(e,{responseType:"text"}).pipe(i())}};t.\u0275fac=function(s){return new(s||t)(n(p))},t.\u0275prov=o({token:t,factory:t.\u0275fac,providedIn:"root"});let r=t;return r})();export{m as a};

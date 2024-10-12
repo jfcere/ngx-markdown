@@ -1,0 +1,1 @@
+import{A as r,Bb as n,J as i,M as o}from"./chunk-ZQROOWMS.js";var f=(()=>{class t{constructor(e){this.httpClient=e}get(e){return this.httpClient.get(e,{responseType:"text"}).pipe(r())}static{this.\u0275fac=function(p){return new(p||t)(o(n))}}static{this.\u0275prov=i({token:t,factory:t.\u0275fac,providedIn:"root"})}}return t})();export{f as a};
