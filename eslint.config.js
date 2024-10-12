@@ -68,6 +68,7 @@ module.exports = tseslint.config(
       "@typescript-eslint/no-unsafe-assignment": "off",
       "@typescript-eslint/no-unsafe-member-access": "off",
       "@typescript-eslint/no-floating-promises": "off",
+      "@typescript-eslint/no-wrapper-object-types": "off",
       "comma-dangle": ["error", "always-multiline"],
 
       "comma-spacing": ["error", {
