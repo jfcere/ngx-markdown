@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Provider, SecurityContext } from '@angular/core';
-// eslint-disable-next-line import/named
 import { MarkedExtension } from 'marked';
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { LanguagePipe } from './language.pipe';

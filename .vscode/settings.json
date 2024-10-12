@@ -3,6 +3,8 @@
     "source.fixAll": "explicit"
   },
 
+  "eslint.useFlatConfig": true,
+
   "files.associations": {
     "*.json": "jsonc",
     "package.json": "json"

@@ -244,7 +244,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
     }
   }
 
-  private setPluginOptions(element: HTMLElement, options: { [key: string]: number | string | string[] | undefined }): void {
+  private setPluginOptions(element: HTMLElement, options: Record<string, number | string | string[] | undefined>): void {
     const preElements = element.querySelectorAll('pre');
     for (let i = 0; i < preElements.length; i++) {
       Object.keys(options).forEach(option => {
