@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, SecurityContext } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-// eslint-disable-next-line import/named
 import { MarkedExtension } from 'marked';
 import { CLIPBOARD_OPTIONS, ClipboardOptions } from './clipboard-options';
 import { MarkdownComponent } from './markdown.component';
