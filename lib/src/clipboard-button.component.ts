@@ -7,17 +7,16 @@ const BUTTON_TEXT_COPY = 'Copy';
 const BUTTON_TEXT_COPIED = 'Copied';
 
 @Component({
-  selector: 'markdown-clipboard',
-  template: `
+    selector: 'markdown-clipboard',
+    template: `
     <button
       class="markdown-clipboard-button"
       [class.copied]="copied$ | async"
       (click)="onCopyToClipboardClick()"
     >{{ copiedText$ | async }}</button>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [AsyncPipe],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [AsyncPipe],
 })
 export class ClipboardButtonComponent {
 
