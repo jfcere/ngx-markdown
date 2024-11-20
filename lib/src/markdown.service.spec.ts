@@ -4,7 +4,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { ComponentRef, EmbeddedViewRef, SecurityContext, TemplateRef, ViewContainerRef, ViewRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
-import { marked, MarkedExtension } from 'marked';
+import { marked, MarkedExtension, Tokens } from 'marked';
 import { first } from 'rxjs/operators';
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { KatexOptions } from './katex-options';
@@ -139,14 +139,14 @@ describe('MarkdownService', () => {
 
       it('should update option.renderer when updated', () => {
 
-        const blockquote = (quote: string) => `<mock-blockquote>${quote}</mock-blockquote>`;
+        const blockquote = ({ text }: Tokens.Blockquote) => `<mock-blockquote>${text}</mock-blockquote>`;
 
         markdownService.renderer.blockquote = blockquote;
 
-        const quoteText = 'foobar';
-        const expectedBlockquote = blockquote(quoteText);
-        const rendererBlockquote = (markdownService.renderer as any).blockquote(quoteText);
-        const optionsRendererBlockquote = (markdownService.options.renderer as any)!.blockquote(quoteText);
+        const blockquoteToken = { text: 'foobar' } as Tokens.Blockquote;
+        const expectedBlockquote = blockquote(blockquoteToken);
+        const rendererBlockquote = markdownService.renderer.blockquote(blockquoteToken);
+        const optionsRendererBlockquote = markdownService.options.renderer!.blockquote(blockquoteToken);
 
         expect(rendererBlockquote).toBe(expectedBlockquote);
         expect(optionsRendererBlockquote).toBe(expectedBlockquote);

@@ -51,14 +51,12 @@ declare let Prism: {
   highlightAllUnder: (element: Element | Document) => void;
 };
 
-
 export const errorJoyPixelsNotLoaded = '[ngx-markdown] When using the `emoji` attribute you *have to* include Emoji-Toolkit files to `angular.json` or use imports. See README for more information';
 export const errorKatexNotLoaded = '[ngx-markdown] When using the `katex` attribute you *have to* include KaTeX files to `angular.json` or use imports. See README for more information';
 export const errorMermaidNotLoaded = '[ngx-markdown] When using the `mermaid` attribute you *have to* include Mermaid files to `angular.json` or use imports. See README for more information';
 export const errorClipboardNotLoaded = '[ngx-markdown] When using the `clipboard` attribute you *have to* include Clipboard files to `angular.json` or use imports. See README for more information';
 export const errorClipboardViewContainerRequired = '[ngx-markdown] When using the `clipboard` attribute you *have to* provide the `viewContainerRef` parameter to `MarkdownService.render()` function';
 export const errorSrcWithoutHttpClient = '[ngx-markdown] When using the `src` attribute you *have to* pass the `HttpClient` as a parameter of the `forRoot` method. See README for more information';
-
 
 export const SECURITY_CONTEXT = new InjectionToken<SecurityContext>('SECURITY_CONTEXT');
 
@@ -284,10 +282,10 @@ export class MarkdownService {
     }
 
     const defaultCode = renderer.code;
-    renderer.code = function (code: string, language: string | undefined, isEscaped: boolean) {
-      return language === 'mermaid'
-        ? `<div class="mermaid">${code}</div>`
-        : defaultCode.call(this, code, language, isEscaped);
+    renderer.code = (token) => {
+      return token.lang === 'mermaid'
+        ? `<div class="mermaid">${token.text}</div>`
+        : defaultCode(token);
     };
 
     extendedRenderer.ɵNgxMarkdownRendererExtendedForMermaid = true;
