@@ -5,16 +5,15 @@ import { HttpRawLoaderService } from '@shared/http-raw-loader';
 import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
 
 @Component({
-  selector: 'app-cheat-sheet',
-  templateUrl: './cheat-sheet.component.html',
-  styleUrls: ['./cheat-sheet.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    MarkdownComponent,
-    ScrollspyNavLayoutComponent,
-  ],
+    selector: 'app-cheat-sheet',
+    templateUrl: './cheat-sheet.component.html',
+    styleUrls: ['./cheat-sheet.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        AsyncPipe,
+        MarkdownComponent,
+        ScrollspyNavLayoutComponent,
+    ],
 })
 export default class CheatSheetComponent implements OnInit {
 

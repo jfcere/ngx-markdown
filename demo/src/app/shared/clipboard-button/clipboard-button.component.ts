@@ -3,12 +3,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'app-clipboard-button',
-  templateUrl: './clipboard-button.component.html',
-  styleUrls: ['./clipboard-button.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [MatButtonModule],
+    selector: 'app-clipboard-button',
+    templateUrl: './clipboard-button.component.html',
+    styleUrls: ['./clipboard-button.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [MatButtonModule],
 })
 export class ClipboardButtonComponent {
 

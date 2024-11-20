@@ -9,21 +9,20 @@ import { ScrollspyNavComponent } from '@shared/scrollspy-nav';
 import { ZOOM_ANIMATION } from './scrollspy-nav-layout.animation';
 
 @Component({
-  animations: [ZOOM_ANIMATION],
-  selector: 'app-scrollspy-nav-layout',
-  templateUrl: './scrollspy-nav-layout.component.html',
-  styleUrls: ['./scrollspy-nav-layout.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    ExtendedModule,
-    FlexModule,
-    MarkdownComponent,
-    MatButtonModule,
-    MatDividerModule,
-    NgIf,
-    ScrollspyNavComponent,
-  ],
+    animations: [ZOOM_ANIMATION],
+    selector: 'app-scrollspy-nav-layout',
+    templateUrl: './scrollspy-nav-layout.component.html',
+    styleUrls: ['./scrollspy-nav-layout.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ExtendedModule,
+        FlexModule,
+        MarkdownComponent,
+        MatButtonModule,
+        MatDividerModule,
+        NgIf,
+        ScrollspyNavComponent,
+    ],
 })
 export class ScrollspyNavLayoutComponent {
 

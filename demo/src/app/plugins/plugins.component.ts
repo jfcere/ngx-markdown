@@ -9,28 +9,27 @@ import { ClipboardButtonComponent } from '@shared/clipboard-button';
 import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
 
 @Component({
-  selector: 'app-plugins',
-  templateUrl: './plugins.component.html',
-  styleUrls: ['./plugins.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    FlexModule,
-    FormsModule,
-    MarkdownComponent,
-    MatFormFieldModule,
-    MatInputModule,
-    ScrollspyNavLayoutComponent,
-  ],
-  providers: [
-    provideMarkdown({
-      clipboardOptions: {
-        provide: CLIPBOARD_OPTIONS,
-        useValue: {},
-      },
-      sanitize: SecurityContext.NONE,
-    }),
-  ],
+    selector: 'app-plugins',
+    templateUrl: './plugins.component.html',
+    styleUrls: ['./plugins.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        FlexModule,
+        FormsModule,
+        MarkdownComponent,
+        MatFormFieldModule,
+        MatInputModule,
+        ScrollspyNavLayoutComponent,
+    ],
+    providers: [
+        provideMarkdown({
+            clipboardOptions: {
+                provide: CLIPBOARD_OPTIONS,
+                useValue: {},
+            },
+            sanitize: SecurityContext.NONE,
+        }),
+    ],
 })
 export default class PluginsComponent implements OnInit {
 

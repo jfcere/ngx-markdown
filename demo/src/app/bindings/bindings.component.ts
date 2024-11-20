@@ -9,22 +9,21 @@ import { HttpRawLoaderService } from '@shared/http-raw-loader';
 import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
 
 @Component({
-  selector: 'app-bindings',
-  templateUrl: './bindings.component.html',
-  styleUrls: ['./bindings.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    FlexModule,
-    FormsModule,
-    LanguagePipe,
-    MarkdownComponent,
-    MarkdownPipe,
-    MatFormFieldModule,
-    MatInputModule,
-    ScrollspyNavLayoutComponent,
-  ],
+    selector: 'app-bindings',
+    templateUrl: './bindings.component.html',
+    styleUrls: ['./bindings.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        AsyncPipe,
+        FlexModule,
+        FormsModule,
+        LanguagePipe,
+        MarkdownComponent,
+        MarkdownPipe,
+        MatFormFieldModule,
+        MatInputModule,
+        ScrollspyNavLayoutComponent,
+    ],
 })
 export default class BindingsComponent implements OnInit {
 

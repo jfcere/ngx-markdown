@@ -12,23 +12,22 @@ import { DEFAULT_THEME, LOCAL_STORAGE_THEME_KEY } from './app.constant';
 import { isTheme, Theme } from './app.models';
 
 @Component({
-  animations: [ROUTE_ANIMATION],
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    FlexModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTabsModule,
-    MatToolbarModule,
-    NgFor,
-    RouterLink,
-    RouterLinkActive,
-    RouterOutlet,
-  ],
+    animations: [ROUTE_ANIMATION],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        FlexModule,
+        MatButtonModule,
+        MatIconModule,
+        MatTabsModule,
+        MatToolbarModule,
+        NgFor,
+        RouterLink,
+        RouterLinkActive,
+        RouterOutlet,
+    ],
 })
 export class AppComponent implements OnInit {
 
