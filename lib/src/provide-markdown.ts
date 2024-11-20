@@ -9,6 +9,7 @@ export function provideMarkdown(markdownModuleConfig?: MarkdownModuleConfig): Pr
     markdownModuleConfig?.loader ?? [],
     markdownModuleConfig?.clipboardOptions ?? [],
     markdownModuleConfig?.markedOptions ?? [],
+    markdownModuleConfig?.mermaidOptions ?? [],
     {
       provide: MARKED_EXTENSIONS,
       useValue: markdownModuleConfig?.markedExtensions ?? [],

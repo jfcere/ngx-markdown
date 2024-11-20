@@ -11,8 +11,7 @@ import { MARKED_EXTENSIONS } from './marked-extensions';
 import { MARKED_OPTIONS, MarkedOptions } from './marked-options';
 
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'host-comp',
+  selector: 'markdown-host',
   template: `
     <div *ngIf="src; else dataTemplate">
       <markdown [src]="src"></markdown>
@@ -57,7 +56,7 @@ describe('MarkdownModule', () => {
           MarkdownModule.forRoot({
             markedOptions: {
               provide: MARKED_OPTIONS,
-              useValue: 'mockMarkedOptions',
+              useValue: {},
             },
           }),
         ],
@@ -182,7 +181,7 @@ describe('MarkdownModule', () => {
           MarkdownModule.forRoot({
             markedOptions: {
               provide: MARKED_OPTIONS,
-              useValue: 'mockMarkedOptions',
+              useValue: {},
             },
           }),
         ],
@@ -226,7 +225,7 @@ describe('MarkdownModule', () => {
           MarkdownModule.forRoot({
             markedOptions: {
               provide: MARKED_OPTIONS,
-              useValue: 'mockMarkedOptions',
+              useValue: {},
             },
           }),
         ],

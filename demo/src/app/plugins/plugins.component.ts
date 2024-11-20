@@ -55,9 +55,9 @@ graph TD;
   C-->D;
 \`\`\``;
 
-  mermaidOptions: MermaidAPI.Config = {
+  mermaidOptions: MermaidAPI.MermaidConfig = {
     fontFamily: 'inherit',
-    theme: MermaidAPI.Theme.Dark,
+    theme: 'dark',
   };
 
   headings: Element[] | undefined;

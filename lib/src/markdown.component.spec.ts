@@ -297,7 +297,7 @@ describe('MarkdownComponent', () => {
         } as TemplateRef<unknown>,
       };
       const katexOptions: KatexOptions = { displayMode: true };
-      const mermaidOptions: MermaidAPI.Config = { darkMode: true };
+      const mermaidOptions: MermaidAPI.MermaidConfig = { darkMode: true };
 
       spyOn(markdownService, 'parse').and.returnValue(parsed);
       spyOn(markdownService, 'render');

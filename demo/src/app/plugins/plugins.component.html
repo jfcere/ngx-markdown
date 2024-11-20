@@ -34,7 +34,7 @@
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="16px">
       <mat-form-field appearance="fill" color="accent" fxFlex.gt-sm="calc(50% - 8px)">
-        <textarea matInput [(ngModel)]="emojiMarkdown"></textarea>
+        <textarea matInput cdkTextareaAutosize="true" [(ngModel)]="emojiMarkdown"></textarea>
       </mat-form-field>
 
       <markdown [data]="emojiMarkdown" emoji fxFlex.gt-sm="calc(50% - 8px)"></markdown>
@@ -308,7 +308,7 @@
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="16px">
       <mat-form-field appearance="fill" color="accent" fxFlex.gt-sm="calc(50% - 8px)">
-        <textarea matInput [(ngModel)]="katexMarkdown"></textarea>
+        <textarea matInput cdkTextareaAutosize="true" [(ngModel)]="katexMarkdown"></textarea>
       </mat-form-field>
 
       <markdown [data]="katexMarkdown" katex fxFlex.gt-sm="calc(50% - 8px)"></markdown>
@@ -367,23 +367,54 @@
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="16px">
       <mat-form-field appearance="fill" color="accent" fxFlex.gt-sm="calc(50% - 8px)">
-        <textarea matInput [(ngModel)]="mermaidMarkdown"></textarea>
+        <textarea matInput cdkTextareaAutosize="true" [(ngModel)]="mermaidMarkdown"></textarea>
       </mat-form-field>
 
-      <markdown [data]="mermaidMarkdown" mermaid [mermaidOptions]="mermaidOptions" fxFlex.gt-sm="calc(50% - 8px)"></markdown>
+      <markdown [data]="mermaidMarkdown" mermaid [mermaidOptions]="mermaidOptions" fxLayoutAlign="center center" fxFlex.gt-sm="calc(50% - 8px)"></markdown>
     </div>
 
     <markdown ngPreserveWhitespaces>
-      Optionally, you can specify mermaid [configuration options](https://mermaid.js.org/config/schema-docs/config.html#mermaid-config-properties) using `mermaidOptions` property.
+      #### Global configuration
 
-      **example.component.ts**
+      You can provide a global configuration for mermaid [configuration options](https://mermaid.js.org/config/schema-docs/config.html#mermaid-config-properties) to use across your application with the `mermaidOptions` in the `MarkdownModuleConfig` either with `provideMarkdown` provide-function for standalone components or `MarkdownModule.forRoot()` for module configuration.
+
+      ```typescript
+      // using the `provideMarkdown` function
+      provideMarkdown(&#123;
+        mermaidOptions: &#123;
+          provide: MERMAID_OPTIONS,
+          useValue: &#123;
+            darkMode: true,
+            look: 'handDrawn',
+            ...
+          &#125;,
+        &#125;,
+      &#125;),
+
+      // using the `MarkdownModule` import
+      MarkdownModule.forRoot(&#123;
+        mermaidOptions: &#123;
+          provide: MERMAID_OPTIONS,
+          useValue: &#123;
+            darkMode: true,
+            look: 'handDrawn',
+            ...
+          &#125;,
+        &#125;,
+      &#125;),
+      ```
+
+      #### Component configuration
+
+      Additionally, you can specify mermaid [configuration options](https://mermaid.js.org/config/schema-docs/config.html#mermaid-config-properties) on component directly using `mermaidOptions` property.
+
+     **example.component.ts**
       ```typescript
       import &#123; MermaidAPI &#125; from 'ngx-markdown';
 
-      public options: MermaidAPI.Config = &#123;
-        fontFamily: '"trebuchet ms", verdana, arial, sans-serif',
-        logLevel: MermaidAPI.LogLevel.Info,
-        theme: MermaidAPI.Theme.Dark,
+      public options: MermaidAPI.MermaidConfig = &#123;
+        darkMode: true,
+        look: 'handDrawn',
         ...
       &#125;;
       ```
