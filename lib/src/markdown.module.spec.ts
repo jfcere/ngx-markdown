@@ -22,7 +22,6 @@ import { MARKED_OPTIONS, MarkedOptions } from './marked-options';
       <markdown [data]="markdown"></markdown>
     </ng-template>
   `,
-  standalone: true,
   imports: [
     CommonModule,
     MarkdownComponent,
@@ -264,7 +263,7 @@ describe('MarkdownModule', () => {
     it('should inherit from forRoot providers', () => {
 
       const mockMarkedOptions: MarkedOptions = { breaks: true, gfm: false };
-      const mockClipboardOptions: ClipboardOptions = { buttonComponent: class mockClipboardButtonComponent {} };
+      const mockClipboardOptions: ClipboardOptions = { buttonComponent: class mockClipboardButtonComponent { } };
 
       TestBed.configureTestingModule({
         imports: [

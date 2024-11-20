@@ -17,7 +17,6 @@ import { isTheme, Theme } from './app.models';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     FlexModule,
     MatButtonModule,

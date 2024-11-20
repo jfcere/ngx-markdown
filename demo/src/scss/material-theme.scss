@@ -84,7 +84,8 @@ body {
 }
 
 // material core
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 // themes
 @include theme(light-theme.$theme, 'light');

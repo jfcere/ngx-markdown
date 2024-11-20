@@ -8,7 +8,6 @@ import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
   templateUrl: './syntax-highlight.component.html',
   styleUrls: ['./syntax-highlight.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     AsyncPipe,
     LanguagePipe,

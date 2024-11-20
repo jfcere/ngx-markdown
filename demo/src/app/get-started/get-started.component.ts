@@ -7,7 +7,6 @@ import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
   templateUrl: './get-started.component.html',
   styleUrls: ['./get-started.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     MarkdownComponent,
     ScrollspyNavLayoutComponent,

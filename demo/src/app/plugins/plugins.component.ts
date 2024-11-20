@@ -13,7 +13,6 @@ import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
   templateUrl: './plugins.component.html',
   styleUrls: ['./plugins.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     FlexModule,
     FormsModule,
@@ -39,7 +38,7 @@ export default class PluginsComponent implements OnInit {
   emojiMarkdown = '# I :heart: ngx-markdown';
 
   katexMarkdown =
-`#### \`katex\` directive example
+    `#### \`katex\` directive example
 
 \`\`\`latex
 f(x) = \\int_{-\\infty}^\\infty \\hat f(\\xi) e^{2 \\pi i \\xi x} d\\xi
@@ -48,7 +47,7 @@ f(x) = \\int_{-\\infty}^\\infty \\hat f(\\xi) e^{2 \\pi i \\xi x} d\\xi
 $f(x) = \\int_{-\\infty}^\\infty \\hat f(\\xi) e^{2 \\pi i \\xi x} d\\xi$`;
 
   mermaidMarkdown =
-`\`\`\`mermaid
+    `\`\`\`mermaid
 graph TD;
   A-->B;
   A-->C;

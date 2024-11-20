@@ -18,7 +18,6 @@ import { first } from 'rxjs/operators';
   templateUrl: './scrollspy-nav.component.html',
   styleUrls: ['./scrollspy-nav.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     NgFor,
     RouterLink,

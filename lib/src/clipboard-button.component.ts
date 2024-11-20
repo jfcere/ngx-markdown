@@ -16,7 +16,6 @@ const BUTTON_TEXT_COPIED = 'Copied';
     >{{ copiedText$ | async }}</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [AsyncPipe],
 })
 export class ClipboardButtonComponent {

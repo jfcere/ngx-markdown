@@ -13,7 +13,6 @@ import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
   templateUrl: './bindings.component.html',
   styleUrls: ['./bindings.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     AsyncPipe,
     FlexModule,
@@ -33,7 +32,7 @@ export default class BindingsComponent implements OnInit {
 
   // variable-binding
   markdown =
-`### Markdown example
+    `### Markdown example
 ---
 This is an **example** where we bind a variable to the \`markdown\` component that is also bound to a textarea.
 
@@ -50,7 +49,7 @@ public markdown = "# Markdown";
 
   // pipe
   typescriptMarkdown =
-`import { Component } from '@angular/core';
+    `import { Component } from '@angular/core';
 
 @Component({
   selector: 'markdown-demo',

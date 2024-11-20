@@ -11,7 +11,6 @@ import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
   templateUrl: './rerender.component.html',
   styleUrls: ['./rerender.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     FlexModule,
     FormsModule,

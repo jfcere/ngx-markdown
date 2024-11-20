@@ -14,7 +14,6 @@ import { ZOOM_ANIMATION } from './scrollspy-nav-layout.animation';
   templateUrl: './scrollspy-nav-layout.component.html',
   styleUrls: ['./scrollspy-nav-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     ExtendedModule,
     FlexModule,

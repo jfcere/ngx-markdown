@@ -7,7 +7,6 @@ export type MarkdownPipeOptions = ParseOptions & RenderOptions;
 
 @Pipe({
   name: 'markdown',
-  standalone: true,
 })
 export class MarkdownPipe implements PipeTransform {
 

@@ -23,7 +23,6 @@ import { PrismPlugin } from './prism-plugin';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'markdown, [markdown]',
   template: '<ng-content></ng-content>',
-  standalone: true,
 })
 export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
 
