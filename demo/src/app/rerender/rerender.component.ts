@@ -42,7 +42,7 @@ export default class RerenderComponent implements OnInit, OnDestroy {
 
   headings: Element[] | undefined;
 
-  markdown = `## Markdown __rulez__!
+  markdown = `## Markdown rulez!
 ---
 
 ### Syntax highlight
@@ -85,9 +85,9 @@ const language = 'typescript';
   private overrideRenderer(styleAttribute: string): void {
     this.overrideEnabled = true;
 
-    this.markdownService.renderer.heading = (text: string, level: number): string => {
+    this.markdownService.renderer.heading = ({ text, depth }): string => {
       return this.overrideEnabled
-        ? `<h${level}${styleAttribute}>${text}</h${level}>`
+        ? `<h${depth}${styleAttribute}>${text}</h${depth}>`
         : false as unknown as string;
     };
   }

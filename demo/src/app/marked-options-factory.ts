@@ -5,8 +5,8 @@ export function markedOptionsFactory(anchorService: AnchorService): MarkedOption
   const renderer = new MarkedRenderer();
 
   // fix `href` for absolute link with fragments so that _copy-paste_ urls are correct
-  renderer.link = (href: string, title: string, text: string) => {
-    return MarkedRenderer.prototype.link.call(renderer, anchorService.normalizeExternalUrl(href), title, text);
+  renderer.link = ({ href, text })  => {
+    return `<a href="${anchorService.normalizeExternalUrl(href)}">${text}</a>`;
   };
 
   return { renderer };
