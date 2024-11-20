@@ -283,10 +283,9 @@ export class MarkdownService {
 
     const defaultCode = renderer.code;
     renderer.code = (token) => {
-      if (token.lang === 'mermaid') {
-        return `<div class="mermaid">${token.text}</div>`;
-      }
-      return defaultCode(token);
+      return token.lang === 'mermaid'
+        ? `<div class="mermaid">${token.text}</div>`
+        : defaultCode(token);
     };
 
     extendedRenderer.ɵNgxMarkdownRendererExtendedForMermaid = true;
