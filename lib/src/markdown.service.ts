@@ -20,7 +20,7 @@ import { KatexOptions } from './katex-options';
 import { MARKED_EXTENSIONS } from './marked-extensions';
 import { MARKED_OPTIONS, MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
-import { MermaidAPI } from './mermaid-options';
+import { MERMAID_OPTIONS, MermaidAPI } from './mermaid-options';
 
 // clipboard
 declare let ClipboardJS: {
@@ -42,7 +42,7 @@ declare function renderMathInElement(elem: HTMLElement, options?: KatexOptions):
 
 // mermaid
 declare let mermaid: {
-  initialize: (options: MermaidAPI.Config) => void;
+  initialize: (options: MermaidAPI.MermaidConfig) => void;
   run: (runOptions: MermaidAPI.RunOptions) => void;
 };
 
@@ -75,7 +75,7 @@ export interface RenderOptions {
   katex?: boolean;
   katexOptions?: KatexOptions;
   mermaid?: boolean;
-  mermaidOptions?: MermaidAPI.Config;
+  mermaidOptions?: MermaidAPI.MermaidConfig;
 }
 
 export class ExtendedRenderer extends Renderer {
@@ -104,7 +104,7 @@ export class MarkdownService {
     ],
   };
 
-  private readonly DEFAULT_MERMAID_OPTIONS: MermaidAPI.Config = {
+  private readonly DEFAULT_MERMAID_OPTIONS: MermaidAPI.MermaidConfig = {
     startOnLoad: false,
   };
 
@@ -149,6 +149,7 @@ export class MarkdownService {
     @Inject(CLIPBOARD_OPTIONS) @Optional() private clipboardOptions: ClipboardOptions,
     @Inject(MARKED_EXTENSIONS) @Optional() private extensions: MarkedExtension[],
     @Inject(MARKED_OPTIONS) @Optional() options: MarkedOptions,
+    @Inject(MERMAID_OPTIONS) @Optional() private mermaidOptions: MermaidAPI.MermaidConfig,
     @Inject(PLATFORM_ID) private platform: Object,
     @Inject(SECURITY_CONTEXT) private securityContext: SecurityContext,
     @Optional() private http: HttpClient,
@@ -209,6 +210,7 @@ export class MarkdownService {
     if (mermaid) {
       this.renderMermaid(element, {
         ...this.DEFAULT_MERMAID_OPTIONS,
+        ...this.mermaidOptions,
         ...mermaidOptions,
       });
     }
@@ -429,7 +431,7 @@ export class MarkdownService {
     }
   }
 
-  private renderMermaid(element: HTMLElement, options: MermaidAPI.Config = this.DEFAULT_MERMAID_OPTIONS): void {
+  private renderMermaid(element: HTMLElement, options: MermaidAPI.MermaidConfig = this.DEFAULT_MERMAID_OPTIONS): void {
     if (!isPlatformBrowser(this.platform)) {
       return;
     }

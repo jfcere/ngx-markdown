@@ -70,7 +70,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   get mermaid(): boolean { return this._mermaid; }
   set mermaid(value: boolean) { this._mermaid = this.coerceBooleanProperty(value); }
 
-  @Input() mermaidOptions: MermaidAPI.Config | undefined;
+  @Input() mermaidOptions: MermaidAPI.MermaidConfig | undefined;
 
   // Plugin - lineHighlight
   @Input()

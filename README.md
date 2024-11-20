@@ -347,15 +347,50 @@ Using `markdown` component and/or directive, you will be able to use the `mermai
 </markdown>
 ```
 
-Optionally, you can specify mermaid [configuration options](https://mermaid.js.org/config/schema-docs/config.html#mermaid-config-properties) using `mermaidOptions` property.
+#### Global configuration
+
+You can provide a global configuration for mermaid [configuration options](https://mermaid.js.org/config/schema-docs/config.html#mermaid-config-properties) to use across your application with the `mermaidOptions` in the `MarkdownModuleConfig` either with `provideMarkdown` provide-function for standalone components or `MarkdownModule.forRoot()` for module configuration.
+
+##### Using the `provideMarkdown` function
+
+```typescript
+provideMarkdown({
+  mermaidOptions: {
+    provide: MERMAID_OPTIONS,
+    useValue: {
+      darkMode: true,
+      look: 'handDrawn',
+      ...
+    },
+  },
+}),
+```
+
+##### Using the `MarkdownModule` import
+
+```typescript
+MarkdownModule.forRoot({
+  mermaidOptions: {
+    provide: MERMAID_OPTIONS,
+    useValue: {
+      darkMode: true,
+      look: 'handDrawn',
+      ...
+    },
+  },
+}),
+```
+
+#### Component configuration
+
+Additionally, you can specify mermaid [configuration options](https://mermaid.js.org/config/schema-docs/config.html#mermaid-config-properties) on component directly using `mermaidOptions` property.
 
 ```typescript
 import { MermaidAPI } from 'ngx-markdown';
 
-public options: MermaidAPI.Config = {
-  fontFamily: '"trebuchet ms", verdana, arial, sans-serif',
-  logLevel: MermaidAPI.LogLevel.Info,
-  theme: MermaidAPI.Theme.Dark,
+public options: MermaidAPI.MermaidConfig = {
+  darkMode: true,
+  look: 'handDrawn',
   ...
 };
 ```
@@ -842,7 +877,7 @@ export interface MarkdownPipeOptions {
   katex?: boolean;
   katexOptions?: KatexOptions;
   mermaid?: boolean;
-  mermaidOptions?: MermaidAPI.Config;
+  mermaidOptions?: MermaidAPI.MermaidConfig;
   markedOptions?: MarkedOptions;
   disableSanitizer?: boolean;
 }

@@ -38,7 +38,7 @@
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="16px">
       <mat-form-field appearance="fill" color="accent" fxFlex.gt-sm="calc(50% - 8px)">
-        <textarea matInput [(ngModel)]="markdown"></textarea>
+        <textarea matInput cdkTextareaAutosize="true" [(ngModel)]="markdown"></textarea>
       </mat-form-field>
 
       <markdown [data]="markdown" fxFlex.gt-sm="calc(50% - 8px)"></markdown>
@@ -66,7 +66,7 @@
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="16px">
       <mat-form-field appearance="fill" color="accent" fxFlex.gt-sm="calc(50% - 8px)">
-        <textarea matInput [(ngModel)]="typescriptMarkdown"></textarea>
+        <textarea matInput cdkTextareaAutosize="true" [(ngModel)]="typescriptMarkdown"></textarea>
       </mat-form-field>
 
       <div [innerHTML]="typescriptMarkdown | language : 'typescript' | markdown | async" fxFlex.gt-sm="calc(50% - 8px)"></div>
