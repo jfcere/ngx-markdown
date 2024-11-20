@@ -7,18 +7,18 @@ import { MarkdownComponent, MarkdownService } from 'ngx-markdown';
 import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
 
 @Component({
-    selector: 'app-rerender',
-    templateUrl: './rerender.component.html',
-    styleUrls: ['./rerender.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        FlexModule,
-        FormsModule,
-        MarkdownComponent,
-        MatFormFieldModule,
-        MatInputModule,
-        ScrollspyNavLayoutComponent,
-    ],
+  selector: 'app-rerender',
+  templateUrl: './rerender.component.html',
+  styleUrls: ['./rerender.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    FlexModule,
+    FormsModule,
+    MarkdownComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    ScrollspyNavLayoutComponent,
+  ],
 })
 export default class RerenderComponent implements OnInit, OnDestroy {
 

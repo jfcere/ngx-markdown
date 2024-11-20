@@ -9,27 +9,27 @@ import { ClipboardButtonComponent } from '@shared/clipboard-button';
 import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
 
 @Component({
-    selector: 'app-plugins',
-    templateUrl: './plugins.component.html',
-    styleUrls: ['./plugins.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        FlexModule,
-        FormsModule,
-        MarkdownComponent,
-        MatFormFieldModule,
-        MatInputModule,
-        ScrollspyNavLayoutComponent,
-    ],
-    providers: [
-        provideMarkdown({
-            clipboardOptions: {
-                provide: CLIPBOARD_OPTIONS,
-                useValue: {},
-            },
-            sanitize: SecurityContext.NONE,
-        }),
-    ],
+  selector: 'app-plugins',
+  templateUrl: './plugins.component.html',
+  styleUrls: ['./plugins.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    FlexModule,
+    FormsModule,
+    MarkdownComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    ScrollspyNavLayoutComponent,
+  ],
+  providers: [
+    provideMarkdown({
+      clipboardOptions: {
+        provide: CLIPBOARD_OPTIONS,
+        useValue: {},
+      },
+      sanitize: SecurityContext.NONE,
+    }),
+  ],
 })
 export default class PluginsComponent implements OnInit {
 
@@ -38,7 +38,7 @@ export default class PluginsComponent implements OnInit {
   emojiMarkdown = '# I :heart: ngx-markdown';
 
   katexMarkdown =
-`#### \`katex\` directive example
+    `#### \`katex\` directive example
 
 \`\`\`latex
 f(x) = \\int_{-\\infty}^\\infty \\hat f(\\xi) e^{2 \\pi i \\xi x} d\\xi
@@ -47,7 +47,7 @@ f(x) = \\int_{-\\infty}^\\infty \\hat f(\\xi) e^{2 \\pi i \\xi x} d\\xi
 $f(x) = \\int_{-\\infty}^\\infty \\hat f(\\xi) e^{2 \\pi i \\xi x} d\\xi$`;
 
   mermaidMarkdown =
-`\`\`\`mermaid
+    `\`\`\`mermaid
 graph TD;
   A-->B;
   A-->C;

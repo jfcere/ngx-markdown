@@ -11,9 +11,9 @@ import { MARKED_EXTENSIONS } from './marked-extensions';
 import { MARKED_OPTIONS, MarkedOptions } from './marked-options';
 
 @Component({
-    // eslint-disable-next-line @angular-eslint/component-selector
-    selector: 'host-comp',
-    template: `
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'host-comp',
+  template: `
     <div *ngIf="src; else dataTemplate">
       <markdown [src]="src"></markdown>
     </div>
@@ -22,10 +22,10 @@ import { MARKED_OPTIONS, MarkedOptions } from './marked-options';
       <markdown [data]="markdown"></markdown>
     </ng-template>
   `,
-    imports: [
-        CommonModule,
-        MarkdownComponent,
-    ],
+  imports: [
+    CommonModule,
+    MarkdownComponent,
+  ],
 })
 class HostComponent {
   markdown = '# Markdown Title';
@@ -263,7 +263,7 @@ describe('MarkdownModule', () => {
     it('should inherit from forRoot providers', () => {
 
       const mockMarkedOptions: MarkedOptions = { breaks: true, gfm: false };
-      const mockClipboardOptions: ClipboardOptions = { buttonComponent: class mockClipboardButtonComponent {} };
+      const mockClipboardOptions: ClipboardOptions = { buttonComponent: class mockClipboardButtonComponent { } };
 
       TestBed.configureTestingModule({
         imports: [

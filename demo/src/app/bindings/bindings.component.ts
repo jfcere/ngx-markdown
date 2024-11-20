@@ -9,21 +9,21 @@ import { HttpRawLoaderService } from '@shared/http-raw-loader';
 import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
 
 @Component({
-    selector: 'app-bindings',
-    templateUrl: './bindings.component.html',
-    styleUrls: ['./bindings.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        AsyncPipe,
-        FlexModule,
-        FormsModule,
-        LanguagePipe,
-        MarkdownComponent,
-        MarkdownPipe,
-        MatFormFieldModule,
-        MatInputModule,
-        ScrollspyNavLayoutComponent,
-    ],
+  selector: 'app-bindings',
+  templateUrl: './bindings.component.html',
+  styleUrls: ['./bindings.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    AsyncPipe,
+    FlexModule,
+    FormsModule,
+    LanguagePipe,
+    MarkdownComponent,
+    MarkdownPipe,
+    MatFormFieldModule,
+    MatInputModule,
+    ScrollspyNavLayoutComponent,
+  ],
 })
 export default class BindingsComponent implements OnInit {
 
@@ -32,7 +32,7 @@ export default class BindingsComponent implements OnInit {
 
   // variable-binding
   markdown =
-`### Markdown example
+    `### Markdown example
 ---
 This is an **example** where we bind a variable to the \`markdown\` component that is also bound to a textarea.
 
@@ -49,7 +49,7 @@ public markdown = "# Markdown";
 
   // pipe
   typescriptMarkdown =
-`import { Component } from '@angular/core';
+    `import { Component } from '@angular/core';
 
 @Component({
   selector: 'markdown-demo',

@@ -3,14 +3,14 @@ import { MarkdownComponent } from 'ngx-markdown';
 import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
 
 @Component({
-    selector: 'app-get-started',
-    templateUrl: './get-started.component.html',
-    styleUrls: ['./get-started.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        MarkdownComponent,
-        ScrollspyNavLayoutComponent,
-    ],
+  selector: 'app-get-started',
+  templateUrl: './get-started.component.html',
+  styleUrls: ['./get-started.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    MarkdownComponent,
+    ScrollspyNavLayoutComponent,
+  ],
 })
 export default class GetStartedComponent {
 

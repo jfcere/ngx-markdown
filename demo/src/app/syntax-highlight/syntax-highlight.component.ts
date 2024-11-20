@@ -4,17 +4,17 @@ import { LanguagePipe, MarkdownComponent, MarkdownPipe } from 'ngx-markdown';
 import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
 
 @Component({
-    selector: 'app-syntax-highlight',
-    templateUrl: './syntax-highlight.component.html',
-    styleUrls: ['./syntax-highlight.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        AsyncPipe,
-        LanguagePipe,
-        MarkdownComponent,
-        MarkdownPipe,
-        ScrollspyNavLayoutComponent,
-    ],
+  selector: 'app-syntax-highlight',
+  templateUrl: './syntax-highlight.component.html',
+  styleUrls: ['./syntax-highlight.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    AsyncPipe,
+    LanguagePipe,
+    MarkdownComponent,
+    MarkdownPipe,
+    ScrollspyNavLayoutComponent,
+  ],
 })
 export default class SyntaxHighlightComponent implements OnInit {
 
