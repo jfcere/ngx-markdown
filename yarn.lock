@@ -7987,7 +7987,7 @@ ng-packagr@^19.0.0:
     rollup "^4.24.0"
 
 "ngx-markdown@file:lib":
-  version "18.1.0"
+  version "19.0.0"
   dependencies:
     tslib "^2.3.0"
   optionalDependencies:
