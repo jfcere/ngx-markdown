@@ -717,14 +717,15 @@ MarkdownModule.forRoot({
 The example uses a factory function and override the default blockquote token rendering by adding a CSS class for custom styling when using Bootstrap CSS:
 
 ```typescript
+import { Parser } from 'marked';
 import { MARKED_OPTIONS, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
 
 // function that returns `MarkedOptions` with renderer override
 export function markedOptionsFactory(): MarkedOptions {
   const renderer = new MarkedRenderer();
 
-  renderer.blockquote = (text: string) => {
-    return '<blockquote class="blockquote"><p>' + text + '</p></blockquote>';
+  renderer.blockquote = ({ tokens }) => {
+    return '<blockquote class="blockquote"><p>' + Parser.parse(tokens) + '</p></blockquote>';
   };
 
   return {
@@ -912,6 +913,7 @@ Here is an example of overriding the default heading token rendering through `Ma
 
 ```typescript
 import { Component, OnInit } from '@angular/core';
+import { Parser } from 'marked';
 import { MarkdownService } from 'ngx-markdown';
 
 @Component({
@@ -922,13 +924,14 @@ export class ExampleComponent implements OnInit {
   constructor(private markdownService: MarkdownService) { }
 
   ngOnInit() {
-    this.markdownService.renderer.heading = (text: string, level: number) => {
+    this.markdownService.renderer.heading = ({ tokens, depth }) => {
+      const text = Parser.parseInline(tokens);
       const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
-      return '<h' + level + '>' +
+      return '<h' + depth + '>' +
                '<a name="' + escapedText + '" class="anchor" href="#' + escapedText + '">' +
                  '<span class="header-link"></span>' +
                '</a>' + text +
-             '</h' + level + '>';
+             '</h' + depth + '>';
     };
   }
 }
