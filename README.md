@@ -763,15 +763,33 @@ MarkdownModule.forRoot({
 
 ### Marked extensions
 
-You can provide [marked extensions](https://marked.js.org/using_advanced#extensions) using the `markedExtensions` property that accepts an array of extensions when configuring `MarkdownModule`.
+When configuring the `MarkdownModule`, you can provide [marked extensions](https://marked.js.org/using_advanced#extensions) using the `markedExtensions` property that accepts an array of extension functions and/or providers to allow dependency injection using the `MARKED_EXTENSION` injection token when configuring `MarkdownModule`.
 
 ##### Using the `provideMarkdown` function
 
 ```typescript
 import { gfmHeadingId } from 'marked-gfm-heading-id';
 
+// using extension functions
 providemarkdown({
   markedExtensions: [gfmHeadingId()],
+}),
+
+// using `MARKED_EXTENSION` allows dependency injection
+providemarkdown({
+  markedExtensions: [
+    {
+      provide: MARKED_EXTENSIONS,
+      useFactory: gfmHeadingId,
+      multi: true,
+    },
+    {
+      provide: MARKED_EXTENSIONS,
+      useFactory: myExtensionFactory,
+      deps: [SomeService],
+      multi: true,
+    },
+  ],
 }),
 ```
 
@@ -780,8 +798,26 @@ providemarkdown({
 ```typescript
 import { gfmHeadingId } from 'marked-gfm-heading-id';
 
+// using extension functions
 MarkdownModule.forRoot({
   markedExtensions: [gfmHeadingId()],
+}),
+
+// using `MARKED_EXTENSION` allows dependency injection
+MarkdownModule.forRoot({
+  markedExtensions: [
+    {
+      provide: MARKED_EXTENSIONS,
+      useFactory: gfmHeadingId,
+      multi: true,
+    },
+    {
+      provide: MARKED_EXTENSIONS,
+      useFactory: myExtensionFactory,
+      deps: [SomeService],
+      multi: true,
+    },
+  ],
 }),
 ```
 
