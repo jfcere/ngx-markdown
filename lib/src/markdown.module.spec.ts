@@ -62,7 +62,7 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const httpClient = TestBed.inject(HttpClient, null);
+      const httpClient = TestBed.inject(HttpClient, null, { optional: true });
 
       expect(httpClient).toBeNull();
     });
@@ -75,7 +75,7 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const httpClient = TestBed.inject(HttpClient, null);
+      const httpClient = TestBed.inject(HttpClient, null, { optional: true });
 
       expect(httpClient).toBeNull();
     });
@@ -97,7 +97,7 @@ describe('MarkdownModule', () => {
 
       const clipboardOptions = TestBed.inject(CLIPBOARD_OPTIONS);
 
-      expect(clipboardOptions).toBe(mockClipboardOptions);
+      expect(clipboardOptions).toEqual(mockClipboardOptions);
     });
 
     it('should not provide ClipboardOptions when MarkdownModuleConfig is provided without clipboardOptions', () => {
@@ -108,7 +108,7 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const clipboardOptions = TestBed.inject(CLIPBOARD_OPTIONS, null);
+      const clipboardOptions = TestBed.inject(CLIPBOARD_OPTIONS, null, { optional: true });
 
       expect(clipboardOptions).toBeNull();
     });
@@ -130,7 +130,7 @@ describe('MarkdownModule', () => {
 
       const markedOptions = TestBed.inject(MARKED_OPTIONS);
 
-      expect(markedOptions).toBe(mockMarkedOptions);
+      expect(markedOptions).toEqual(mockMarkedOptions);
     });
 
     it('should not provide MarkedOptions when MarkdownModuleConfig is provided without markedOptions', () => {
@@ -141,7 +141,7 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const markedOptions = TestBed.inject(MARKED_OPTIONS, null);
+      const markedOptions = TestBed.inject(MARKED_OPTIONS, null, { optional: true });
 
       expect(markedOptions).toBeNull();
     });
@@ -154,14 +154,16 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const markedOptions = TestBed.inject(MARKED_OPTIONS, null);
+      const markedOptions = TestBed.inject(MARKED_OPTIONS, null, { optional: true });
 
       expect(markedOptions).toBeNull();
     });
 
-    it('should provide MarkedExtensions when MarkdownModuleConfig is provided with markedExtensions', () => {
-
-      const mockExtensions = [{ name: 'mock-extension' } as MarkedExtension];
+    it('should provide MarkedExtensions when MarkdownModuleConfig is provided with markedExtension functions', () => {
+      const mockExtensions = [
+        { name: 'mock-extension-one' } as MarkedExtension,
+        { name: 'mock-extension-two' } as MarkedExtension,
+      ];
 
       TestBed.configureTestingModule({
         imports: [
@@ -169,12 +171,40 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const markedExtensions = TestBed.inject(MARKED_EXTENSIONS);
+      const markedExtensions = TestBed.inject<MarkedExtension[]>(MARKED_EXTENSIONS);
 
-      expect(markedExtensions).toBe(mockExtensions);
+      expect(markedExtensions).toEqual(mockExtensions);
     });
 
-    it('should provide an empty array when MarkdownModuleConfig is provided without markedExtensions', () => {
+    it('should provide MarkedExtensions when MarkdownModuleConfig is provided with markedExtension providers', () => {
+      const mockExtensionOne = { name: 'mock-extension-one' } as MarkedExtension;
+      const mockExtensionTwo = { name: 'mock-extension-two' } as MarkedExtension;
+
+      TestBed.configureTestingModule({
+        imports: [
+          MarkdownModule.forRoot({
+            markedExtensions: [
+              {
+                provide: MARKED_EXTENSIONS,
+                useValue: mockExtensionOne,
+                multi: true,
+              },
+              {
+                provide: MARKED_EXTENSIONS,
+                useFactory: () => mockExtensionTwo,
+                multi: true,
+              },
+            ],
+          }),
+        ],
+      });
+
+      const markedExtensions = TestBed.inject<MarkedExtension[]>(MARKED_EXTENSIONS);
+
+      expect(markedExtensions).toEqual([mockExtensionOne, mockExtensionTwo]);
+    });
+
+    it('should provide null when MarkdownModuleConfig is provided without markedExtensions', () => {
 
       TestBed.configureTestingModule({
         imports: [
@@ -187,12 +217,12 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const markedExtensions = TestBed.inject(MARKED_EXTENSIONS);
+      const markedExtensions = TestBed.inject<MarkedExtension[]>(MARKED_EXTENSIONS, null, { optional: true });
 
-      expect(markedExtensions).toEqual([]);
+      expect(markedExtensions).toBeNull();
     });
 
-    it('should provide an empty array when MarkdownModuleConfig is not provided', () => {
+    it('should provide null when MarkdownModuleConfig is not provided', () => {
 
       TestBed.configureTestingModule({
         imports: [
@@ -200,9 +230,9 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const markedExtensions = TestBed.inject(MARKED_EXTENSIONS);
+      const markedExtensions = TestBed.inject<MarkedExtension[]>(MARKED_EXTENSIONS, null, { optional: true });
 
-      expect(markedExtensions).toEqual([]);
+      expect(markedExtensions).toBeNull();
     });
 
     it('should provide SecurityContext when MarkdownModuleConfig is provided with sanitize', () => {
