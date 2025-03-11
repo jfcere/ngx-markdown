@@ -68,7 +68,7 @@
     "marked-gfm-heading-id": "^4.1.1",
     "mermaid": "^11.2.1",
     "ngx-markdown": "file:lib",
-    "prismjs": "^1.29.0",
+    "prismjs": "^1.30.0",
     "rxjs": "~6.5.3",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

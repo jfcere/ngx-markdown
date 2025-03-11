@@ -42,7 +42,7 @@
     "emoji-toolkit": ">= 8.0.0 < 10.0.0",
     "katex": "^0.16.0",
     "mermaid": ">= 10.6.0 < 12.0.0",
-    "prismjs": "^1.28.0"
+    "prismjs": "^1.30.0"
   },
   "sideEffects": false
 }
