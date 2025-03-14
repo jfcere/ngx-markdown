@@ -64,7 +64,7 @@ npm install ngx-markdown marked@^15.0.0 --save
 To add [Prism.js](http://prismjs.com/) library to your `package.json` use the following command.
 
 ```bash
-npm install prismjs@^1.28.0 --save
+npm install prismjs@^1.30.0 --save
 ```
 
 To activate [Prism.js](http://prismjs.com/) syntax highlight you will need to include...
