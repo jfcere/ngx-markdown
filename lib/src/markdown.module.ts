@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { InjectionToken, ModuleWithProviders, NgModule, Provider, SecurityContext } from '@angular/core';
 import { MarkedExtension } from 'marked';
 import { ClipboardButtonComponent } from './clipboard-button.component';
@@ -66,7 +65,7 @@ const sharedDeclarations = [
 ];
 
 @NgModule({
-  imports: [CommonModule, ...sharedDeclarations],
+  imports: sharedDeclarations,
   exports: sharedDeclarations,
 })
 export class MarkdownModule {
