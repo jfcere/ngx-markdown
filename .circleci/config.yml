@@ -55,7 +55,7 @@ jobs:
           command: yarn build:lib
   deploy:
     docker:
-      - image: cimg/node:20.13
+      - image: cimg/node:20.19
     steps:
       # Checkout the code from the branch into the working_directory
       - checkout
