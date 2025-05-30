@@ -73,14 +73,14 @@
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular-eslint/schematics": "^18.3.1",
+    "@angular-eslint/schematics": "^19.6.0",
     "@angular/build": "^20.0.0",
     "@angular/cli": "^20.0.0",
     "@angular/compiler-cli": "^20.0.0",
     "@angular/language-service": "^20.0.0",
     "@types/jasmine": "~5.1.0",
     "angular-cli-ghpages": "^0.5.3",
-    "angular-eslint": "^18.3.1",
+    "angular-eslint": "^19.6.0",
     "coveralls": "^3.1.1",
     "cpy-cli": "^3.1.1",
     "eslint": "^9.11.1",
@@ -98,6 +98,6 @@
     "ng-packagr": "^20.0.0",
     "rimraf": "^2.7.0",
     "typescript": "~5.8.2",
-    "typescript-eslint": "8.2.0"
+    "typescript-eslint": "8.33.0"
   }
 }
