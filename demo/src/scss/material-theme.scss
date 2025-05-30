@@ -64,17 +64,29 @@
   }
 }
 
+@mixin material-element-themes($theme) {
+  @include mat.core-color($theme);
+  @include mat.divider-theme($theme);
+  @include mat.fab-theme($theme);
+  @include mat.form-field-theme($theme);
+  @include mat.icon-button-theme($theme);
+  @include mat.icon-theme($theme);
+  @include mat.input-theme($theme);
+  @include mat.snack-bar-theme($theme);
+  @include mat.tabs-theme($theme);
+  @include mat.toolbar-theme($theme);
+}
+
+@mixin app-component-themes($theme) {
+  @include app-component.theme($theme);
+  @include scrollspy-nav-component.theme($theme);
+}
+
 @mixin theme($theme, $name) {
   .#{$name}-theme {
-    // native elements
     @include native-element-theme($theme);
-
-    // all components
-    @include mat.all-component-themes($theme);
-
-    // app components
-    @include app-component.theme($theme);
-    @include scrollspy-nav-component.theme($theme);
+    @include material-element-themes($theme);
+    @include app-component-themes($theme);
   }
 }
 

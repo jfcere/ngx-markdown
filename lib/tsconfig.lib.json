@@ -15,6 +15,10 @@
     "strictMetadataEmit": true,
     "enableResourceInlining": true
   },
+  "include": [
+    "src/**/*.ts",
+    "public_api.ts"
+  ],
   "exclude": [
     "**/*.spec.ts"
   ]
