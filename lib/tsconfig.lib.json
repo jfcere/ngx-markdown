@@ -5,6 +5,7 @@
     "target": "es2015",
     "declaration": true,
     "declarationMap": true,
+    "sourceMap": true,
     "inlineSources": true,
     "types": [
       "marked"
