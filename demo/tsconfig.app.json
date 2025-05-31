@@ -6,11 +6,10 @@
       "node"
     ],
   },
-  "files": [
-    "src/main.ts"
-  ],
   "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts"
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "src/**/*.spec.ts"
   ]
 }

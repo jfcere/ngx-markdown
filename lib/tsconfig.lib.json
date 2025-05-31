@@ -6,6 +6,7 @@
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
+    "inlineSourceMap": true,
     "types": [
       "marked"
     ],
@@ -15,6 +16,10 @@
     "strictMetadataEmit": true,
     "enableResourceInlining": true
   },
+  "include": [
+    "src/**/*.ts",
+    "public_api.ts"
+  ],
   "exclude": [
     "**/*.spec.ts"
   ]

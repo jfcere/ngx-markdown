@@ -1,5 +1,6 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
+@use '../scss/utils' as utils;
 
 @mixin theme($theme) {
   $color-config: mat.m2-get-color-config($theme);
@@ -8,10 +9,14 @@
   $primary-color: mat.m2-get-color-from-palette($primary-palette, 'default');
 
   .mat-toolbar.mat-primary {
-    background: linear-gradient(90deg, $primary-color 15%, darken($primary-color, 4%) 100%);
+    background: linear-gradient(90deg, $primary-color 15%, utils.darken-color($primary-color, 4%) 100%);
   }
 
   .mat-mdc-tab-nav-bar.mat-background-primary {
     background: $primary-color;
   }
+
+  @include mat.tabs-overrides((
+    foreground-color: #ffffff,
+  ));
 }
