@@ -1,7 +1,7 @@
-import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { merge, of, Subject, timer } from 'rxjs';
-import { distinctUntilChanged, map, mapTo, shareReplay, startWith, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, mapTo, shareReplay, switchMap } from 'rxjs/operators';
 
 const BUTTON_TEXT_COPY = 'Copy';
 const BUTTON_TEXT_COPIED = 'Copied';
@@ -11,31 +11,30 @@ const BUTTON_TEXT_COPIED = 'Copied';
   template: `
     <button
       class="markdown-clipboard-button"
-      [class.copied]="copied$ | async"
+      [class.copied]="copied()"
       (click)="onCopyToClipboardClick()"
-    >{{ copiedText$ | async }}</button>
+    >{{ copiedText() }}</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [AsyncPipe],
 })
 export class ClipboardButtonComponent {
-
   private _buttonClick$ = new Subject<void>();
 
-  readonly copied$ = this._buttonClick$.pipe(
-    switchMap(() => merge(
-      of(true),
-      timer(3000).pipe(mapTo(false)),
-    )),
-    distinctUntilChanged(),
-    shareReplay(1),
+  readonly copied = toSignal(
+    this._buttonClick$.pipe(
+      switchMap(() => merge(
+        of(true),
+        timer(3000).pipe(mapTo(false)),
+      )),
+      distinctUntilChanged(),
+      shareReplay(1),
+    )
   );
 
-  readonly copiedText$ = this.copied$.pipe(
-    startWith(false),
-    map(copied => copied
+  readonly copiedText = computed(() =>
+    this.copied()
       ? BUTTON_TEXT_COPIED
-      : BUTTON_TEXT_COPY),
+      : BUTTON_TEXT_COPY
   );
 
   onCopyToClipboardClick(): void {
