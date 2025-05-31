@@ -20,6 +20,7 @@ import {
   ParseOptions,
   SECURITY_CONTEXT,
 } from './markdown.service';
+import { MARKED_EXTENSIONS } from './marked-extensions';
 import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
 import { MermaidAPI } from './mermaid-options';
@@ -36,7 +37,10 @@ describe('MarkdownService', () => {
   let securityContext: SecurityContext;
   let viewContainerRef: ViewContainerRef;
 
-  const mockExtensions = [{ name: 'mock-extension' } as MarkedExtension];
+  const mockExtensions = [
+    { name: 'mock-extension-one' } as MarkedExtension,
+    { name: 'mock-extension-two' } as MarkedExtension,
+  ];
   const viewContainerRefSpy = jasmine.createSpyObj<ViewContainerRef>(['createComponent', 'createEmbeddedView']);
 
   describe('with SecurityContext.HTML', () => {
@@ -94,7 +98,10 @@ describe('MarkdownService', () => {
           BrowserModule,
           HttpClientTestingModule,
           MarkdownModule.forRoot({
-            markedExtensions: mockExtensions,
+            markedExtensions: [
+              { provide: MARKED_EXTENSIONS, useValue: mockExtensions[0], multi: true },
+              { provide: MARKED_EXTENSIONS, useFactory: () => mockExtensions[1], multi: true },
+            ],
             sanitize: SecurityContext.NONE,
           }),
         ],

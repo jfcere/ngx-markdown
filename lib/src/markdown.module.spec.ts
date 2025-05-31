@@ -159,23 +159,6 @@ describe('MarkdownModule', () => {
       expect(markedOptions).toBeNull();
     });
 
-    it('should provide MarkedExtensions when MarkdownModuleConfig is provided with markedExtension functions', () => {
-      const mockExtensions = [
-        { name: 'mock-extension-one' } as MarkedExtension,
-        { name: 'mock-extension-two' } as MarkedExtension,
-      ];
-
-      TestBed.configureTestingModule({
-        imports: [
-          MarkdownModule.forRoot({ markedExtensions: mockExtensions }),
-        ],
-      });
-
-      const markedExtensions = TestBed.inject<MarkedExtension[]>(MARKED_EXTENSIONS);
-
-      expect(markedExtensions).toEqual(mockExtensions);
-    });
-
     it('should provide MarkedExtensions when MarkdownModuleConfig is provided with markedExtension providers', () => {
       const mockExtensionOne = { name: 'mock-extension-one' } as MarkedExtension;
       const mockExtensionTwo = { name: 'mock-extension-two' } as MarkedExtension;
