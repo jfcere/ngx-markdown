@@ -1,4 +1,4 @@
-import{a as b,b as E,c as D,d as _,e as L,f as R,g as F,h as I,i as A,j as O}from"./chunk-KQLYUWWW.js";import"./chunk-4MPBDHDT.js";import{a as w,b as S}from"./chunk-6G7VIRS4.js";import{Ea as m,Fa as o,Ga as r,Ha as v,Za as a,aa as g,ab as c,bb as p,cb as h,ec as y,ia as d,ma as s,qa as f,sc as C,tc as M,uc as k,xc as x}from"./chunk-C7BPA6K5.js";var l=class l{constructor(e,n){this.elementRef=e;this.markdownService=n;this.overrideEnabled=!1;this._accentColor="";this.markdown=`## Markdown rulez!
+import{a as b,b as E,c as D,d as _,e as L,f as R,g as F,h as I,i as A,j as O}from"./chunk-LTF7N5BN.js";import"./chunk-GK2B4LJJ.js";import{a as w,b as S}from"./chunk-HE67L7KU.js";import{Ea as m,Fa as o,Ga as r,Ha as v,Za as a,aa as g,ab as c,bb as p,cb as h,ec as y,ia as d,ma as s,qa as f,sc as C,tc as M,uc as k,xc as x}from"./chunk-B4V4QLCL.js";var l=class l{constructor(e,n){this.elementRef=e;this.markdownService=n;this.overrideEnabled=!1;this._accentColor="";this.markdown=`## Markdown rulez!
 ---
 
 ### Syntax highlight
