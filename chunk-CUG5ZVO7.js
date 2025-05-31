@@ -1,1 +1,0 @@
-import{Gb as n,T as o,w as e,z as i}from"./chunk-YTFRMPFA.js";var t=class t{constructor(r){this.httpClient=r}get(r){return this.httpClient.get(r,{responseType:"text"}).pipe(o())}};t.\u0275fac=function(s){return new(s||t)(i(n))},t.\u0275prov=e({token:t,factory:t.\u0275fac,providedIn:"root"});var p=t;export{p as a};
