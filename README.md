@@ -763,10 +763,6 @@ MarkdownModule.forRoot({
 
 ### Marked extensions
 
-Optionally, markdown parsing can be configured using [MarkedOptions](https://marked.js.org/#/USING_ADVANCED.md#options) that can be provided with the `MARKED_OPTIONS` injection token via the `markedOptions` property of the `forRoot` method of `MarkdownModule`.
-
-
-
 When configuring the `MarkdownModule`, you can provide [marked extensions](https://marked.js.org/using_advanced#extensions) using the `MARKED_EXTENSION` injection token via the `markedExtensions` property, which accepts an array of providers and supports Angular dependency injection.
 
 ##### Using the `provideMarkdown` function
