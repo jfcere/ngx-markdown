@@ -763,19 +763,17 @@ MarkdownModule.forRoot({
 
 ### Marked extensions
 
-When configuring the `MarkdownModule`, you can provide [marked extensions](https://marked.js.org/using_advanced#extensions) using the `markedExtensions` property that accepts an array of extension functions and/or providers to allow dependency injection using the `MARKED_EXTENSION` injection token when configuring `MarkdownModule`.
+Optionally, markdown parsing can be configured using [MarkedOptions](https://marked.js.org/#/USING_ADVANCED.md#options) that can be provided with the `MARKED_OPTIONS` injection token via the `markedOptions` property of the `forRoot` method of `MarkdownModule`.
+
+
+
+When configuring the `MarkdownModule`, you can provide [marked extensions](https://marked.js.org/using_advanced#extensions) using the `MARKED_EXTENSION` injection token via the `markedExtensions` property, which accepts an array of providers and supports Angular dependency injection.
 
 ##### Using the `provideMarkdown` function
 
 ```typescript
 import { gfmHeadingId } from 'marked-gfm-heading-id';
 
-// using extension functions
-providemarkdown({
-  markedExtensions: [gfmHeadingId()],
-}),
-
-// using `MARKED_EXTENSION` allows dependency injection
 providemarkdown({
   markedExtensions: [
     {
@@ -798,12 +796,6 @@ providemarkdown({
 ```typescript
 import { gfmHeadingId } from 'marked-gfm-heading-id';
 
-// using extension functions
-MarkdownModule.forRoot({
-  markedExtensions: [gfmHeadingId()],
-}),
-
-// using `MARKED_EXTENSION` allows dependency injection
 MarkdownModule.forRoot({
   markedExtensions: [
     {

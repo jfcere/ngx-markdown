@@ -1,5 +1,5 @@
 import { Provider, SecurityContext } from '@angular/core';
-import { getMarkedExtensionProvider, MarkdownModuleConfig } from './markdown.module';
+import { MarkdownModuleConfig } from './markdown.module';
 import { MarkdownService, SECURITY_CONTEXT } from './markdown.service';
 
 export function provideMarkdown(markdownModuleConfig?: MarkdownModuleConfig): Provider[] {
@@ -9,7 +9,7 @@ export function provideMarkdown(markdownModuleConfig?: MarkdownModuleConfig): Pr
     markdownModuleConfig?.clipboardOptions ?? [],
     markdownModuleConfig?.markedOptions ?? [],
     markdownModuleConfig?.mermaidOptions ?? [],
-    getMarkedExtensionProvider(markdownModuleConfig?.markedExtensions) ?? [],
+    markdownModuleConfig?.markedExtensions ?? [],
     {
       provide: SECURITY_CONTEXT,
       useValue: markdownModuleConfig?.sanitize ?? SecurityContext.HTML,
