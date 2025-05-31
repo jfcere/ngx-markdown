@@ -38,8 +38,8 @@ describe('MarkdownService', () => {
   let viewContainerRef: ViewContainerRef;
 
   const mockExtensions = [
-    { name: 'mock-extension-1' } as MarkedExtension,
-    { name: 'mock-extension-2' } as MarkedExtension,
+    { name: 'mock-extension-one' } as MarkedExtension,
+    { name: 'mock-extension-two' } as MarkedExtension,
   ];
   const viewContainerRefSpy = jasmine.createSpyObj<ViewContainerRef>(['createComponent', 'createEmbeddedView']);
 
