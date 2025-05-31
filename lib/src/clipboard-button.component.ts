@@ -31,10 +31,11 @@ export class ClipboardButtonComponent {
     )
   );
 
-  readonly copiedText = computed(() => {
-    const copied = this.copied();
-    return copied ? BUTTON_TEXT_COPIED : BUTTON_TEXT_COPY;
-  });
+  readonly copiedText = computed(() =>
+    this.copied()
+      ? BUTTON_TEXT_COPIED
+      : BUTTON_TEXT_COPY
+  );
 
   onCopyToClipboardClick(): void {
     this._buttonClick$.next();
