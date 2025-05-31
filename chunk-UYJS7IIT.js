@@ -1,1 +1,0 @@
-import{C as e,Fb as n,L as i,O as o}from"./chunk-5WVJHME3.js";var t=class t{constructor(r){this.httpClient=r}get(r){return this.httpClient.get(r,{responseType:"text"}).pipe(e())}};t.\u0275fac=function(s){return new(s||t)(o(n))},t.\u0275prov=i({token:t,factory:t.\u0275fac,providedIn:"root"});var p=t;export{p as a};
