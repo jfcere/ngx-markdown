@@ -96,7 +96,7 @@
     "karma-junit-reporter": "^2.0.1",
     "linklocal": "^2.8.2",
     "ng-packagr": "^20.0.0",
-    "rimraf": "^2.7.0",
+    "rimraf": "^6.0.0",
     "typescript": "~5.8.2",
     "typescript-eslint": "8.33.0"
   }
