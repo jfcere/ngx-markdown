@@ -13,21 +13,21 @@ jobs:
       - checkout
       # Restore dependencies from cache
       - restore_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
+          key: dependency-cache-{{ checksum "package-lock.json" }}
       # Install dependencies
       - run:
           name: Install dependencies
-          command: yarn install --frozen-lockfile --no-progress
+          command: npm ci
       # Cache dependencies if they don't exist
       - save_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
+          key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
-            - ~/.cache/yarn
+            - ~/.npm
             - ./node_modules
       # Test the source code
       - run:
           name: Test
-          command: yarn test --watch=false --code-coverage --no-progress
+          command: npm run test -- --watch=false --code-coverage --no-progress
       - store_artifacts:
           path: test-results.xml
           prefix: tests
@@ -37,22 +37,22 @@ jobs:
       # Upload coverage artifacts to Coveralls
       - run:
           name: Push coverage artifacts
-          command: yarn coveralls
+          command: npm run coveralls
       # Type check the source code
       - run:
           name: Type-Check
-          command: yarn type-check:lib
+          command: npm run type-check:lib
       # Lint the source code
       - run:
           name: Lint
-          command: yarn lint:ci
+          command: npm run lint:ci
       - store_artifacts:
           path: eslint.xml
           prefix: lint
       # Build the source code
       - run:
           name: Build
-          command: yarn build:lib
+          command: npm run build:lib
   deploy:
     docker:
       - image: cimg/node:20.19
@@ -61,27 +61,27 @@ jobs:
       - checkout
       # Restore dependencies from cache
       - restore_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
+          key: dependency-cache-{{ checksum "package-lock.json" }}
       # Install dependencies
       - run:
           name: Install dependencies
-          command: yarn install --frozen-lockfile --no-progress
+          command: npm ci
       # Cache local dependencies if they don't exist
       - save_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
+          key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
-            - ~/.cache/yarn
+            - ~/.npm
             - ./node_modules
       # Build demo
       - run:
           name: Build
           command: |
-            yarn gh-pages:build
-            yarn gh-pages:postbuild
+            npm run gh-pages:build
+            npm run gh-pages:postbuild
       # Deploy demo to Github Pages
       - run:
           name: Deploy to gh-pages
-          command: yarn gh-pages:deploy
+          command: npm run gh-pages:deploy
 
 workflows:
   version: 2
