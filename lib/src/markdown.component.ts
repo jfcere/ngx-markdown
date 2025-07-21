@@ -169,15 +169,89 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
       mermaidOptions: this.mermaidOptions,
     };
 
-    const parsed = await this.markdownService.parse(markdown, parsedOptions);
+    const newParsedHtml = await this.markdownService.parse(
+      markdown,
+      parsedOptions
+    );
 
-    this.element.nativeElement.innerHTML = parsed;
+    this.patch(this.element.nativeElement, newParsedHtml);
 
     this.handlePlugins();
 
     this.markdownService.render(this.element.nativeElement, renderOptions, this.viewContainerRef);
 
     this.ready.emit();
+  }
+
+  // Updates the DOM to match a new HTML structure with minimal changes to preserve text selections.
+  private patch(liveContainer: HTMLElement, newHtmlString: string): void {
+    const newContainer = document.createElement('div');
+    newContainer.innerHTML = newHtmlString;
+
+    const patchRecursive = (oldNode: Node, newNode: Node) => {
+      if (oldNode.isEqualNode(newNode)) {
+        return;
+      }
+
+      if (
+        oldNode.nodeType === Node.TEXT_NODE &&
+        newNode.nodeType === Node.TEXT_NODE
+      ) {
+        if (oldNode.textContent !== newNode.textContent) {
+          if (newNode.textContent?.startsWith(oldNode.textContent!)) {
+            const diff = newNode.textContent.substring(
+              oldNode.textContent!.length
+            );
+            (oldNode as Text).appendData(diff);
+          } else {
+            oldNode.textContent = newNode.textContent;
+          }
+        }
+        return;
+      }
+
+      if (oldNode.nodeName !== newNode.nodeName) {
+        oldNode.parentNode?.replaceChild(newNode.cloneNode(true), oldNode);
+        return;
+      }
+
+      const oldChildren = Array.from(oldNode.childNodes);
+      const newChildren = Array.from(newNode.childNodes);
+      const maxLen = Math.max(oldChildren.length, newChildren.length);
+
+      for (let i = 0; i < maxLen; i++) {
+        const oldChild = oldChildren[i];
+        const newChild = newChildren[i];
+
+        if (newChild && !oldChild) {
+          oldNode.appendChild(newChild.cloneNode(true));
+        } else if (!newChild && oldChild) {
+          oldNode.removeChild(oldChild);
+        } else if (oldChild && newChild) {
+          patchRecursive(oldChild, newChild);
+        }
+      }
+    };
+
+    const oldLiveChildren = Array.from(liveContainer.childNodes);
+    const newVirtualChildren = Array.from(newContainer.childNodes);
+    const maxChildrenLength = Math.max(
+      oldLiveChildren.length,
+      newVirtualChildren.length
+    );
+
+    for (let i = 0; i < maxChildrenLength; i++) {
+      const oldChild = oldLiveChildren[i];
+      const newChild = newVirtualChildren[i];
+
+      if (newChild && !oldChild) {
+        liveContainer.appendChild(newChild.cloneNode(true));
+      } else if (!newChild && oldChild) {
+        liveContainer.removeChild(oldChild);
+      } else if (oldChild && newChild) {
+        patchRecursive(oldChild, newChild);
+      }
+    }
   }
 
   private coerceBooleanProperty(value: boolean | ''): boolean {
