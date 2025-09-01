@@ -30,7 +30,7 @@ declare let Prism: any;
 declare let joypixels: any;
 declare let mermaid: any;
 
-fdescribe('MarkdownService', () => {
+describe('MarkdownService', () => {
   let domSanitizer: DomSanitizer;
   let http: HttpTestingController;
   let markdownService: MarkdownService;
