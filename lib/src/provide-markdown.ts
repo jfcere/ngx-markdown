@@ -1,6 +1,6 @@
-import { Provider, SecurityContext } from '@angular/core';
-import { MarkdownModuleConfig } from './markdown.module';
-import { MarkdownService, SECURITY_CONTEXT } from './markdown.service';
+import { Provider } from '@angular/core';
+import { getSanitizeProvider, MarkdownModuleConfig } from './markdown.module';
+import { MarkdownService } from './markdown.service';
 
 export function provideMarkdown(markdownModuleConfig?: MarkdownModuleConfig): Provider[] {
   return [
@@ -10,9 +10,6 @@ export function provideMarkdown(markdownModuleConfig?: MarkdownModuleConfig): Pr
     markdownModuleConfig?.markedOptions ?? [],
     markdownModuleConfig?.mermaidOptions ?? [],
     markdownModuleConfig?.markedExtensions ?? [],
-    {
-      provide: SECURITY_CONTEXT,
-      useValue: markdownModuleConfig?.sanitize ?? SecurityContext.HTML,
-    },
+    getSanitizeProvider(markdownModuleConfig?.sanitize) ?? [],
   ];
 }

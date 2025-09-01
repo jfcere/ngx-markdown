@@ -4,7 +4,6 @@ import {
   EmbeddedViewRef,
   Inject,
   Injectable,
-  InjectionToken,
   Optional,
   PLATFORM_ID,
   SecurityContext,
@@ -21,6 +20,7 @@ import { MARKED_EXTENSIONS } from './marked-extensions';
 import { MARKED_OPTIONS, MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
 import { MERMAID_OPTIONS, MermaidAPI } from './mermaid-options';
+import { isSanitizeFunction, SANITIZE, SanitizeFunction } from './sanitize-options';
 
 // clipboard
 declare let ClipboardJS: {
@@ -57,8 +57,6 @@ export const errorMermaidNotLoaded = '[ngx-markdown] When using the `mermaid` at
 export const errorClipboardNotLoaded = '[ngx-markdown] When using the `clipboard` attribute you *have to* include Clipboard files to `angular.json` or use imports. See README for more information';
 export const errorClipboardViewContainerRequired = '[ngx-markdown] When using the `clipboard` attribute you *have to* provide the `viewContainerRef` parameter to `MarkdownService.render()` function';
 export const errorSrcWithoutHttpClient = '[ngx-markdown] When using the `src` attribute you *have to* pass the `HttpClient` as a parameter of the `forRoot` method. See README for more information';
-
-export const SECURITY_CONTEXT = new InjectionToken<SecurityContext>('SECURITY_CONTEXT');
 
 export interface ParseOptions {
   decodeHtml?: boolean;
@@ -151,7 +149,7 @@ export class MarkdownService {
     @Inject(MARKED_OPTIONS) @Optional() options: MarkedOptions,
     @Inject(MERMAID_OPTIONS) @Optional() private mermaidOptions: MermaidAPI.MermaidConfig,
     @Inject(PLATFORM_ID) private platform: Object,
-    @Inject(SECURITY_CONTEXT) private securityContext: SecurityContext,
+    @Inject(SANITIZE) private sanitize: SecurityContext | SanitizeFunction,
     @Optional() private http: HttpClient,
     private sanitizer: DomSanitizer,
   ) {
@@ -186,9 +184,9 @@ export class MarkdownService {
     const decoded = decodeHtml ? this.decodeHtml(trimmed) : trimmed;
     const emojified = emoji ? this.parseEmoji(decoded) : decoded;
     const marked = this.parseMarked(emojified, markedOptions, inline);
-    const sanitized = disableSanitizer ? marked : this.sanitizer.sanitize(this.securityContext, marked);
+    const sanitized = disableSanitizer ? marked : this.sanitizeHtml(marked);
 
-    return sanitized || '';
+    return sanitized;
   }
 
   render(element: HTMLElement, options: RenderOptions = this.DEFAULT_RENDER_OPTIONS, viewContainerRef?: ViewContainerRef): void {
@@ -467,5 +465,15 @@ export class MarkdownService {
           ? line.substring(lineIdentStart)
           : line;
       }).join('\n');
+  }
+
+  private async sanitizeHtml(html: string | Promise<string>): Promise<string> {
+    if (isSanitizeFunction(this.sanitize)) {
+      return this.sanitize(await html);
+    }
+    if (this.sanitize !== SecurityContext.NONE) {
+      return this.sanitizer.sanitize(this.sanitize, html) ?? '';
+    }
+    return html;
   }
 }

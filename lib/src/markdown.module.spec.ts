@@ -6,9 +6,10 @@ import { MarkedExtension } from 'marked';
 import { CLIPBOARD_OPTIONS, ClipboardOptions } from './clipboard-options';
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownModule } from './markdown.module';
-import { errorSrcWithoutHttpClient, SECURITY_CONTEXT } from './markdown.service';
+import { errorSrcWithoutHttpClient } from './markdown.service';
 import { MARKED_EXTENSIONS } from './marked-extensions';
 import { MARKED_OPTIONS, MarkedOptions } from './marked-options';
+import { SANITIZE } from './sanitize-options';
 
 @Component({
   selector: 'markdown-host',
@@ -226,9 +227,9 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const securityContext = TestBed.inject(SECURITY_CONTEXT);
+      const sanitize = TestBed.inject(SANITIZE);
 
-      expect(securityContext).toBe(SecurityContext.NONE);
+      expect(sanitize).toBe(SecurityContext.NONE);
     });
 
     it('should provide default SecurityContext when MarkdownModuleConfig is provided without sanitize', () => {
@@ -244,9 +245,9 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const securityContext = TestBed.inject(SECURITY_CONTEXT);
+      const sanitize = TestBed.inject(SANITIZE);
 
-      expect(securityContext).toBe(SecurityContext.HTML);
+      expect(sanitize).toBe(SecurityContext.HTML);
     });
 
     it('should provide default SecurityContext when MarkdownModuleConfig is not provided', () => {
@@ -257,9 +258,9 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const securityContext = TestBed.inject(SECURITY_CONTEXT);
+      const sanitize = TestBed.inject(SANITIZE);
 
-      expect(securityContext).toBe(SecurityContext.HTML);
+      expect(sanitize).toBe(SecurityContext.HTML);
     });
   });
 
@@ -293,12 +294,12 @@ describe('MarkdownModule', () => {
       const httpClient = TestBed.inject(HttpClient);
       const clipboardOptions = TestBed.inject(CLIPBOARD_OPTIONS);
       const markedOptions = TestBed.inject(MARKED_OPTIONS);
-      const securityContext = TestBed.inject(SECURITY_CONTEXT);
+      const sanitize = TestBed.inject(SANITIZE);
 
       expect(httpClient instanceof HttpClient).toBeTruthy();
       expect(clipboardOptions).toEqual(mockClipboardOptions);
       expect(markedOptions).toEqual(mockMarkedOptions);
-      expect(securityContext).toBe(SecurityContext.NONE);
+      expect(sanitize).toBe(SecurityContext.NONE);
     });
   });
 

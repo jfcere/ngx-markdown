@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit, SecurityContext } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout/flex';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CLIPBOARD_OPTIONS, MarkdownComponent, MermaidAPI, provideMarkdown } from 'ngx-markdown';
+import { CLIPBOARD_OPTIONS, MarkdownComponent, MermaidAPI, provideMarkdown, SANITIZE } from 'ngx-markdown';
+import { sanitizeHtml } from '@app/app.marked-config';
 import { ClipboardButtonComponent } from '@shared/clipboard-button';
 import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
 
@@ -27,7 +28,10 @@ import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
         provide: CLIPBOARD_OPTIONS,
         useValue: {},
       },
-      sanitize: SecurityContext.NONE,
+      sanitize: {
+        provide: SANITIZE,
+        useValue: sanitizeHtml,
+      },
     }),
   ],
 })
