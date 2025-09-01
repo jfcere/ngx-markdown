@@ -1,11 +1,11 @@
 import { HttpClient, provideHttpClient } from '@angular/common/http';
-import { ApplicationConfig, SecurityContext } from '@angular/core';
+import { ApplicationConfig } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { gfmHeadingId } from 'marked-gfm-heading-id';
-import { CLIPBOARD_OPTIONS, MARKED_EXTENSIONS, MARKED_OPTIONS, MERMAID_OPTIONS, provideMarkdown } from 'ngx-markdown';
+import { CLIPBOARD_OPTIONS, MARKED_EXTENSIONS, MARKED_OPTIONS, MERMAID_OPTIONS, provideMarkdown, SANITIZE } from 'ngx-markdown';
 import { appRoutes } from '@app/app-routes';
-import { markedOptionsFactory } from '@app/marked-options-factory';
+import { markedOptionsFactory, sanitizeHtml } from '@app/app.marked-config';
 import { AnchorService } from '@shared/anchor/anchor.service';
 import { ClipboardButtonComponent } from '@shared/clipboard-button';
 
@@ -45,7 +45,10 @@ export const appConfig: ApplicationConfig = {
           look: 'handDrawn',
         },
       },
-      sanitize: SecurityContext.NONE,
+      sanitize: {
+        provide: SANITIZE,
+        useValue: sanitizeHtml,
+      },
     }),
   ],
 };

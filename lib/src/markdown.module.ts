@@ -8,6 +8,7 @@ import { MARKED_EXTENSIONS } from './marked-extensions';
 import { MARKED_OPTIONS } from './marked-options';
 import { MERMAID_OPTIONS } from './mermaid-options';
 import { provideMarkdown } from './provide-markdown';
+import { SANITIZE } from './sanitize-options';
 
 type InjectionTokenType<T extends InjectionToken<any>> = T extends InjectionToken<infer R> ? R : unknown;
 
@@ -26,6 +27,24 @@ type TypedProvider<T extends InjectionToken<any>> = TypedValueProvider<T> | Type
 
 type MultiTypedProvider<T extends InjectionToken<any>> = TypedProvider<T> & { multi: true };
 
+export function isTypedProvider<T extends InjectionToken<any>>(provider: any): provider is TypedProvider<T> {
+  return provider != null && provider.provide != null;
+}
+
+export function getSanitizeProvider(sanitize: MarkdownModuleConfig['sanitize']): Provider | undefined {
+  return isTypedProvider(sanitize)
+    ? sanitize
+    : { provide: SANITIZE, useValue: sanitize ?? SecurityContext.HTML };
+}
+
+/**
+ * @deprecated Will be removed in ngx-markdown v21, use provider syntax instead.
+ * ```typescript
+ * sanitize: { provide: SANITIZE, useValue: SecurityContext.HTML },
+ * ```
+ */
+type SanitizeTokenType = InjectionTokenType<typeof SANITIZE>;
+
 // having a dependency on `HttpClientModule` within a library
 // breaks all the interceptors from the app consuming the library
 // here, we explicitely ask the user to pass a provider with
@@ -36,7 +55,7 @@ export interface MarkdownModuleConfig {
   markedOptions?: TypedProvider<typeof MARKED_OPTIONS>;
   markedExtensions?: MultiTypedProvider<typeof MARKED_EXTENSIONS>[];
   mermaidOptions?: TypedProvider<typeof MERMAID_OPTIONS>;
-  sanitize?: SecurityContext;
+  sanitize?: SanitizeTokenType | TypedProvider<typeof SANITIZE>;
 }
 
 const sharedDeclarations = [

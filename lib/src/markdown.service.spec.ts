@@ -18,12 +18,12 @@ import {
   ExtendedRenderer,
   MarkdownService,
   ParseOptions,
-  SECURITY_CONTEXT,
 } from './markdown.service';
 import { MARKED_EXTENSIONS } from './marked-extensions';
 import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
 import { MermaidAPI } from './mermaid-options';
+import { SANITIZE, SanitizeFunction } from './sanitize-options';
 
 declare let window: any;
 declare let Prism: any;
@@ -34,7 +34,7 @@ describe('MarkdownService', () => {
   let domSanitizer: DomSanitizer;
   let http: HttpTestingController;
   let markdownService: MarkdownService;
-  let securityContext: SecurityContext;
+  let sanitize: SecurityContext | SanitizeFunction;
   let viewContainerRef: ViewContainerRef;
 
   const mockExtensions = [
@@ -42,6 +42,43 @@ describe('MarkdownService', () => {
     { name: 'mock-extension-two' } as MarkedExtension,
   ];
   const viewContainerRefSpy = jasmine.createSpyObj<ViewContainerRef>(['createComponent', 'createEmbeddedView']);
+
+  describe('with sanitize function', () => {
+
+    describe('parse', () => {
+      let sanitizeFuncSpy: jasmine.Spy<SanitizeFunction>;
+
+      beforeEach(() => {
+        sanitizeFuncSpy = jasmine.createSpy('sanitize');
+
+        TestBed.configureTestingModule({
+          imports: [
+            MarkdownModule.forRoot({ sanitize: sanitizeFuncSpy }),
+          ],
+        });
+
+        domSanitizer = TestBed.inject(DomSanitizer);
+        markdownService = TestBed.inject(MarkdownService);
+        sanitize = TestBed.inject(SANITIZE);
+      });
+
+      it('should sanitize parsed markdown using provided sanitize function', async () => {
+        const mockRaw = '### Markdown-x';
+        const mockSanitized = '### Markdown-x sanitized';
+        const unsanitized = await marked.parse(mockRaw);
+
+        sanitizeFuncSpy
+          .withArgs(unsanitized)
+          .and.returnValue(mockSanitized);
+
+        const result = await markdownService.parse(mockRaw);
+
+        expect(sanitizeFuncSpy).toHaveBeenCalledWith(unsanitized);
+        expect(result).toBe(mockSanitized);
+        expect(result).not.toBe(unsanitized);
+      });
+    });
+  });
 
   describe('with SecurityContext.HTML', () => {
 
@@ -56,32 +93,32 @@ describe('MarkdownService', () => {
 
         domSanitizer = TestBed.inject(DomSanitizer);
         markdownService = TestBed.inject(MarkdownService);
-        securityContext = TestBed.inject(SECURITY_CONTEXT);
+        sanitize = TestBed.inject(SANITIZE);
       });
 
-      it('should sanitize parsed markdown when disableSanitizer is ommited/false/null/undefined', () => {
+      it('should sanitize parsed markdown when disableSanitizer is ommited/false/null/undefined', async () => {
 
         const mockRaw = '### Markdown-x';
-        const sanitized = domSanitizer.sanitize(securityContext, marked.parse(mockRaw))!;
-        const unsanitized = marked.parse(mockRaw);
+        const sanitized = domSanitizer.sanitize(sanitize as SecurityContext, await marked.parse(mockRaw))!;
+        const unsanitized = await marked.parse(mockRaw);
 
-        expect(markdownService.parse(mockRaw)).toBe(sanitized);
-        expect(markdownService.parse(mockRaw)).not.toBe(unsanitized);
+        expect(await markdownService.parse(mockRaw)).toBe(sanitized);
+        expect(await markdownService.parse(mockRaw)).not.toBe(unsanitized);
 
-        expect(markdownService.parse(mockRaw, { disableSanitizer: false })).toBe(sanitized);
-        expect(markdownService.parse(mockRaw, { disableSanitizer: false })).not.toBe(unsanitized);
+        expect(await markdownService.parse(mockRaw, { disableSanitizer: false })).toBe(sanitized);
+        expect(await markdownService.parse(mockRaw, { disableSanitizer: false })).not.toBe(unsanitized);
 
-        expect(markdownService.parse(mockRaw, { disableSanitizer: null! })).toBe(sanitized);
-        expect(markdownService.parse(mockRaw, { disableSanitizer: null! })).not.toBe(unsanitized);
+        expect(await markdownService.parse(mockRaw, { disableSanitizer: null! })).toBe(sanitized);
+        expect(await markdownService.parse(mockRaw, { disableSanitizer: null! })).not.toBe(unsanitized);
 
-        expect(markdownService.parse(mockRaw, { disableSanitizer: undefined })).toBe(sanitized);
-        expect(markdownService.parse(mockRaw, { disableSanitizer: undefined })).not.toBe(unsanitized);
+        expect(await markdownService.parse(mockRaw, { disableSanitizer: undefined })).toBe(sanitized);
+        expect(await markdownService.parse(mockRaw, { disableSanitizer: undefined })).not.toBe(unsanitized);
       });
 
       it('should not sanitize parsed markdown when disableSanitizer is true', () => {
 
         const mockRaw = '### Markdown-x';
-        const sanitized = domSanitizer.sanitize(securityContext, marked.parse(mockRaw))!;
+        const sanitized = domSanitizer.sanitize(sanitize as SecurityContext, marked.parse(mockRaw))!;
         const unsanitized = marked.parse(mockRaw);
 
         expect(markdownService.parse(mockRaw, { disableSanitizer: true })).not.toBe(sanitized);
@@ -113,7 +150,7 @@ describe('MarkdownService', () => {
       domSanitizer = TestBed.inject(DomSanitizer);
       http = TestBed.inject(HttpTestingController);
       markdownService = TestBed.inject(MarkdownService);
-      securityContext = TestBed.inject(SECURITY_CONTEXT);
+      sanitize = TestBed.inject(SANITIZE);
       viewContainerRef = TestBed.inject(ViewContainerRef);
     });
 
@@ -190,24 +227,24 @@ describe('MarkdownService', () => {
         expect(markedUseSpy).not.toHaveBeenCalledWith(...mockExtensions);
       });
 
-      it('should extend marked renderer when mermaid is true', () => {
+      it('should extend marked renderer when mermaid is true', async () => {
 
         const mermaid = 'graph TD; A-->B;';
         const mockRaw = `\`\`\`mermaid\n${mermaid}\n\`\`\``;
 
-        const parsed = markdownService.parse(mockRaw, { mermaid: true });
+        const parsed = await markdownService.parse(mockRaw, { mermaid: true });
 
         expect(parsed).toBe(`<div class="mermaid">${mermaid}</div>`);
       });
 
-      it('should not extend marked renderer when mermaid is false', () => {
+      it('should not extend marked renderer when mermaid is false', async () => {
 
         const mermaid = 'graph TD; A-->B;';
         const mockRaw = `\`\`\`mermaid\n${mermaid}\n\`\`\``;
 
-        const parsed = markdownService.parse(mockRaw, { mermaid: false });
+        const parsed = await markdownService.parse(mockRaw, { mermaid: false });
 
-        expect(parsed).toBe(marked.parse(mockRaw));
+        expect(parsed).toBe(await marked.parse(mockRaw));
       });
 
       it('should not pass extended flags to `marked.use` when parsing', () => {
@@ -229,7 +266,7 @@ describe('MarkdownService', () => {
         expect(markedUseSpy).toHaveBeenCalledWith({ renderer: expectedMockRenderer });
       });
 
-      it('should remove leading whitespaces offset while keeping indent', () => {
+      it('should remove leading whitespaces offset while keeping indent', async () => {
 
         const mockRaw =  [
           '',               // wait for line with non-whitespaces
@@ -243,10 +280,12 @@ describe('MarkdownService', () => {
           '   * sub-list',
         ].join('\n');
 
-        expect(markdownService.parse(mockRaw)).toBe(marked.parse(expected));
+        const result = await markdownService.parse(mockRaw);
+
+        expect(result).toBe(await marked.parse(expected));
       });
 
-      it('should return line with indent correctly', () => {
+      it('should return line with indent correctly', async () => {
 
         const mockRaw =  [
           '   ',              // first line with only whitespaces should not determine indent offset
@@ -265,36 +304,42 @@ describe('MarkdownService', () => {
           'Lorem Ipsum',
         ].join('\n');
 
-        expect(markdownService.parse(mockRaw)).toBe(marked.parse(expected));
+        const result = await markdownService.parse(mockRaw);
+
+        expect(result).toBe(await marked.parse(expected));
       });
 
-      it('should decode HTML correctly when decodeHtml is true', () => {
+      it('should decode HTML correctly when decodeHtml is true', async () => {
 
         const mockRaw = '&lt;html&gt;';
         const expected = '<html>';
 
-        expect(markdownService.parse(mockRaw, { decodeHtml: true })).toBe(expected);
+        const result = await markdownService.parse(mockRaw, { decodeHtml: true });
+
+        expect(result).toBe(expected);
       });
 
-      it('should not decode HTML when decodeHtml is omitted/false/null/undefined', () => {
+      it('should not decode HTML when decodeHtml is omitted/false/null/undefined', async () => {
 
         const mockRaw = '&lt;html&gt;';
         const expected = '<p>&lt;html&gt;</p>\n';
 
-        expect(markdownService.parse(mockRaw)).toBe(expected);
-        expect(markdownService.parse(mockRaw, { decodeHtml: false })).toBe(expected);
-        expect(markdownService.parse(mockRaw, { decodeHtml: null! })).toBe(expected);
-        expect(markdownService.parse(mockRaw, { decodeHtml: undefined })).toBe(expected);
+        expect(await markdownService.parse(mockRaw)).toBe(expected);
+        expect(await markdownService.parse(mockRaw, { decodeHtml: false })).toBe(expected);
+        expect(await markdownService.parse(mockRaw, { decodeHtml: null! })).toBe(expected);
+        expect(await markdownService.parse(mockRaw, { decodeHtml: undefined })).toBe(expected);
       });
 
-      it('should not decode HTML when platform is not browser as it uses `document`', () => {
+      it('should not decode HTML when platform is not browser as it uses `document`', async () => {
 
         const mockRaw = '&lt;html&gt;';
         const expected = '<p>&lt;html&gt;</p>\n';
 
         markdownService['platform'] = 'server';
 
-        expect(markdownService.parse(mockRaw, { decodeHtml: true })).toBe(expected);
+        const result = await markdownService.parse(mockRaw, { decodeHtml: true });
+
+        expect(result).toBe(expected);
       });
 
       it('should throw when emoji is true but emoji-toolkit is not loaded', () => {
@@ -308,7 +353,7 @@ describe('MarkdownService', () => {
         expect(() => markdownService.parse('I :heart: ngx-markdown', { decodeHtml: false, emoji: true })).toThrowError(errorJoyPixelsNotLoaded);
       });
 
-      it('should call joypixels when emoji is true', () => {
+      it('should call joypixels when emoji is true', async () => {
 
         const mockRaw = 'I :heart: ngx-markdown';
         const mockEmojified = 'I ❤️ ngx-markdown';
@@ -317,7 +362,9 @@ describe('MarkdownService', () => {
 
         spyOn(joypixels, 'shortnameToUnicode').and.returnValue(mockEmojified);
 
-        expect(markdownService.parse(mockRaw, { decodeHtml: false, emoji: true })).toEqual(marked.parse(mockEmojified));
+        const result = await markdownService.parse(mockRaw, { decodeHtml: false, emoji: true });
+
+        expect(result).toEqual(await marked.parse(mockEmojified));
         expect(joypixels.shortnameToUnicode).toHaveBeenCalledWith(mockRaw);
       });
 
@@ -356,7 +403,7 @@ describe('MarkdownService', () => {
         expect(joypixels.shortnameToUnicode).not.toHaveBeenCalled();
       });
 
-      it('should parse markdown when platform is either browser/server to allow server-side rendering', () => {
+      it('should parse markdown when platform is either browser/server to allow server-side rendering', async () => {
 
         const mockRaw = '### Markdown-x';
 
@@ -365,22 +412,22 @@ describe('MarkdownService', () => {
           'server',
         ];
 
-        useCases.forEach(platform => {
+        for (const platform of useCases) {
           markdownService['platform'] = platform;
 
-          expect(() => markdownService.parse(mockRaw)).not.toThrowError();
-          expect(markdownService.parse(mockRaw)).toBe(marked.parse(mockRaw));
-        });
+          expect(async () => await markdownService.parse(mockRaw)).not.toThrowError();
+          expect(await markdownService.parse(mockRaw)).toBe(await marked.parse(mockRaw));
+        }
       });
 
-      it('should return inline parsed markdown when inline is true', () => {
+      it('should return inline parsed markdown when inline is true', async () => {
 
         const mockRaw = '### Markdown-x';
 
-        expect(markdownService.parse(mockRaw, { inline: true })).toBe(marked.parseInline(mockRaw));
+        expect(await markdownService.parse(mockRaw, { inline: true })).toBe(await marked.parseInline(mockRaw));
       });
 
-      it('should return parsed markdown when inline is omitted/false/null/undefined', () => {
+      it('should return parsed markdown when inline is omitted/false/null/undefined', async () => {
 
         const mockRaw = '### Markdown-x';
 
@@ -391,9 +438,9 @@ describe('MarkdownService', () => {
           () => markdownService.parse(mockRaw, { inline: undefined }),
         ];
 
-        useCases.forEach(func => {
-          expect(func()).toBe(marked.parse(mockRaw));
-        });
+        for (const func of useCases) {
+          expect(await func()).toBe(await marked.parse(mockRaw));
+        }
       });
 
       it('should provide markedOptions correctly when parsing', () => {
@@ -436,19 +483,19 @@ describe('MarkdownService', () => {
         expect(markedUseSpy).toHaveBeenCalledWith({ renderer: expectedMockRenderer });
       });
 
-      it('should return empty string when raw is null/undefined/empty', () => {
+      it('should return empty string when raw is null/undefined/empty', async () => {
 
-        expect(markdownService.parse(null!)).toBe('');
-        expect(markdownService.parse(undefined!)).toBe('');
-        expect(markdownService.parse('')).toBe('');
+        expect(await markdownService.parse(null!)).toBe('');
+        expect(await markdownService.parse(undefined!)).toBe('');
+        expect(await markdownService.parse('')).toBe('');
       });
 
-      it('should not sanitize parsed markdown', () => {
+      it('should not sanitize parsed markdown', async () => {
 
         const mockRaw = '### Markdown-x';
-        const unsanitized = marked.parse(mockRaw);
+        const unsanitized = await marked.parse(mockRaw);
 
-        expect(markdownService.parse(mockRaw, { decodeHtml: false })).toBe(unsanitized);
+        expect(await markdownService.parse(mockRaw, { decodeHtml: false })).toBe(unsanitized);
       });
     });
 
