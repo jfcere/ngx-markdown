@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout/flex';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -36,6 +36,8 @@ import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
   ],
 })
 export default class PluginsComponent implements OnInit {
+  private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private snackbar = inject(MatSnackBar);
 
   readonly clipboardButton = ClipboardButtonComponent;
 
@@ -65,11 +67,6 @@ graph TD;
   };
 
   headings: Element[] | undefined;
-
-  constructor(
-    private elementRef: ElementRef<HTMLElement>,
-    private snackbar: MatSnackBar,
-  ) { }
 
   ngOnInit(): void {
     this.setHeadings();

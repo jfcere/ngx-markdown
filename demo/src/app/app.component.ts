@@ -1,5 +1,5 @@
 import { DOCUMENT, NgFor } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, Inject, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout/flex';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,6 +30,9 @@ import { isTheme, Theme } from './app.models';
   ],
 })
 export class AppComponent implements OnInit {
+  private document = inject(DOCUMENT);
+  private anchorService = inject(AnchorService);
+  private router = inject(Router);
 
   private readonly stickyClassName = 'mat-mdc-tab-nav-bar--sticky';
 
@@ -61,11 +64,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private anchorService: AnchorService,
-    private router: Router,
-  ) {
+  constructor() {
     this.routes = this.router.config.filter(route => route.data && route.data['label']);
   }
 

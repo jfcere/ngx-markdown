@@ -322,7 +322,7 @@ describe('MarkdownModule', () => {
       fixture.detectChanges();
       tick();
 
-      const title = (fixture.nativeElement as HTMLElement).textContent!.trim();
+      const title = (fixture.nativeElement as HTMLElement).textContent.trim();
 
       expect(title).toEqual('Markdown Title');
     }));
