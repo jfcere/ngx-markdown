@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, SecurityContext } from '@angular/core';
+import { HttpBackend, HttpClient, HttpClientModule } from '@angular/common/http';
+import { Component, EnvironmentInjector, SecurityContext } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MarkedExtension } from 'marked';
 import { CLIPBOARD_OPTIONS, ClipboardOptions } from './clipboard-options';
@@ -40,8 +40,13 @@ describe('MarkdownModule', () => {
 
       TestBed.configureTestingModule({
         imports: [
-          HttpClientModule,
           MarkdownModule.forRoot({ loader: HttpClient }),
+        ],
+        providers: [
+          {
+            provide: HttpClient,
+            useClass: HttpClient,
+          },
         ],
       });
 
@@ -61,11 +66,17 @@ describe('MarkdownModule', () => {
             },
           }),
         ],
+        providers: [
+          {
+            provide: HttpClient,
+            useValue: undefined,
+          },
+        ],
       });
 
-      const httpClient = TestBed.inject(HttpClient, null, { optional: true });
+      const httpClient = TestBed.inject(HttpClient);
 
-      expect(httpClient).toBeNull();
+      expect(httpClient).toBeUndefined();
     });
 
     it('should not provide HttpClient when MarkdownModuleConfig is not provided', () => {
@@ -74,11 +85,17 @@ describe('MarkdownModule', () => {
         imports: [
           MarkdownModule.forRoot(),
         ],
+        providers: [
+          {
+            provide: HttpClient,
+            useValue: undefined,
+          },
+        ],
       });
 
-      const httpClient = TestBed.inject(HttpClient, null, { optional: true });
+      const httpClient = TestBed.inject(HttpClient);
 
-      expect(httpClient).toBeNull();
+      expect(httpClient).toBeUndefined();
     });
 
     it('should provide ClipboardOptions when MarkdownModuleConfig is provided with clipboardOptions', () => {
@@ -311,6 +328,12 @@ describe('MarkdownModule', () => {
           CommonModule,
           MarkdownModule.forRoot(),
           HostComponent,
+        ],
+        providers: [
+          {
+            provide: HttpClient,
+            useValue: undefined,
+          },
         ],
       }).compileComponents();
     });

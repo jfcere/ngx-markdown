@@ -24,18 +24,19 @@ describe('MarkdownPipe', () => {
         MarkdownModule.forRoot(),
       ],
       providers: [
+        MarkdownPipe,
         { provide: ElementRef, useValue: elementRefSpy },
         { provide: ViewContainerRef, useValue: viewContainerRefSpy },
       ],
     });
+
+    pipe = TestBed.inject(MarkdownPipe);
 
     elementRef = TestBed.inject(ElementRef);
     domSanitizer = TestBed.inject(DomSanitizer);
     markdownService = TestBed.inject(MarkdownService);
     viewContainerRef = TestBed.inject(ViewContainerRef);
     zone = TestBed.inject(NgZone);
-
-    pipe = new MarkdownPipe(domSanitizer, elementRef, markdownService, viewContainerRef, zone);
   });
 
   it('should return empty string when value is null/undefined', async () => {
