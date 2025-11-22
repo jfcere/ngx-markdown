@@ -41,6 +41,7 @@ chrome-profiler-events*.json
 /libpeerconnection.log
 /package
 /typings
+__screenshots__/
 yarn.lock
 test-results.xml
 eslint.xml
