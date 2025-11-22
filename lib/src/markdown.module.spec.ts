@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { HttpBackend, HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, EnvironmentInjector, SecurityContext } from '@angular/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Component, SecurityContext } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MarkedExtension } from 'marked';
 import { CLIPBOARD_OPTIONS, ClipboardOptions } from './clipboard-options';
