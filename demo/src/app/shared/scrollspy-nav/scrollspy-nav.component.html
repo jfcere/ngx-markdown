@@ -1,5 +1,7 @@
 <ul class="scrollspy-nav">
-  <li *ngFor="let heading of headings">
-    <a routerLink="." [fragment]="heading.id">{{ heading.innerHTML }}</a>
-  </li>
+  @for (heading of headings; track heading) {
+    <li>
+      <a routerLink="." [fragment]="heading.id">{{ heading.innerHTML }}</a>
+    </li>
+  }
 </ul>

@@ -14,16 +14,15 @@ import { SANITIZE } from './sanitize-options';
 @Component({
   selector: 'markdown-host',
   template: `
-    <div *ngIf="src; else dataTemplate">
-      <markdown [src]="src"></markdown>
-    </div>
-
-    <ng-template #dataTemplate>
+    @if (src) {
+      <div>
+        <markdown [src]="src"></markdown>
+      </div>
+    } @else {
       <markdown [data]="markdown"></markdown>
-    </ng-template>
+    }
   `,
   imports: [
-    CommonModule,
     MarkdownComponent,
   ],
 })

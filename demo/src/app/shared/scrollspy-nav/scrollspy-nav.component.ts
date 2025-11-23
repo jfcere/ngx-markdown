@@ -1,4 +1,3 @@
-import { NgFor } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, inject, Input, NgZone, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import Gumshoe from 'gumshoejs';
@@ -10,7 +9,6 @@ import { first } from 'rxjs/operators';
   styleUrls: ['./scrollspy-nav.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    NgFor,
     RouterLink,
   ],
 })

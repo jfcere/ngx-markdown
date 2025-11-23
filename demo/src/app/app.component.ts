@@ -1,4 +1,4 @@
-import { DOCUMENT, NgFor } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout/flex';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,7 +23,6 @@ import { isTheme, Theme } from './app.models';
     MatIconModule,
     MatTabsModule,
     MatToolbarModule,
-    NgFor,
     RouterLink,
     RouterLinkActive,
     RouterOutlet,
