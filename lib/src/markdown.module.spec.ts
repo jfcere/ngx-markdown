@@ -1,37 +1,21 @@
-import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, SecurityContext } from '@angular/core';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { createEnvironmentInjector, EnvironmentInjector, importProvidersFrom, ModuleWithProviders, SecurityContext } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { MarkedExtension } from 'marked';
 import { CLIPBOARD_OPTIONS, ClipboardOptions } from './clipboard-options';
-import { MarkdownComponent } from './markdown.component';
 import { MarkdownModule } from './markdown.module';
-import { errorSrcWithoutHttpClient } from './markdown.service';
 import { MARKED_EXTENSIONS } from './marked-extensions';
 import { MARKED_OPTIONS, MarkedOptions } from './marked-options';
 import { SANITIZE } from './sanitize-options';
 
-@Component({
-  selector: 'markdown-host',
-  template: `
-    @if (src) {
-      <div>
-        <markdown [src]="src"></markdown>
-      </div>
-    } @else {
-      <markdown [data]="markdown"></markdown>
-    }
-  `,
-  imports: [
-    MarkdownComponent,
-  ],
-})
-class HostComponent {
-  markdown = '# Markdown Title';
-  src: string | undefined;
-}
-
 describe('MarkdownModule', () => {
+
+  function createInjectorForModule(markdownModule: ModuleWithProviders<MarkdownModule>): EnvironmentInjector {
+    const environmentProviders = importProvidersFrom(markdownModule);
+    const parentInjector = undefined as unknown as EnvironmentInjector;
+
+    return createEnvironmentInjector([environmentProviders], parentInjector);
+  }
 
   describe('forRoot', () => {
 
@@ -39,13 +23,8 @@ describe('MarkdownModule', () => {
 
       TestBed.configureTestingModule({
         imports: [
+          HttpClientModule,
           MarkdownModule.forRoot({ loader: HttpClient }),
-        ],
-        providers: [
-          {
-            provide: HttpClient,
-            useClass: HttpClient,
-          },
         ],
       });
 
@@ -56,45 +35,29 @@ describe('MarkdownModule', () => {
 
     it('should not provide HttpClient when MarkdownModuleConfig is provided without loader', () => {
 
-      TestBed.configureTestingModule({
-        imports: [
-          MarkdownModule.forRoot({
-            markedOptions: {
-              provide: MARKED_OPTIONS,
-              useValue: {},
-            },
-          }),
-        ],
-        providers: [
-          {
-            provide: HttpClient,
-            useValue: undefined,
+      const injector = createInjectorForModule(
+        MarkdownModule.forRoot({
+          markedOptions: {
+            provide: MARKED_OPTIONS,
+            useValue: {},
           },
-        ],
-      });
+        }),
+      );
 
-      const httpClient = TestBed.inject(HttpClient);
+      const httpClient = injector.get(HttpClient, null, { optional: true });
 
-      expect(httpClient).toBeUndefined();
+      expect(httpClient).toBeNull();
     });
 
     it('should not provide HttpClient when MarkdownModuleConfig is not provided', () => {
 
-      TestBed.configureTestingModule({
-        imports: [
-          MarkdownModule.forRoot(),
-        ],
-        providers: [
-          {
-            provide: HttpClient,
-            useValue: undefined,
-          },
-        ],
-      });
+      const injector = createInjectorForModule(
+        MarkdownModule.forRoot(),
+      );
 
-      const httpClient = TestBed.inject(HttpClient);
+      const httpClient = injector.get(HttpClient, null, { optional: true });
 
-      expect(httpClient).toBeUndefined();
+      expect(httpClient).toBeNull();
     });
 
     it('should provide ClipboardOptions when MarkdownModuleConfig is provided with clipboardOptions', () => {
@@ -316,46 +279,6 @@ describe('MarkdownModule', () => {
       expect(clipboardOptions).toEqual(mockClipboardOptions);
       expect(markedOptions).toEqual(mockMarkedOptions);
       expect(sanitize).toBe(SecurityContext.NONE);
-    });
-  });
-
-  describe('without HttpClient', () => {
-
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [
-          CommonModule,
-          MarkdownModule.forRoot(),
-          HostComponent,
-        ],
-        providers: [
-          {
-            provide: HttpClient,
-            useValue: undefined,
-          },
-        ],
-      }).compileComponents();
-    });
-
-    it('should render the markdown if not passing src attribute', fakeAsync(() => {
-
-      const fixture = TestBed.createComponent(HostComponent);
-
-      fixture.detectChanges();
-      tick();
-
-      const title = (fixture.nativeElement as HTMLElement).textContent.trim();
-
-      expect(title).toEqual('Markdown Title');
-    }));
-
-    it('should throw an error when using src attribute', () => {
-
-      const fixture = TestBed.createComponent(HostComponent);
-
-      fixture.componentInstance.src = '/some/path/to/file.md';
-
-      expect(() => fixture.detectChanges()).toThrowError(errorSrcWithoutHttpClient);
     });
   });
 });

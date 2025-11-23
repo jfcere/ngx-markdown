@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 
+import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ComponentRef, EmbeddedViewRef, SecurityContext, TemplateRef, ViewContainerRef, ViewRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -15,6 +16,7 @@ import {
   errorJoyPixelsNotLoaded,
   errorKatexNotLoaded,
   errorMermaidNotLoaded,
+  errorSrcWithoutHttpClient,
   ExtendedRenderer,
   MarkdownService,
   ParseOptions,
@@ -1301,6 +1303,29 @@ describe('MarkdownService', () => {
           Prism.highlightAllUnder.calls.reset();
         });
       });
+    });
+  });
+
+  describe('without HttpClient provider', () => {
+
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          MarkdownModule.forRoot(),
+        ],
+        providers: [
+          { provide: HttpClient, useValue: null },
+        ],
+      });
+
+      markdownService = TestBed.inject(MarkdownService);
+    });
+
+    it('should throw an error when using src attribute', () => {
+
+      const mockSrc = 'file-x.md';
+
+      expect(() => markdownService.getSource(mockSrc)).toThrowError(errorSrcWithoutHttpClient);
     });
   });
 });
