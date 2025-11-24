@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -10,10 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   imports: [MatButtonModule],
 })
 export class ClipboardButtonComponent {
-
-  constructor(
-    private snackbar: MatSnackBar,
-  ) { }
+  private snackbar = inject(MatSnackBar);
 
   onCopyToClipboard(): void {
     this.snackbar.open('Copied to clipboard via component!', undefined, {

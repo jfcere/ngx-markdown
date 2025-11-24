@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout/flex';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,6 +26,8 @@ import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
   ],
 })
 export default class BindingsComponent implements OnInit {
+  private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private rawLoaderService = inject(HttpRawLoaderService);
 
   // remote url
   demoPython$ = this.rawLoaderService.get('app/bindings/remote/demo.py');
@@ -61,11 +63,6 @@ export class MarkdownDemoComponent {
 }`;
 
   headings: Element[] | undefined;
-
-  constructor(
-    private elementRef: ElementRef<HTMLElement>,
-    private rawLoaderService: HttpRawLoaderService,
-  ) { }
 
   ngOnInit(): void {
     this.setHeadings();

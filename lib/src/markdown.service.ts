@@ -1,14 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import {
-  EmbeddedViewRef,
-  Inject,
-  Injectable,
-  Optional,
-  PLATFORM_ID,
-  SecurityContext,
-  ViewContainerRef,
-} from '@angular/core';
+import { EmbeddedViewRef, inject, Injectable, PLATFORM_ID, SecurityContext, ViewContainerRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { marked, MarkedExtension, Renderer } from 'marked';
 import { Observable, Subject } from 'rxjs';
@@ -20,7 +12,7 @@ import { MARKED_EXTENSIONS } from './marked-extensions';
 import { MARKED_OPTIONS, MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
 import { MERMAID_OPTIONS, MermaidAPI } from './mermaid-options';
-import { isSanitizeFunction, SANITIZE, SanitizeFunction } from './sanitize-options';
+import { isSanitizeFunction, SANITIZE } from './sanitize-options';
 
 // clipboard
 declare let ClipboardJS: {
@@ -83,6 +75,13 @@ export class ExtendedRenderer extends Renderer {
 
 @Injectable()
 export class MarkdownService {
+  private clipboardOptions = inject(CLIPBOARD_OPTIONS, { optional: true });
+  private extensions = inject<MarkedExtension[]>(MARKED_EXTENSIONS, { optional: true });
+  private http = inject(HttpClient, { optional: true });
+  private mermaidOptions = inject(MERMAID_OPTIONS, { optional: true });
+  private platform = inject(PLATFORM_ID);
+  private sanitize = inject(SANITIZE);
+  private sanitizer = inject(DomSanitizer);
 
   private readonly DEFAULT_MARKED_OPTIONS: MarkedOptions = {
     renderer: new MarkedRenderer(),
@@ -128,10 +127,10 @@ export class MarkdownService {
     mermaidOptions: undefined,
   };
 
-  private _options: MarkedOptions | undefined;
+  private _options: MarkedOptions | null = null;
 
   get options(): MarkedOptions { return this._options!; }
-  set options(value: MarkedOptions | undefined) {
+  set options(value: MarkedOptions | null) {
     this._options = { ...this.DEFAULT_MARKED_OPTIONS, ...value };
   }
 
@@ -143,17 +142,8 @@ export class MarkdownService {
   private readonly _reload$ = new Subject<void>();
   readonly reload$ = this._reload$.asObservable();
 
-  constructor(
-    @Inject(CLIPBOARD_OPTIONS) @Optional() private clipboardOptions: ClipboardOptions,
-    @Inject(MARKED_EXTENSIONS) @Optional() private extensions: MarkedExtension[],
-    @Inject(MARKED_OPTIONS) @Optional() options: MarkedOptions,
-    @Inject(MERMAID_OPTIONS) @Optional() private mermaidOptions: MermaidAPI.MermaidConfig,
-    @Inject(PLATFORM_ID) private platform: Object,
-    @Inject(SANITIZE) private sanitize: SecurityContext | SanitizeFunction,
-    @Optional() private http: HttpClient,
-    private sanitizer: DomSanitizer,
-  ) {
-    this.options = options;
+  constructor() {
+    this.options = inject<MarkedOptions>(MARKED_OPTIONS, { optional: true });
   }
 
   parse(markdown: string, parseOptions: ParseOptions = this.DEFAULT_PARSE_OPTIONS): string | Promise<string> {
@@ -266,7 +256,7 @@ export class MarkdownService {
       return renderer;
     }
 
-    if (this.extensions?.length > 0) {
+    if (this.extensions && this.extensions.length > 0) {
       marked.use(...this.extensions);
     }
 

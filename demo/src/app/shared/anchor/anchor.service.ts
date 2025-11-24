@@ -1,5 +1,5 @@
 import { LocationStrategy, ViewportScroller } from '@angular/common';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 
 /**
@@ -33,13 +33,10 @@ import { ActivatedRoute, Router, UrlTree } from '@angular/router';
  */
 @Injectable({ providedIn: 'root' })
 export class AnchorService {
-
-  constructor(
-    private locationStrategy: LocationStrategy,
-    private route: ActivatedRoute,
-    private router: Router,
-    private viewportScroller: ViewportScroller,
-  ) { }
+  private locationStrategy = inject(LocationStrategy);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private viewportScroller = inject(ViewportScroller);
 
   /**
    * Intercept clicks on `HTMLAnchorElement` to use `Router.navigate()`

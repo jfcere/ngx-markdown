@@ -1,16 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnDestroy,
-  Output,
-  TemplateRef,
-  Type,
-  ViewContainerRef,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnDestroy, Output, TemplateRef, Type, ViewContainerRef } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ClipboardRenderOptions } from './clipboard-options';
@@ -25,6 +13,9 @@ import { PrismPlugin } from './prism-plugin';
   template: '<ng-content></ng-content>',
 })
 export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
+  element = inject<ElementRef<HTMLElement>>(ElementRef);
+  markdownService = inject(MarkdownService);
+  viewContainerRef = inject(ViewContainerRef);
 
   protected static ngAcceptInputType_clipboard: boolean | '';
   protected static ngAcceptInputType_emoji: boolean | '';
@@ -114,12 +105,6 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   private _mermaid = false;
 
   private readonly destroyed$ = new Subject<void>();
-
-  constructor(
-    public element: ElementRef<HTMLElement>,
-    public markdownService: MarkdownService,
-    public viewContainerRef: ViewContainerRef,
-  ) { }
 
   ngOnChanges(): void {
     this.loadContent();

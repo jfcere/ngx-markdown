@@ -1,4 +1,4 @@
-import { ElementRef, NgZone, Pipe, PipeTransform, ViewContainerRef } from '@angular/core';
+import { ElementRef, inject, NgZone, Pipe, PipeTransform, ViewContainerRef } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { first } from 'rxjs/operators';
 import { MarkdownService, ParseOptions, RenderOptions } from './markdown.service';
@@ -9,14 +9,11 @@ export type MarkdownPipeOptions = ParseOptions & RenderOptions;
   name: 'markdown',
 })
 export class MarkdownPipe implements PipeTransform {
-
-  constructor(
-    private domSanitizer: DomSanitizer,
-    private elementRef: ElementRef<HTMLElement>,
-    private markdownService: MarkdownService,
-    private viewContainerRef: ViewContainerRef,
-    private zone: NgZone,
-  ) { }
+  private domSanitizer = inject(DomSanitizer);
+  private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private markdownService = inject(MarkdownService);
+  private viewContainerRef = inject(ViewContainerRef);
+  private zone = inject(NgZone);
 
   async transform(value: string, options?: MarkdownPipeOptions): Promise<SafeHtml> {
     if (value == null) {

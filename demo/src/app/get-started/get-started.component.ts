@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject } from '@angular/core';
 import { MarkdownComponent } from 'ngx-markdown';
 import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
 
@@ -13,12 +13,9 @@ import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
   ],
 })
 export default class GetStartedComponent {
+  private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
   headings: Element[] | undefined;
-
-  constructor(
-    private elementRef: ElementRef<HTMLElement>,
-  ) { }
 
   onLoad(): void {
     this.stripContent();

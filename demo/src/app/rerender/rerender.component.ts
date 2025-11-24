@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, OnDestroy, OnInit } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout/flex';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -21,6 +21,8 @@ import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
   ],
 })
 export default class RerenderComponent implements OnInit, OnDestroy {
+  private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private markdownService = inject(MarkdownService);
 
   // property to handle override as per marked documentation, if a renderer
   // function returns `false` it will fallback to previous implementation
@@ -58,11 +60,6 @@ const language = 'typescript';
 
 ### Blockquote
 > Blockquote to the max`;
-
-  constructor(
-    private elementRef: ElementRef<HTMLElement>,
-    private markdownService: MarkdownService,
-  ) { }
 
   ngOnInit(): void {
     this.setHeadings();

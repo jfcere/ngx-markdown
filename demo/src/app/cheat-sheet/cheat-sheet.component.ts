@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit } from '@angular/core';
 import { MarkdownComponent } from 'ngx-markdown';
 import { HttpRawLoaderService } from '@shared/http-raw-loader';
 import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
@@ -16,6 +16,8 @@ import { ScrollspyNavLayoutComponent } from '@shared/scrollspy-nav-layout';
   ],
 })
 export default class CheatSheetComponent implements OnInit {
+  private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private rawLoaderService = inject(HttpRawLoaderService);
 
   blockquotes$ = this.rawLoaderService.get('app/cheat-sheet/remote/blockquotes.md');
   codeAndSynthaxHighlighting$ = this.rawLoaderService.get('app/cheat-sheet/remote/code-and-synthax-highlighting.md');
@@ -29,11 +31,6 @@ export default class CheatSheetComponent implements OnInit {
   tables$ = this.rawLoaderService.get('app/cheat-sheet/remote/tables.md');
 
   headings: Element[] | undefined;
-
-  constructor(
-    private elementRef: ElementRef<HTMLElement>,
-    private rawLoaderService: HttpRawLoaderService,
-  ) { }
 
   ngOnInit(): void {
     this.setHeadings();

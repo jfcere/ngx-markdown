@@ -7,14 +7,18 @@
         Crafted with :heart: by **jfcere** <span style="margin:0 .15em;">•</span> Follow on [GitHub](https://github.com/jfcere)
       </markdown>
     </div>
-    <button class="scrollup-button--fixed" mat-fab color="accent" fxHide.gt-sm (click)="onScrollUp()" *ngIf="showScrollUpButton" [@zoomAnimation]>
-      <img src="icon-chevron-up.svg">
-    </button>
+    @if (showScrollUpButton) {
+      <button class="scrollup-button--fixed" mat-fab color="accent" fxHide.gt-sm (click)="onScrollUp()" [@zoomAnimation]>
+        <img src="icon-chevron-up.svg">
+      </button>
+    }
   </div>
   <div class="sticky" fxLayout="column" fxFlex="1 0 180px" fxFlexAlign="flex-start" fxHide.lt-md>
     <app-scrollspy-nav [headings]="headings"></app-scrollspy-nav>
-    <button class="scrollup-button" mat-mini-fab color="accent" (click)="onScrollUp()" *ngIf="showScrollUpButton" [@zoomAnimation]>
-      <img src="icon-chevron-up.svg">
-    </button>
+    @if (showScrollUpButton) {
+      <button class="scrollup-button" mat-mini-fab color="accent" (click)="onScrollUp()" [@zoomAnimation]>
+        <img src="icon-chevron-up.svg">
+      </button>
+    }
   </div>
 </div>
