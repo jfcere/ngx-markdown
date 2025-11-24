@@ -80,7 +80,7 @@ export class MarkdownService {
   private http = inject(HttpClient, { optional: true });
   private mermaidOptions = inject(MERMAID_OPTIONS, { optional: true });
   private platform = inject(PLATFORM_ID);
-  private sanitize = inject(SANITIZE, { optional: true });
+  private sanitize = inject(SANITIZE);
   private sanitizer = inject(DomSanitizer);
 
   private readonly DEFAULT_MARKED_OPTIONS: MarkedOptions = {
@@ -126,8 +126,6 @@ export class MarkdownService {
     mermaid: false,
     mermaidOptions: undefined,
   };
-
-  private readonly DEFAULT_SECURITY_CONTEXT = SecurityContext.HTML;
 
   private _options: MarkedOptions | null = null;
 
@@ -464,7 +462,7 @@ export class MarkdownService {
       return this.sanitize(await html);
     }
     if (this.sanitize !== SecurityContext.NONE) {
-      return this.sanitizer.sanitize(this.sanitize ?? this.DEFAULT_SECURITY_CONTEXT, html) ?? '';
+      return this.sanitizer.sanitize(this.sanitize, html) ?? '';
     }
     return html;
   }

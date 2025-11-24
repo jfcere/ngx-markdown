@@ -36,7 +36,7 @@ describe('MarkdownService', () => {
   let domSanitizer: DomSanitizer;
   let http: HttpTestingController;
   let markdownService: MarkdownService;
-  let sanitize: SecurityContext | SanitizeFunction | null;
+  let sanitize: SecurityContext | SanitizeFunction;
   let viewContainerRef: ViewContainerRef;
 
   const mockExtensions = [
@@ -44,34 +44,6 @@ describe('MarkdownService', () => {
     { name: 'mock-extension-two' } as MarkedExtension,
   ];
   const viewContainerRefSpy = jasmine.createSpyObj<ViewContainerRef>(['createComponent', 'createEmbeddedView']);
-
-  describe('without sanitize provider', () => {
-
-    describe('parse', () => {
-      beforeEach(() => {
-        TestBed.configureTestingModule({
-          imports: [
-            MarkdownModule.forRoot(),
-          ],
-        });
-
-        domSanitizer = TestBed.inject(DomSanitizer);
-        markdownService = TestBed.inject(MarkdownService);
-        sanitize = TestBed.inject(SANITIZE, null, { optional: true });
-      });
-
-      it('should sanitize parsed markdown using default HTML security context', async () => {
-
-        const mockRaw = '### Markdown-x';
-        const sanitized = domSanitizer.sanitize(SecurityContext.HTML, await marked.parse(mockRaw))!;
-        const unsanitized = await marked.parse(mockRaw);
-
-        expect(sanitize).toBeNull();
-        expect(await markdownService.parse(mockRaw)).toBe(sanitized);
-        expect(await markdownService.parse(mockRaw)).not.toBe(unsanitized);
-      });
-    });
-  });
 
   describe('with sanitize function', () => {
 
@@ -83,7 +55,7 @@ describe('MarkdownService', () => {
 
         TestBed.configureTestingModule({
           imports: [
-            MarkdownModule.forRoot({ sanitize: { provide: SANITIZE, useValue: sanitizeFuncSpy } }),
+            MarkdownModule.forRoot({ sanitize: sanitizeFuncSpy }),
           ],
         });
 
@@ -117,7 +89,7 @@ describe('MarkdownService', () => {
       beforeEach(() => {
         TestBed.configureTestingModule({
           imports: [
-            MarkdownModule.forRoot({ sanitize: { provide: SANITIZE, useValue: SecurityContext.HTML } }),
+            MarkdownModule.forRoot({ sanitize: SecurityContext.HTML }),
           ],
         });
 
@@ -169,7 +141,7 @@ describe('MarkdownService', () => {
               { provide: MARKED_EXTENSIONS, useValue: mockExtensions[0], multi: true },
               { provide: MARKED_EXTENSIONS, useFactory: () => mockExtensions[1], multi: true },
             ],
-            sanitize: { provide: SANITIZE, useValue: SecurityContext.NONE },
+            sanitize: SecurityContext.NONE,
           }),
         ],
         providers: [
