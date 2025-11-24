@@ -1,5 +1,5 @@
 import { Provider } from '@angular/core';
-import { getSanitizeProvider, MarkdownModuleConfig } from './markdown.module';
+import { MarkdownModuleConfig } from './markdown.module';
 import { MarkdownService } from './markdown.service';
 
 export function provideMarkdown(markdownModuleConfig?: MarkdownModuleConfig): Provider[] {
@@ -10,6 +10,6 @@ export function provideMarkdown(markdownModuleConfig?: MarkdownModuleConfig): Pr
     markdownModuleConfig?.markedOptions ?? [],
     markdownModuleConfig?.mermaidOptions ?? [],
     markdownModuleConfig?.markedExtensions ?? [],
-    getSanitizeProvider(markdownModuleConfig?.sanitize) ?? [],
+    markdownModuleConfig?.sanitize ?? [],
   ];
 }

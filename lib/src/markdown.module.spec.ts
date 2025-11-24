@@ -202,7 +202,7 @@ describe('MarkdownModule', () => {
 
       TestBed.configureTestingModule({
         imports: [
-          MarkdownModule.forRoot({ sanitize: SecurityContext.NONE }),
+          MarkdownModule.forRoot({ sanitize: { provide: SANITIZE, useValue: SecurityContext.NONE } }),
         ],
       });
 
@@ -211,7 +211,7 @@ describe('MarkdownModule', () => {
       expect(sanitize).toBe(SecurityContext.NONE);
     });
 
-    it('should provide default SecurityContext when MarkdownModuleConfig is provided without sanitize', () => {
+    it('should not provide SecurityContext when MarkdownModuleConfig is provided without sanitize', () => {
 
       TestBed.configureTestingModule({
         imports: [
@@ -224,12 +224,12 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const sanitize = TestBed.inject(SANITIZE);
+      const sanitize = TestBed.inject(SANITIZE, null, { optional: true });
 
-      expect(sanitize).toBe(SecurityContext.HTML);
+      expect(sanitize).toBeNull();
     });
 
-    it('should provide default SecurityContext when MarkdownModuleConfig is not provided', () => {
+    it('should not provide SecurityContext when MarkdownModuleConfig is not provided', () => {
 
       TestBed.configureTestingModule({
         imports: [
@@ -237,9 +237,9 @@ describe('MarkdownModule', () => {
         ],
       });
 
-      const sanitize = TestBed.inject(SANITIZE);
+      const sanitize = TestBed.inject(SANITIZE, null, { optional: true });
 
-      expect(sanitize).toBe(SecurityContext.HTML);
+      expect(sanitize).toBeNull();
     });
   });
 
@@ -264,7 +264,7 @@ describe('MarkdownModule', () => {
             loader: HttpClient,
             clipboardOptions: { provide: CLIPBOARD_OPTIONS, useValue: mockClipboardOptions },
             markedOptions: { provide: MARKED_OPTIONS, useValue: mockMarkedOptions },
-            sanitize: SecurityContext.NONE,
+            sanitize: { provide: SANITIZE, useValue: SecurityContext.NONE },
           }),
           MarkdownModule.forChild(),
         ],
