@@ -1,105 +1,127 @@
 version: 2.1
+
 orbs:
   browser-tools: circleci/browser-tools@1.4.8
+
 jobs:
   build:
     docker:
       - image: cimg/node:20.19-browsers
     steps:
-      # Install chrome via browser tools
+      # Install Chrome and Chromedriver via browser-tools orb
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
-      # Checkout the code from the branch into the working_directory
+
+      # Checkout the source code
       - checkout
+
       # Restore dependencies from cache
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
+
       # Install dependencies
       - run:
           name: Install dependencies
           command: npm ci
-      # Cache dependencies if they don't exist
+
+      # Cache dependencies
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
             - ~/.npm
             - ./node_modules
-      # Test the source code
+
+      # Run tests
       - run:
           name: Test
           command: npm run test -- --watch=false --code-coverage --no-progress
+
+      # Store test results and coverage
       - store_artifacts:
           path: test-results.xml
           prefix: tests
       - store_artifacts:
           path: coverage
           prefix: coverage
-      # Upload coverage artifacts to Coveralls
+
+      # Upload coverage to Coveralls
       - run:
           name: Push coverage artifacts
           command: npm run coveralls
-      # Type check the source code
+
+      # Type-check
       - run:
           name: Type-Check
           command: npm run type-check:lib
-      # Lint the source code
+
+      # Lint
       - run:
           name: Lint
           command: npm run lint:ci
       - store_artifacts:
           path: eslint.xml
           prefix: lint
+
       # Build the source code
       - run:
           name: Build
           command: npm run build:lib
+
   deploy:
     docker:
       - image: cimg/node:20.19
     steps:
-      # Checkout the code from the branch into the working_directory
+      # Checkout the source code
       - checkout
+
       # Restore dependencies from cache
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
+
       # Install dependencies
       - run:
           name: Install dependencies
           command: npm ci
-      # Cache local dependencies if they don't exist
+
+      # Cache dependencies
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
             - ~/.npm
             - ./node_modules
-      # Build demo
+
+      # Build demo for gh-pages
       - run:
-          name: Build
+          name: Build gh-pages demo
           command: |
             npm run gh-pages:build
             npm run gh-pages:postbuild
-      # Deploy demo to Github Pages
+
+      # Deploy demo to GitHub Pages
       - run:
           name: Deploy to gh-pages
           command: npm run gh-pages:deploy
 
 workflows:
-  version: 2
   build_and_deploy:
+    # Do not run workflow when the pipeline is triggered from gh-pages branch
+    when:
+      not:
+        equal: [gh-pages, << pipeline.git.branch >>]
+
     jobs:
-      # Build for all branches other than gh-pages and for all tags
+      # Build for all branches and all tags
       - build:
           filters:
             tags:
               only: /.*/
-            branches:
-              ignore: gh-pages
-      # Deploy for tags marked by a version number only on master branch
+
+      # Deploy only for version tags (vX.Y.Z) on the master branch
       - deploy:
           requires:
             - build
           filters:
-            tags:
-              only: /v[0-9]+(\.[0-9]+)*/
             branches:
               only: master
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
