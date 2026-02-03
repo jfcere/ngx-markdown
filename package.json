@@ -61,7 +61,7 @@
     "@angular/router": "^21.0.0",
     "clipboard": "^2.0.11",
     "dompurify": "^3.2.6",
-    "emoji-toolkit": "^9.0.0",
+    "emoji-toolkit": "^10.0.0",
     "gumshoejs": "^5.1.2",
     "hammerjs": "~2.0.8",
     "katex": "^0.16.2",
