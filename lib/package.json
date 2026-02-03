@@ -39,7 +39,7 @@
   },
   "optionalDependencies": {
     "clipboard": "^2.0.11",
-    "emoji-toolkit": ">= 8.0.0 < 10.0.0",
+    "emoji-toolkit": ">= 8.0.0 < 11.0.0",
     "katex": "^0.16.0",
     "mermaid": ">= 10.6.0 < 12.0.0",
     "prismjs": "^1.30.0"
