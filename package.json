@@ -43,7 +43,7 @@
     "coveralls": "cat \"./coverage/lcov.info\" | \"./node_modules/coveralls/bin/coveralls.js\"",
     "gh-pages:build": "npm run build:demo -- --aot --base-href /ngx-markdown/",
     "gh-pages:postbuild": "cpy ./dist/demo/3rdpartylicenses.txt ./dist/demo/browser --flat",
-    "gh-pages:deploy": "angular-cli-ghpages --dir=dist/demo/browser --name=CircleCI --email=circleci@email.com --no-silent",
+    "gh-pages:deploy": "angular-cli-ghpages --dir=dist/demo/browser --message=\"Auto-generated commit [skip ci]\" --name=CircleCI --email=circleci@email.com --no-silent",
     "publish:lib": "npm publish ./dist/lib",
     "publish:beta": "npm publish ./dist/lib --tag beta"
   },
