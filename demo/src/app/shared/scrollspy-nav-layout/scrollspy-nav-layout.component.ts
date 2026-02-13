@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, HostListener, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  inject,
+  Input,
+  NgZone,
+} from '@angular/core';
 import { ExtendedModule } from '@angular/flex-layout/extended';
 import { FlexModule } from '@angular/flex-layout/flex';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,15 +31,28 @@ import { ZOOM_ANIMATION } from './scrollspy-nav-layout.animation';
   ],
 })
 export class ScrollspyNavLayoutComponent {
-
   @Input()
   headings: Element[] | undefined;
 
   showScrollUpButton = false;
 
-  @HostListener('window:scroll')
-  onWindowScroll(): void {
-    this.showScrollUpButton = Math.ceil(window.pageYOffset) > 64;
+  constructor() {
+    const ngZone = inject(NgZone);
+    const destroyRef = inject(DestroyRef);
+    const ref = inject(ChangeDetectorRef);
+
+    ngZone.runOutsideAngular(() => {
+      const onScroll = () => {
+        const showScrollUpButton = Math.ceil(window.pageYOffset) > 64;
+        if (this.showScrollUpButton === showScrollUpButton) return;
+        this.showScrollUpButton = showScrollUpButton;
+        ref.detectChanges();
+      };
+      window.addEventListener('scroll', onScroll);
+      destroyRef.onDestroy(() =>
+        window.removeEventListener('scroll', onScroll),
+      );
+    });
   }
 
   onScrollUp(): void {

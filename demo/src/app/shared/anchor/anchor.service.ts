@@ -1,5 +1,5 @@
 import { LocationStrategy, ViewportScroller } from '@angular/common';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, NgZone } from '@angular/core';
 import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 
 /**
@@ -37,6 +37,7 @@ export class AnchorService {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private viewportScroller = inject(ViewportScroller);
+  private ngZone = inject(NgZone);
 
   /**
    * Intercept clicks on `HTMLAnchorElement` to use `Router.navigate()`
@@ -64,7 +65,9 @@ export class AnchorService {
   navigate(url: string, replaceUrl = false): void {
     const urlTree = this.getUrlTree(url);
     this.router.navigated = false;
-    void this.router.navigateByUrl(urlTree, { replaceUrl });
+    this.ngZone.run(() => {
+      this.router.navigateByUrl(urlTree, { replaceUrl });
+    });
   }
 
   /**
@@ -101,9 +104,13 @@ export class AnchorService {
   }
 
   private getUrlTree(url: string): UrlTree {
-    const urlPath = this.stripFragment(url) || this.stripFragment(this.router.url);
+    const urlPath =
+      this.stripFragment(url) || this.stripFragment(this.router.url);
     const urlFragment = this.router.parseUrl(url).fragment || undefined;
-    return this.router.createUrlTree([urlPath], { relativeTo: this.route, fragment: urlFragment });
+    return this.router.createUrlTree([urlPath], {
+      relativeTo: this.route,
+      fragment: urlFragment,
+    });
   }
 
   private isExternalUrl(url: string): boolean {
@@ -111,7 +118,7 @@ export class AnchorService {
   }
 
   private isRouterLink(element: HTMLAnchorElement): boolean {
-    return element.getAttributeNames().some(n => n.startsWith('_ngcontent'));
+    return element.getAttributeNames().some((n) => n.startsWith('_ngcontent'));
   }
 
   private stripFragment(url: string): string {

@@ -1,18 +1,37 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnDestroy, Output, TemplateRef, Type, ViewContainerRef } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import {
+  AfterViewInit,
+  Component,
+  DestroyRef,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  NgZone,
+  OnChanges,
+  Output,
+  TemplateRef,
+  Type,
+  ViewContainerRef,
+} from '@angular/core';
+import { switchMap } from 'rxjs/operators';
 import { ClipboardRenderOptions } from './clipboard-options';
 import { KatexOptions } from './katex-options';
-import { MarkdownService, ParseOptions, RenderOptions } from './markdown.service';
+import {
+  MarkdownService,
+  ParseOptions,
+  RenderOptions,
+} from './markdown.service';
 import { MermaidAPI } from './mermaid-options';
 import { PrismPlugin } from './prism-plugin';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'markdown, [markdown]',
   template: '<ng-content></ng-content>',
 })
-export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
+export class MarkdownComponent implements OnChanges, AfterViewInit {
   element = inject<ElementRef<HTMLElement>>(ElementRef);
   markdownService = inject(MarkdownService);
   viewContainerRef = inject(ViewContainerRef);
@@ -29,59 +48,95 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input() src: string | null | undefined;
 
   @Input()
-  get disableSanitizer(): boolean { return this._disableSanitizer; }
-  set disableSanitizer(value: boolean) { this._disableSanitizer = this.coerceBooleanProperty(value); }
+  get disableSanitizer(): boolean {
+    return this._disableSanitizer;
+  }
+  set disableSanitizer(value: boolean) {
+    this._disableSanitizer = this.coerceBooleanProperty(value);
+  }
 
   @Input()
-  get inline(): boolean { return this._inline; }
-  set inline(value: boolean) { this._inline = this.coerceBooleanProperty(value); }
+  get inline(): boolean {
+    return this._inline;
+  }
+  set inline(value: boolean) {
+    this._inline = this.coerceBooleanProperty(value);
+  }
 
   // Plugin - clipboard
   @Input()
-  get clipboard(): boolean { return this._clipboard; }
-  set clipboard(value: boolean) { this._clipboard = this.coerceBooleanProperty(value); }
+  get clipboard(): boolean {
+    return this._clipboard;
+  }
+  set clipboard(value: boolean) {
+    this._clipboard = this.coerceBooleanProperty(value);
+  }
 
   @Input() clipboardButtonComponent: Type<unknown> | undefined;
   @Input() clipboardButtonTemplate: TemplateRef<unknown> | undefined;
 
   // Plugin - emoji
   @Input()
-  get emoji(): boolean { return this._emoji; }
-  set emoji(value: boolean) { this._emoji = this.coerceBooleanProperty(value); }
+  get emoji(): boolean {
+    return this._emoji;
+  }
+  set emoji(value: boolean) {
+    this._emoji = this.coerceBooleanProperty(value);
+  }
 
   // Plugin - katex
   @Input()
-  get katex(): boolean { return this._katex; }
-  set katex(value: boolean) { this._katex = this.coerceBooleanProperty(value); }
+  get katex(): boolean {
+    return this._katex;
+  }
+  set katex(value: boolean) {
+    this._katex = this.coerceBooleanProperty(value);
+  }
 
   @Input() katexOptions: KatexOptions | undefined;
 
   // Plugin - mermaid
   @Input()
-  get mermaid(): boolean { return this._mermaid; }
-  set mermaid(value: boolean) { this._mermaid = this.coerceBooleanProperty(value); }
+  get mermaid(): boolean {
+    return this._mermaid;
+  }
+  set mermaid(value: boolean) {
+    this._mermaid = this.coerceBooleanProperty(value);
+  }
 
   @Input() mermaidOptions: MermaidAPI.MermaidConfig | undefined;
 
   // Plugin - lineHighlight
   @Input()
-  get lineHighlight(): boolean { return this._lineHighlight; }
-  set lineHighlight(value: boolean) { this._lineHighlight = this.coerceBooleanProperty(value); }
+  get lineHighlight(): boolean {
+    return this._lineHighlight;
+  }
+  set lineHighlight(value: boolean) {
+    this._lineHighlight = this.coerceBooleanProperty(value);
+  }
 
   @Input() line: string | string[] | undefined;
   @Input() lineOffset: number | undefined;
 
   // Plugin - lineNumbers
   @Input()
-  get lineNumbers(): boolean { return this._lineNumbers; }
-  set lineNumbers(value: boolean) { this._lineNumbers = this.coerceBooleanProperty(value); }
+  get lineNumbers(): boolean {
+    return this._lineNumbers;
+  }
+  set lineNumbers(value: boolean) {
+    this._lineNumbers = this.coerceBooleanProperty(value);
+  }
 
   @Input() start: number | undefined;
 
   // Plugin - commandLine
   @Input()
-  get commandLine(): boolean { return this._commandLine; }
-  set commandLine(value: boolean) { this._commandLine = this.coerceBooleanProperty(value); }
+  get commandLine(): boolean {
+    return this._commandLine;
+  }
+  set commandLine(value: boolean) {
+    this._commandLine = this.coerceBooleanProperty(value);
+  }
 
   @Input() filterOutput: string | undefined;
   @Input() host: string | undefined;
@@ -104,7 +159,14 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   private _lineNumbers = false;
   private _mermaid = false;
 
-  private readonly destroyed$ = new Subject<void>();
+  private readonly handleSrc$ = new Subject<string>();
+
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly ngZone = inject(NgZone);
+
+  constructor() {
+    this.setupHandleSrcListener();
+  }
 
   ngOnChanges(): void {
     this.loadContent();
@@ -116,7 +178,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
       return;
     }
     if (this.src != null) {
-      this.handleSrc();
+      this.handleSrc$.next(this.src);
       return;
     }
   }
@@ -127,16 +189,15 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
     }
 
     this.markdownService.reload$
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.loadContent());
   }
 
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-  }
-
-  async render(markdown: string, decodeHtml = false): Promise<void> {
+  async render(
+    markdown: string,
+    decodeHtml = false,
+    abortController?: AbortController,
+  ): Promise<void> {
     const parsedOptions: ParseOptions = {
       decodeHtml,
       inline: this.inline,
@@ -154,13 +215,26 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
       mermaidOptions: this.mermaidOptions,
     };
 
+    // Parse markdown (potentially expensive operation).
     const parsed = await this.markdownService.parse(markdown, parsedOptions);
 
+    // Early exit if the operation was aborted while parsing.
+    // Without this check, we'd waste CPU updating the DOM for a stale/cancelled request.
+    // This is the cancellation checkpoint - prevents executing the expensive DOM operations below.
+    if (abortController?.signal.aborted) {
+      return;
+    }
+
+    // Only proceed with DOM updates if not aborted.
     this.element.nativeElement.innerHTML = parsed;
 
     this.handlePlugins();
 
-    this.markdownService.render(this.element.nativeElement, renderOptions, this.viewContainerRef);
+    this.markdownService.render(
+      this.element.nativeElement,
+      renderOptions,
+      this.viewContainerRef,
+    );
 
     this.ready.emit();
   }
@@ -183,14 +257,50 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
     this.render(this.data!);
   }
 
-  private handleSrc(): void {
-    this.markdownService
-      .getSource(this.src!)
+  private setupHandleSrcListener(): void {
+    this.handleSrc$
+      .pipe(
+        // `switchMap` ensures that if `src` changes rapidly, only the latest request matters.
+        // Previous in-flight requests are cancelled automatically.
+        // We wait for `render()` to complete before emitting the markdown to subscribers.
+        switchMap((src) =>
+          this.markdownService.getSource(src).pipe(
+            switchMap((markdown) => {
+              // Wrap the async `render()` in an Observable to make it cancellable.
+              // CRITICAL: Promises/async functions are NOT cancellable by default in JavaScript.
+              // Once a Promise starts, it runs to completion even if no one is waiting for it.
+              // By wrapping in an Observable with a teardown function, we can:
+              // 1. Signal cancellation via AbortController when switchMap cancels
+              // 2. Prevent unnecessary DOM updates if the user navigates away or src changes
+              // 3. Abort expensive async operations (parsing, rendering) mid-flight
+              return new Observable<string>((subscriber) => {
+                const abortController = new AbortController();
+                this.render(
+                  markdown,
+                  /* decodeHtml */ false,
+                  abortController,
+                ).then(() => subscriber.next(markdown));
+
+                // Teardown function: called when switchMap cancels this inner Observable.
+                // This aborts the render operation, preventing wasted work.
+                return () => abortController.abort();
+              });
+            }),
+          ),
+        ),
+        takeUntilDestroyed(this.destroyRef),
+      )
       .subscribe({
-        next: markdown => {
-          this.render(markdown).then(() => {
-            this.load.emit(markdown);
-          });
+        next: (markdown) => {
+          // Re-enter Angular's zone ONLY if someone is listening to the load event.
+          // This completes the zone.js optimization loop:
+          // 1. HTTP request ran OUTSIDE zone (from `getSource`) - no CD during XHR
+          // 2. Now we run INSIDE zone to emit the event - triggers ONE CD cycle
+          // This ensures `@Output()` emissions properly trigger change detection in parent components,
+          // but only when necessary (i.e., when observers actually exist).
+          if (this.load.observers.length) {
+            this.ngZone.run(() => this.load.emit(markdown));
+          }
         },
         error: (error: string | Error) => this.error.emit(error),
       });
@@ -212,15 +322,23 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
       });
     }
     if (this.lineHighlight) {
-      this.setPluginOptions(this.element.nativeElement, { dataLine: this.line, dataLineOffset: this.lineOffset });
+      this.setPluginOptions(this.element.nativeElement, {
+        dataLine: this.line,
+        dataLineOffset: this.lineOffset,
+      });
     }
     if (this.lineNumbers) {
       this.setPluginClass(this.element.nativeElement, PrismPlugin.LineNumbers);
-      this.setPluginOptions(this.element.nativeElement, { dataStart: this.start });
+      this.setPluginOptions(this.element.nativeElement, {
+        dataStart: this.start,
+      });
     }
   }
 
-  private setPluginClass(element: HTMLElement, plugin: string | string[]): void {
+  private setPluginClass(
+    element: HTMLElement,
+    plugin: string | string[],
+  ): void {
     const preElements = element.querySelectorAll('pre');
     for (let i = 0; i < preElements.length; i++) {
       const classes = plugin instanceof Array ? plugin : [plugin];
@@ -228,14 +346,19 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
     }
   }
 
-  private setPluginOptions(element: HTMLElement, options: Record<string, number | string | string[] | undefined>): void {
+  private setPluginOptions(
+    element: HTMLElement,
+    options: Record<string, number | string | string[] | undefined>,
+  ): void {
     const preElements = element.querySelectorAll('pre');
     for (let i = 0; i < preElements.length; i++) {
-      Object.keys(options).forEach(option => {
+      Object.keys(options).forEach((option) => {
         const attributeValue = options[option];
         if (attributeValue) {
           const attributeName = this.toLispCase(option);
-          preElements.item(i).setAttribute(attributeName, attributeValue.toString());
+          preElements
+            .item(i)
+            .setAttribute(attributeName, attributeValue.toString());
         }
       });
     }
@@ -248,7 +371,10 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
     }
     let str = value.toString();
     for (let i = 0, n = upperChars.length; i < n; i++) {
-      str = str.replace(new RegExp(upperChars[i]), '-' + upperChars[i].toLowerCase());
+      str = str.replace(
+        new RegExp(upperChars[i]),
+        '-' + upperChars[i].toLowerCase(),
+      );
     }
     if (str.slice(0, 1) === '-') {
       str = str.slice(1);
