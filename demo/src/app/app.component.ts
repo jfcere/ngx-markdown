@@ -1,11 +1,25 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  NgZone,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FlexModule } from '@angular/flex-layout/flex';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { Route, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import {
+  Route,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
 import { AnchorService } from '@shared/anchor';
 import { ROUTE_ANIMATION } from './app.animation';
 import { DEFAULT_THEME, LOCAL_STORAGE_THEME_KEY } from './app.constant';
@@ -41,12 +55,10 @@ export class AppComponent implements OnInit {
   @ViewChild('tabHeader', { read: ElementRef, static: true })
   tabHeader: ElementRef<HTMLElement> | undefined;
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: Event): void {
+  onDocumentClick(event: MouseEvent): void {
     this.anchorService.interceptClick(event);
   }
 
-  @HostListener('window:scroll')
   onWindowScroll(): void {
     if (this.tabHeader == null) {
       return;
@@ -64,18 +76,24 @@ export class AppComponent implements OnInit {
   }
 
   constructor() {
-    this.routes = this.router.config.filter(route => route.data && route.data['label']);
+    this.routes = this.router.config.filter(
+      (route) => route.data && route.data['label'],
+    );
+
+    const ngZone = inject(NgZone);
+    ngZone.runOutsideAngular(() => {
+      window.addEventListener('scroll', () => this.onWindowScroll());
+      this.document.addEventListener('click', (event) =>
+        this.onDocumentClick(event),
+      );
+    });
   }
 
   ngOnInit(): void {
     this.anchorService.setOffset([0, 64]);
 
     const storedTheme = localStorage.getItem(LOCAL_STORAGE_THEME_KEY);
-    this.setTheme(
-      isTheme(storedTheme)
-        ? storedTheme
-        : DEFAULT_THEME,
-    );
+    this.setTheme(isTheme(storedTheme) ? storedTheme : DEFAULT_THEME);
   }
 
   handleFragment(): void {
@@ -94,16 +112,14 @@ export class AppComponent implements OnInit {
   }
 
   getRouteAnimation(outlet: RouterOutlet): string {
-    return outlet
-      && outlet.activatedRouteData
-      && outlet.activatedRouteData['label'] as string;
+    return (
+      outlet &&
+      outlet.activatedRouteData &&
+      (outlet.activatedRouteData['label'] as string)
+    );
   }
 
   toggleTheme(): void {
-    this.setTheme(
-      this.theme === Theme.Light
-        ? Theme.Dark
-        : Theme.Light,
-    );
+    this.setTheme(this.theme === Theme.Light ? Theme.Dark : Theme.Light);
   }
 }
