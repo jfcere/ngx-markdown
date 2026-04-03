@@ -58,8 +58,6 @@ To add ngx-markdown along with the required marked library to your `package.json
 npm install ngx-markdown marked@^17.0.0 --save
 ```
 
-Optional features (syntax highlight with Prism.js, emoji, KaTeX, Mermaid, and copy-to-clipboard) are declared as **optional peer dependencies**. They are not installed automatically; add the packages you need to your `package.json` when you enable those features (see the sections below). If you previously relied on them being pulled in transitively through ngx-markdown, install them explicitly.
-
 ### Syntax highlight
 
 > :bell: Syntax highlight is **optional**, skip this step if you are not planning to use it
