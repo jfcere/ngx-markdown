@@ -2,7 +2,7 @@
 
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { ComponentRef, EmbeddedViewRef, SecurityContext, TemplateRef, ViewContainerRef, ViewRef } from '@angular/core';
+import { ComponentRef, EmbeddedViewRef, SecurityContext, TemplateRef, ViewContainerRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { marked, MarkedExtension, Tokens } from 'marked';
@@ -555,8 +555,8 @@ describe('MarkdownService', () => {
           hostView: {
             rootNodes: [rootNode],
             onDestroy: (callback) => {},
-          } as EmbeddedViewRef<unknown> as ViewRef,
-        } as ComponentRef<unknown>;
+          } as EmbeddedViewRef<unknown>,
+        } as unknown as ComponentRef<unknown>;
 
         return { componentRef, rootNode };
       }
@@ -1286,7 +1286,6 @@ describe('MarkdownService', () => {
       });
 
       it('should call Prism when available and element parameter is ommited/null/undefined', () => {
-
         window['Prism'] = { highlightAllUnder: () => {} };
 
         spyOn(Prism, 'highlightAllUnder');
