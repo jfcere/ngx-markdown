@@ -64,8 +64,13 @@ jobs:
 
       # Build the source code
       - run:
-          name: Build
+          name: Build lib
           command: npm run build:lib
+
+      # Build demo for gh-pages
+      - run:
+          name: Build gh-pages demo
+          command: npm run gh-pages:build
 
   deploy:
     docker:
