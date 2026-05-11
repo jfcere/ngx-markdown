@@ -67,6 +67,11 @@ jobs:
           name: Build
           command: npm run build:lib
 
+      # Build demo for gh-pages
+      - run:
+          name: Build gh-pages demo
+          command: npm run gh-pages:build
+
   deploy:
     docker:
       - image: cimg/node:20.19
