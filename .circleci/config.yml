@@ -1,40 +1,49 @@
 version: 2.1
 
 orbs:
-  browser-tools: circleci/browser-tools@1.4.8
+  browser-tools: circleci/browser-tools@2.4.2
 
 jobs:
   build:
     docker:
-      - image: cimg/node:20.19-browsers
+      - image: cimg/node:24.15-browsers
     steps:
-      # Install Chrome and Chromedriver via browser-tools orb
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
-
       # Checkout the source code
       - checkout
 
       # Restore dependencies from cache
       - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+          key: dependency-cache-{{ checksum "pnpm-lock.yaml" }}
+
+      # https://pnpm.io/continuous-integration#circleci
+      - run:
+          name: Install pnpm package manager
+          command: |
+            sudo npm install --global corepack@latest
+            sudo corepack enable
+            corepack prepare pnpm@latest-10 --activate
+            pnpm config set store-dir .pnpm-store
+            pnpm config set minimum-release-age 0
 
       # Install dependencies
       - run:
           name: Install dependencies
-          command: npm ci
+          command: pnpm install --frozen-lockfile
 
       # Cache dependencies
       - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+          key: dependency-cache-{{ checksum "pnpm-lock.yaml" }}
           paths:
-            - ~/.npm
-            - ./node_modules
+            - .pnpm-store
+
+      # Install headless Chrome
+      - browser-tools/install_chrome
+      - browser-tools/install_chromedriver
 
       # Run tests
       - run:
           name: Test
-          command: npm run test -- --watch=false --code-coverage --no-progress
+          command: pnpm test --watch=false --code-coverage --no-progress --browsers=ChromeHeadless
 
       # Store test results and coverage
       - store_artifacts:
@@ -47,17 +56,17 @@ jobs:
       # Upload coverage to Coveralls
       - run:
           name: Push coverage artifacts
-          command: npm run coveralls
+          command: pnpm coveralls
 
       # Type-check
       - run:
           name: Type-Check
-          command: npm run type-check:lib
+          command: pnpm type-check:lib
 
       # Lint
       - run:
           name: Lint
-          command: npm run lint:ci
+          command: pnpm lint:ci
       - store_artifacts:
           path: eslint.xml
           prefix: lint
@@ -65,47 +74,46 @@ jobs:
       # Build the source code
       - run:
           name: Build lib
-          command: npm run build:lib
+          command: pnpm build:lib
 
       # Build demo for gh-pages
       - run:
           name: Build gh-pages demo
-          command: npm run gh-pages:build
+          command: pnpm gh-pages:build
 
   deploy:
     docker:
-      - image: cimg/node:20.19
+      - image: cimg/node:24.15-browsers
     steps:
       # Checkout the source code
       - checkout
 
       # Restore dependencies from cache
       - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+          key: dependency-cache-{{ checksum "pnpm-lock.yaml" }}
 
       # Install dependencies
       - run:
           name: Install dependencies
-          command: npm ci
+          command: pnpm install --frozen-lockfile
 
       # Cache dependencies
       - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+          key: dependency-cache-{{ checksum "pnpm-lock.yaml" }}
           paths:
-            - ~/.npm
-            - ./node_modules
+            - .pnpm-store
 
       # Build demo for gh-pages
       - run:
           name: Build gh-pages demo
           command: |
-            npm run gh-pages:build
-            npm run gh-pages:postbuild
+            pnpm gh-pages:build
+            pnpm gh-pages:postbuild
 
       # Deploy demo to GitHub Pages
       - run:
           name: Deploy to gh-pages
-          command: npm run gh-pages:deploy
+          command: pnpm gh-pages:deploy
 
 workflows:
   build_and_deploy:
