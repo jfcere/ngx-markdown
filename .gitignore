@@ -44,6 +44,7 @@ chrome-profiler-events*.json
 /typings
 __screenshots__/
 yarn.lock
+package-lock.json
 test-results.xml
 eslint.xml
 *.log

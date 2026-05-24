@@ -1,0 +1,8 @@
+ignoredBuiltDependencies:
+  - lmdb
+  - msgpackr-extract
+  - unrs-resolver
+
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - esbuild
