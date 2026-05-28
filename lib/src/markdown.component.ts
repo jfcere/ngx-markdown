@@ -1,9 +1,29 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnDestroy, Output, TemplateRef, Type, ViewContainerRef } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  OnChanges,
+  OnDestroy,
+  Output,
+  Renderer2,
+  SecurityContext,
+  TemplateRef,
+  Type,
+  ViewContainerRef,
+} from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ClipboardRenderOptions } from './clipboard-options';
 import { KatexOptions } from './katex-options';
-import { MarkdownService, ParseOptions, RenderOptions } from './markdown.service';
+import {
+  MarkdownService,
+  ParseOptions,
+  RenderOptions,
+} from './markdown.service';
 import { MermaidAPI } from './mermaid-options';
 import { PrismPlugin } from './prism-plugin';
 
@@ -13,6 +33,8 @@ import { PrismPlugin } from './prism-plugin';
   template: '<ng-content></ng-content>',
 })
 export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
+  private _sanitizer = inject(DomSanitizer);
+  private _renderer = inject(Renderer2);
   element = inject<ElementRef<HTMLElement>>(ElementRef);
   markdownService = inject(MarkdownService);
   viewContainerRef = inject(ViewContainerRef);
@@ -29,59 +51,95 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input() src: string | null | undefined;
 
   @Input()
-  get disableSanitizer(): boolean { return this._disableSanitizer; }
-  set disableSanitizer(value: boolean) { this._disableSanitizer = this.coerceBooleanProperty(value); }
+  get disableSanitizer(): boolean {
+    return this._disableSanitizer;
+  }
+  set disableSanitizer(value: boolean) {
+    this._disableSanitizer = this.coerceBooleanProperty(value);
+  }
 
   @Input()
-  get inline(): boolean { return this._inline; }
-  set inline(value: boolean) { this._inline = this.coerceBooleanProperty(value); }
+  get inline(): boolean {
+    return this._inline;
+  }
+  set inline(value: boolean) {
+    this._inline = this.coerceBooleanProperty(value);
+  }
 
   // Plugin - clipboard
   @Input()
-  get clipboard(): boolean { return this._clipboard; }
-  set clipboard(value: boolean) { this._clipboard = this.coerceBooleanProperty(value); }
+  get clipboard(): boolean {
+    return this._clipboard;
+  }
+  set clipboard(value: boolean) {
+    this._clipboard = this.coerceBooleanProperty(value);
+  }
 
   @Input() clipboardButtonComponent: Type<unknown> | undefined;
   @Input() clipboardButtonTemplate: TemplateRef<unknown> | undefined;
 
   // Plugin - emoji
   @Input()
-  get emoji(): boolean { return this._emoji; }
-  set emoji(value: boolean) { this._emoji = this.coerceBooleanProperty(value); }
+  get emoji(): boolean {
+    return this._emoji;
+  }
+  set emoji(value: boolean) {
+    this._emoji = this.coerceBooleanProperty(value);
+  }
 
   // Plugin - katex
   @Input()
-  get katex(): boolean { return this._katex; }
-  set katex(value: boolean) { this._katex = this.coerceBooleanProperty(value); }
+  get katex(): boolean {
+    return this._katex;
+  }
+  set katex(value: boolean) {
+    this._katex = this.coerceBooleanProperty(value);
+  }
 
   @Input() katexOptions: KatexOptions | undefined;
 
   // Plugin - mermaid
   @Input()
-  get mermaid(): boolean { return this._mermaid; }
-  set mermaid(value: boolean) { this._mermaid = this.coerceBooleanProperty(value); }
+  get mermaid(): boolean {
+    return this._mermaid;
+  }
+  set mermaid(value: boolean) {
+    this._mermaid = this.coerceBooleanProperty(value);
+  }
 
   @Input() mermaidOptions: MermaidAPI.MermaidConfig | undefined;
 
   // Plugin - lineHighlight
   @Input()
-  get lineHighlight(): boolean { return this._lineHighlight; }
-  set lineHighlight(value: boolean) { this._lineHighlight = this.coerceBooleanProperty(value); }
+  get lineHighlight(): boolean {
+    return this._lineHighlight;
+  }
+  set lineHighlight(value: boolean) {
+    this._lineHighlight = this.coerceBooleanProperty(value);
+  }
 
   @Input() line: string | string[] | undefined;
   @Input() lineOffset: number | undefined;
 
   // Plugin - lineNumbers
   @Input()
-  get lineNumbers(): boolean { return this._lineNumbers; }
-  set lineNumbers(value: boolean) { this._lineNumbers = this.coerceBooleanProperty(value); }
+  get lineNumbers(): boolean {
+    return this._lineNumbers;
+  }
+  set lineNumbers(value: boolean) {
+    this._lineNumbers = this.coerceBooleanProperty(value);
+  }
 
   @Input() start: number | undefined;
 
   // Plugin - commandLine
   @Input()
-  get commandLine(): boolean { return this._commandLine; }
-  set commandLine(value: boolean) { this._commandLine = this.coerceBooleanProperty(value); }
+  get commandLine(): boolean {
+    return this._commandLine;
+  }
+  set commandLine(value: boolean) {
+    this._commandLine = this.coerceBooleanProperty(value);
+  }
 
   @Input() filterOutput: string | undefined;
   @Input() host: string | undefined;
@@ -136,7 +194,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
     this.destroyed$.complete();
   }
 
-  async render(markdown: string, decodeHtml = false): Promise<void> {
+  async render(markdown: string, decodeHtml = false) {
     const parsedOptions: ParseOptions = {
       decodeHtml,
       inline: this.inline,
@@ -156,12 +214,33 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
 
     const parsed = await this.markdownService.parse(markdown, parsedOptions);
 
-    this.element.nativeElement.innerHTML = parsed;
+    // Use DomSanitizer to produce a SafeHtml value, then write it via
+    // Renderer2.setProperty instead of direct innerHTML assignment.
+    // Direct innerHTML assignment bypasses Angular's XSS protections even
+    // when the content has been through DomSanitizer.sanitize(), because
+    // the sanitized string is still written to the DOM outside of Angular's
+    // template pipeline. Renderer2.setProperty goes through Angular's
+    // security layer and correctly handles SafeHtml values.
+    //
+    // If disableSanitizer is explicitly set, bypassSecurityTrustHtml is used
+    // — this should only ever be done with fully trusted content (e.g.
+    // content authored internally, never user-supplied input).
+    const safeHtml = this.disableSanitizer
+      ? this._sanitizer.bypassSecurityTrustHtml(parsed)
+      : (this._sanitizer.sanitize(SecurityContext.HTML, parsed) ?? '');
+
+    this._renderer.setProperty(
+      this.element.nativeElement,
+      'innerHTML',
+      safeHtml,
+    );
 
     this.handlePlugins();
-
-    this.markdownService.render(this.element.nativeElement, renderOptions, this.viewContainerRef);
-
+    this.markdownService.render(
+      this.element.nativeElement,
+      renderOptions,
+      this.viewContainerRef,
+    );
     this.ready.emit();
   }
 
@@ -184,16 +263,14 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   }
 
   private handleSrc(): void {
-    this.markdownService
-      .getSource(this.src!)
-      .subscribe({
-        next: markdown => {
-          this.render(markdown).then(() => {
-            this.load.emit(markdown);
-          });
-        },
-        error: (error: string | Error) => this.error.emit(error),
-      });
+    this.markdownService.getSource(this.src!).subscribe({
+      next: (markdown) => {
+        this.render(markdown).then(() => {
+          this.load.emit(markdown);
+        });
+      },
+      error: (error: string | Error) => this.error.emit(error),
+    });
   }
 
   private handleTransclusion(): void {
@@ -212,15 +289,23 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
       });
     }
     if (this.lineHighlight) {
-      this.setPluginOptions(this.element.nativeElement, { dataLine: this.line, dataLineOffset: this.lineOffset });
+      this.setPluginOptions(this.element.nativeElement, {
+        dataLine: this.line,
+        dataLineOffset: this.lineOffset,
+      });
     }
     if (this.lineNumbers) {
       this.setPluginClass(this.element.nativeElement, PrismPlugin.LineNumbers);
-      this.setPluginOptions(this.element.nativeElement, { dataStart: this.start });
+      this.setPluginOptions(this.element.nativeElement, {
+        dataStart: this.start,
+      });
     }
   }
 
-  private setPluginClass(element: HTMLElement, plugin: string | string[]): void {
+  private setPluginClass(
+    element: HTMLElement,
+    plugin: string | string[],
+  ): void {
     const preElements = element.querySelectorAll('pre');
     for (let i = 0; i < preElements.length; i++) {
       const classes = plugin instanceof Array ? plugin : [plugin];
@@ -228,14 +313,19 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
     }
   }
 
-  private setPluginOptions(element: HTMLElement, options: Record<string, number | string | string[] | undefined>): void {
+  private setPluginOptions(
+    element: HTMLElement,
+    options: Record<string, number | string | string[] | undefined>,
+  ): void {
     const preElements = element.querySelectorAll('pre');
     for (let i = 0; i < preElements.length; i++) {
-      Object.keys(options).forEach(option => {
+      Object.keys(options).forEach((option) => {
         const attributeValue = options[option];
         if (attributeValue) {
           const attributeName = this.toLispCase(option);
-          preElements.item(i).setAttribute(attributeName, attributeValue.toString());
+          preElements
+            .item(i)
+            .setAttribute(attributeName, attributeValue.toString());
         }
       });
     }
@@ -248,7 +338,10 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
     }
     let str = value.toString();
     for (let i = 0, n = upperChars.length; i < n; i++) {
-      str = str.replace(new RegExp(upperChars[i]), '-' + upperChars[i].toLowerCase());
+      str = str.replace(
+        new RegExp(upperChars[i]),
+        '-' + upperChars[i].toLowerCase(),
+      );
     }
     if (str.slice(0, 1) === '-') {
       str = str.slice(1);
