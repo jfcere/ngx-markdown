@@ -36,7 +36,11 @@ jobs:
           name: Test
           command: npm run test -- --watch=false --code-coverage --no-progress
 
-      # Store test results and coverage
+      # Store test results for tests tab in CircleCI UI
+      - store_test_results:
+          path: test-results.xml
+
+      # Store downloadable artifacts
       - store_artifacts:
           path: test-results.xml
           prefix: tests
@@ -52,7 +56,7 @@ jobs:
       # Type-check
       - run:
           name: Type-Check
-          command: npm run type-check:lib
+          command: npm run type-check
 
       # Lint
       - run:
@@ -67,10 +71,12 @@ jobs:
           name: Build lib
           command: npm run build:lib
 
-      # Build demo for gh-pages
+      # Build demo for gh-pages (same as deploy to catch issues early)
       - run:
           name: Build gh-pages demo
-          command: npm run gh-pages:build
+          command: |
+            npm run gh-pages:build
+            npm run gh-pages:postbuild
 
   deploy:
     docker:
