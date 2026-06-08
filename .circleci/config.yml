@@ -1,16 +1,16 @@
 version: 2.1
 
 orbs:
-  browser-tools: circleci/browser-tools@1.4.8
+  browser-tools: circleci/browser-tools@2.4.2
 
 jobs:
   build:
     docker:
-      - image: cimg/node:20.19-browsers
+      - image: cimg/node:24.16-browsers
     steps:
       # Install Chrome and Chromedriver via browser-tools orb
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
+      - browser-tools/install_chrome
+      - browser-tools/install_chromedriver
 
       # Checkout the source code
       - checkout
