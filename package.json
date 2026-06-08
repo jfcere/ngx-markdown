@@ -90,6 +90,7 @@
     "eslint-formatter-checkstyle": "^8.40.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-import": "^2.31.0",
+    "istanbul-lib-instrument": "^6.0.3",
     "jasmine-core": "~5.7.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
