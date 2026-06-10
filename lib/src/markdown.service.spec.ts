@@ -548,14 +548,16 @@ describe('MarkdownService', () => {
       function mockComponentRef(): { componentRef: ComponentRef<unknown>; rootNode: HTMLElement; } {
         const rootNode = document.createElement('button');
 
+        const embeddedViewRef = {
+          rootNodes: [rootNode],
+          onDestroy: (callback) => {},
+        } as EmbeddedViewRef<unknown> as ViewRef;
+
         const componentRef = {
           changeDetectorRef: {
             markForCheck: () => {},
           },
-          hostView: {
-            rootNodes: [rootNode],
-            onDestroy: (callback) => {},
-          } as EmbeddedViewRef<unknown> as ViewRef,
+          hostView: embeddedViewRef,
         } as ComponentRef<unknown>;
 
         return { componentRef, rootNode };

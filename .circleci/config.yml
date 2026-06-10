@@ -1,16 +1,16 @@
 version: 2.1
 
 orbs:
-  browser-tools: circleci/browser-tools@1.4.8
+  browser-tools: circleci/browser-tools@2.4.2
 
 jobs:
   build:
     docker:
-      - image: cimg/node:20.19-browsers
+      - image: cimg/node:24.16-browsers
     steps:
       # Install Chrome and Chromedriver via browser-tools orb
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
+      - browser-tools/install_chrome
+      - browser-tools/install_chromedriver
 
       # Checkout the source code
       - checkout
@@ -36,7 +36,11 @@ jobs:
           name: Test
           command: npm run test -- --watch=false --code-coverage --no-progress
 
-      # Store test results and coverage
+      # Store test results for tests tab in CircleCI UI
+      - store_test_results:
+          path: test-results.xml
+
+      # Store downloadable artifacts
       - store_artifacts:
           path: test-results.xml
           prefix: tests
@@ -52,7 +56,7 @@ jobs:
       # Type-check
       - run:
           name: Type-Check
-          command: npm run type-check:lib
+          command: npm run type-check
 
       # Lint
       - run:
@@ -67,10 +71,12 @@ jobs:
           name: Build lib
           command: npm run build:lib
 
-      # Build demo for gh-pages
+      # Build demo for gh-pages (same as deploy to catch issues early)
       - run:
           name: Build gh-pages demo
-          command: npm run gh-pages:build
+          command: |
+            npm run gh-pages:build
+            npm run gh-pages:postbuild
 
   deploy:
     docker:
