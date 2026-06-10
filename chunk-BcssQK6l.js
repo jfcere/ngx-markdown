@@ -1,1 +1,0 @@
-import {h,r as rl,e as rw,_}from'./main-KA6DQZIU.js';var t=class t{constructor(){this.httpClient=h(rl);}get(r){return this.httpClient.get(r,{responseType:"text"}).pipe(rw())}};t.\u0275fac=function(s){return new(s||t)},t.\u0275prov=_({token:t,factory:t.\u0275fac,providedIn:"root"});var p=t;export{p};

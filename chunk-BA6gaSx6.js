@@ -1,4 +1,4 @@
-import {y as yr,Z as Zt,v as vr,_ as _n,a as at,F as Fi,i as it,I as Io,S as So,s as so}from'./chunk-BtKC-bEP.js';import {h,X,l as fE,L as Le,Z as Z4,H as H4,z as z4,G as G4,D as Dc,B as Bh,F as Fh,b as Gb,w as wT,P as PC,j as jc,S as Sb,f as fn,c as zb,d as BC}from'./main-KA6DQZIU.js';import {U,e as et}from'./chunk-5rUGPa-d.js';var l=class l{constructor(){this.elementRef=h(X);this.markdownService=h(fE);this.overrideEnabled=false;this._accentColor="";this.markdown=`## Markdown rulez!
+import {y as yr,Z as Zt,v as vr,_ as _n,a as at,F as Fi,i as it,I as Io,S as So,s as so}from'./chunk-vq4aiYt-.js';import {h,X,l as fE,L as Le,Z as Z4,H as H4,z as z4,G as G4,D as Dc,B as Bh,F as Fh,b as Gb,w as wT,P as PC,j as jc,S as Sb,f as fn,c as zb,d as BC}from'./main-GM4SH2N5.js';import {U,e as et}from'./chunk-CuRo2V91.js';var l=class l{constructor(){this.elementRef=h(X);this.markdownService=h(fE);this.overrideEnabled=false;this._accentColor="";this.markdown=`## Markdown rulez!
 ---
 
 ### Syntax highlight
