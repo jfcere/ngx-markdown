@@ -80,7 +80,7 @@ jobs:
 
   deploy:
     docker:
-      - image: cimg/node:20.19
+      - image: cimg/node:24.16-browsers
     steps:
       # Checkout the source code
       - checkout
