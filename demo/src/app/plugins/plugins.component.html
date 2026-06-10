@@ -283,21 +283,19 @@
       #### KaTeX files to include
       ```javascript
       node_modules/katex/dist/katex.min.css
-      node_modules/katex/dist/katex.min.js
-      node_modules/katex/dist/contrib/auto-render.min.js
       ```
 
       #### Directive
       `katex` - activate KaTeX plugin
 
       #### Attributes
-      `katexOptions` - combine [KaTeX options](https://katex.org/docs/options.html) and [Auto-Renderer options](https://katex.org/docs/autorender.html#api)<br>
+      `katexOptions` - [KaTeX options](https://katex.org/docs/options.html)<br>
 
       ### Example
     </markdown>
 
     <markdown>
-      You can render KaTex expression by adding `katex` directive on the `markdown` component/directive.
+      You can render LaTeX expression by adding `katex` directive on the `markdown` component/directive.
     </markdown>
 
     <markdown [src]="'app/plugins/remote/katex.html'"></markdown>
@@ -315,7 +313,7 @@
     </div>
 
     <markdown ngPreserveWhitespaces>
-      Optionally, you can specify both [KaTeX options](https://katex.org/docs/options.html) and [Auto-Renderer options](https://katex.org/docs/autorender.html#api) using `katexOptions` property.
+      Optionally, you can specify the [KaTeX options](https://katex.org/docs/options.html) at the component-level through `katexOptions` property.
 
       **example.component.ts**
       ```typescript

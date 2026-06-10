@@ -3,7 +3,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { of, throwError } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { ClipboardRenderOptions } from './clipboard-options';
-import { KatexOptions } from './katex-options';
+import { MarkedKatexOptions } from './katex-options';
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownModule } from './markdown.module';
 import { MarkdownService } from './markdown.service';
@@ -198,6 +198,8 @@ describe('MarkdownComponent', () => {
         decodeHtml: true,
         inline: true,
         emoji: false,
+        katex: false,
+        katexOptions: undefined,
         mermaid: false,
         disableSanitizer: true,
       });
@@ -208,7 +210,7 @@ describe('MarkdownComponent', () => {
       const raw = '### Raw';
       const parsed = '<h3>Compiled</h3>';
 
-      spyOn(markdownService, 'parse').and.returnValue(parsed);
+      spyOn(markdownService, 'parse').and.resolveTo(parsed);
 
       await component.render(raw, true);
 
@@ -296,10 +298,10 @@ describe('MarkdownComponent', () => {
         buttonTemplate: new class mockTemplateRef {
         } as TemplateRef<unknown>,
       };
-      const katexOptions: KatexOptions = { displayMode: true };
+      const katexOptions: MarkedKatexOptions = { displayMode: true };
       const mermaidOptions: MermaidAPI.MermaidConfig = { darkMode: true };
 
-      spyOn(markdownService, 'parse').and.returnValue(parsed);
+      spyOn(markdownService, 'parse').and.resolveTo(parsed);
       spyOn(markdownService, 'render');
 
       component.clipboard = true;
@@ -315,6 +317,8 @@ describe('MarkdownComponent', () => {
         decodeHtml: false,
         inline: false,
         emoji: false,
+        katex: true,
+        katexOptions: katexOptions,
         mermaid: true,
         disableSanitizer: false,
       });
@@ -324,8 +328,6 @@ describe('MarkdownComponent', () => {
         {
           clipboard: true,
           clipboardOptions: clipboardOptions,
-          katex: true,
-          katexOptions: katexOptions,
           mermaid: true,
           mermaidOptions: mermaidOptions,
         },
@@ -337,7 +339,7 @@ describe('MarkdownComponent', () => {
       const raw = '### Raw';
       const parsed = '<h3>Compiled</h3>';
 
-      spyOn(markdownService, 'parse').and.returnValue(parsed);
+      spyOn(markdownService, 'parse').and.resolveTo(parsed);
       spyOn(markdownService, 'render');
 
       component.clipboard = true;
@@ -347,6 +349,8 @@ describe('MarkdownComponent', () => {
         decodeHtml: false,
         inline: false,
         emoji: false,
+        katex: false,
+        katexOptions: undefined,
         mermaid: false,
         disableSanitizer: false,
       });
@@ -356,8 +360,6 @@ describe('MarkdownComponent', () => {
         {
           clipboard: true,
           clipboardOptions: undefined,
-          katex: false,
-          katexOptions: undefined,
           mermaid: false,
           mermaidOptions: undefined,
         },
@@ -369,7 +371,7 @@ describe('MarkdownComponent', () => {
       const markdown = '# Markdown';
       const parsed = '<h1 id="markdown">Markdown</h1>';
 
-      spyOn(markdownService, 'parse').and.returnValue(parsed);
+      spyOn(markdownService, 'parse').and.resolveTo(parsed);
       spyOn(markdownService, 'render');
 
       component.ready

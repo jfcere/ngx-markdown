@@ -2,12 +2,12 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { EmbeddedViewRef, inject, Injectable, PLATFORM_ID, SecurityContext, ViewContainerRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { marked, MarkedExtension, Renderer } from 'marked';
+import { marked, MarkedExtension, Renderer, TokenizerExtension, TokenizerThis } from 'marked';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { CLIPBOARD_OPTIONS, ClipboardOptions, ClipboardRenderOptions } from './clipboard-options';
-import { KatexOptions } from './katex-options';
+import { KATEX_OPTIONS, MarkedKatexOptions } from './katex-options';
 import { MARKED_EXTENSIONS } from './marked-extensions';
 import { MARKED_OPTIONS, MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
@@ -29,8 +29,7 @@ declare let joypixels: {
 };
 
 // katex
-declare let katex: unknown;
-declare function renderMathInElement(elem: HTMLElement, options?: KatexOptions): void;
+type MarkedKatexExtension = typeof import('marked-katex-extension').default;
 
 // mermaid
 declare let mermaid: {
@@ -45,6 +44,7 @@ declare let Prism: {
 
 export const errorJoyPixelsNotLoaded = '[ngx-markdown] When using the `emoji` attribute you *have to* include Emoji-Toolkit files to `angular.json` or use imports. See README for more information';
 export const errorKatexNotLoaded = '[ngx-markdown] When using the `katex` attribute you *have to* include KaTeX files to `angular.json` or use imports. See README for more information';
+export const errorKatexExtensionNotLoaded = '[ngx-markdown] When using the `katex` attribute you *have to* include the `marked-katex-extension` package and its dependencies. See README for more information';
 export const errorMermaidNotLoaded = '[ngx-markdown] When using the `mermaid` attribute you *have to* include Mermaid files to `angular.json` or use imports. See README for more information';
 export const errorClipboardNotLoaded = '[ngx-markdown] When using the `clipboard` attribute you *have to* include Clipboard files to `angular.json` or use imports. See README for more information';
 export const errorClipboardViewContainerRequired = '[ngx-markdown] When using the `clipboard` attribute you *have to* provide the `viewContainerRef` parameter to `MarkdownService.render()` function';
@@ -54,6 +54,8 @@ export interface ParseOptions {
   decodeHtml?: boolean;
   inline?: boolean;
   emoji?: boolean;
+  katex?: boolean;
+  katexOptions?: MarkedKatexOptions;
   mermaid?: boolean;
   markedOptions?: MarkedOptions;
   disableSanitizer?: boolean;
@@ -62,14 +64,13 @@ export interface ParseOptions {
 export interface RenderOptions {
   clipboard?: boolean;
   clipboardOptions?: ClipboardRenderOptions;
-  katex?: boolean;
-  katexOptions?: KatexOptions;
   mermaid?: boolean;
   mermaidOptions?: MermaidAPI.MermaidConfig;
 }
 
 export class ExtendedRenderer extends Renderer {
   ɵNgxMarkdownRendererExtendedForExtensions = false;
+  ɵNgxMarkdownRendererExtendedForKatex = false;
   ɵNgxMarkdownRendererExtendedForMermaid = false;
 }
 
@@ -79,26 +80,16 @@ export class MarkdownService {
   private extensions = inject<MarkedExtension[]>(MARKED_EXTENSIONS, { optional: true });
   private http = inject(HttpClient, { optional: true });
   private mermaidOptions = inject(MERMAID_OPTIONS, { optional: true });
+  private katexOptions = inject(KATEX_OPTIONS, { optional: true });
   private platform = inject(PLATFORM_ID);
   private sanitize = inject(SANITIZE, { optional: true });
   private sanitizer = inject(DomSanitizer);
 
+  private katexGate: { enabled: boolean } = { enabled: false };
+  private markedKatex: MarkedKatexExtension | null = null;
+
   private readonly DEFAULT_MARKED_OPTIONS: MarkedOptions = {
     renderer: new MarkedRenderer(),
-  };
-
-  private readonly DEFAULT_KATEX_OPTIONS: KatexOptions = {
-    delimiters: [
-      { left: '$$', right: '$$', display: true },
-      { left: '$', right: '$', display: false },
-      { left: '\\(', right: '\\)', display: false },
-      { left: '\\begin{equation}', right: '\\end{equation}', display: true },
-      { left: '\\begin{align}', right: '\\end{align}', display: true },
-      { left: '\\begin{alignat}', right: '\\end{alignat}', display: true },
-      { left: '\\begin{gather}', right: '\\end{gather}', display: true },
-      { left: '\\begin{CD}', right: '\\end{CD}', display: true },
-      { left: '\\[', right: '\\]', display: true },
-    ],
   };
 
   private readonly DEFAULT_MERMAID_OPTIONS: MermaidAPI.MermaidConfig = {
@@ -113,6 +104,8 @@ export class MarkdownService {
     decodeHtml: false,
     inline: false,
     emoji: false,
+    katex: false,
+    katexOptions: undefined,
     mermaid: false,
     markedOptions: undefined,
     disableSanitizer: false,
@@ -121,8 +114,6 @@ export class MarkdownService {
   private readonly DEFAULT_RENDER_OPTIONS: RenderOptions = {
     clipboard: false,
     clipboardOptions: undefined,
-    katex: false,
-    katexOptions: undefined,
     mermaid: false,
     mermaidOptions: undefined,
   };
@@ -148,14 +139,18 @@ export class MarkdownService {
     this.options = inject<MarkedOptions>(MARKED_OPTIONS, { optional: true });
   }
 
-  parse(markdown: string, parseOptions: ParseOptions = this.DEFAULT_PARSE_OPTIONS): string | Promise<string> {
+  async parse(markdown: string, parseOptions: ParseOptions = this.DEFAULT_PARSE_OPTIONS): Promise<string | Promise<string>> {
     const {
       decodeHtml,
       inline,
       emoji,
+      katex,
+      katexOptions,
       mermaid,
       disableSanitizer,
     } = parseOptions;
+
+    this.katexGate = { enabled: !!parseOptions.katex };
 
     const markedOptions = {
       ...this.options,
@@ -167,7 +162,9 @@ export class MarkdownService {
     if (this.extensions) {
       this.renderer = this.extendsRendererForExtensions(renderer);
     }
-
+    if (katex) {
+      this.renderer = await this.extendsRendererForKatex(renderer, katexOptions);
+    }
     if (mermaid) {
       this.renderer = this.extendsRendererForMermaid(renderer);
     }
@@ -185,18 +182,10 @@ export class MarkdownService {
     const {
       clipboard,
       clipboardOptions,
-      katex,
-      katexOptions,
       mermaid,
       mermaidOptions,
     } = options;
 
-    if (katex) {
-      this.renderKatex(element, {
-        ...this.DEFAULT_KATEX_OPTIONS,
-        ...katexOptions,
-      });
-    }
     if (mermaid) {
       this.renderMermaid(element, {
         ...this.DEFAULT_MERMAID_OPTIONS,
@@ -267,6 +256,58 @@ export class MarkdownService {
     return renderer;
   }
 
+  private async extendsRendererForKatex(renderer: Renderer, options?: MarkedKatexOptions): Promise<Renderer> {
+    const gate = this.katexGate;
+
+    const extendedRenderer = renderer as ExtendedRenderer;
+    if (extendedRenderer.ɵNgxMarkdownRendererExtendedForKatex === true) {
+      return renderer;
+    }
+
+    this.markedKatex ??= await import('marked-katex-extension')
+      .then(module => module.default)
+      .catch(() => null);
+
+    if (!this.markedKatex) {
+      throw new Error(errorKatexExtensionNotLoaded);
+    }
+
+    const katexOptions = {
+      ...this.katexOptions,
+      ...options,
+    };
+
+    const original = this.markedKatex(katexOptions);
+
+    // wrap marked-katex-extension with gate because marked does not support dynamic enabling/disabling
+    // of extensions and without gate, as renderer is shared between multiple markdown components,
+    // enabling katex in one of them would enable it for all the others
+    const gatedExtensions = original.extensions?.map(extension => {
+      const tokenizerExtension = extension as TokenizerExtension;
+      const originalTokenizer = tokenizerExtension.tokenizer;
+      return {
+        ...extension,
+        tokenizer(this: TokenizerThis, src: string) {
+          if (!gate.enabled || !originalTokenizer) {
+            return undefined;
+          }
+          return originalTokenizer.call(this, src, []);
+        },
+      };
+    });
+
+    const gatedExtension = {
+      ...original,
+      extensions: gatedExtensions,
+    };
+
+    marked.use(gatedExtension);
+
+    extendedRenderer.ɵNgxMarkdownRendererExtendedForKatex = true;
+
+    return renderer;
+  }
+
   private extendsRendererForMermaid(renderer: Renderer): Renderer {
     const extendedRenderer = renderer as ExtendedRenderer;
     if (extendedRenderer.ɵNgxMarkdownRendererExtendedForMermaid === true) {
@@ -312,6 +353,7 @@ export class MarkdownService {
       // marked throws an error thinking it is a renderer prop
       const renderer = { ...markedOptions.renderer } as Partial<ExtendedRenderer>;
       delete renderer.ɵNgxMarkdownRendererExtendedForExtensions;
+      delete renderer.ɵNgxMarkdownRendererExtendedForKatex;
       delete renderer.ɵNgxMarkdownRendererExtendedForMermaid;
 
       // remove renderer from markedOptions because if renderer is
@@ -334,16 +376,6 @@ export class MarkdownService {
       throw new Error(errorJoyPixelsNotLoaded);
     }
     return joypixels.shortnameToUnicode(html);
-  }
-
-  private renderKatex(element: HTMLElement, options: KatexOptions): void {
-    if (!isPlatformBrowser(this.platform)) {
-      return;
-    }
-    if (typeof katex === 'undefined' || typeof renderMathInElement === 'undefined') {
-      throw new Error(errorKatexNotLoaded);
-    }
-    renderMathInElement(element, options);
   }
 
   private renderClipboard(element: HTMLElement, viewContainerRef: ViewContainerRef | undefined, options: ClipboardRenderOptions): void {

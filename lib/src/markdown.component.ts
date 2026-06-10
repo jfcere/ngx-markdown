@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Input, OnCh
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ClipboardRenderOptions } from './clipboard-options';
-import { KatexOptions } from './katex-options';
+import { MarkedKatexOptions } from './katex-options';
 import { MarkdownService, ParseOptions, RenderOptions } from './markdown.service';
 import { MermaidAPI } from './mermaid-options';
 import { PrismPlugin } from './prism-plugin';
@@ -54,7 +54,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   get katex(): boolean { return this._katex; }
   set katex(value: boolean) { this._katex = this.coerceBooleanProperty(value); }
 
-  @Input() katexOptions: KatexOptions | undefined;
+  @Input() katexOptions: MarkedKatexOptions | undefined;
 
   // Plugin - mermaid
   @Input()
@@ -141,6 +141,8 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
       decodeHtml,
       inline: this.inline,
       emoji: this.emoji,
+      katex: this.katex,
+      katexOptions: this.katexOptions,
       mermaid: this.mermaid,
       disableSanitizer: this.disableSanitizer,
     };
@@ -148,8 +150,6 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
     const renderOptions: RenderOptions = {
       clipboard: this.clipboard,
       clipboardOptions: this.getClipboardOptions(),
-      katex: this.katex,
-      katexOptions: this.katexOptions,
       mermaid: this.mermaid,
       mermaidOptions: this.mermaidOptions,
     };

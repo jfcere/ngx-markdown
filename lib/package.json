@@ -37,6 +37,7 @@
     "emoji-toolkit": ">= 8.0.0 < 11.0.0",
     "katex": "^0.16.0",
     "marked": "^17.0.0 || ^18.0.0",
+    "marked-katex-extension": "^5.0.0",
     "mermaid": ">= 10.6.0 < 12.0.0",
     "prismjs": "^1.30.0",
     "rxjs": "^6.5.3 || ^7.4.0",
@@ -50,6 +51,9 @@
       "optional": true
     },
     "katex": {
+      "optional": true
+    },
+    "marked-katex-extension": {
       "optional": true
     },
     "mermaid": {

@@ -1,0 +1,5 @@
+# This project intentionally does not use Prettier.
+# Code formatting is handled by the project's existing tooling and conventions.
+# To avoid large formatting-only diffs, all files are ignored by Prettier.
+
+*

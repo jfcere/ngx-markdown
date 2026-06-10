@@ -1,6 +1,7 @@
 import { InjectionToken, ModuleWithProviders, NgModule, Provider } from '@angular/core';
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { CLIPBOARD_OPTIONS } from './clipboard-options';
+import { KATEX_OPTIONS } from './katex-options';
 import { LanguagePipe } from './language.pipe';
 import { MarkdownComponent } from './markdown.component';
 import { MarkdownPipe } from './markdown.pipe';
@@ -34,6 +35,7 @@ type MultiTypedProvider<T extends InjectionToken<any>> = TypedProvider<T> & { mu
 export interface MarkdownModuleConfig {
   loader?: Provider;
   clipboardOptions?: TypedProvider<typeof CLIPBOARD_OPTIONS>;
+  katexOptions?: TypedProvider<typeof KATEX_OPTIONS>;
   markedOptions?: TypedProvider<typeof MARKED_OPTIONS>;
   markedExtensions?: MultiTypedProvider<typeof MARKED_EXTENSIONS>[];
   mermaidOptions?: TypedProvider<typeof MERMAID_OPTIONS>;
