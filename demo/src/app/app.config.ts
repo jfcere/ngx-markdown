@@ -3,7 +3,7 @@ import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { gfmHeadingId } from 'marked-gfm-heading-id';
-import { CLIPBOARD_OPTIONS, MARKED_EXTENSIONS, MARKED_OPTIONS, MERMAID_OPTIONS, provideMarkdown, SANITIZE } from 'ngx-markdown';
+import { CLIPBOARD_OPTIONS, KATEX_OPTIONS, MARKED_EXTENSIONS, MARKED_OPTIONS, MERMAID_OPTIONS, provideMarkdown, SANITIZE } from 'ngx-markdown';
 import { appRoutes } from '@app/app-routes';
 import { markedOptionsFactory, sanitizeHtml } from '@app/app.marked-config';
 import { AnchorService } from '@shared/anchor/anchor.service';
@@ -26,6 +26,14 @@ export const appConfig: ApplicationConfig = {
       clipboardOptions: {
         provide: CLIPBOARD_OPTIONS,
         useValue: { buttonComponent: ClipboardButtonComponent },
+      },
+      katexOptions: {
+        provide: KATEX_OPTIONS,
+        useValue: {
+          displayMode: false,
+          throwOnError: false,
+          errorColor: '#cc0000',
+        },
       },
       markedOptions: {
         provide: MARKED_OPTIONS,

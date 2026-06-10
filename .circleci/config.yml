@@ -34,7 +34,7 @@ jobs:
       # Run tests
       - run:
           name: Test
-          command: npm run test -- --watch=false --code-coverage --no-progress
+          command: npm run test:ci
 
       # Store test results for tests tab in CircleCI UI
       - store_test_results:

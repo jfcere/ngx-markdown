@@ -7,6 +7,7 @@ export function provideMarkdown(markdownModuleConfig?: MarkdownModuleConfig): Pr
     MarkdownService,
     markdownModuleConfig?.loader ?? [],
     markdownModuleConfig?.clipboardOptions ?? [],
+    markdownModuleConfig?.katexOptions ?? [],
     markdownModuleConfig?.markedOptions ?? [],
     markdownModuleConfig?.mermaidOptions ?? [],
     markdownModuleConfig?.markedExtensions ?? [],

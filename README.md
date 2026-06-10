@@ -256,33 +256,24 @@ Using `markdown` component and/or directive, you will be able to use the `emoji`
 
 > :bell: Math rendering is **optional**, skip this step if you are not planning to use it
 
-To add [KaTeX](https://katex.org/) library to your `package.json` use the following command.
+To add [KaTeX](https://katex.org/) math rendering support to your application install the KaTeX runtime and the parser extension:
 
 ```bash
-npm install katex@^0.16.0 --save
+npm install katex@^0.16.0 marked-katex-extension@^5.0.0 --save
 ```
 
-To activate [KaTeX](https://katex.org/) math rendering you will need to include...
-- KaTex JavaScript library - `node_modules/katex/dist/katex.min.js` file
-- KaTex Auto-Render extension - `node_modules/katex/dist/contrib/auto-render.min.js,` file
-- KaTex CSS customization - `node_modules/katex/dist/katex.min.css` file
-
-If you are using [Angular CLI](https://cli.angular.io/) you can follow the `angular.json` example below...
+To activate [KaTeX](https://katex.org/) math rendering you need to include the KaTeX stylesheet:
 
 ```diff
 "styles": [
   "styles.css",
 + "node_modules/katex/dist/katex.min.css"
 ],
-"scripts": [
-+ "node_modules/katex/dist/katex.min.js",
-+ "node_modules/katex/dist/contrib/auto-render.min.js",
-]
 ```
 
 #### KaTeX plugin
 
-Using `markdown` component and/or directive, you will be able to use the `katex` property to activate [KaTeX](https://katex.org/) plugin that renders mathematical expression to HTML.
+Using the `markdown` component and/or directive, you can enable KaTeX rendering with the `katex` property:
 
 ```html
 <markdown
@@ -291,7 +282,41 @@ Using `markdown` component and/or directive, you will be able to use the `katex`
 </markdown>
 ```
 
-Optionally, you can use `katexOptions` property to specify both the [KaTeX options](https://katex.org/docs/options.html) and the [KaTeX Auto-Render options](https://katex.org/docs/autorender.html#api).
+#### Global configuration
+
+Global [KaTeX](https://katex.org/) options can be provided with the `KATEX_OPTIONS` injection token when configuring `MarkdownModule` or `provideMarkdown()`.
+
+##### Using the `provideMarkdown` function
+
+```typescript
+provideMarkdown({
+  katexOptions: {
+    provide: KATEX_OPTIONS,
+    useValue: {
+      displayMode: false,
+      throwOnError: false,
+    },
+  },
+}),
+```
+
+##### Using the `MarkdownModule` import
+
+```typescript
+MarkdownModule.forRoot({
+  katexOptions: {
+    provide: KATEX_OPTIONS,
+    useValue: {
+      displayMode: false,
+      throwOnError: false,
+    },
+  },
+}),
+```
+
+#### Component configuration
+
+Optionally, you can specify the [KaTeX options](https://katex.org/docs/options.html) at the component-level through `katexOptions` property:
 
 ```typescript
 import { KatexOptions } from 'ngx-markdown';
@@ -301,7 +326,6 @@ public options: KatexOptions = {
   throwOnError: false,
   errorColor: '#cc0000',
   delimiters: [...],
-  ...
 };
 ```
 
@@ -313,7 +337,7 @@ public options: KatexOptions = {
 </markdown>
 ```
 
-> :blue_book: Follow official [KaTeX options](https://katex.org/docs/options.html) and [KaTeX Auto-Render options](https://katex.org/docs/autorender.html#api) documentation for more details on the available options.
+> :blue_book: Follow official [KaTeX options](https://katex.org/docs/options.html) documentation for more details on available options.
 
 ### Diagrams tool
 

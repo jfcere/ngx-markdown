@@ -6,15 +6,16 @@ import { ComponentRef, EmbeddedViewRef, SecurityContext, TemplateRef, ViewContai
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { marked, MarkedExtension, Tokens } from 'marked';
+import markedKatex from 'marked-katex-extension';
 import { first } from 'rxjs/operators';
 import { ClipboardButtonComponent } from './clipboard-button.component';
-import { KatexOptions } from './katex-options';
+import { MarkedKatexOptions } from './katex-options';
 import { MarkdownModule } from './markdown.module';
 import {
   errorClipboardNotLoaded,
   errorClipboardViewContainerRequired,
   errorJoyPixelsNotLoaded,
-  errorKatexNotLoaded,
+  errorKatexExtensionNotLoaded,
   errorMermaidNotLoaded,
   errorSrcWithoutHttpClient,
   ExtendedRenderer,
@@ -67,8 +68,8 @@ describe('MarkdownService', () => {
         const unsanitized = await marked.parse(mockRaw);
 
         expect(sanitize).toBeNull();
-        expect(await markdownService.parse(mockRaw)).toBe(sanitized);
-        expect(await markdownService.parse(mockRaw)).not.toBe(unsanitized);
+        await expectAsync(markdownService.parse(mockRaw)).toBeResolvedTo(sanitized);
+        await expectAsync(markdownService.parse(mockRaw)).not.toBeResolvedTo(unsanitized);
       });
     });
   });
@@ -132,27 +133,27 @@ describe('MarkdownService', () => {
         const sanitized = domSanitizer.sanitize(sanitize as SecurityContext, await marked.parse(mockRaw))!;
         const unsanitized = await marked.parse(mockRaw);
 
-        expect(await markdownService.parse(mockRaw)).toBe(sanitized);
-        expect(await markdownService.parse(mockRaw)).not.toBe(unsanitized);
+        await expectAsync(markdownService.parse(mockRaw)).toBeResolvedTo(sanitized);
+        await expectAsync(markdownService.parse(mockRaw)).not.toBeResolvedTo(unsanitized);
 
-        expect(await markdownService.parse(mockRaw, { disableSanitizer: false })).toBe(sanitized);
-        expect(await markdownService.parse(mockRaw, { disableSanitizer: false })).not.toBe(unsanitized);
+        await expectAsync(markdownService.parse(mockRaw, { disableSanitizer: false })).toBeResolvedTo(sanitized);
+        await expectAsync(markdownService.parse(mockRaw, { disableSanitizer: false })).not.toBeResolvedTo(unsanitized);
 
-        expect(await markdownService.parse(mockRaw, { disableSanitizer: null! })).toBe(sanitized);
-        expect(await markdownService.parse(mockRaw, { disableSanitizer: null! })).not.toBe(unsanitized);
+        await expectAsync(markdownService.parse(mockRaw, { disableSanitizer: null! })).toBeResolvedTo(sanitized);
+        await expectAsync(markdownService.parse(mockRaw, { disableSanitizer: null! })).not.toBeResolvedTo(unsanitized);
 
-        expect(await markdownService.parse(mockRaw, { disableSanitizer: undefined })).toBe(sanitized);
-        expect(await markdownService.parse(mockRaw, { disableSanitizer: undefined })).not.toBe(unsanitized);
+        await expectAsync(markdownService.parse(mockRaw, { disableSanitizer: undefined })).toBeResolvedTo(sanitized);
+        await expectAsync(markdownService.parse(mockRaw, { disableSanitizer: undefined })).not.toBeResolvedTo(unsanitized);
       });
 
-      it('should not sanitize parsed markdown when disableSanitizer is true', () => {
+      it('should not sanitize parsed markdown when disableSanitizer is true', async () => {
 
         const mockRaw = '### Markdown-x';
-        const sanitized = domSanitizer.sanitize(sanitize as SecurityContext, marked.parse(mockRaw))!;
-        const unsanitized = marked.parse(mockRaw);
+        const sanitized = domSanitizer.sanitize(sanitize as SecurityContext, await marked.parse(mockRaw))!;
+        const unsanitized = await marked.parse(mockRaw);
 
-        expect(markdownService.parse(mockRaw, { disableSanitizer: true })).not.toBe(sanitized);
-        expect(markdownService.parse(mockRaw, { disableSanitizer: true })).toBe(unsanitized);
+        await expectAsync(markdownService.parse(mockRaw, { disableSanitizer: true })).not.toBeResolvedTo(sanitized);
+        await expectAsync(markdownService.parse(mockRaw, { disableSanitizer: true })).toBeResolvedTo(unsanitized);
       });
     });
   });
@@ -229,32 +230,146 @@ describe('MarkdownService', () => {
 
     describe('parse', () => {
 
-      it('should register extensions for marked renderer when extensions are provided', () => {
+      it('should register extensions for marked renderer when extensions are provided', async () => {
 
         const mockRaw = '### Markdown-x';
 
         const markedUseSpy = spyOn(marked, 'use');
 
-        markdownService.parse(mockRaw);
+        await markdownService.parse(mockRaw);
 
         expect(markedUseSpy).toHaveBeenCalledWith(...mockExtensions);
       });
 
-      it('should not register extensions for marked renderer more than once', () => {
+      it('should not register extensions for marked renderer more than once', async () => {
 
         const mockRaw = '### Markdown-x';
 
         const markedUseSpy = spyOn(marked, 'use');
 
-        markdownService.parse(mockRaw);
+        await markdownService.parse(mockRaw);
 
         expect(markedUseSpy).toHaveBeenCalledWith(...mockExtensions);
 
         markedUseSpy.calls.reset();
 
-        markdownService.parse(mockRaw);
+        await markdownService.parse(mockRaw);
 
         expect(markedUseSpy).not.toHaveBeenCalledWith(...mockExtensions);
+      });
+
+      it('should extend marked renderer when katex is true', async () => {
+
+        const markedUseSpy = spyOn(marked, 'use');
+
+        await markdownService.parse('### Markdown-x', { katex: true });
+
+        expect(markedUseSpy).toHaveBeenCalledWith(
+          jasmine.objectContaining({
+            extensions: jasmine.arrayContaining([
+              jasmine.objectContaining({ name: 'inlineKatex' }),
+              jasmine.objectContaining({ name: 'blockKatex' }),
+            ]),
+          }),
+        );
+      });
+
+      it('should not extend marked renderer more than once when katex is true', async () => {
+
+        const markedUseSpy = spyOn(marked, 'use');
+
+        await markdownService.parse('### Markdown-x', { katex: true });
+
+        expect(markedUseSpy).toHaveBeenCalled();
+        markedUseSpy.calls.reset();
+
+        await markdownService.parse('### Markdown-y', { katex: true });
+
+        expect(markedUseSpy).not.toHaveBeenCalledWith(
+          jasmine.objectContaining({
+            extensions: jasmine.arrayContaining([
+              jasmine.objectContaining({ name: 'inlineKatex' }),
+              jasmine.objectContaining({ name: 'blockKatex' }),
+            ]),
+          }),
+        );
+      });
+
+      it('should only import marked-katex-extension only once', async () => {
+
+        const markedUseSpy = spyOn(marked, 'use');
+
+        await markdownService.parse('### Markdown-x', { katex: true });
+
+        markedUseSpy.calls.reset();
+
+        await markdownService.parse('### Markdown-x', { katex: true });
+
+        expect(markedUseSpy).not.toHaveBeenCalledWith(
+          jasmine.objectContaining({
+            extensions: jasmine.arrayContaining([
+              jasmine.objectContaining({ name: 'inlineKatex' }),
+              jasmine.objectContaining({ name: 'blockKatex' }),
+            ]),
+          }),
+        );
+      });
+
+      it('should throw when katex is true and marked-katex-extension is not loaded ', async () => {
+
+        markdownService['markedKatex'] = false as any;
+
+        await expectAsync(markdownService.parse('### Markdown-x', { katex: true })).toBeRejectedWithError(errorKatexExtensionNotLoaded);
+      });
+
+      it('should provide katexOptions correctly when parsing', async () => {
+
+        const markedKatexSpy = jasmine.createSpy('markedKatex').and.returnValue({ extensions: [] });
+        markdownService['markedKatex'] = markedKatexSpy;
+
+        const katexOptions: MarkedKatexOptions = { displayMode: true };
+
+        await markdownService.parse('### Markdown-x', { katex: true, katexOptions });
+
+        expect(markedKatexSpy).toHaveBeenCalledWith(katexOptions);
+      });
+
+      it('should gate KaTeX parse extension behind `katex` flag', async () => {
+
+        const tokenizerSpy = jasmine.createSpy('katexTokenizer').and.returnValue(undefined);
+        const markedKatexSpy = jasmine.createSpy('markedKatex').and.returnValue({
+          extensions: [{ name: 'marked-katex-extension', level: 'block', tokenizer: tokenizerSpy }],
+        });
+
+        markdownService['markedKatex'] = markedKatexSpy;
+
+        await markdownService.parse('$E=mc^2$', { katex: false });
+
+        expect(tokenizerSpy).not.toHaveBeenCalled();
+
+        await markdownService.parse('$E=mc^2$', { katex: true });
+
+        expect(tokenizerSpy).toHaveBeenCalled();
+      });
+
+      it('should not extend marked renderer when katex is false', async () => {
+
+        const markedKatexSpy = jasmine.createSpy('markedKatex').and.returnValue({ extensions: [] } as any);
+        markdownService['markedKatex'] = markedKatexSpy;
+
+        const markedUseSpy = spyOn(marked, 'use');
+
+        await markdownService.parse('### Markdown-x', { katex: false });
+
+        expect(markedKatexSpy).not.toHaveBeenCalled();
+        expect(markedUseSpy).not.toHaveBeenCalledWith(
+          jasmine.objectContaining({
+            extensions: jasmine.arrayContaining([
+              jasmine.objectContaining({ name: 'inlineKatex' }),
+              jasmine.objectContaining({ name: 'blockKatex' }),
+            ]),
+          }),
+        );
       });
 
       it('should extend marked renderer when mermaid is true', async () => {
@@ -277,7 +392,7 @@ describe('MarkdownService', () => {
         expect(parsed).toBe(await marked.parse(mockRaw));
       });
 
-      it('should not pass extended flags to `marked.use` when parsing', () => {
+      it('should not pass extended flags to `marked.use` when parsing', async () => {
 
         const mockRaw = '### Markdown-x';
         const mockRenderer = new MarkedRenderer();
@@ -286,7 +401,7 @@ describe('MarkdownService', () => {
         const markedUseSpy = spyOn(marked, 'use');
 
         markdownService.options = mockMarkedOptions;
-        markdownService.parse(mockRaw, { mermaid: true });
+        await markdownService.parse(mockRaw, { mermaid: true });
 
         const expectedMockRenderer = { ...mockRenderer } as Partial<ExtendedRenderer>;
         delete expectedMockRenderer.ɵNgxMarkdownRendererExtendedForExtensions;
@@ -354,10 +469,10 @@ describe('MarkdownService', () => {
         const mockRaw = '&lt;html&gt;';
         const expected = '<p>&lt;html&gt;</p>\n';
 
-        expect(await markdownService.parse(mockRaw)).toBe(expected);
-        expect(await markdownService.parse(mockRaw, { decodeHtml: false })).toBe(expected);
-        expect(await markdownService.parse(mockRaw, { decodeHtml: null! })).toBe(expected);
-        expect(await markdownService.parse(mockRaw, { decodeHtml: undefined })).toBe(expected);
+        await expectAsync(markdownService.parse(mockRaw)).toBeResolvedTo(expected);
+        await expectAsync(markdownService.parse(mockRaw, { decodeHtml: false })).toBeResolvedTo(expected);
+        await expectAsync(markdownService.parse(mockRaw, { decodeHtml: null! })).toBeResolvedTo(expected);
+        await expectAsync(markdownService.parse(mockRaw, { decodeHtml: undefined })).toBeResolvedTo(expected);
       });
 
       it('should not decode HTML when platform is not browser as it uses `document`', async () => {
@@ -372,15 +487,15 @@ describe('MarkdownService', () => {
         expect(result).toBe(expected);
       });
 
-      it('should throw when emoji is true but emoji-toolkit is not loaded', () => {
+      it('should throw when emoji is true but emoji-toolkit is not loaded', async () => {
 
         window['joypixels'] = undefined;
 
-        expect(() => markdownService.parse('I :heart: ngx-markdown', { decodeHtml: false, emoji: true })).toThrowError(errorJoyPixelsNotLoaded);
+        await expectAsync(markdownService.parse('I :heart: ngx-markdown', { decodeHtml: false, emoji: true })).toBeRejectedWithError(errorJoyPixelsNotLoaded);
 
         window['joypixels'] = { shortnameToUnicode: undefined };
 
-        expect(() => markdownService.parse('I :heart: ngx-markdown', { decodeHtml: false, emoji: true })).toThrowError(errorJoyPixelsNotLoaded);
+        await expectAsync(markdownService.parse('I :heart: ngx-markdown', { decodeHtml: false, emoji: true })).toBeRejectedWithError(errorJoyPixelsNotLoaded);
       });
 
       it('should call joypixels when emoji is true', async () => {
@@ -398,7 +513,7 @@ describe('MarkdownService', () => {
         expect(joypixels.shortnameToUnicode).toHaveBeenCalledWith(mockRaw);
       });
 
-      it('should not call joypixels when emoji is omitted/false/null/undefined', () => {
+      it('should not call joypixels when emoji is omitted/false/null/undefined', async () => {
 
         const mockRaw = '### Markdown-x';
 
@@ -413,13 +528,13 @@ describe('MarkdownService', () => {
           () => markdownService.parse(mockRaw, { decodeHtml: false, emoji: undefined }),
         ];
 
-        useCases.forEach(func => {
-          func();
+        for (const func of useCases) {
+          await func();
           expect(joypixels.shortnameToUnicode).not.toHaveBeenCalled();
-        });
+        }
       });
 
-      it('should not call joypixels or throw when platform is not browser', () => {
+      it('should not call joypixels or throw when platform is not browser', async () => {
 
         const mockRaw = 'I :heart: ngx-markdown';
 
@@ -429,7 +544,7 @@ describe('MarkdownService', () => {
 
         markdownService['platform'] = 'server';
 
-        expect(() => markdownService.parse(mockRaw, { decodeHtml: false, emoji: true })).not.toThrowError();
+        await expectAsync(markdownService.parse(mockRaw, { decodeHtml: false, emoji: true })).not.toBeRejected();
         expect(joypixels.shortnameToUnicode).not.toHaveBeenCalled();
       });
 
@@ -445,8 +560,8 @@ describe('MarkdownService', () => {
         for (const platform of useCases) {
           markdownService['platform'] = platform;
 
-          expect(async () => await markdownService.parse(mockRaw)).not.toThrowError();
-          expect(await markdownService.parse(mockRaw)).toBe(await marked.parse(mockRaw));
+          await expectAsync(markdownService.parse(mockRaw)).not.toBeRejected();
+          await expectAsync(markdownService.parse(mockRaw)).toBeResolvedTo(await marked.parse(mockRaw));
         }
       });
 
@@ -454,7 +569,7 @@ describe('MarkdownService', () => {
 
         const mockRaw = '### Markdown-x';
 
-        expect(await markdownService.parse(mockRaw, { inline: true })).toBe(await marked.parseInline(mockRaw));
+        await expectAsync(markdownService.parse(mockRaw, { inline: true })).toBeResolvedTo(await marked.parseInline(mockRaw));
       });
 
       it('should return parsed markdown when inline is omitted/false/null/undefined', async () => {
@@ -469,11 +584,11 @@ describe('MarkdownService', () => {
         ];
 
         for (const func of useCases) {
-          expect(await func()).toBe(await marked.parse(mockRaw));
+          await expectAsync(func()).toBeResolvedTo(await marked.parse(mockRaw));
         }
       });
 
-      it('should provide markedOptions correctly when parsing', () => {
+      it('should provide markedOptions correctly when parsing', async () => {
 
         const mockRaw = '### Markdown-x';
         const mockMarkedOptions: MarkedOptions = { breaks: true, gfm: false, pedantic: true, silent: false };
@@ -487,14 +602,14 @@ describe('MarkdownService', () => {
 
         const markedParseSpy = spyOn(marked, 'parse');
 
-        markdownService.parse(mockRaw, parseOptions);
+        await markdownService.parse(mockRaw, parseOptions);
 
         expect(markedParseSpy).toHaveBeenCalled();
         expect(markedParseSpy.calls.argsFor(0)[0]).toBe(mockRaw);
         expect(markedParseSpy.calls.argsFor(0)[1]).toEqual(expectedOptions);
       });
 
-      it('should not override markedOptions.renderer when parsing and parseOptions.renderer is not provided', () => {
+      it('should not override markedOptions.renderer when parsing and parseOptions.renderer is not provided', async () => {
 
         const mockRaw = '### Markdown-x';
         const mockRenderer = new MarkedRenderer();
@@ -504,7 +619,7 @@ describe('MarkdownService', () => {
         const markedUseSpy = spyOn(marked, 'use');
 
         markdownService.options = mockMarkedOptions;
-        markdownService.parse(mockRaw);
+        await markdownService.parse(mockRaw);
 
         const expectedMockRenderer = { ...mockRenderer } as Partial<ExtendedRenderer>;
         delete expectedMockRenderer.ɵNgxMarkdownRendererExtendedForExtensions;
@@ -515,9 +630,9 @@ describe('MarkdownService', () => {
 
       it('should return empty string when raw is null/undefined/empty', async () => {
 
-        expect(await markdownService.parse(null!)).toBe('');
-        expect(await markdownService.parse(undefined!)).toBe('');
-        expect(await markdownService.parse('')).toBe('');
+        await expectAsync(markdownService.parse(null!)).toBeResolvedTo('');
+        await expectAsync(markdownService.parse(undefined!)).toBeResolvedTo('');
+        await expectAsync(markdownService.parse('')).toBeResolvedTo('');
       });
 
       it('should not sanitize parsed markdown', async () => {
@@ -525,25 +640,11 @@ describe('MarkdownService', () => {
         const mockRaw = '### Markdown-x';
         const unsanitized = await marked.parse(mockRaw);
 
-        expect(await markdownService.parse(mockRaw, { decodeHtml: false })).toBe(unsanitized);
+        await expectAsync(markdownService.parse(mockRaw, { decodeHtml: false })).toBeResolvedTo(unsanitized);
       });
     });
 
     describe('render', () => {
-
-      const KATEX_DEFAULT_OPTIONS: KatexOptions = {
-        delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false },
-          { left: '\\(', right: '\\)', display: false },
-          { left: '\\begin{equation}', right: '\\end{equation}', display: true },
-          { left: '\\begin{align}', right: '\\end{align}', display: true },
-          { left: '\\begin{alignat}', right: '\\end{alignat}', display: true },
-          { left: '\\begin{gather}', right: '\\end{gather}', display: true },
-          { left: '\\begin{CD}', right: '\\end{CD}', display: true },
-          { left: '\\[', right: '\\]', display: true },
-        ],
-      };
 
       function mockComponentRef(): { componentRef: ComponentRef<unknown>; rootNode: HTMLElement; } {
         const rootNode = document.createElement('button');
@@ -573,114 +674,6 @@ describe('MarkdownService', () => {
 
         return { embeddedViewRef, rootNode };
       }
-
-      it('should render katex when katex is true', () => {
-
-        const element = document.createElement('div');
-        element.innerHTML = '$E=mc^2$';
-
-        const container = document.createElement('div');
-        container.append(element);
-
-        const katexOptions = { strict: 'error', ignoredClasses: ['ignore'] };
-
-        window['katex'] = {};
-        window['renderMathInElement'] = (elem: HTMLElement, options?: KatexOptions) => {};
-
-        spyOn(window, 'renderMathInElement');
-
-        markdownService.render(container, { katex: true, katexOptions });
-
-        expect(window['renderMathInElement']).toHaveBeenCalledWith(container, {
-          ...katexOptions,
-          ...KATEX_DEFAULT_OPTIONS,
-        });
-      });
-
-      it('should not render katex when katex is omitted/false/null/undefined', () => {
-
-        const element = document.createElement('div');
-        element.innerHTML = '$E=mc^2$';
-
-        window['katex'] = {};
-        window['renderMathInElement'] = (elem: HTMLElement, options?: KatexOptions) => {};
-
-        spyOn(window, 'renderMathInElement');
-
-        const useCases = [
-          () => markdownService.render(element),
-          () => markdownService.render(element, { katex: false }),
-          () => markdownService.render(element, { katex: null! }),
-          () => markdownService.render(element, { katex: undefined }),
-        ];
-
-        useCases.forEach(func => {
-          func();
-          expect(window['renderMathInElement']).not.toHaveBeenCalled();
-        });
-      });
-
-      it('should not render katex or throw when platform is not browser', () => {
-
-        const element = document.createElement('div');
-        element.innerHTML = '$E=mc^2$';
-
-        window['katex'] = {};
-        window['renderMathInElement'] = (elem: HTMLElement, options?: KatexOptions) => {};
-
-        spyOn(window, 'renderMathInElement');
-
-        markdownService['platform'] = 'server';
-
-        expect(() => markdownService.render(element, { katex: true })).not.toThrowError();
-        expect(window['renderMathInElement']).not.toHaveBeenCalled();
-      });
-
-      it('should throw when katex is called but not loaded', () => {
-
-        const element = document.createElement('div');
-        element.innerHTML = '$E=mc^2$';
-
-        window['katex'] = undefined;
-
-        expect(() => markdownService.render(element, { katex: true })).toThrowError(errorKatexNotLoaded);
-
-        window['katex'] = {};
-        window['renderMathInElement'] = undefined;
-
-        expect(() => markdownService.render(element, { katex: true })).toThrowError(errorKatexNotLoaded);
-      });
-
-      it('should render katex with math expressions', () => {
-
-        const element = document.createElement('div');
-        element.innerHTML = '$E=mc^2$';
-
-        window['katex'] = {};
-        window['renderMathInElement'] = (elem: HTMLElement, options?: KatexOptions) => {};
-
-        spyOn(window, 'renderMathInElement');
-
-        const createElement = (innerHTML: string): HTMLElement => {
-          const element = document.createElement('div');
-          element.innerHTML = innerHTML;
-          return element;
-        };
-
-        const useCases = [
-          { element: createElement('$E=mc^2$') },
-          { element: createElement('$$x^2 + y^2 = z^2$$'), options: { ignoredClasses: ['error'] } },
-        ];
-
-        useCases.forEach(useCase => {
-          markdownService.render(useCase.element, { katex: true, katexOptions: useCase.options });
-          expect(window['renderMathInElement']).toHaveBeenCalledWith(useCase.element, {
-            ...useCase.options,
-            ...KATEX_DEFAULT_OPTIONS,
-          });
-          window['renderMathInElement'].calls.reset();
-        });
-      });
 
       it('should render mermaid with default options when mermaid is true and options are omitted', () => {
 
@@ -821,7 +814,7 @@ describe('MarkdownService', () => {
         expect(mermaid.run).not.toHaveBeenCalled();
       });
 
-      it('should render clipboard after katex and mermaid', () => {
+      it('should render clipboard after mermaid', () => {
 
         const container = document.createElement('div');
         const pluginRenderingOrder: string[] = [];
@@ -840,18 +833,6 @@ describe('MarkdownService', () => {
           }
         };
 
-        // katex
-        const katexElement = document.createElement('div');
-        katexElement.innerHTML = '$E=mc^2$';
-        container.append(katexElement);
-
-        window['katex'] = {};
-        window['renderMathInElement'] = (elem: HTMLElement, options?: KatexOptions) => {};
-
-        spyOn(window, 'renderMathInElement').and.callFake(() => {
-          pluginRenderingOrder.push('katex');
-        });
-
         // mermaid
         const mermaidElement = document.createElement('div');
         mermaidElement.classList.add('mermaid');
@@ -868,8 +849,9 @@ describe('MarkdownService', () => {
           pluginRenderingOrder.push('mermaid');
         });
 
-        markdownService.render(container, { clipboard: true, katex: true, mermaid: true }, viewContainerRef);
-        expect(pluginRenderingOrder).toEqual(['katex', 'mermaid', 'clipboard']);
+        markdownService.render(container, { clipboard: true, mermaid: true }, viewContainerRef);
+
+        expect(pluginRenderingOrder).toEqual(['mermaid', 'clipboard']);
       });
 
       it('should render clipboard with default button when clipboard is true and buttonComponent/buttonTemplate is not provided', () => {
