@@ -6,7 +6,6 @@ import { ComponentRef, EmbeddedViewRef, SecurityContext, TemplateRef, ViewContai
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { marked, MarkedExtension, Tokens } from 'marked';
-import markedKatex from 'marked-katex-extension';
 import { first } from 'rxjs/operators';
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { MarkedKatexOptions } from './katex-options';
