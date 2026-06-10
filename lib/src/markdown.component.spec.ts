@@ -5,9 +5,9 @@ import { first } from 'rxjs/operators';
 import { ClipboardRenderOptions } from './clipboard-options';
 import { MarkedKatexOptions } from './katex-options';
 import { MarkdownComponent } from './markdown.component';
-import { MarkdownModule } from './markdown.module';
 import { MarkdownService } from './markdown.service';
 import { MermaidAPI } from './mermaid-options';
+import { provideMarkdown } from './provide-markdown';
 
 describe('MarkdownComponent', () => {
   let fixture: ComponentFixture<MarkdownComponent>;
@@ -17,7 +17,10 @@ describe('MarkdownComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        MarkdownModule.forRoot(),
+        MarkdownComponent,
+      ],
+      providers: [
+        provideMarkdown(),
       ],
     }).compileComponents();
 

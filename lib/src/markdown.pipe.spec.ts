@@ -3,9 +3,9 @@
 import { ElementRef, NgZone, ViewContainerRef } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MarkdownModule } from './markdown.module';
 import { MarkdownPipe, MarkdownPipeOptions } from './markdown.pipe';
 import { MarkdownService } from './markdown.service';
+import { provideMarkdown } from './provide-markdown';
 
 describe('MarkdownPipe', () => {
   let domSanitizer: DomSanitizer;
@@ -20,10 +20,8 @@ describe('MarkdownPipe', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        MarkdownModule.forRoot(),
-      ],
       providers: [
+        provideMarkdown(),
         MarkdownPipe,
         { provide: ElementRef, useValue: elementRefSpy },
         { provide: ViewContainerRef, useValue: viewContainerRefSpy },
