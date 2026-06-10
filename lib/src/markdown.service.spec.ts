@@ -9,7 +9,6 @@ import { marked, MarkedExtension, Tokens } from 'marked';
 import { first } from 'rxjs/operators';
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { MarkedKatexOptions } from './katex-options';
-import { MarkdownModule } from './markdown.module';
 import {
   errorClipboardNotLoaded,
   errorClipboardViewContainerRequired,
@@ -25,6 +24,7 @@ import { MARKED_EXTENSIONS } from './marked-extensions';
 import { MarkedOptions } from './marked-options';
 import { MarkedRenderer } from './marked-renderer';
 import { MermaidAPI } from './mermaid-options';
+import { provideMarkdown } from './provide-markdown';
 import { SANITIZE, SanitizeFunction } from './sanitize-options';
 
 declare let window: any;
@@ -50,8 +50,8 @@ describe('MarkdownService', () => {
     describe('parse', () => {
       beforeEach(() => {
         TestBed.configureTestingModule({
-          imports: [
-            MarkdownModule.forRoot(),
+          providers: [
+            provideMarkdown(),
           ],
         });
 
@@ -82,8 +82,8 @@ describe('MarkdownService', () => {
         sanitizeFuncSpy = jasmine.createSpy('sanitize');
 
         TestBed.configureTestingModule({
-          imports: [
-            MarkdownModule.forRoot({ sanitize: { provide: SANITIZE, useValue: sanitizeFuncSpy } }),
+          providers: [
+            provideMarkdown({ sanitize: { provide: SANITIZE, useValue: sanitizeFuncSpy } }),
           ],
         });
 
@@ -116,8 +116,8 @@ describe('MarkdownService', () => {
 
       beforeEach(() => {
         TestBed.configureTestingModule({
-          imports: [
-            MarkdownModule.forRoot({ sanitize: { provide: SANITIZE, useValue: SecurityContext.HTML } }),
+          providers: [
+            provideMarkdown({ sanitize: { provide: SANITIZE, useValue: SecurityContext.HTML } }),
           ],
         });
 
@@ -164,15 +164,15 @@ describe('MarkdownService', () => {
         imports: [
           BrowserModule,
           HttpClientTestingModule,
-          MarkdownModule.forRoot({
+        ],
+        providers: [
+          provideMarkdown({
             markedExtensions: [
               { provide: MARKED_EXTENSIONS, useValue: mockExtensions[0], multi: true },
               { provide: MARKED_EXTENSIONS, useFactory: () => mockExtensions[1], multi: true },
             ],
             sanitize: { provide: SANITIZE, useValue: SecurityContext.NONE },
           }),
-        ],
-        providers: [
           { provide: ViewContainerRef, useValue: viewContainerRefSpy },
         ],
       });
@@ -1293,10 +1293,8 @@ describe('MarkdownService', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [
-          MarkdownModule.forRoot(),
-        ],
         providers: [
+          provideMarkdown(),
           { provide: HttpClient, useValue: null },
         ],
       });

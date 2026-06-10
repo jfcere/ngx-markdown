@@ -374,23 +374,10 @@
     <markdown ngPreserveWhitespaces>
       #### Global configuration
 
-      You can provide a global configuration for mermaid [configuration options](https://mermaid.js.org/config/schema-docs/config.html#mermaid-config-properties) to use across your application with the `mermaidOptions` in the `MarkdownModuleConfig` either with `provideMarkdown` provide-function for standalone components or `MarkdownModule.forRoot()` for module configuration.
+      You can provide a global configuration for mermaid [configuration options](https://mermaid.js.org/config/schema-docs/config.html#mermaid-config-properties) to use across your application with the `mermaidOptions` when configuring `provideMarkdown`.
 
       ```typescript
-      // using the `provideMarkdown` function
       provideMarkdown(&#123;
-        mermaidOptions: &#123;
-          provide: MERMAID_OPTIONS,
-          useValue: &#123;
-            darkMode: true,
-            look: 'handDrawn',
-            ...
-          &#125;,
-        &#125;,
-      &#125;),
-
-      // using the `MarkdownModule` import
-      MarkdownModule.forRoot(&#123;
         mermaidOptions: &#123;
           provide: MERMAID_OPTIONS,
           useValue: &#123;
@@ -521,10 +508,9 @@
     <markdown clipboard [clipboardButtonComponent]="clipboardButton" ngPreserveWhitespaces>
       #### Using global configuration
 
-      You can provide a custom component to use globaly across your application with the `clipboardOptions` in the `MarkdownModuleConfig` either with `provideMarkdown` provide-function for standalone components or `MarkdownModule.forRoot()` for module configuration.
+      You can provide a custom component to use globaly across your application with the `clipboardOptions` when configuring `provideMarkdown`.
 
       ```typescript
-      // using the `provideMarkdown` function
       provideMarkdown(&#123;
         clipboardOptions: &#123;
           provide: CLIPBOARD_OPTIONS,
@@ -533,16 +519,6 @@
           &#125;,
         &#125;,
       &#125;)
-
-      // using `MarkdownModule` import
-      MarkdownModule.forRoot(&#123;
-        clipboardOptions: &#123;
-          provide: CLIPBOARD_OPTIONS,
-          useValue: &#123;
-            buttonComponent: ClipboardButtonComponent,
-          &#125;,
-        &#125;,
-      &#125;),
       ```
     </markdown>
 

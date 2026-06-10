@@ -49,6 +49,9 @@ const sharedDeclarations = [
   MarkdownPipe,
 ];
 
+/**
+ * @deprecated `MarkdownModule` will be removed in next major version – use `provideMarkdown()` instead.
+ */
 @NgModule({
   imports: sharedDeclarations,
   exports: sharedDeclarations,
