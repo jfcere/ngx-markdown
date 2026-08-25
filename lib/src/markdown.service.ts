@@ -265,8 +265,8 @@ export class MarkdownService {
     }
 
     // Hide the optional peer specifier from Vite import-analysis (see #681).
-    const markedKatexSpecifier = 'marked-katex-extension';
-    this.markedKatex ??= await import(/* @vite-ignore */ markedKatexSpecifier)
+    // Literal + @vite-ignore: Vite skips analysis; webpack/Karma can still resolve the peer when installed.
+    this.markedKatex ??= await import(/* @vite-ignore */ 'marked-katex-extension')
       .then(module => module.default)
       .catch(() => null);
 
