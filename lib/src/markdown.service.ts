@@ -267,7 +267,7 @@ export class MarkdownService {
     // Hide the optional peer specifier from Vite import-analysis (see #681).
     const markedKatexSpecifier = 'marked-katex-extension';
     this.markedKatex ??= await import(/* @vite-ignore */ markedKatexSpecifier)
-      .then(module => module.default)
+      .then((module: { default: MarkedKatexExtension }) => module.default)
       .catch(() => null);
 
     if (!this.markedKatex) {
