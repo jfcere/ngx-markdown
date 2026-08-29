@@ -31,6 +31,11 @@ jobs:
             - ~/.npm
             - ./node_modules
 
+      # Vite regression check for optional KaTeX peer
+      - run:
+          name: Vite optional import regression
+          command: npm run test:vite
+
       # Run tests
       - run:
           name: Test
