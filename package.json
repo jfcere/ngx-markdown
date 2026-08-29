@@ -42,6 +42,7 @@
     "type-check:lib": "tsc --project ./lib/tsconfig.lib.json --inlineSourceMap --noEmit",
     "test": "ng test",
     "test:ci": "npm run test -- --watch=false --code-coverage --no-progress",
+    "test:vite": "node lib/test/vite-optional-import.spec.mjs",
     "coveralls": "cat \"./coverage/lcov.info\" | \"./node_modules/coveralls/bin/coveralls.js\"",
     "gh-pages:build": "npm run build:demo -- --aot --base-href /ngx-markdown/",
     "gh-pages:postbuild": "cpy ./dist/demo/3rdpartylicenses.txt ./dist/demo/browser --flat",

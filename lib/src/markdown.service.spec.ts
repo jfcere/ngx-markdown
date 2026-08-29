@@ -259,6 +259,14 @@ describe('MarkdownService', () => {
 
       it('should extend marked renderer when katex is true', async () => {
 
+        const markedKatexSpy = jasmine.createSpy('markedKatex').and.returnValue({
+          extensions: [
+            { name: 'inlineKatex' },
+            { name: 'blockKatex' },
+          ],
+        });
+        markdownService['markedKatex'] = markedKatexSpy;
+
         const markedUseSpy = spyOn(marked, 'use');
 
         await markdownService.parse('### Markdown-x', { katex: true });
@@ -274,6 +282,14 @@ describe('MarkdownService', () => {
       });
 
       it('should not extend marked renderer more than once when katex is true', async () => {
+
+        const markedKatexSpy = jasmine.createSpy('markedKatex').and.returnValue({
+          extensions: [
+            { name: 'inlineKatex' },
+            { name: 'blockKatex' },
+          ],
+        });
+        markdownService['markedKatex'] = markedKatexSpy;
 
         const markedUseSpy = spyOn(marked, 'use');
 
@@ -295,6 +311,14 @@ describe('MarkdownService', () => {
       });
 
       it('should only import marked-katex-extension only once', async () => {
+
+        const markedKatexSpy = jasmine.createSpy('markedKatex').and.returnValue({
+          extensions: [
+            { name: 'inlineKatex' },
+            { name: 'blockKatex' },
+          ],
+        });
+        markdownService['markedKatex'] = markedKatexSpy;
 
         const markedUseSpy = spyOn(marked, 'use');
 
