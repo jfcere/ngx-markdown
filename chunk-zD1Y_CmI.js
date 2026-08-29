@@ -1,0 +1,1 @@
+import{At as _,Yt as h,at as Rw,hn as ml}from"./main-6HIY6DEW.js";var t=class t{constructor(){this.httpClient=h(ml)}get(r){return this.httpClient.get(r,{responseType:`text`}).pipe(Rw())}};t.ɵfac=function(s){return new(s||t)},t.ɵprov=_({token:t,factory:t.ɵfac,providedIn:`root`});var p=t;export{p as t};

@@ -1,1 +1,0 @@
-import{hn as pl,jt as bw,qt as h,wt as _}from"./main-KW2AL426.js";var t=class t{constructor(){this.httpClient=h(pl)}get(r){return this.httpClient.get(r,{responseType:`text`}).pipe(bw())}};t.ɵfac=function(s){return new(s||t)},t.ɵprov=_({token:t,factory:t.ɵfac,providedIn:`root`});var p=t;export{p as t};
