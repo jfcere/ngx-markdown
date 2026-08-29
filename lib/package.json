@@ -34,7 +34,7 @@
     "@angular/core": "^22.0.0",
     "@angular/platform-browser": "^22.0.0",
     "clipboard": "^2.0.11",
-    "emoji-toolkit": ">= 8.0.0 < 11.0.0",
+    "emoji-toolkit": ">= 8.0.0 < 12.0.0",
     "katex": "^0.16.0",
     "marked": "^17.0.0 || ^18.0.0",
     "marked-katex-extension": "^5.0.0",
