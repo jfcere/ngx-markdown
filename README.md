@@ -254,13 +254,21 @@ Using `markdown` component and/or directive, you will be able to use the `emoji`
 
 ### Math rendering
 
-> :bell: Math rendering is **optional**, skip this step if you are not planning to use it
+> :warning: Math rendering is **optional**, and no KaTeX packages are required if you are not planning to use it. However, Angular applications using the Vite-based application builder may need to add `marked-katex-extension` to `externalDependencies` in the `build.options` section of `angular.json`:
+>
+> ```json
+> {
+>   "externalDependencies": ["marked-katex-extension"]
+> }
+> ```
 
 To add [KaTeX](https://katex.org/) math rendering support to your application install the KaTeX runtime and the parser extension:
 
 ```bash
 npm install katex@^0.16.0 marked-katex-extension@^5.0.0 --save
 ```
+
+Applications using the `katex` property must install both `katex` and `marked-katex-extension`.
 
 To activate [KaTeX](https://katex.org/) math rendering you need to include the KaTeX stylesheet:
 
