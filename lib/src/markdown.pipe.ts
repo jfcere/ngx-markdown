@@ -1,6 +1,5 @@
-import { ElementRef, inject, NgZone, Pipe, PipeTransform, ViewContainerRef } from '@angular/core';
+import { afterNextRender, ElementRef, inject, Injector, Pipe, PipeTransform, ViewContainerRef } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { first } from 'rxjs/operators';
 import { MarkdownService, ParseOptions, RenderOptions } from './markdown.service';
 
 export type MarkdownPipeOptions = ParseOptions & RenderOptions;
@@ -13,7 +12,7 @@ export class MarkdownPipe implements PipeTransform {
   private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private markdownService = inject(MarkdownService);
   private viewContainerRef = inject(ViewContainerRef);
-  private zone = inject(NgZone);
+  private injector = inject(Injector);
 
   async transform(value: string, options?: MarkdownPipeOptions): Promise<SafeHtml> {
     if (value == null) {
@@ -27,9 +26,10 @@ export class MarkdownPipe implements PipeTransform {
 
     const markdown = await this.markdownService.parse(value, options);
 
-    this.zone.onStable
-      .pipe(first())
-      .subscribe(() => this.markdownService.render(this.elementRef.nativeElement, options, this.viewContainerRef));
+    afterNextRender(
+      () => this.markdownService.render(this.elementRef.nativeElement, options, this.viewContainerRef),
+      { injector: this.injector },
+    );
 
     return this.domSanitizer.bypassSecurityTrustHtml(markdown);
   }

@@ -1,5 +1,5 @@
 import { ElementRef, TemplateRef } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { ClipboardRenderOptions } from './clipboard-options';
@@ -28,6 +28,7 @@ describe('MarkdownComponent', () => {
     fixture = TestBed.createComponent(MarkdownComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   describe('data', () => {
@@ -89,7 +90,7 @@ describe('MarkdownComponent', () => {
       expect(component.src).toBe(mockSrc);
     });
 
-    it('should emit load when get', fakeAsync(() => {
+    it('should emit load when get', async () => {
 
       const mockSrc = './src-example/file.md';
       const mockSrcReturn = 'src-return-value';
@@ -100,10 +101,10 @@ describe('MarkdownComponent', () => {
       component.src = mockSrc;
 
       component.ngOnChanges();
-      tick();
+      await fixture.whenStable();
 
       expect(component.load.emit).toHaveBeenCalledWith(mockSrcReturn);
-    }));
+    });
 
     it('should emit error when and error occurs', () => {
 

@@ -18,9 +18,6 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "demo/src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
             "tsConfig": "demo/tsconfig.app.json",
             "assets": [
               {
@@ -139,11 +136,7 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "lib/tsconfig.spec.json",
-            "karmaConfig": "lib/karma.conf.js",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "karmaConfig": "lib/karma.conf.js"
           }
         },
         "lint": {
