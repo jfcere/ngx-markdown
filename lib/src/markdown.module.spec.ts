@@ -1,4 +1,4 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { createEnvironmentInjector, EnvironmentInjector, EnvironmentProviders, Provider, SecurityContext } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MarkedExtension } from 'marked';
@@ -18,8 +18,8 @@ describe('provideMarkdown', () => {
   it('should provide HttpClient when config.loader is provided', () => {
 
     TestBed.configureTestingModule({
-      imports: [HttpClientModule],
       providers: [
+        provideHttpClient(),
         provideMarkdown({ loader: HttpClient }),
       ],
     });

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 
-import { HttpClient } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClient, provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentRef, EmbeddedViewRef, SecurityContext, TemplateRef, ViewContainerRef, ViewRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
@@ -163,9 +163,10 @@ describe('MarkdownService', () => {
       TestBed.configureTestingModule({
         imports: [
           BrowserModule,
-          HttpClientTestingModule,
         ],
         providers: [
+          provideHttpClient(),
+          provideHttpClientTesting(),
           provideMarkdown({
             markedExtensions: [
               { provide: MARKED_EXTENSIONS, useValue: mockExtensions[0], multi: true },
