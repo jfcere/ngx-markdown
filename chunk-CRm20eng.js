@@ -1,0 +1,17 @@
+import{Ct as XT,D as HM,E as Gh,I as J,K as Le,Mt as ZT,Pn as xS,R as JT,an as hn,at as Tc,bt as Wc,ht as Vh,rn as h,x as Fb}from"./main-ZKQ5VCMV.js";import{n as y,t as d$1}from"./chunk-Bzzizdf_.js";import{n as et,t as U}from"./chunk-pw2Eq08b.js";var a=class a{constructor(){this.elementRef=h(J);this.myValue=`print('hello-world')`}ngOnInit(){this.setHeadings()}setHeadings(){let o=[];this.elementRef.nativeElement.querySelectorAll(`h2`).forEach(i=>o.push(i)),this.headings=o}};a.ɵfac=function(i){return new(i||a)},a.ɵcmp=Le({type:a,selectors:[[`app-syntax-highlight`]],decls:25,vars:10,consts:[[3,`headings`],[`id`,`getting-started`],[`id`,`auto-detect`],[3,`src`],[`id`,`interpolation`],[`emoji`,``],[`id`,`language-pipe`],[3,`innerHTML`]],template:function(i,m){i&1&&(Tc(0,`app-scrollspy-nav-layout`,0)(1,`h1`,1),Gh(2,`Syntax Highlight`),Vh(),Tc(3,`section`)(4,`h2`,2),Gh(5,`Auto-Detect`),Vh(),Tc(6,`markdown`),Gh(7,`
+      When using the \`src\` input property to load file remotely, language for syntax highlight will be auto-detected based on the loaded file extension.
+
+      The following example...
+
+      \`\`\`html
+      <markdown [src]="'app/syntax-highlight/remote/for-loop.js'"></markdown>
+      \`\`\`
+
+      Would render with Javascript syntax highlight based on the \`js\` file extension.
+    `),Vh(),Wc(8,`markdown`,3),Vh(),Tc(9,`section`)(10,`h2`,4),Gh(11,`Interpolation`),Vh(),Tc(12,`markdown`,5),Gh(13,"\n      > :bulb: Using interpolation requires the uses of `ngPreserveWhitespaces` to keep indentation and spaces untouched during compilation.\n\n      When using [interpolation](https://angular.io/guide/template-syntax#interpolation-), the language for code block must be specified after the first three backticks.\n\n      ````html\n      <markdown ngPreserveWhitespaces>\n        ```typescript\n        export function greetings(name: string): string &#123;\n          return 'Hello ' + name;\n        }\n        ```\n      </markdown>\n      ````\n      ##### _* Characters such as `<, >, {, }` directly written in the HTML template file must be escaped so that the compiler doesn't try to bind it as regular Angular code_.\n\n      Would render with TypeScript syntax highlight based on the specified `typescript` language.\n    "),Vh(),Tc(14,`markdown`),Gh(15,`
+      \`\`\`typescript
+      export function greetings(name: string): string {
+        return 'Hello ' + name;
+      }
+      \`\`\`
+    `),Vh()(),Tc(16,`section`)(17,`h2`,6),Gh(18,`Language Pipe`),Vh(),Tc(19,`markdown`),Gh(20,"\n      When using the `markdown` pipe, you can specify the syntax highlight language by chaining the `language` pipe.\n\n      For example, having the python code `print('hello world')` into the `myValue` variable could be parsed specifying the language as follow...\n\n      ````\n      ```html\n      <div [innerHTML]=\"myValue | language : 'python' | markdown | async\"><div>\n      ```\n      ````\n\n      Would render with Python syntax highlight as specified with the `language` pipe in front of the `markdown` pipe.\n    "),Vh(),Wc(21,`div`,7),ZT(22,`language`),ZT(23,`markdown`),ZT(24,`async`),Vh()()),i&2&&(Fb(`headings`,m.headings),hn(8),Fb(`src`,`app/syntax-highlight/remote/for-loop.js`),hn(13),Fb(`innerHTML`,XT(24,8,XT(23,6,JT(22,3,m.myValue,`python`))),xS))},dependencies:[U,et,HM,d$1,y],styles:[`[_nghost-%COMP%]{display:block}`]});var d=a;export{d as default};
