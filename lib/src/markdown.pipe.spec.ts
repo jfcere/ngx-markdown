@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 
-import { ElementRef, NgZone, ViewContainerRef } from '@angular/core';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ElementRef, ViewContainerRef } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MarkdownPipe, MarkdownPipeOptions } from './markdown.pipe';
 import { MarkdownService } from './markdown.service';
@@ -13,7 +13,6 @@ describe('MarkdownPipe', () => {
   let markdownService: MarkdownService;
   let pipe: MarkdownPipe;
   let viewContainerRef: ViewContainerRef;
-  let zone: NgZone;
 
   const elementRefSpy = jasmine.createSpyObj<ElementRef>([], { nativeElement: document.createElement('div') });
   const viewContainerRefSpy = jasmine.createSpyObj<ViewContainerRef>(['createComponent']);
@@ -34,7 +33,6 @@ describe('MarkdownPipe', () => {
     domSanitizer = TestBed.inject(DomSanitizer);
     markdownService = TestBed.inject(MarkdownService);
     viewContainerRef = TestBed.inject(ViewContainerRef);
-    zone = TestBed.inject(NgZone);
   });
 
   it('should return empty string when value is null/undefined', async () => {
@@ -61,22 +59,21 @@ describe('MarkdownPipe', () => {
     }
   });
 
-  it('should render element through MarkdownService when zone is stable', fakeAsync(() => {
+  it('should render element through MarkdownService after next render', async () => {
 
     const markdown = '# Markdown';
     const mockPipeOptions: MarkdownPipeOptions = { mermaid: true, mermaidOptions: { darkMode: true } };
 
     spyOn(markdownService, 'render');
 
-    pipe.transform(markdown, mockPipeOptions);
-    tick();
+    await pipe.transform(markdown, mockPipeOptions);
 
     expect(markdownService.render).not.toHaveBeenCalled();
 
-    zone.onStable.emit(null);
+    TestBed.tick();
 
     expect(markdownService.render).toHaveBeenCalledWith(elementRef.nativeElement, mockPipeOptions, viewContainerRef);
-  }));
+  });
 
   it('should return parsed markdown', async () => {
 

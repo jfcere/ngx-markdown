@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ClipboardButtonComponent } from './clipboard-button.component';
 
 describe('ClipboardButtonComponent', () => {
@@ -13,6 +13,12 @@ describe('ClipboardButtonComponent', () => {
     fixture = TestBed.createComponent(ClipboardButtonComponent);
     nativeElement = fixture.nativeElement;
     fixture.detectChanges();
+
+    jasmine.clock().install();
+  });
+
+  afterEach(() => {
+    jasmine.clock().uninstall();
   });
 
   describe('button', () => {
@@ -23,7 +29,7 @@ describe('ClipboardButtonComponent', () => {
       expect(buttonElement).toBeDefined();
     });
 
-    it('should have class `copied` applied for 3 seconds when clicked', fakeAsync(() => {
+    it('should have class `copied` applied for 3 seconds when clicked', () => {
 
       const buttonElement = nativeElement.querySelector<HTMLButtonElement>('.markdown-clipboard-button');
 
@@ -34,16 +40,16 @@ describe('ClipboardButtonComponent', () => {
 
       expect(buttonElement?.classList).toContain('copied');
 
-      tick(2999);
+      jasmine.clock().tick(2999);
       fixture.detectChanges();
 
       expect(buttonElement?.classList).toContain('copied');
 
-      tick(1);
+      jasmine.clock().tick(1);
       fixture.detectChanges();
 
       expect(buttonElement?.classList).not.toContain('copied');
-    }));
+    });
 
     it('should display text `copy`', () => {
 
@@ -52,7 +58,7 @@ describe('ClipboardButtonComponent', () => {
       expect(buttonElement?.innerText).toBe('Copy');
     });
 
-    it('should display text `copied` for 3 seconds when clicked', fakeAsync(() => {
+    it('should display text `copied` for 3 seconds when clicked', () => {
 
       const buttonElement = nativeElement.querySelector<HTMLButtonElement>('.markdown-clipboard-button');
 
@@ -63,15 +69,15 @@ describe('ClipboardButtonComponent', () => {
 
       expect(buttonElement?.innerText).toBe('Copied');
 
-      tick(2999);
+      jasmine.clock().tick(2999);
       fixture.detectChanges();
 
       expect(buttonElement?.innerText).toBe('Copied');
 
-      tick(1);
+      jasmine.clock().tick(1);
       fixture.detectChanges();
 
       expect(buttonElement?.innerText).toBe('Copy');
-    }));
+    });
   });
 });

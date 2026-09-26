@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnDestroy, Output, TemplateRef, Type, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnDestroy, Output, PendingTasks, TemplateRef, Type, ViewContainerRef } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ClipboardRenderOptions } from './clipboard-options';
@@ -16,6 +16,7 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   element = inject<ElementRef<HTMLElement>>(ElementRef);
   markdownService = inject(MarkdownService);
   viewContainerRef = inject(ViewContainerRef);
+  private pendingTasks = inject(PendingTasks);
 
   protected static ngAcceptInputType_clipboard: boolean | '';
   protected static ngAcceptInputType_emoji: boolean | '';
@@ -137,6 +138,16 @@ export class MarkdownComponent implements OnChanges, AfterViewInit, OnDestroy {
   }
 
   async render(markdown: string, decodeHtml = false): Promise<void> {
+    // tracked so zoneless stability (whenStable, SSR) waits for the async render
+    const done = this.pendingTasks.add();
+    try {
+      await this.renderContent(markdown, decodeHtml);
+    } finally {
+      done();
+    }
+  }
+
+  private async renderContent(markdown: string, decodeHtml: boolean): Promise<void> {
     const parsedOptions: ParseOptions = {
       decodeHtml,
       inline: this.inline,

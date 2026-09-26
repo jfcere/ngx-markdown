@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, Input, NgZone, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, ElementRef, inject, Injector, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import Gumshoe from 'gumshoejs';
-import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-scrollspy-nav',
@@ -14,7 +13,7 @@ import { first } from 'rxjs/operators';
 })
 export class ScrollspyNavComponent implements OnChanges, OnDestroy {
   private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-  private zone = inject(NgZone);
+  private injector = inject(Injector);
 
   @Input()
   headings: Element[] | undefined;
@@ -42,12 +41,10 @@ export class ScrollspyNavComponent implements OnChanges, OnDestroy {
       this.scrollSpy.setup();
       return;
     }
-    this.zone.onStable
-      .pipe(first())
-      .subscribe(() => {
-        const hostElement = this.elementRef.nativeElement;
-        const linkSelector = `${hostElement.tagName}.${hostElement.className} a`;
-        this.scrollSpy = new Gumshoe(linkSelector, { offset: 64, reflow: true });
-      });
+    afterNextRender(() => {
+      const hostElement = this.elementRef.nativeElement;
+      const linkSelector = `${hostElement.tagName}.${hostElement.className} a`;
+      this.scrollSpy = new Gumshoe(linkSelector, { offset: 64, reflow: true });
+    }, { injector: this.injector });
   }
 }
