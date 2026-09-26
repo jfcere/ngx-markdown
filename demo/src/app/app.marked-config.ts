@@ -13,37 +13,40 @@ export function markedOptionsFactory(anchorService: AnchorService): MarkedOption
   return { renderer };
 }
 
-export function sanitizeHtml(html: string): string {
-  // configure DOMPurify to allow...
-  // - `class` as it is safe by default
-  // - `href` as its content is validated by DOMPurify
-  // - `style` as its content is validated by DOMPurify
-  // - `id` to be validated by the hook
-  DOMPurify.setConfig({
-    ALLOWED_ATTR: ['class', 'href', 'style'],
-    ADD_ATTR: ['id'],
-  });
+// configure DOMPurify to allow...
+// - `class` as it is safe by default
+// - `href` as its content is validated by DOMPurify
+// - `style` as its content is validated by DOMPurify
+// - `id` to be validated by the hook
+//
+// `setConfig` and `addHook` are global and cumulative, they are called once
+// on module load rather than on every `sanitizeHtml` call
+DOMPurify.setConfig({
+  ALLOWED_ATTR: ['class', 'href', 'style'],
+  ADD_ATTR: ['id'],
+});
 
-  // hook to validate and restrict `id` usage on header elements only
-  // and ensure they do not containt javascript or other unsafe characters
-  // to prevent potential XSS attacks through `id` attributes
-  DOMPurify.addHook('uponSanitizeElement', (node: Node) => {
-    const isNodeElement = node instanceof Element;
-    if (!isNodeElement) {
-      return;
-    }
+// hook to validate and restrict `id` usage on header elements only
+// and ensure they do not containt javascript or other unsafe characters
+// to prevent potential XSS attacks through `id` attributes
+DOMPurify.addHook('uponSanitizeElement', (node: Node) => {
+  const isNodeElement = node instanceof Element;
+  if (!isNodeElement) {
+    return;
+  }
 
-    const isHeader = /^(h[1-6])$/i.test(node.tagName);
-    if (isHeader) {
-      const idValue = node.getAttribute('id') ?? '';
-      const isValidId = /^[a-zA-Z][\w\-:.]*$/.test(idValue);
-      if (!isValidId) {
-        node.removeAttribute('id');
-      }
-    } else {
+  const isHeader = /^(h[1-6])$/i.test(node.tagName);
+  if (isHeader) {
+    const idValue = node.getAttribute('id') ?? '';
+    const isValidId = /^[a-zA-Z][\w\-:.]*$/.test(idValue);
+    if (!isValidId) {
       node.removeAttribute('id');
     }
-  });
+  } else {
+    node.removeAttribute('id');
+  }
+});
 
+export function sanitizeHtml(html: string): string {
   return DOMPurify.sanitize(html);
 }

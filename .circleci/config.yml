@@ -53,10 +53,13 @@ jobs:
           path: coverage
           prefix: coverage
 
-      # Upload coverage to Coveralls
+      # Upload coverage to Coveralls using the official self-contained reporter
+      # instead of the unmaintained `coveralls` npm package
       - run:
           name: Push coverage artifacts
-          command: npm run coveralls
+          command: |
+            curl -L https://coveralls.io/coveralls-linux.tar.gz | sudo tar -xz -C /usr/local/bin
+            coveralls report coverage/lcov.info
 
       # Type-check
       - run:

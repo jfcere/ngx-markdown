@@ -568,9 +568,12 @@ Because Angular's sanitizer offers limited flexibility, you can use any external
 import DOMPurify from 'dompurify';
 import { SANITIZE } from 'ngx-markdown';
 
+// `setConfig` and `addHook` are global and cumulative, configure DOMPurify
+// once on module load rather than inside the sanitize function
+DOMPurify.setConfig({ ... });
+
 // sanitize function using an external library
 function sanitizeHtml(html: string): string {
-  DOMPurify.setConfig({ ... });
   return DOMPurify.sanitize(html);
 }
 
