@@ -76,8 +76,8 @@
     "mermaid": "^11.2.1",
     "ngx-markdown": "file:lib",
     "prismjs": "^1.30.0",
-    "rxjs": "~6.5.3",
-    "tslib": "^2.3.0"
+    "rxjs": "~6.5.5",
+    "tslib": "^2.8.1"
   },
   "devDependencies": {
     "@angular-eslint/schematics": "^22.5.0",
