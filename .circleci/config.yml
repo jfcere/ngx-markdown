@@ -17,10 +17,12 @@ jobs:
           name: Install dependencies
           command: npm ci
 
-      # Install the browser Vitest drives (not shipped by `npm ci`)
+      # Install the browser Vitest drives (not shipped by `npm ci`). No
+      # `--with-deps`: that needs `sudo apt-get` for xvfb, which only headed
+      # runs require. Cheap no-op once the cache holds the browser.
       - run:
           name: Install Playwright chromium
-          command: npx playwright install --with-deps chromium
+          command: npx playwright install chromium
 
       # Cache dependencies (including the Playwright browser download)
       - save_cache:
@@ -40,7 +42,9 @@ jobs:
           name: Test
           command: npm run test:ci
 
-      # Store test results for tests tab in CircleCI UI
+      # Store test results for tests tab in CircleCI UI. These steps run even
+      # when the suite above fails, so a red build still reports which specs
+      # broke (`when` is not a valid attribute here).
       - store_test_results:
           path: test-results.xml
 
