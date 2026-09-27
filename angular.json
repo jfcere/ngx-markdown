@@ -62,8 +62,7 @@
               "node_modules/clipboard/dist/clipboard.min.js"
             ],
             "allowedCommonJsDependencies": [
-              "gumshoejs",
-              "hammerjs"
+              "gumshoejs"
             ]
           },
           "configurations": {
