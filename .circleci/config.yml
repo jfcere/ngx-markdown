@@ -3,7 +3,10 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/node:24.16-browsers
+      # Pinned by digest so a re-tag upstream cannot silently change the
+      # toolchain. The tag is kept alongside for readability; when bumping
+      # it, refresh the digest too.
+      - image: cimg/node:24.16-browsers@sha256:50d45d9ffc7db42251dc5c6d82a620fa5c6f9a585bd6e8d57376f81210b670c7
     steps:
       # Checkout the source code
       - checkout
@@ -61,7 +64,18 @@ jobs:
       - run:
           name: Push coverage artifacts
           command: |
-            curl -L https://coveralls.io/coveralls-linux.tar.gz | sudo tar -xz -C /usr/local/bin
+            # Pinned release + checksum instead of piping the unversioned
+            # `coveralls.io/coveralls-linux.tar.gz` straight into tar: that URL
+            # always serves the latest build, so the binary running here could
+            # change without any commit. Bump COVERALLS_VERSION and CHECKSUM
+            # together from the release's coveralls-checksums.txt.
+            COVERALLS_VERSION=v0.6.22
+            COVERALLS_SHA256=cd042b63bcb2c03fd0fd3372c040507331f5013a997828071e2ab7f9584fc7d6
+            curl -fsSL -o coveralls.tar.gz \
+              "https://github.com/coverallsapp/coverage-reporter/releases/download/${COVERALLS_VERSION}/coveralls-linux.tar.gz"
+            echo "${COVERALLS_SHA256}  coveralls.tar.gz" | sha256sum --check --strict
+            sudo tar -xz -C /usr/local/bin -f coveralls.tar.gz
+            rm coveralls.tar.gz
             coveralls report coverage/lib/lcov.info
 
       # Type-check
@@ -91,7 +105,10 @@ jobs:
 
   deploy:
     docker:
-      - image: cimg/node:24.16-browsers
+      # Pinned by digest so a re-tag upstream cannot silently change the
+      # toolchain. The tag is kept alongside for readability; when bumping
+      # it, refresh the digest too.
+      - image: cimg/node:24.16-browsers@sha256:50d45d9ffc7db42251dc5c6d82a620fa5c6f9a585bd6e8d57376f81210b670c7
     steps:
       # Checkout the source code
       - checkout
