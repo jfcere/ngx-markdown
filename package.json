@@ -5,7 +5,7 @@
   "homepage": "https://github.com/jfcere/ngx-markdown",
   "license": "MIT",
   "engines": {
-    "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
+    "node": "^22.22.3 || ^24.19.0 || >=26.0.0"
   },
   "author": {
     "name": "Jean-Francois Cere",

@@ -3,15 +3,17 @@ version: 2.1
 jobs:
   build:
     docker:
-      # node 24.16 + browsers, digest resolved 2026-09-27.
+      # node 24.21 + browsers, digest resolved 2026-09-27. Keep this at or
+      # above the `@types/node` minor in package.json, so the types describe
+      # the runtime the tests actually run on.
       #
       # The tag alone is mutable: pinning the digest stops a re-tag upstream
       # from changing the toolchain with no commit behind it. The trade-off is
       # that base-image security updates only land when this is refreshed, so
       # bump tag and digest together:
-      #   docker pull cimg/node:24.16-browsers
-      #   docker inspect --format='{{index .RepoDigests 0}}' cimg/node:24.16-browsers
-      - image: cimg/node:24.16-browsers@sha256:50d45d9ffc7db42251dc5c6d82a620fa5c6f9a585bd6e8d57376f81210b670c7
+      #   docker pull cimg/node:24.21-browsers
+      #   docker inspect --format='{{index .RepoDigests 0}}' cimg/node:24.21-browsers
+      - image: cimg/node:24.21-browsers@sha256:7e52dee8e595008b20af17a38b141402bf6d8c9dee09c910c74e0cef61ce9879
     steps:
       # Checkout the source code
       - checkout
@@ -110,15 +112,17 @@ jobs:
 
   deploy:
     docker:
-      # node 24.16 + browsers, digest resolved 2026-09-27.
+      # node 24.21 + browsers, digest resolved 2026-09-27. Keep this at or
+      # above the `@types/node` minor in package.json, so the types describe
+      # the runtime the tests actually run on.
       #
       # The tag alone is mutable: pinning the digest stops a re-tag upstream
       # from changing the toolchain with no commit behind it. The trade-off is
       # that base-image security updates only land when this is refreshed, so
       # bump tag and digest together:
-      #   docker pull cimg/node:24.16-browsers
-      #   docker inspect --format='{{index .RepoDigests 0}}' cimg/node:24.16-browsers
-      - image: cimg/node:24.16-browsers@sha256:50d45d9ffc7db42251dc5c6d82a620fa5c6f9a585bd6e8d57376f81210b670c7
+      #   docker pull cimg/node:24.21-browsers
+      #   docker inspect --format='{{index .RepoDigests 0}}' cimg/node:24.21-browsers
+      - image: cimg/node:24.21-browsers@sha256:7e52dee8e595008b20af17a38b141402bf6d8c9dee09c910c74e0cef61ce9879
     steps:
       # Checkout the source code
       - checkout
