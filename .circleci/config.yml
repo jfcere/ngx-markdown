@@ -3,9 +3,14 @@ version: 2.1
 jobs:
   build:
     docker:
-      # Pinned by digest so a re-tag upstream cannot silently change the
-      # toolchain. The tag is kept alongside for readability; when bumping
-      # it, refresh the digest too.
+      # node 24.16 + browsers, digest resolved 2026-09-27.
+      #
+      # The tag alone is mutable: pinning the digest stops a re-tag upstream
+      # from changing the toolchain with no commit behind it. The trade-off is
+      # that base-image security updates only land when this is refreshed, so
+      # bump tag and digest together:
+      #   docker pull cimg/node:24.16-browsers
+      #   docker inspect --format='{{index .RepoDigests 0}}' cimg/node:24.16-browsers
       - image: cimg/node:24.16-browsers@sha256:50d45d9ffc7db42251dc5c6d82a620fa5c6f9a585bd6e8d57376f81210b670c7
     steps:
       # Checkout the source code
@@ -105,9 +110,14 @@ jobs:
 
   deploy:
     docker:
-      # Pinned by digest so a re-tag upstream cannot silently change the
-      # toolchain. The tag is kept alongside for readability; when bumping
-      # it, refresh the digest too.
+      # node 24.16 + browsers, digest resolved 2026-09-27.
+      #
+      # The tag alone is mutable: pinning the digest stops a re-tag upstream
+      # from changing the toolchain with no commit behind it. The trade-off is
+      # that base-image security updates only land when this is refreshed, so
+      # bump tag and digest together:
+      #   docker pull cimg/node:24.16-browsers
+      #   docker inspect --format='{{index .RepoDigests 0}}' cimg/node:24.16-browsers
       - image: cimg/node:24.16-browsers@sha256:50d45d9ffc7db42251dc5c6d82a620fa5c6f9a585bd6e8d57376f81210b670c7
     steps:
       # Checkout the source code
