@@ -439,6 +439,20 @@ describe('MarkdownService', () => {
         expect(parsed).toBe(await marked.parse(mockRaw));
       });
 
+      it('should delegate non-mermaid code blocks to the default renderer', async () => {
+
+        // `extendsRendererForMermaid` installs itself once and is guarded by a
+        // flag on the shared renderer, so whether its `else` arm ever runs
+        // otherwise depends on which spec file installed it first. Parse a
+        // plain code block through the extended renderer explicitly.
+        const mockRaw = '```ts\nconst answer = 42;\n```';
+
+        const parsed = await markdownService.parse(mockRaw, { mermaid: true });
+
+        expect(parsed).not.toContain('class="mermaid"');
+        expect(parsed).toContain('answer');
+      });
+
       it('should not pass extended flags to `marked.use` when parsing', async () => {
 
         const mockRaw = '### Markdown-x';
