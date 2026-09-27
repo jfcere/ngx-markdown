@@ -88,6 +88,10 @@ export class MarkdownService {
   private katexGate: { enabled: boolean } = { enabled: false };
   private markedKatex: MarkedKatexExtension | null = null;
 
+  // views created by `renderClipboard`, keyed by the container they live in, so
+  // a re-render can remove its own buttons without touching consumer views
+  private readonly clipboardViewRefs = new WeakMap<ViewContainerRef, EmbeddedViewRef<unknown>[]>();
+
   private readonly DEFAULT_MARKED_OPTIONS: MarkedOptions = {
     renderer: new MarkedRenderer(),
   };
@@ -379,6 +383,28 @@ export class MarkdownService {
     return joypixels.shortnameToUnicode(html);
   }
 
+  private trackClipboardView(viewContainerRef: ViewContainerRef, viewRef: EmbeddedViewRef<unknown>): void {
+    const viewRefs = this.clipboardViewRefs.get(viewContainerRef) ?? [];
+    viewRefs.push(viewRef);
+    this.clipboardViewRefs.set(viewContainerRef, viewRefs);
+  }
+
+  private clearClipboardViews(viewContainerRef: ViewContainerRef): void {
+    const viewRefs = this.clipboardViewRefs.get(viewContainerRef);
+    if (!viewRefs) {
+      return;
+    }
+    // only remove the views this service created, as the container may also
+    // hold views owned by the consumer when they call `render()` themselves
+    for (const viewRef of viewRefs) {
+      const index = viewContainerRef.indexOf(viewRef);
+      if (index !== -1) {
+        viewContainerRef.remove(index);
+      }
+    }
+    this.clipboardViewRefs.delete(viewContainerRef);
+  }
+
   private renderClipboard(element: HTMLElement, viewContainerRef: ViewContainerRef | undefined, options: ClipboardRenderOptions): void {
     if (!isPlatformBrowser(this.platform)) {
       return;
@@ -389,6 +415,12 @@ export class MarkdownService {
     if (!viewContainerRef) {
       throw new Error(errorClipboardViewContainerRequired);
     }
+
+    // destroy the views created by a previous render, whose DOM nodes were
+    // wiped when the host element's innerHTML was reassigned; leaving them in
+    // the container makes Angular insert the next buttons after dead anchors
+    // (misplacing them) and leaks their ClipboardJS instances
+    this.clearClipboardViews(viewContainerRef);
 
     const {
       buttonComponent,
@@ -439,6 +471,8 @@ export class MarkdownService {
         embeddedViewRef = componentRef.hostView as EmbeddedViewRef<unknown>;
         componentRef.changeDetectorRef.markForCheck();
       }
+
+      this.trackClipboardView(viewContainerRef, embeddedViewRef);
 
       // declare clipboard instance variable
       let clipboardInstance: typeof ClipboardJS;
