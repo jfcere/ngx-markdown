@@ -105,7 +105,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "eslintConfig": "demo/eslint.config.js",
+            "eslintConfig": "demo/eslint.config.mjs",
             "lintFilePatterns": [
               "demo/**/*.ts",
               "demo/**/*.html"
@@ -169,7 +169,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "eslintConfig": "lib/eslint.config.js",
+            "eslintConfig": "lib/eslint.config.mjs",
             "lintFilePatterns": [
               "lib/**/*.ts",
               "lib/**/*.html"

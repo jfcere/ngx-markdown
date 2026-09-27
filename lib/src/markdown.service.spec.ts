@@ -5,8 +5,7 @@ import { TestBed } from '@angular/core/testing';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { marked, MarkedExtension, Tokens } from 'marked';
 import { first } from 'rxjs/operators';
-import type { MockedFunction } from 'vitest';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, type MockedFunction, vi } from 'vitest';
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { MarkedKatexOptions } from './katex-options';
 import {

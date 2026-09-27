@@ -1,10 +1,15 @@
 // @ts-check
-const tseslint = require("typescript-eslint");
-const angular = require("angular-eslint");
+import { join } from "node:path";
+import angular from "angular-eslint";
+import { defineConfig } from "eslint/config";
+import tseslint from "typescript-eslint";
+import baseConfig, { sortImportsRule } from "../eslint.config.mjs";
 
-const baseConfig = require("../eslint.config.js");
+// The repo has a single `tsconfig.json`, at the root, and it is the one that
+// declares the `@app/*`, `@shared/*` and `ngx-markdown` path aliases.
+const repoRoot = join(import.meta.dirname, "..");
 
-module.exports = tseslint.config(
+export default defineConfig(
   {
     extends: [...baseConfig],
   },
@@ -20,7 +25,7 @@ module.exports = tseslint.config(
 
       parserOptions: {
         project: "tsconfig.app.json",
-        tsconfigRootDir: __dirname,
+        tsconfigRootDir: import.meta.dirname,
         createDefaultProgram: true,
       },
     },
@@ -47,7 +52,7 @@ module.exports = tseslint.config(
       "@typescript-eslint/no-unused-vars": "error",
       "@typescript-eslint/no-var-requires": "off",
       "comma-dangle": ["error", "always-multiline"],
-      "import/order": "error",
+      "perfectionist/sort-imports": sortImportsRule(repoRoot),
       "object-shorthand": "off",
     },
   },
