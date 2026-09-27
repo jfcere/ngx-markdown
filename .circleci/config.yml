@@ -1,17 +1,10 @@
 version: 2.1
 
-orbs:
-  browser-tools: circleci/browser-tools@2.4.2
-
 jobs:
   build:
     docker:
       - image: cimg/node:24.16-browsers
     steps:
-      # Install Chrome and Chromedriver via browser-tools orb
-      - browser-tools/install_chrome
-      - browser-tools/install_chromedriver
-
       # Checkout the source code
       - checkout
 
@@ -24,12 +17,18 @@ jobs:
           name: Install dependencies
           command: npm ci
 
-      # Cache dependencies
+      # Install the browser Vitest drives (not shipped by `npm ci`)
+      - run:
+          name: Install Playwright chromium
+          command: npx playwright install --with-deps chromium
+
+      # Cache dependencies (including the Playwright browser download)
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
             - ~/.npm
             - ./node_modules
+            - ~/.cache/ms-playwright
 
       # Vite regression check for optional KaTeX peer
       - run:
@@ -59,7 +58,7 @@ jobs:
           name: Push coverage artifacts
           command: |
             curl -L https://coveralls.io/coveralls-linux.tar.gz | sudo tar -xz -C /usr/local/bin
-            coveralls report coverage/lcov.info
+            coveralls report coverage/lib/lcov.info
 
       # Type-check
       - run:

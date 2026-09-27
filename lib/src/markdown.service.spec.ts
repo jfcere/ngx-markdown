@@ -1072,16 +1072,18 @@ describe('MarkdownService', () => {
 
     describe('reload', () => {
 
-      it('should request reload through reload$ subject', (done) => {
+      it('should request reload through reload$ subject', async () => {
 
-        markdownService.reload$
-          .pipe(first())
-          .subscribe(() => {
-            expect(true).toBeTruthy();
-            done();
-          });
+        // `firstValueFrom` is rxjs 7+; the library still supports rxjs 6.
+        const reloaded = new Promise<void>(resolve => {
+          markdownService.reload$
+            .pipe(first())
+            .subscribe(() => resolve());
+        });
 
         markdownService.reload();
+
+        await expectAsync(reloaded).toBeResolved();
       });
     });
 

@@ -133,13 +133,6 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
-          "options": {
-            "tsConfig": "lib/tsconfig.spec.json",
-            "karmaConfig": "lib/karma.conf.js"
-          }
-        },
-        "unit-test": {
           "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "lib/tsconfig.spec.json",
@@ -163,6 +156,15 @@
               "html",
               "lcovonly",
               "text-summary"
+            ],
+            "reporters": [
+              "default",
+              [
+                "junit",
+                {
+                  "outputFile": "test-results.xml"
+                }
+              ]
             ]
           }
         },
