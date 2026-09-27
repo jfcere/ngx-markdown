@@ -4,6 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { MarkedExtension } from 'marked';
 import { describe, expect, it } from 'vitest';
 import { CLIPBOARD_OPTIONS, ClipboardOptions } from './clipboard-options';
+import { MarkdownModule } from './markdown.module';
 import { MARKED_EXTENSIONS } from './marked-extensions';
 import { MARKED_OPTIONS, MarkedOptions } from './marked-options';
 import { provideMarkdown } from './provide-markdown';
@@ -237,5 +238,61 @@ describe('provideMarkdown', () => {
     const sanitize = TestBed.inject(SANITIZE, null, { optional: true });
 
     expect(sanitize).toBeNull();
+  });
+});
+
+describe('MarkdownModule', () => {
+
+  describe('forRoot', () => {
+
+    it('should return the module with providers from `provideMarkdown`', () => {
+
+      const moduleWithProviders = MarkdownModule.forRoot();
+
+      expect(moduleWithProviders.ngModule).toBe(MarkdownModule);
+      expect(moduleWithProviders.providers).toBeDefined();
+    });
+
+    it('should forward its config to `provideMarkdown`', () => {
+
+      const mockClipboardOptions: ClipboardOptions = { buttonComponent: undefined };
+
+      TestBed.configureTestingModule({
+        imports: [
+          MarkdownModule.forRoot({
+            clipboardOptions: { provide: CLIPBOARD_OPTIONS, useValue: mockClipboardOptions },
+          }),
+        ],
+      });
+
+      expect(TestBed.inject(CLIPBOARD_OPTIONS)).toBe(mockClipboardOptions);
+    });
+  });
+
+  describe('forChild', () => {
+
+    it('should return the module without any provider', () => {
+
+      const moduleWithProviders = MarkdownModule.forChild();
+
+      expect(moduleWithProviders.ngModule).toBe(MarkdownModule);
+      expect(moduleWithProviders.providers).toBeUndefined();
+    });
+
+    it('should not re-provide the services already provided by `forRoot`', () => {
+
+      const mockClipboardOptions: ClipboardOptions = { buttonComponent: undefined };
+
+      TestBed.configureTestingModule({
+        imports: [
+          MarkdownModule.forRoot({
+            clipboardOptions: { provide: CLIPBOARD_OPTIONS, useValue: mockClipboardOptions },
+          }),
+          MarkdownModule.forChild(),
+        ],
+      });
+
+      expect(TestBed.inject(CLIPBOARD_OPTIONS)).toBe(mockClipboardOptions);
+    });
   });
 });

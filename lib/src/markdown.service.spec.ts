@@ -376,6 +376,30 @@ describe('MarkdownService', () => {
         expect(tokenizerSpy).toHaveBeenCalled();
       });
 
+      it('should disable an already-installed KaTeX tokenizer when katex is false', async () => {
+
+        // The renderer is shared across components, and marked cannot disable an
+        // extension once registered. Once `katex: true` has installed the gated
+        // tokenizer, a later `katex: false` parse must go through the gate and
+        // bail out, otherwise enabling katex in one component enables it for all.
+        const tokenizerSpy = vi.fn().mockReturnValue(undefined);
+        const markedKatexSpy = vi.fn().mockReturnValue({
+          extensions: [{ name: 'marked-katex-extension', level: 'block', tokenizer: tokenizerSpy }],
+        });
+
+        markdownService['markedKatex'] = markedKatexSpy;
+
+        await markdownService.parse('$E=mc^2$', { katex: true });
+
+        expect(tokenizerSpy).toHaveBeenCalled();
+
+        tokenizerSpy.mockClear();
+
+        await markdownService.parse('$E=mc^2$', { katex: false });
+
+        expect(tokenizerSpy).not.toHaveBeenCalled();
+      });
+
       it('should not extend marked renderer when katex is false', async () => {
 
         const markedKatexSpy = vi.fn().mockReturnValue({ extensions: [] } as any);
