@@ -83,6 +83,8 @@
     "@angular/compiler-cli": "^22.1.4",
     "@angular/language-service": "^22.1.4",
     "@types/jasmine": "~6.0.0",
+    "@vitest/browser-playwright": "^5.0.2",
+    "@vitest/coverage-v8": "^5.0.2",
     "angular-cli-ghpages": "^3.1.0",
     "angular-eslint": "^22.1.0",
     "cpy-cli": "^7.0.0",
@@ -99,8 +101,10 @@
     "karma-jasmine-html-reporter": "~2.3.0",
     "karma-junit-reporter": "^2.0.1",
     "ng-packagr": "^22.1.0",
+    "playwright": "^1.63.0",
     "rimraf": "^6.0.0",
     "typescript": "~6.0.2",
-    "typescript-eslint": "^8.33.1"
+    "typescript-eslint": "^8.33.1",
+    "vitest": "^5.0.2"
   }
 }
