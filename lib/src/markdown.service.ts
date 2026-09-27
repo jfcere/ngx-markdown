@@ -150,7 +150,11 @@ export class MarkdownService {
       disableSanitizer,
     } = parseOptions;
 
-    this.katexGate = { enabled: !!parseOptions.katex };
+    // Mutate rather than reassign: the gated tokenizer installed by
+    // `extendsRendererForKatex` closes over this object, and the renderer
+    // outlives any single `parse` call. Replacing it here would orphan that
+    // closure on a gate no later parse can ever update.
+    this.katexGate.enabled = !!parseOptions.katex;
 
     const markedOptions = {
       ...this.options,

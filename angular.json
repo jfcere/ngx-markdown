@@ -62,8 +62,7 @@
               "node_modules/clipboard/dist/clipboard.min.js"
             ],
             "allowedCommonJsDependencies": [
-              "gumshoejs",
-              "hammerjs"
+              "gumshoejs"
             ]
           },
           "configurations": {
@@ -105,7 +104,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "eslintConfig": "demo/eslint.config.js",
+            "eslintConfig": "demo/eslint.config.mjs",
             "lintFilePatterns": [
               "demo/**/*.ts",
               "demo/**/*.html"
@@ -133,16 +132,43 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "lib/tsconfig.spec.json",
-            "karmaConfig": "lib/karma.conf.js"
+            "runner": "vitest",
+            "browsers": [
+              "chromium"
+            ],
+            "setupFiles": [
+              "lib/src/test-setup.ts"
+            ],
+            "coverageInclude": [
+              "lib/src/**/*.ts"
+            ],
+            "coverageExclude": [
+              "lib/src/**/*.spec.ts",
+              "lib/src/test-setup.ts"
+            ],
+            "coverageReporters": [
+              "html",
+              "lcovonly",
+              "text-summary"
+            ],
+            "reporters": [
+              "default",
+              [
+                "junit",
+                {
+                  "outputFile": "test-results.xml"
+                }
+              ]
+            ]
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "eslintConfig": "lib/eslint.config.js",
+            "eslintConfig": "lib/eslint.config.mjs",
             "lintFilePatterns": [
               "lib/**/*.ts",
               "lib/**/*.html"

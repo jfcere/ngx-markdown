@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { merge, of, Subject, timer } from 'rxjs';
-import { distinctUntilChanged, mapTo, shareReplay, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, map, shareReplay, switchMap } from 'rxjs/operators';
 
 const BUTTON_TEXT_COPY = 'Copy';
 const BUTTON_TEXT_COPIED = 'Copied';
@@ -24,7 +24,7 @@ export class ClipboardButtonComponent {
     this._buttonClick$.pipe(
       switchMap(() => merge(
         of(true),
-        timer(3000).pipe(mapTo(false)),
+        timer(3000).pipe(map(() => false)),
       )),
       distinctUntilChanged(),
       shareReplay(1),

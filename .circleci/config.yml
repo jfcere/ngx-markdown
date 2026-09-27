@@ -1,17 +1,20 @@
 version: 2.1
 
-orbs:
-  browser-tools: circleci/browser-tools@2.4.2
-
 jobs:
   build:
     docker:
-      - image: cimg/node:24.16-browsers
+      # node 24.21 + browsers, digest resolved 2026-09-27. Keep this at or
+      # above the `@types/node` minor in package.json, so the types describe
+      # the runtime the tests actually run on.
+      #
+      # The tag alone is mutable: pinning the digest stops a re-tag upstream
+      # from changing the toolchain with no commit behind it. The trade-off is
+      # that base-image security updates only land when this is refreshed, so
+      # bump tag and digest together:
+      #   docker pull cimg/node:24.21-browsers
+      #   docker inspect --format='{{index .RepoDigests 0}}' cimg/node:24.21-browsers
+      - image: cimg/node:24.21-browsers@sha256:7e52dee8e595008b20af17a38b141402bf6d8c9dee09c910c74e0cef61ce9879
     steps:
-      # Install Chrome and Chromedriver via browser-tools orb
-      - browser-tools/install_chrome
-      - browser-tools/install_chromedriver
-
       # Checkout the source code
       - checkout
 
@@ -24,12 +27,20 @@ jobs:
           name: Install dependencies
           command: npm ci
 
-      # Cache dependencies
+      # Install the browser Vitest drives (not shipped by `npm ci`). No
+      # `--with-deps`: that needs `sudo apt-get` for xvfb, which only headed
+      # runs require. Cheap no-op once the cache holds the browser.
+      - run:
+          name: Install Playwright chromium
+          command: npx playwright install chromium
+
+      # Cache dependencies (including the Playwright browser download)
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
             - ~/.npm
             - ./node_modules
+            - ~/.cache/ms-playwright
 
       # Vite regression check for optional KaTeX peer
       - run:
@@ -41,7 +52,9 @@ jobs:
           name: Test
           command: npm run test:ci
 
-      # Store test results for tests tab in CircleCI UI
+      # Store test results for tests tab in CircleCI UI. These steps run even
+      # when the suite above fails, so a red build still reports which specs
+      # broke (`when` is not a valid attribute here).
       - store_test_results:
           path: test-results.xml
 
@@ -53,10 +66,24 @@ jobs:
           path: coverage
           prefix: coverage
 
-      # Upload coverage to Coveralls
+      # Upload coverage to Coveralls using the official self-contained reporter
+      # instead of the unmaintained `coveralls` npm package
       - run:
           name: Push coverage artifacts
-          command: npm run coveralls
+          command: |
+            # Pinned release + checksum instead of piping the unversioned
+            # `coveralls.io/coveralls-linux.tar.gz` straight into tar: that URL
+            # always serves the latest build, so the binary running here could
+            # change without any commit. Bump COVERALLS_VERSION and CHECKSUM
+            # together from the release's coveralls-checksums.txt.
+            COVERALLS_VERSION=v0.6.22
+            COVERALLS_SHA256=cd042b63bcb2c03fd0fd3372c040507331f5013a997828071e2ab7f9584fc7d6
+            curl -fsSL -o coveralls.tar.gz \
+              "https://github.com/coverallsapp/coverage-reporter/releases/download/${COVERALLS_VERSION}/coveralls-linux.tar.gz"
+            echo "${COVERALLS_SHA256}  coveralls.tar.gz" | sha256sum --check --strict
+            sudo tar -xz -C /usr/local/bin -f coveralls.tar.gz
+            rm coveralls.tar.gz
+            coveralls report coverage/lib/lcov.info
 
       # Type-check
       - run:
@@ -85,7 +112,17 @@ jobs:
 
   deploy:
     docker:
-      - image: cimg/node:24.16-browsers
+      # node 24.21 + browsers, digest resolved 2026-09-27. Keep this at or
+      # above the `@types/node` minor in package.json, so the types describe
+      # the runtime the tests actually run on.
+      #
+      # The tag alone is mutable: pinning the digest stops a re-tag upstream
+      # from changing the toolchain with no commit behind it. The trade-off is
+      # that base-image security updates only land when this is refreshed, so
+      # bump tag and digest together:
+      #   docker pull cimg/node:24.21-browsers
+      #   docker inspect --format='{{index .RepoDigests 0}}' cimg/node:24.21-browsers
+      - image: cimg/node:24.21-browsers@sha256:7e52dee8e595008b20af17a38b141402bf6d8c9dee09c910c74e0cef61ce9879
     steps:
       # Checkout the source code
       - checkout

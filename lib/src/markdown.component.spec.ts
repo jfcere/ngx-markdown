@@ -2,6 +2,7 @@ import { ElementRef, TemplateRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { first } from 'rxjs/operators';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ClipboardRenderOptions } from './clipboard-options';
 import { MarkedKatexOptions } from './katex-options';
 import { MarkdownComponent } from './markdown.component';
@@ -35,7 +36,7 @@ describe('MarkdownComponent', () => {
 
     it('should call render with provided data when set', () => {
 
-      const spyRender = spyOn(component, 'render');
+      const spyRender = vi.spyOn(component, 'render').mockImplementation((() => undefined) as never);
 
       const useCases = [
         '',
@@ -47,7 +48,7 @@ describe('MarkdownComponent', () => {
         component.data = data;
         component.ngOnChanges();
         expect(component.render).toHaveBeenCalledWith(data);
-        spyRender.calls.reset();
+        spyRender.mockClear();
       });
     });
 
@@ -68,8 +69,8 @@ describe('MarkdownComponent', () => {
       const mockSrc = './src-example/file.md';
       const mockContent = 'source-content';
 
-      spyOn(component, 'render').and.returnValue(Promise.resolve());
-      spyOn(markdownService, 'getSource').and.returnValue(of(mockContent));
+      vi.spyOn(component, 'render').mockReturnValue(Promise.resolve());
+      vi.spyOn(markdownService, 'getSource').mockReturnValue(of(mockContent));
 
       component.src = mockSrc;
 
@@ -83,7 +84,7 @@ describe('MarkdownComponent', () => {
 
       const mockSrc = './src-example/file.md';
 
-      spyOn(markdownService, 'getSource').and.returnValue(of());
+      vi.spyOn(markdownService, 'getSource').mockReturnValue(of());
 
       component.src = mockSrc;
 
@@ -95,8 +96,8 @@ describe('MarkdownComponent', () => {
       const mockSrc = './src-example/file.md';
       const mockSrcReturn = 'src-return-value';
 
-      spyOn(markdownService, 'getSource').and.returnValue(of(mockSrcReturn));
-      spyOn(component.load, 'emit');
+      vi.spyOn(markdownService, 'getSource').mockReturnValue(of(mockSrcReturn));
+      vi.spyOn(component.load, 'emit').mockImplementation((() => undefined));
 
       component.src = mockSrc;
 
@@ -111,8 +112,8 @@ describe('MarkdownComponent', () => {
       const mockSrc = './src-example/file.md';
       const mockError = 'error-x';
 
-      spyOn(markdownService, 'getSource').and.returnValue(throwError(mockError));
-      spyOn(component.error, 'emit');
+      vi.spyOn(markdownService, 'getSource').mockReturnValue(throwError(mockError));
+      vi.spyOn(component.error, 'emit').mockImplementation((() => undefined));
 
       component.src = mockSrc;
 
@@ -129,13 +130,13 @@ describe('MarkdownComponent', () => {
       const mockHtmlElement = document.createElement('div');
       mockHtmlElement.innerHTML = 'inner-html';
 
-      spyOn(markdownService, 'getSource').and.returnValue(of());
+      vi.spyOn(markdownService, 'getSource').mockReturnValue(of());
 
       component.element = new ElementRef(mockHtmlElement);
       component.data = undefined;
       component.src = undefined;
 
-      spyOn(component, 'render');
+      vi.spyOn(component, 'render').mockImplementation((() => undefined) as never);
 
       component.ngAfterViewInit();
 
@@ -147,12 +148,12 @@ describe('MarkdownComponent', () => {
       const mockHtmlElement = document.createElement('div');
       mockHtmlElement.innerHTML = 'inner-html';
 
-      spyOn(markdownService, 'getSource').and.returnValue(of());
+      vi.spyOn(markdownService, 'getSource').mockReturnValue(of());
 
       component.element = new ElementRef(mockHtmlElement);
       component.src = './src-example/file.md';
 
-      spyOn(component, 'render');
+      vi.spyOn(component, 'render').mockImplementation((() => undefined) as never);
 
       component.ngAfterViewInit();
 
@@ -167,7 +168,7 @@ describe('MarkdownComponent', () => {
       component.element = new ElementRef(mockHtmlElement);
       component.data = '# Markdown';
 
-      spyOn(component, 'render');
+      vi.spyOn(component, 'render').mockImplementation((() => undefined) as never);
 
       component.ngAfterViewInit();
 
@@ -176,7 +177,7 @@ describe('MarkdownComponent', () => {
 
     it('should rerender content on demand', () => {
 
-      spyOn(component, 'loadContent');
+      vi.spyOn(component, 'loadContent').mockImplementation((() => undefined));
 
       markdownService.reload();
 
@@ -190,7 +191,7 @@ describe('MarkdownComponent', () => {
 
       const raw = '### Raw';
 
-      spyOn(markdownService, 'parse');
+      vi.spyOn(markdownService, 'parse').mockImplementation((() => undefined) as never);
 
       component.inline = true;
       component.emoji = false;
@@ -214,7 +215,7 @@ describe('MarkdownComponent', () => {
       const raw = '### Raw';
       const parsed = '<h3>Compiled</h3>';
 
-      spyOn(markdownService, 'parse').and.resolveTo(parsed);
+      vi.spyOn(markdownService, 'parse').mockResolvedValue(parsed);
 
       await component.render(raw, true);
 
@@ -305,8 +306,8 @@ describe('MarkdownComponent', () => {
       const katexOptions: MarkedKatexOptions = { displayMode: true };
       const mermaidOptions: MermaidAPI.MermaidConfig = { darkMode: true };
 
-      spyOn(markdownService, 'parse').and.resolveTo(parsed);
-      spyOn(markdownService, 'render');
+      vi.spyOn(markdownService, 'parse').mockResolvedValue(parsed);
+      vi.spyOn(markdownService, 'render').mockImplementation((() => undefined));
 
       component.clipboard = true;
       component.clipboardButtonComponent = clipboardOptions.buttonComponent;
@@ -343,8 +344,8 @@ describe('MarkdownComponent', () => {
       const raw = '### Raw';
       const parsed = '<h3>Compiled</h3>';
 
-      spyOn(markdownService, 'parse').and.resolveTo(parsed);
-      spyOn(markdownService, 'render');
+      vi.spyOn(markdownService, 'parse').mockResolvedValue(parsed);
+      vi.spyOn(markdownService, 'render').mockImplementation((() => undefined));
 
       component.clipboard = true;
       await component.render(raw);
@@ -375,8 +376,8 @@ describe('MarkdownComponent', () => {
       const markdown = '# Markdown';
       const parsed = '<h1 id="markdown">Markdown</h1>';
 
-      spyOn(markdownService, 'parse').and.resolveTo(parsed);
-      spyOn(markdownService, 'render');
+      vi.spyOn(markdownService, 'parse').mockResolvedValue(parsed);
+      vi.spyOn(markdownService, 'render').mockImplementation((() => undefined));
 
       component.ready
         .pipe(first())

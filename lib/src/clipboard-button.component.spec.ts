@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ClipboardButtonComponent } from './clipboard-button.component';
 
 describe('ClipboardButtonComponent', () => {
@@ -14,11 +15,11 @@ describe('ClipboardButtonComponent', () => {
     nativeElement = fixture.nativeElement;
     fixture.detectChanges();
 
-    jasmine.clock().install();
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
-    jasmine.clock().uninstall();
+    vi.useRealTimers();
   });
 
   describe('button', () => {
@@ -40,12 +41,12 @@ describe('ClipboardButtonComponent', () => {
 
       expect(buttonElement?.classList).toContain('copied');
 
-      jasmine.clock().tick(2999);
+      vi.advanceTimersByTime(2999);
       fixture.detectChanges();
 
       expect(buttonElement?.classList).toContain('copied');
 
-      jasmine.clock().tick(1);
+      vi.advanceTimersByTime(1);
       fixture.detectChanges();
 
       expect(buttonElement?.classList).not.toContain('copied');
@@ -69,12 +70,12 @@ describe('ClipboardButtonComponent', () => {
 
       expect(buttonElement?.innerText).toBe('Copied');
 
-      jasmine.clock().tick(2999);
+      vi.advanceTimersByTime(2999);
       fixture.detectChanges();
 
       expect(buttonElement?.innerText).toBe('Copied');
 
-      jasmine.clock().tick(1);
+      vi.advanceTimersByTime(1);
       fixture.detectChanges();
 
       expect(buttonElement?.innerText).toBe('Copy');
