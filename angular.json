@@ -148,8 +148,6 @@
             ],
             "coverageExclude": [
               "lib/src/**/*.spec.ts",
-              "lib/src/test.ts",
-              "lib/src/public-api.ts",
               "lib/src/jasmine-compat.ts"
             ],
             "coverageReporters": [

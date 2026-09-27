@@ -4,6 +4,9 @@
   "description": "Angular library that uses marked to parse markdown to html combined with Prism.js for synthax highlights",
   "homepage": "https://github.com/jfcere/ngx-markdown",
   "license": "MIT",
+  "engines": {
+    "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
+  },
   "author": {
     "name": "Jean-Francois Cere",
     "email": "jfcere@hotmail.com"
@@ -37,9 +40,10 @@
     "lint:demo": "ng lint demo",
     "lint:lib": "ng lint lib",
     "lint:ci": "ng lint lib --format checkstyle > eslint.xml",
-    "type-check": "npm run type-check:lib && npm run type-check:demo",
+    "type-check": "npm run type-check:lib && npm run type-check:spec && npm run type-check:demo",
     "type-check:demo": "tsc --project ./demo/tsconfig.app.json --inlineSourceMap --noEmit",
     "type-check:lib": "tsc --project ./lib/tsconfig.lib.json --inlineSourceMap --noEmit",
+    "type-check:spec": "tsc --project ./lib/tsconfig.spec.json --inlineSourceMap --noEmit",
     "test": "ng test",
     "test:ci": "npm run test -- --watch=false --coverage",
     "test:vite": "node lib/test/vite-optional-import.spec.mjs",

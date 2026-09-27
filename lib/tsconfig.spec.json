@@ -9,6 +9,7 @@
     ]
   },
   "include": [
+    "src/jasmine-compat.ts",
     "src/**/*.d.ts",
     "src/**/*.spec.ts"
   ]
