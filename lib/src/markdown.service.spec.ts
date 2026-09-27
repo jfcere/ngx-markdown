@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-
 import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentRef, EmbeddedViewRef, SecurityContext, TemplateRef, ViewContainerRef, ViewRef } from '@angular/core';
@@ -7,6 +5,8 @@ import { TestBed } from '@angular/core/testing';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { marked, MarkedExtension, Tokens } from 'marked';
 import { first } from 'rxjs/operators';
+import type { MockedFunction } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ClipboardButtonComponent } from './clipboard-button.component';
 import { MarkedKatexOptions } from './katex-options';
 import {
@@ -43,7 +43,7 @@ describe('MarkdownService', () => {
     { name: 'mock-extension-one' } as MarkedExtension,
     { name: 'mock-extension-two' } as MarkedExtension,
   ];
-  const viewContainerRefSpy = jasmine.createSpyObj<ViewContainerRef>(['createComponent', 'createEmbeddedView']);
+  const viewContainerRefSpy = { createComponent: vi.fn(), createEmbeddedView: vi.fn() };
 
   describe('without sanitize provider', () => {
 
@@ -67,8 +67,8 @@ describe('MarkdownService', () => {
         const unsanitized = await marked.parse(mockRaw);
 
         expect(sanitize).toBeNull();
-        await expectAsync(markdownService.parse(mockRaw)).toBeResolvedTo(sanitized);
-        await expectAsync(markdownService.parse(mockRaw)).not.toBeResolvedTo(unsanitized);
+        await expect(markdownService.parse(mockRaw)).resolves.toEqual(sanitized);
+        await expect(markdownService.parse(mockRaw)).resolves.not.toEqual(unsanitized);
       });
     });
   });
@@ -76,10 +76,10 @@ describe('MarkdownService', () => {
   describe('with sanitize function', () => {
 
     describe('parse', () => {
-      let sanitizeFuncSpy: jasmine.Spy<SanitizeFunction>;
+      let sanitizeFuncSpy: MockedFunction<SanitizeFunction>;
 
       beforeEach(() => {
-        sanitizeFuncSpy = jasmine.createSpy('sanitize');
+        sanitizeFuncSpy = vi.fn();
 
         TestBed.configureTestingModule({
           providers: [
@@ -97,9 +97,9 @@ describe('MarkdownService', () => {
         const mockSanitized = '### Markdown-x sanitized';
         const unsanitized = await marked.parse(mockRaw);
 
-        sanitizeFuncSpy
-          .withArgs(unsanitized)
-          .and.returnValue(mockSanitized);
+        sanitizeFuncSpy.mockImplementation(
+          (value: string) => value === unsanitized ? mockSanitized : undefined!,
+        );
 
         const result = await markdownService.parse(mockRaw);
 
@@ -132,17 +132,17 @@ describe('MarkdownService', () => {
         const sanitized = domSanitizer.sanitize(sanitize as SecurityContext, await marked.parse(mockRaw))!;
         const unsanitized = await marked.parse(mockRaw);
 
-        await expectAsync(markdownService.parse(mockRaw)).toBeResolvedTo(sanitized);
-        await expectAsync(markdownService.parse(mockRaw)).not.toBeResolvedTo(unsanitized);
+        await expect(markdownService.parse(mockRaw)).resolves.toEqual(sanitized);
+        await expect(markdownService.parse(mockRaw)).resolves.not.toEqual(unsanitized);
 
-        await expectAsync(markdownService.parse(mockRaw, { disableSanitizer: false })).toBeResolvedTo(sanitized);
-        await expectAsync(markdownService.parse(mockRaw, { disableSanitizer: false })).not.toBeResolvedTo(unsanitized);
+        await expect(markdownService.parse(mockRaw, { disableSanitizer: false })).resolves.toEqual(sanitized);
+        await expect(markdownService.parse(mockRaw, { disableSanitizer: false })).resolves.not.toEqual(unsanitized);
 
-        await expectAsync(markdownService.parse(mockRaw, { disableSanitizer: null! })).toBeResolvedTo(sanitized);
-        await expectAsync(markdownService.parse(mockRaw, { disableSanitizer: null! })).not.toBeResolvedTo(unsanitized);
+        await expect(markdownService.parse(mockRaw, { disableSanitizer: null! })).resolves.toEqual(sanitized);
+        await expect(markdownService.parse(mockRaw, { disableSanitizer: null! })).resolves.not.toEqual(unsanitized);
 
-        await expectAsync(markdownService.parse(mockRaw, { disableSanitizer: undefined })).toBeResolvedTo(sanitized);
-        await expectAsync(markdownService.parse(mockRaw, { disableSanitizer: undefined })).not.toBeResolvedTo(unsanitized);
+        await expect(markdownService.parse(mockRaw, { disableSanitizer: undefined })).resolves.toEqual(sanitized);
+        await expect(markdownService.parse(mockRaw, { disableSanitizer: undefined })).resolves.not.toEqual(unsanitized);
       });
 
       it('should not sanitize parsed markdown when disableSanitizer is true', async () => {
@@ -151,8 +151,8 @@ describe('MarkdownService', () => {
         const sanitized = domSanitizer.sanitize(sanitize as SecurityContext, await marked.parse(mockRaw))!;
         const unsanitized = await marked.parse(mockRaw);
 
-        await expectAsync(markdownService.parse(mockRaw, { disableSanitizer: true })).not.toBeResolvedTo(sanitized);
-        await expectAsync(markdownService.parse(mockRaw, { disableSanitizer: true })).toBeResolvedTo(unsanitized);
+        await expect(markdownService.parse(mockRaw, { disableSanitizer: true })).resolves.not.toEqual(sanitized);
+        await expect(markdownService.parse(mockRaw, { disableSanitizer: true })).resolves.toEqual(unsanitized);
       });
     });
   });
@@ -197,10 +197,10 @@ describe('MarkdownService', () => {
 
         markdownService.options = { breaks: true, gfm: false, pedantic: true, silent: false };
 
-        expect(markdownService.options.breaks).toBeTrue();
-        expect(markdownService.options.gfm).toBeFalse();
-        expect(markdownService.options.pedantic).toBeTrue();
-        expect(markdownService.options.silent).toBeFalse();
+        expect(markdownService.options.breaks).toBe(true);
+        expect(markdownService.options.gfm).toBe(false);
+        expect(markdownService.options.pedantic).toBe(true);
+        expect(markdownService.options.silent).toBe(false);
         expect(markdownService.options.renderer).toBeDefined();
       });
     });
@@ -234,7 +234,7 @@ describe('MarkdownService', () => {
 
         const mockRaw = '### Markdown-x';
 
-        const markedUseSpy = spyOn(marked, 'use');
+        const markedUseSpy = vi.spyOn(marked, 'use').mockImplementation((() => undefined) as never);
 
         await markdownService.parse(mockRaw);
 
@@ -245,13 +245,13 @@ describe('MarkdownService', () => {
 
         const mockRaw = '### Markdown-x';
 
-        const markedUseSpy = spyOn(marked, 'use');
+        const markedUseSpy = vi.spyOn(marked, 'use').mockImplementation((() => undefined) as never);
 
         await markdownService.parse(mockRaw);
 
         expect(markedUseSpy).toHaveBeenCalledWith(...mockExtensions);
 
-        markedUseSpy.calls.reset();
+        markedUseSpy.mockClear();
 
         await markdownService.parse(mockRaw);
 
@@ -260,7 +260,7 @@ describe('MarkdownService', () => {
 
       it('should extend marked renderer when katex is true', async () => {
 
-        const markedKatexSpy = jasmine.createSpy('markedKatex').and.returnValue({
+        const markedKatexSpy = vi.fn().mockReturnValue({
           extensions: [
             { name: 'inlineKatex' },
             { name: 'blockKatex' },
@@ -268,15 +268,15 @@ describe('MarkdownService', () => {
         });
         markdownService['markedKatex'] = markedKatexSpy;
 
-        const markedUseSpy = spyOn(marked, 'use');
+        const markedUseSpy = vi.spyOn(marked, 'use').mockImplementation((() => undefined) as never);
 
         await markdownService.parse('### Markdown-x', { katex: true });
 
         expect(markedUseSpy).toHaveBeenCalledWith(
-          jasmine.objectContaining({
-            extensions: jasmine.arrayContaining([
-              jasmine.objectContaining({ name: 'inlineKatex' }),
-              jasmine.objectContaining({ name: 'blockKatex' }),
+          expect.objectContaining({
+            extensions: expect.arrayContaining([
+              expect.objectContaining({ name: 'inlineKatex' }),
+              expect.objectContaining({ name: 'blockKatex' }),
             ]),
           }),
         );
@@ -284,7 +284,7 @@ describe('MarkdownService', () => {
 
       it('should not extend marked renderer more than once when katex is true', async () => {
 
-        const markedKatexSpy = jasmine.createSpy('markedKatex').and.returnValue({
+        const markedKatexSpy = vi.fn().mockReturnValue({
           extensions: [
             { name: 'inlineKatex' },
             { name: 'blockKatex' },
@@ -292,20 +292,20 @@ describe('MarkdownService', () => {
         });
         markdownService['markedKatex'] = markedKatexSpy;
 
-        const markedUseSpy = spyOn(marked, 'use');
+        const markedUseSpy = vi.spyOn(marked, 'use').mockImplementation((() => undefined) as never);
 
         await markdownService.parse('### Markdown-x', { katex: true });
 
         expect(markedUseSpy).toHaveBeenCalled();
-        markedUseSpy.calls.reset();
+        markedUseSpy.mockClear();
 
         await markdownService.parse('### Markdown-y', { katex: true });
 
         expect(markedUseSpy).not.toHaveBeenCalledWith(
-          jasmine.objectContaining({
-            extensions: jasmine.arrayContaining([
-              jasmine.objectContaining({ name: 'inlineKatex' }),
-              jasmine.objectContaining({ name: 'blockKatex' }),
+          expect.objectContaining({
+            extensions: expect.arrayContaining([
+              expect.objectContaining({ name: 'inlineKatex' }),
+              expect.objectContaining({ name: 'blockKatex' }),
             ]),
           }),
         );
@@ -313,7 +313,7 @@ describe('MarkdownService', () => {
 
       it('should only import marked-katex-extension only once', async () => {
 
-        const markedKatexSpy = jasmine.createSpy('markedKatex').and.returnValue({
+        const markedKatexSpy = vi.fn().mockReturnValue({
           extensions: [
             { name: 'inlineKatex' },
             { name: 'blockKatex' },
@@ -321,19 +321,19 @@ describe('MarkdownService', () => {
         });
         markdownService['markedKatex'] = markedKatexSpy;
 
-        const markedUseSpy = spyOn(marked, 'use');
+        const markedUseSpy = vi.spyOn(marked, 'use').mockImplementation((() => undefined) as never);
 
         await markdownService.parse('### Markdown-x', { katex: true });
 
-        markedUseSpy.calls.reset();
+        markedUseSpy.mockClear();
 
         await markdownService.parse('### Markdown-x', { katex: true });
 
         expect(markedUseSpy).not.toHaveBeenCalledWith(
-          jasmine.objectContaining({
-            extensions: jasmine.arrayContaining([
-              jasmine.objectContaining({ name: 'inlineKatex' }),
-              jasmine.objectContaining({ name: 'blockKatex' }),
+          expect.objectContaining({
+            extensions: expect.arrayContaining([
+              expect.objectContaining({ name: 'inlineKatex' }),
+              expect.objectContaining({ name: 'blockKatex' }),
             ]),
           }),
         );
@@ -343,12 +343,12 @@ describe('MarkdownService', () => {
 
         markdownService['markedKatex'] = false as any;
 
-        await expectAsync(markdownService.parse('### Markdown-x', { katex: true })).toBeRejectedWithError(errorKatexExtensionNotLoaded);
+        await expect(markdownService.parse('### Markdown-x', { katex: true })).rejects.toThrowError(errorKatexExtensionNotLoaded);
       });
 
       it('should provide katexOptions correctly when parsing', async () => {
 
-        const markedKatexSpy = jasmine.createSpy('markedKatex').and.returnValue({ extensions: [] });
+        const markedKatexSpy = vi.fn().mockReturnValue({ extensions: [] });
         markdownService['markedKatex'] = markedKatexSpy;
 
         const katexOptions: MarkedKatexOptions = { displayMode: true };
@@ -360,8 +360,8 @@ describe('MarkdownService', () => {
 
       it('should gate KaTeX parse extension behind `katex` flag', async () => {
 
-        const tokenizerSpy = jasmine.createSpy('katexTokenizer').and.returnValue(undefined);
-        const markedKatexSpy = jasmine.createSpy('markedKatex').and.returnValue({
+        const tokenizerSpy = vi.fn().mockReturnValue(undefined);
+        const markedKatexSpy = vi.fn().mockReturnValue({
           extensions: [{ name: 'marked-katex-extension', level: 'block', tokenizer: tokenizerSpy }],
         });
 
@@ -378,19 +378,19 @@ describe('MarkdownService', () => {
 
       it('should not extend marked renderer when katex is false', async () => {
 
-        const markedKatexSpy = jasmine.createSpy('markedKatex').and.returnValue({ extensions: [] } as any);
+        const markedKatexSpy = vi.fn().mockReturnValue({ extensions: [] } as any);
         markdownService['markedKatex'] = markedKatexSpy;
 
-        const markedUseSpy = spyOn(marked, 'use');
+        const markedUseSpy = vi.spyOn(marked, 'use').mockImplementation((() => undefined) as never);
 
         await markdownService.parse('### Markdown-x', { katex: false });
 
         expect(markedKatexSpy).not.toHaveBeenCalled();
         expect(markedUseSpy).not.toHaveBeenCalledWith(
-          jasmine.objectContaining({
-            extensions: jasmine.arrayContaining([
-              jasmine.objectContaining({ name: 'inlineKatex' }),
-              jasmine.objectContaining({ name: 'blockKatex' }),
+          expect.objectContaining({
+            extensions: expect.arrayContaining([
+              expect.objectContaining({ name: 'inlineKatex' }),
+              expect.objectContaining({ name: 'blockKatex' }),
             ]),
           }),
         );
@@ -422,7 +422,7 @@ describe('MarkdownService', () => {
         const mockRenderer = new MarkedRenderer();
         const mockMarkedOptions: MarkedOptions = { renderer: mockRenderer };
 
-        const markedUseSpy = spyOn(marked, 'use');
+        const markedUseSpy = vi.spyOn(marked, 'use').mockImplementation((() => undefined) as never);
 
         markdownService.options = mockMarkedOptions;
         await markdownService.parse(mockRaw, { mermaid: true });
@@ -493,10 +493,10 @@ describe('MarkdownService', () => {
         const mockRaw = '&lt;html&gt;';
         const expected = '<p>&lt;html&gt;</p>\n';
 
-        await expectAsync(markdownService.parse(mockRaw)).toBeResolvedTo(expected);
-        await expectAsync(markdownService.parse(mockRaw, { decodeHtml: false })).toBeResolvedTo(expected);
-        await expectAsync(markdownService.parse(mockRaw, { decodeHtml: null! })).toBeResolvedTo(expected);
-        await expectAsync(markdownService.parse(mockRaw, { decodeHtml: undefined })).toBeResolvedTo(expected);
+        await expect(markdownService.parse(mockRaw)).resolves.toEqual(expected);
+        await expect(markdownService.parse(mockRaw, { decodeHtml: false })).resolves.toEqual(expected);
+        await expect(markdownService.parse(mockRaw, { decodeHtml: null! })).resolves.toEqual(expected);
+        await expect(markdownService.parse(mockRaw, { decodeHtml: undefined })).resolves.toEqual(expected);
       });
 
       it('should not decode HTML when platform is not browser as it uses `document`', async () => {
@@ -515,11 +515,11 @@ describe('MarkdownService', () => {
 
         window['joypixels'] = undefined;
 
-        await expectAsync(markdownService.parse('I :heart: ngx-markdown', { decodeHtml: false, emoji: true })).toBeRejectedWithError(errorJoyPixelsNotLoaded);
+        await expect(markdownService.parse('I :heart: ngx-markdown', { decodeHtml: false, emoji: true })).rejects.toThrowError(errorJoyPixelsNotLoaded);
 
         window['joypixels'] = { shortnameToUnicode: undefined };
 
-        await expectAsync(markdownService.parse('I :heart: ngx-markdown', { decodeHtml: false, emoji: true })).toBeRejectedWithError(errorJoyPixelsNotLoaded);
+        await expect(markdownService.parse('I :heart: ngx-markdown', { decodeHtml: false, emoji: true })).rejects.toThrowError(errorJoyPixelsNotLoaded);
       });
 
       it('should call joypixels when emoji is true', async () => {
@@ -529,7 +529,7 @@ describe('MarkdownService', () => {
 
         window['joypixels'] = { shortnameToUnicode: () => {} };
 
-        spyOn(joypixels, 'shortnameToUnicode').and.returnValue(mockEmojified);
+        vi.spyOn(joypixels, 'shortnameToUnicode').mockReturnValue(mockEmojified);
 
         const result = await markdownService.parse(mockRaw, { decodeHtml: false, emoji: true });
 
@@ -543,7 +543,7 @@ describe('MarkdownService', () => {
 
         window['joypixels'] = { shortnameToUnicode: () => {} };
 
-        spyOn(joypixels, 'shortnameToUnicode');
+        vi.spyOn(joypixels, 'shortnameToUnicode').mockImplementation((() => undefined) as never);
 
         const useCases = [
           () => markdownService.parse(mockRaw, { decodeHtml: false }),
@@ -564,11 +564,11 @@ describe('MarkdownService', () => {
 
         window['joypixels'] = { shortnameToUnicode: () => {} };
 
-        spyOn(joypixels, 'shortnameToUnicode');
+        vi.spyOn(joypixels, 'shortnameToUnicode').mockImplementation((() => undefined) as never);
 
         markdownService['platform'] = 'server';
 
-        await expectAsync(markdownService.parse(mockRaw, { decodeHtml: false, emoji: true })).not.toBeRejected();
+        await expect(markdownService.parse(mockRaw, { decodeHtml: false, emoji: true })).resolves.not.toThrow();
         expect(joypixels.shortnameToUnicode).not.toHaveBeenCalled();
       });
 
@@ -584,8 +584,8 @@ describe('MarkdownService', () => {
         for (const platform of useCases) {
           markdownService['platform'] = platform;
 
-          await expectAsync(markdownService.parse(mockRaw)).not.toBeRejected();
-          await expectAsync(markdownService.parse(mockRaw)).toBeResolvedTo(await marked.parse(mockRaw));
+          await expect(markdownService.parse(mockRaw)).resolves.not.toThrow();
+          await expect(markdownService.parse(mockRaw)).resolves.toEqual(await marked.parse(mockRaw));
         }
       });
 
@@ -593,7 +593,7 @@ describe('MarkdownService', () => {
 
         const mockRaw = '### Markdown-x';
 
-        await expectAsync(markdownService.parse(mockRaw, { inline: true })).toBeResolvedTo(await marked.parseInline(mockRaw));
+        await expect(markdownService.parse(mockRaw, { inline: true })).resolves.toEqual(await marked.parseInline(mockRaw));
       });
 
       it('should return parsed markdown when inline is omitted/false/null/undefined', async () => {
@@ -608,7 +608,7 @@ describe('MarkdownService', () => {
         ];
 
         for (const func of useCases) {
-          await expectAsync(func()).toBeResolvedTo(await marked.parse(mockRaw));
+          await expect(func()).resolves.toEqual(await marked.parse(mockRaw));
         }
       });
 
@@ -624,13 +624,13 @@ describe('MarkdownService', () => {
         };
         delete expectedOptions.renderer;
 
-        const markedParseSpy = spyOn(marked, 'parse');
+        const markedParseSpy = vi.spyOn(marked, 'parse').mockImplementation((() => undefined) as never);
 
         await markdownService.parse(mockRaw, parseOptions);
 
         expect(markedParseSpy).toHaveBeenCalled();
-        expect(markedParseSpy.calls.argsFor(0)[0]).toBe(mockRaw);
-        expect(markedParseSpy.calls.argsFor(0)[1]).toEqual(expectedOptions);
+        expect(markedParseSpy.mock.calls[0][0]).toBe(mockRaw);
+        expect(markedParseSpy.mock.calls[0][1]).toEqual(expectedOptions);
       });
 
       it('should not override markedOptions.renderer when parsing and parseOptions.renderer is not provided', async () => {
@@ -640,7 +640,7 @@ describe('MarkdownService', () => {
         mockRenderer.blockquote = () => 'mock-blocquote';
         const mockMarkedOptions: MarkedOptions = { breaks: true, gfm: false, pedantic: true, silent: false, renderer: mockRenderer };
 
-        const markedUseSpy = spyOn(marked, 'use');
+        const markedUseSpy = vi.spyOn(marked, 'use').mockImplementation((() => undefined) as never);
 
         markdownService.options = mockMarkedOptions;
         await markdownService.parse(mockRaw);
@@ -654,9 +654,9 @@ describe('MarkdownService', () => {
 
       it('should return empty string when raw is null/undefined/empty', async () => {
 
-        await expectAsync(markdownService.parse(null!)).toBeResolvedTo('');
-        await expectAsync(markdownService.parse(undefined!)).toBeResolvedTo('');
-        await expectAsync(markdownService.parse('')).toBeResolvedTo('');
+        await expect(markdownService.parse(null!)).resolves.toEqual('');
+        await expect(markdownService.parse(undefined!)).resolves.toEqual('');
+        await expect(markdownService.parse('')).resolves.toEqual('');
       });
 
       it('should not sanitize parsed markdown', async () => {
@@ -664,7 +664,7 @@ describe('MarkdownService', () => {
         const mockRaw = '### Markdown-x';
         const unsanitized = await marked.parse(mockRaw);
 
-        await expectAsync(markdownService.parse(mockRaw, { decodeHtml: false })).toBeResolvedTo(unsanitized);
+        await expect(markdownService.parse(mockRaw, { decodeHtml: false })).resolves.toEqual(unsanitized);
       });
     });
 
@@ -719,8 +719,8 @@ describe('MarkdownService', () => {
           run: (runOptions: MermaidAPI.RunOptions) => {},
         };
 
-        spyOn(mermaid, 'initialize');
-        spyOn(mermaid, 'run');
+        vi.spyOn(mermaid, 'initialize').mockImplementation((() => undefined) as never);
+        vi.spyOn(mermaid, 'run').mockImplementation((() => undefined) as never);
 
         markdownService.render(container, { mermaid: true });
 
@@ -749,8 +749,8 @@ describe('MarkdownService', () => {
           run: (runOptions: MermaidAPI.RunOptions) => {},
         };
 
-        spyOn(mermaid, 'initialize');
-        spyOn(mermaid, 'run');
+        vi.spyOn(mermaid, 'initialize').mockImplementation((() => undefined) as never);
+        vi.spyOn(mermaid, 'run').mockImplementation((() => undefined) as never);
 
         markdownService.render(container, { mermaid: true, mermaidOptions: providedOptions });
 
@@ -767,8 +767,8 @@ describe('MarkdownService', () => {
           run: (runOptions: MermaidAPI.RunOptions) => {},
         };
 
-        spyOn(mermaid, 'initialize');
-        spyOn(mermaid, 'run');
+        vi.spyOn(mermaid, 'initialize').mockImplementation((() => undefined) as never);
+        vi.spyOn(mermaid, 'run').mockImplementation((() => undefined) as never);
 
         const useCases = [
           () => markdownService.render(container),
@@ -793,8 +793,8 @@ describe('MarkdownService', () => {
           run: (runOptions: MermaidAPI.RunOptions) => {},
         };
 
-        spyOn(mermaid, 'initialize');
-        spyOn(mermaid, 'run');
+        vi.spyOn(mermaid, 'initialize').mockImplementation((() => undefined) as never);
+        vi.spyOn(mermaid, 'run').mockImplementation((() => undefined) as never);
 
         markdownService['platform'] = 'server';
 
@@ -830,8 +830,8 @@ describe('MarkdownService', () => {
           run: (runOptions: MermaidAPI.RunOptions) => {},
         };
 
-        spyOn(mermaid, 'initialize');
-        spyOn(mermaid, 'run');
+        vi.spyOn(mermaid, 'initialize').mockImplementation((() => undefined) as never);
+        vi.spyOn(mermaid, 'run').mockImplementation((() => undefined) as never);
 
         expect(() => markdownService.render(container, { mermaid: true })).not.toThrowError();
         expect(mermaid.initialize).not.toHaveBeenCalled();
@@ -849,7 +849,7 @@ describe('MarkdownService', () => {
         container.append(clipboardPreElement);
 
         const { componentRef } = mockComponentRef();
-        viewContainerRefSpy.createComponent.and.returnValue(componentRef);
+        viewContainerRefSpy.createComponent.mockReturnValue(componentRef);
 
         window['ClipboardJS'] = class ClipboardJS {
           constructor() {
@@ -869,7 +869,7 @@ describe('MarkdownService', () => {
           run: (runOptions: MermaidAPI.RunOptions) => {},
         };
 
-        spyOn(mermaid, 'run').and.callFake(() => {
+        vi.spyOn(mermaid, 'run').mockImplementation(() => {
           pluginRenderingOrder.push('mermaid');
         });
 
@@ -889,17 +889,17 @@ describe('MarkdownService', () => {
 
         window['ClipboardJS'] = class ClipboardJS {};
 
-        const clipboardSpy = spyOn(window, 'ClipboardJS');
-        const markForCheckSpy = spyOn(componentRef.changeDetectorRef, 'markForCheck');
+        const clipboardSpy = vi.spyOn(window, 'ClipboardJS').mockImplementation(function () { return undefined; } as never);
+        const markForCheckSpy = vi.spyOn(componentRef.changeDetectorRef, 'markForCheck').mockImplementation((() => undefined));
 
-        viewContainerRefSpy.createComponent.and.returnValue(componentRef);
+        viewContainerRefSpy.createComponent.mockReturnValue(componentRef);
 
         markdownService.render(container, { clipboard: true }, viewContainerRef);
 
         expect(viewContainerRefSpy.createComponent).toHaveBeenCalledWith(ClipboardButtonComponent as any);
         expect(markForCheckSpy).toHaveBeenCalled();
-        expect(clipboardSpy).toHaveBeenCalledWith(rootNode, { text: jasmine.any(Function) });
-        expect((clipboardSpy.calls.argsFor(0)[1] as any).text()).toBe(preElement.innerText);
+        expect(clipboardSpy).toHaveBeenCalledWith(rootNode, { text: expect.any(Function) });
+        expect((clipboardSpy.mock.calls[0][1] as any).text()).toBe(preElement.innerText);
       });
 
       it('should render clipboard with buttonComponent when clipboard is true and buttonComponent is provided', () => {
@@ -915,10 +915,10 @@ describe('MarkdownService', () => {
 
         window['ClipboardJS'] = class ClipboardJS {};
 
-        const clipboardSpy = spyOn(window, 'ClipboardJS');
-        const markForCheckSpy = spyOn(componentRef.changeDetectorRef, 'markForCheck');
+        const clipboardSpy = vi.spyOn(window, 'ClipboardJS').mockImplementation(function () { return undefined; } as never);
+        const markForCheckSpy = vi.spyOn(componentRef.changeDetectorRef, 'markForCheck').mockImplementation((() => undefined));
 
-        viewContainerRefSpy.createComponent.and.returnValue(componentRef);
+        viewContainerRefSpy.createComponent.mockReturnValue(componentRef);
 
         markdownService.render(
           container,
@@ -928,8 +928,8 @@ describe('MarkdownService', () => {
 
         expect(viewContainerRefSpy.createComponent).toHaveBeenCalledWith(MockButtonComponent as any);
         expect(markForCheckSpy).toHaveBeenCalled();
-        expect(clipboardSpy).toHaveBeenCalledWith(rootNode, { text: jasmine.any(Function) });
-        expect((clipboardSpy.calls.argsFor(0)[1] as any).text()).toBe(preElement.innerText);
+        expect(clipboardSpy).toHaveBeenCalledWith(rootNode, { text: expect.any(Function) });
+        expect((clipboardSpy.mock.calls[0][1] as any).text()).toBe(preElement.innerText);
       });
 
       it('should render clipboard with buttonTemplate when clipboard is true and buttonTemplate is provided', () => {
@@ -947,9 +947,9 @@ describe('MarkdownService', () => {
 
         window['ClipboardJS'] = class ClipboardJS {};
 
-        const clipboardSpy = spyOn(window, 'ClipboardJS');
+        const clipboardSpy = vi.spyOn(window, 'ClipboardJS').mockImplementation(function () { return undefined; } as never);
 
-        viewContainerRefSpy.createEmbeddedView.and.returnValue(embeddedViewRef);
+        viewContainerRefSpy.createEmbeddedView.mockReturnValue(embeddedViewRef);
 
         markdownService.render(
           container,
@@ -958,8 +958,8 @@ describe('MarkdownService', () => {
         );
 
         expect(viewContainerRefSpy.createEmbeddedView).toHaveBeenCalledWith(mockTemplateRef);
-        expect(clipboardSpy).toHaveBeenCalledWith(rootNode, { text: jasmine.any(Function) });
-        expect((clipboardSpy.calls.argsFor(0)[1] as any).text()).toBe(preElement.innerText);
+        expect(clipboardSpy).toHaveBeenCalledWith(rootNode, { text: expect.any(Function) });
+        expect((clipboardSpy.mock.calls[0][1] as any).text()).toBe(preElement.innerText);
       });
 
       it('should destroy clipboard instances when host view is destroyed', () => {
@@ -974,18 +974,18 @@ describe('MarkdownService', () => {
 
         window['ClipboardJS'] = () => {};
 
-        spyOn(window, 'ClipboardJS').and.returnValue(mockClipboardInstance);
+        vi.spyOn(window, 'ClipboardJS').mockImplementation(function () { return mockClipboardInstance; } as never);
 
-        const hostViewDestroySpy = spyOn(componentRef.hostView, 'onDestroy');
-        const clipboardDestroySpy = spyOn(mockClipboardInstance, 'destroy');
+        const hostViewDestroySpy = vi.spyOn(componentRef.hostView, 'onDestroy').mockImplementation((() => undefined));
+        const clipboardDestroySpy = vi.spyOn(mockClipboardInstance, 'destroy').mockImplementation((() => undefined));
 
-        viewContainerRefSpy.createComponent.and.returnValue(componentRef);
+        viewContainerRefSpy.createComponent.mockReturnValue(componentRef);
 
         markdownService.render(container, { clipboard: true }, viewContainerRef);
 
         expect(hostViewDestroySpy).toHaveBeenCalled();
 
-        const hostViewDestroyCallback = hostViewDestroySpy.calls.argsFor(0)[0];
+        const hostViewDestroyCallback = hostViewDestroySpy.mock.calls[0][0];
         hostViewDestroyCallback();
 
         expect(clipboardDestroySpy).toHaveBeenCalled();
@@ -997,11 +997,8 @@ describe('MarkdownService', () => {
         const container = document.createElement('div');
         container.append(preElement);
 
-        window['ClipboardJS'] = {
-          new: () => {},
-        };
-
-        spyOn(window, 'ClipboardJS');
+        const clipboardSpy = vi.fn();
+        window['ClipboardJS'] = clipboardSpy;
 
         const useCases = [
           () => markdownService.render(container),
@@ -1012,7 +1009,7 @@ describe('MarkdownService', () => {
 
         useCases.forEach(func => {
           func();
-          expect(window['ClipboardJS']).not.toHaveBeenCalled();
+          expect(clipboardSpy).not.toHaveBeenCalled();
         });
       });
 
@@ -1022,14 +1019,13 @@ describe('MarkdownService', () => {
         const container = document.createElement('div');
         container.append(preElement);
 
-        window['ClipboardJS'] = {};
-
-        spyOn(window, 'ClipboardJS');
+        const clipboardSpy = vi.fn();
+        window['ClipboardJS'] = clipboardSpy;
 
         markdownService['platform'] = 'server';
 
         expect(() => markdownService.render(container, { clipboard: true })).not.toThrowError();
-        expect(window['ClipboardJS']).not.toHaveBeenCalled();
+        expect(clipboardSpy).not.toHaveBeenCalled();
       });
 
       it('should throw when clipboard is called but not loaded', () => {
@@ -1062,7 +1058,7 @@ describe('MarkdownService', () => {
 
         const element = document.createElement('div');
 
-        spyOn(markdownService, 'highlight');
+        vi.spyOn(markdownService, 'highlight').mockImplementation((() => undefined));
 
         markdownService.render(element);
 
@@ -1083,7 +1079,7 @@ describe('MarkdownService', () => {
 
         markdownService.reload();
 
-        await expectAsync(reloaded).toBeResolved();
+        await expect(reloaded).resolves.toBeUndefined();
       });
     });
 
@@ -1222,7 +1218,7 @@ describe('MarkdownService', () => {
 
         window['Prism'] = { highlightAllUnder: () => {} };
 
-        spyOn(Prism, 'highlightAllUnder');
+        vi.spyOn(Prism, 'highlightAllUnder').mockImplementation((() => undefined) as never);
 
         markdownService['platform'] = 'server';
 
@@ -1288,7 +1284,7 @@ describe('MarkdownService', () => {
 
         window['Prism'] = { highlightAllUnder: () => {} };
 
-        spyOn(Prism, 'highlightAllUnder');
+        vi.spyOn(Prism, 'highlightAllUnder').mockImplementation((() => undefined) as never);
 
         markdownService.highlight(mockHtmlElement);
 
@@ -1299,7 +1295,7 @@ describe('MarkdownService', () => {
 
         window['Prism'] = { highlightAllUnder: () => {} };
 
-        spyOn(Prism, 'highlightAllUnder');
+        vi.spyOn(Prism, 'highlightAllUnder').mockImplementation((() => undefined) as never);
 
         const useCases = [
           () => markdownService.highlight(),
@@ -1310,7 +1306,7 @@ describe('MarkdownService', () => {
         useCases.forEach(func => {
           func();
           expect(Prism.highlightAllUnder).toHaveBeenCalledWith(document);
-          Prism.highlightAllUnder.calls.reset();
+          Prism.highlightAllUnder.mockClear();
         });
       });
     });

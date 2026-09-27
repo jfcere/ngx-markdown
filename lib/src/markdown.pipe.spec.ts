@@ -3,6 +3,7 @@
 import { ElementRef, ViewContainerRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MarkdownPipe, MarkdownPipeOptions } from './markdown.pipe';
 import { MarkdownService } from './markdown.service';
 import { provideMarkdown } from './provide-markdown';
@@ -14,8 +15,8 @@ describe('MarkdownPipe', () => {
   let pipe: MarkdownPipe;
   let viewContainerRef: ViewContainerRef;
 
-  const elementRefSpy = jasmine.createSpyObj<ElementRef>([], { nativeElement: document.createElement('div') });
-  const viewContainerRefSpy = jasmine.createSpyObj<ViewContainerRef>(['createComponent']);
+  const elementRefSpy = { nativeElement: document.createElement('div') };
+  const viewContainerRefSpy = { createComponent: vi.fn() };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -49,7 +50,7 @@ describe('MarkdownPipe', () => {
 
     const markdowns: any[] = [0, {}, [], /regex/];
 
-    spyOn(console, 'error');
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
     for (const markdown of markdowns) {
       const result = await pipe.transform(markdown);
@@ -64,7 +65,7 @@ describe('MarkdownPipe', () => {
     const markdown = '# Markdown';
     const mockPipeOptions: MarkdownPipeOptions = { mermaid: true, mermaidOptions: { darkMode: true } };
 
-    spyOn(markdownService, 'render');
+    vi.spyOn(markdownService, 'render').mockImplementation(() => undefined);
 
     await pipe.transform(markdown, mockPipeOptions);
 
@@ -82,8 +83,8 @@ describe('MarkdownPipe', () => {
     const mockBypassSecurity = 'bypass-x';
     const mockPipeOptions: MarkdownPipeOptions = { inline: true, emoji: true, disableSanitizer: true };
 
-    spyOn(markdownService, 'parse').and.resolveTo(mockParsed);
-    spyOn(domSanitizer, 'bypassSecurityTrustHtml').and.returnValue(mockBypassSecurity);
+    vi.spyOn(markdownService, 'parse').mockResolvedValue(mockParsed);
+    vi.spyOn(domSanitizer, 'bypassSecurityTrustHtml').mockReturnValue(mockBypassSecurity);
 
     const result = await pipe.transform(markdown, mockPipeOptions);
 

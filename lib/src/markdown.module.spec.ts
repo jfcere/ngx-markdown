@@ -2,6 +2,7 @@ import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { createEnvironmentInjector, EnvironmentInjector, EnvironmentProviders, Provider, SecurityContext } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MarkedExtension } from 'marked';
+import { describe, expect, it } from 'vitest';
 import { CLIPBOARD_OPTIONS, ClipboardOptions } from './clipboard-options';
 import { MARKED_EXTENSIONS } from './marked-extensions';
 import { MARKED_OPTIONS, MarkedOptions } from './marked-options';

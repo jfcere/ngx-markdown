@@ -141,14 +141,14 @@
               "chromium"
             ],
             "setupFiles": [
-              "lib/src/jasmine-compat.ts"
+              "lib/src/test-setup.ts"
             ],
             "coverageInclude": [
               "lib/src/**/*.ts"
             ],
             "coverageExclude": [
               "lib/src/**/*.spec.ts",
-              "lib/src/jasmine-compat.ts"
+              "lib/src/test-setup.ts"
             ],
             "coverageReporters": [
               "html",

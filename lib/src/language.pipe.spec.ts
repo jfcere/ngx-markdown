@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { LanguagePipe } from './language.pipe';
 
 describe('LanguagePipe', () => {
@@ -32,7 +33,7 @@ describe('LanguagePipe', () => {
   it('should log error and return value when value is not a string', () => {
     const markdowns: any[] = [0, {}, [], /regex/];
 
-    spyOn(console, 'error');
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
     markdowns.forEach(markdown => {
       const result = pipe.transform(markdown, markdown);
@@ -46,7 +47,7 @@ describe('LanguagePipe', () => {
     const markdown = '# Markdown';
     const languages: any[] = [0, {}, [], /regex/];
 
-    spyOn(console, 'error');
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
     languages.forEach(language => {
       const result = pipe.transform(markdown, language);
