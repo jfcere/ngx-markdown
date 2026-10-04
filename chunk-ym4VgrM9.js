@@ -1,1 +1,0 @@
-import{Ft as _,Qt as fl,Rn as yw,rn as h}from"./main-ZKQ5VCMV.js";var t=class t{constructor(){this.httpClient=h(fl)}get(r){return this.httpClient.get(r,{responseType:`text`}).pipe(yw())}};t.ɵfac=function(s){return new(s||t)},t.ɵprov=_({token:t,factory:t.ɵfac,providedIn:`root`});var p=t;export{p as t};

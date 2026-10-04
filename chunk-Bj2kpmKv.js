@@ -1,4 +1,4 @@
-import{E as Gh,En as tC,I as J,K as Le,Lt as _E,O as HT,Ut as b5,_ as E5,an as hn,at as Tc,bt as Wc,ht as Vh,jn as w5,p as D5,rn as h,wn as rC,wt as Xb,x as Fb,z as Jb}from"./main-ZKQ5VCMV.js";import{n as et,t as U}from"./chunk-pw2Eq08b.js";import{a as Zt,c as ut,i as Yo,l as xi,n as Sr,o as st,r as Xo,s as uo,t as Mn,u as xr}from"./chunk-DQ4VMMPF.js";var l=class l{constructor(){this.elementRef=h(J);this.markdownService=h(_E);this.overrideEnabled=!1;this._accentColor=``;this.markdown=`## Markdown rulez!
+import{E as Gh,En as tC,I as J,K as Le,Lt as _E,O as HT,Ut as b5,_ as E5,an as hn,at as Tc,bt as Wc,ht as Vh,jn as w5,p as D5,rn as h,wn as rC,wt as Xb,x as Fb,z as Jb}from"./main-FOGERYFJ.js";import{n as et,t as U}from"./chunk-CAN5vBci.js";import{a as Zt,c as ut,i as Yo,l as xi,n as Sr,o as st,r as Xo,s as uo,t as Mn,u as xr}from"./chunk-C8FleOn5.js";var l=class l{constructor(){this.elementRef=h(J);this.markdownService=h(_E);this.overrideEnabled=!1;this._accentColor=``;this.markdown=`## Markdown rulez!
 ---
 
 ### Syntax highlight
