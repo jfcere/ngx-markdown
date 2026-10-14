@@ -43,7 +43,7 @@ describe('MarkdownService', () => {
     { name: 'mock-extension-one' } as MarkedExtension,
     { name: 'mock-extension-two' } as MarkedExtension,
   ];
-  const viewContainerRefSpy = jasmine.createSpyObj<ViewContainerRef>(['createComponent', 'createEmbeddedView']);
+  const viewContainerRefSpy = jasmine.createSpyObj<ViewContainerRef>(['createComponent', 'createEmbeddedView', 'indexOf', 'remove']);
 
   describe('without sanitize provider', () => {
 
@@ -988,6 +988,62 @@ describe('MarkdownService', () => {
         hostViewDestroyCallback();
 
         expect(clipboardDestroySpy).toHaveBeenCalled();
+      });
+
+      it('should remove the buttons of a previous render instead of accumulating them', () => {
+
+        const container = document.createElement('div');
+        container.append(document.createElement('pre'));
+
+        window['ClipboardJS'] = class ClipboardJS {};
+        spyOn(window, 'ClipboardJS');
+
+        // the spy object is shared across this suite
+        viewContainerRefSpy.indexOf.calls.reset();
+        viewContainerRefSpy.remove.calls.reset();
+
+        const firstRender = mockComponentRef();
+        viewContainerRefSpy.createComponent.and.returnValue(firstRender.componentRef);
+
+        markdownService.render(container, { clipboard: true }, viewContainerRef);
+
+        // nothing existed before the first render, so nothing gets removed
+        expect(viewContainerRefSpy.remove).not.toHaveBeenCalled();
+
+        // the host element's innerHTML would be reassigned between renders,
+        // leaving the first button's view in the container with dead DOM nodes
+        const secondRender = mockComponentRef();
+        viewContainerRefSpy.createComponent.and.returnValue(secondRender.componentRef);
+        viewContainerRefSpy.indexOf.and.returnValue(0);
+
+        markdownService.render(container, { clipboard: true }, viewContainerRef);
+
+        expect(viewContainerRefSpy.indexOf).toHaveBeenCalledWith(firstRender.componentRef.hostView as any);
+        expect(viewContainerRefSpy.remove).toHaveBeenCalledWith(0);
+      });
+
+      it('should not remove a view that no longer belongs to the container', () => {
+
+        const container = document.createElement('div');
+        container.append(document.createElement('pre'));
+
+        window['ClipboardJS'] = class ClipboardJS {};
+        spyOn(window, 'ClipboardJS');
+
+        // the spy object is shared across this suite
+        viewContainerRefSpy.indexOf.calls.reset();
+        viewContainerRefSpy.remove.calls.reset();
+
+        viewContainerRefSpy.createComponent.and.returnValue(mockComponentRef().componentRef);
+
+        markdownService.render(container, { clipboard: true }, viewContainerRef);
+
+        // a consumer may have destroyed the view already
+        viewContainerRefSpy.indexOf.and.returnValue(-1);
+
+        markdownService.render(container, { clipboard: true }, viewContainerRef);
+
+        expect(viewContainerRefSpy.remove).not.toHaveBeenCalled();
       });
 
       it('should not render clipboard when clipboard is omitted/false/null/undefined', () => {
